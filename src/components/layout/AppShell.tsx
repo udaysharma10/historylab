@@ -63,6 +63,21 @@ export function AppShell() {
               <span className="font-display font-bold text-hist-dark text-sm">{totalStars}</span>
             </div>
 
+            {/* Teacher Dashboard button */}
+            {profile.role === 'teacher' && (
+              <motion.button
+                className="flex items-center gap-1.5 bg-hist-blue/10 hover:bg-hist-blue/20 px-3 py-1.5 rounded-full transition-colors"
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/dashboard')}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2980B9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+                </svg>
+                <span className="font-display font-bold text-hist-blue text-xs hidden sm:inline">Dashboard</span>
+              </motion.button>
+            )}
+
             {/* Avatar with dropdown */}
             <div className="relative" ref={menuRef}>
               <motion.button

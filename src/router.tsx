@@ -8,6 +8,7 @@ import { MapMode } from './modules/MapMode'
 import { FigureMode } from './modules/FigureMode'
 import { FlashcardMode } from './modules/FlashcardMode'
 import { ExamPractice } from './modules/ExamPractice'
+import { TeacherDashboard } from './modules/TeacherDashboard'
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: 'flashcards', element: <FlashcardMode /> },
       { path: 'figures', element: <FigureMode /> },
       { path: 'exam', element: <ExamPractice /> },
+      { path: 'dashboard', element: <TeacherDashboard /> },
     ],
   },
 ])
