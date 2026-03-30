@@ -5,10 +5,19 @@ export const section5Subsections: Subsection[] = [
     id: 's5-allegory',
     title: 'Allegory and the Nation',
     narrativeCards: [
+      // OPENING CARD — Story So Far + Sorrieu reference
+      {
+        id: 's5-opener',
+        title: 'The Story So Far...',
+        type: 'text',
+        text: 'Every nation needs a **face**. Think about it — you can paint a portrait of a king, but **how do you paint a country?** How do you make millions of people feel they belong to something bigger than themselves?\n\nRemember Sorrieu\'s painting? He used the **Statue of Liberty** — a female figure holding a torch — to represent the idea of freedom. That wasn\'t an accident. Across Europe, artists turned to **allegory** — using human figures to represent abstract ideas like the nation.\n\nThis section is **heavily tested in CBSE** because it\'s about visual interpretation — and Board exams love asking you to analyse paintings and symbols.',
+        highlight: '**This section is exam-critical.** CBSE frequently asks: "What do the symbols in this painting represent?" Learn the symbols, learn the story they tell.',
+      },
       {
         id: 's5-al-1',
+        title: 'Giving a Face to a Nation',
         type: 'text',
-        text: 'While it is easy enough to represent a ruler through a portrait or a statue, how does one go about giving a face to a nation? Artists in the eighteenth and nineteenth centuries found a way out by personifying a nation — representing a country as if it were a person.',
+        text: 'It\'s easy to represent a **ruler** — paint a portrait, build a statue. But how do you represent a **nation**? Artists in the eighteenth and nineteenth centuries found an answer: **personification** — representing a country as if it were a person.',
       },
       {
         id: 's5-al-2',
@@ -94,6 +103,14 @@ export const section5Subsections: Subsection[] = [
           correctIndex: 1,
           explanation: 'Replacing the Kaiser\'s crown with broken chains symbolises the shift from monarchical authority to the aspiration for freedom and liberation — the hope of 1848 liberal-nationalists.',
         },
+      },
+      // CLOSING CARD — Sorrieu thread + What Comes Next
+      {
+        id: 's5-closing',
+        title: 'What Comes Next...',
+        type: 'text',
+        text: 'Look at what the symbols tell us. **Sorrieu\'s Liberty** held a **torch** and a **charter** — symbols of knowledge and rights. **Germania in 1848** wore **broken chains** — a symbol of freedom.\n\nBut **Germania by 1860** wears **armor** and holds a **sword**. The symbols changed from **freedom to power**. And nationalism changed with them.\n\nIn the final section, we\'ll see where this transformation led: nationalism, which began as a dream of liberation, **becomes imperialism** — and the nations that were supposed to live in brotherhood (remember Sorrieu\'s angels?) end up marching into **World War I**.',
+        highlight: '**The symbols tell the whole story:** Sorrieu\'s Liberty (torch + charter) → Germania 1848 (broken chains) → Germania 1860 (sword + armor). Freedom became power. Next: power becomes imperialism.',
       },
     ],
   },

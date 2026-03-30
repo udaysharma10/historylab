@@ -5,11 +5,20 @@ export const section4Subsections: Subsection[] = [
     id: 's4-intro',
     title: 'Nationalism Shifts to State Power',
     narrativeCards: [
+      // OPENING CARD — Story So Far + Sorrieu reference
+      {
+        id: 's4-opener',
+        title: 'The Story So Far...',
+        type: 'text',
+        text: 'The Frankfurt Parliament has failed. The dreamers — professors, lawyers, idealists — tried to build a democratic Germany through debate and votes. **It didn\'t work.**\n\nNow Europe makes a devastating calculation: if democracy can\'t build nations, then **power** will. The era of revolutions is over. The era of **prime ministers and generals** is about to begin.\n\n**Sorrieu imagined nations built by the people.** What actually happened was very different.',
+        highlight: '**The big shift:** After 1848, nationalism moved from democratic revolution to state-driven power. The dream survived — but it changed hands.',
+      },
       {
         id: 's4-intro-1',
+        title: 'From Idealism to Realpolitik',
         type: 'text',
-        text: 'After 1848, nationalism in Europe moved away from its association with democracy and revolution. Nationalist sentiments were often mobilised by conservatives for promoting state power and achieving political domination over Europe.',
-        highlight: 'After 1848: nationalism shifted from liberal-democratic to state-power driven',
+        text: 'After 1848, nationalism in Europe **moved away from democracy and revolution**. Instead, nationalist sentiments were hijacked by **conservative leaders** to promote **state power** and political domination.\n\nThis is the most important shift in the entire chapter: nationalism started as a force for **liberation** (Sections 1-3). Now it becomes a tool of **domination** (Sections 4-6). Understanding this transformation is key to scoring well in Board exams.',
+        highlight: '**After 1848:** Nationalism shifted from liberal-democratic (people\'s movement) → state-power driven (led by prime ministers and armies)',
       },
     ],
   },
@@ -162,6 +171,14 @@ export const section4Subsections: Subsection[] = [
         id: 's4-br-5',
         type: 'vocabulary',
         text: 'Ethnic — Relates to a common racial, tribal, or cultural origin or background that a community identifies with or claims.',
+      },
+      // CLOSING CARD — What Comes Next
+      {
+        id: 's4-closing',
+        title: 'What Comes Next...',
+        type: 'text',
+        text: 'The nations are built — but look at **how** they were built. Not by the people, as Sorrieu dreamed. Germany was built by **Bismarck\'s army**. Italy was built by **Cavour\'s diplomacy** and **Garibaldi\'s guerrillas**. Britain was built by **English cultural domination** over Scotland, Wales, and Ireland.\n\nNow these new nations need **symbols** — faces, images, stories that make citizens feel they belong. In the next section, we\'ll see how France created **Marianne** and Germany created **Germania**. And the way those symbols changed over time tells the story of how nationalism itself changed — from a dream of **freedom** to a tool of **power**.',
+        highlight: '**The story so far:** Nations were built by armies and diplomats, not by the people. Now they need symbols to make citizens "feel" the nation. Next: how those symbols reveal nationalism\'s transformation.',
       },
     ],
   },

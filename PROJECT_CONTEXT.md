@@ -164,8 +164,14 @@ vedansh-history/
 │   │       ├── SourceReader.tsx        # Parchment-styled source text display: quotation marks, author/year, numbered analysis points, exam tip
 │   │       ├── SourceQuizCard.tsx      # Source comprehension quiz: MCQ + free-text, compact source excerpt, sub-question progress dots
 │   │       └── index.ts              # Barrel export
+│   ├── lib/
+│   │   ├── supabase.ts                  # Supabase client init (env vars)
+│   │   ├── adminEmails.ts              # Configurable admin teacher emails (auto-redirect to dashboard)
+│   │   ├── activityLog.ts             # Log activity completions to Supabase
+│   │   └── syncProgress.ts           # Debounced progress sync to Supabase
 │   └── modules/
 │       ├── HomePage.tsx                 # Dashboard: greeting, stats, 6 section cards, 5 mode icons (incl. Maps)
+│       ├── TeacherDashboard.tsx         # Teacher analytics: overview cards, activity breakdown, student table
 │       ├── ComingSoon.tsx               # Placeholder (no longer used — all routes now have real components)
 │       ├── SectionModule.tsx            # BUILT: Section landing page — key points, subsection list with progress, "Practice Quiz" card, "Start/Continue Reading" CTA
 │       ├── NarrativeMode.tsx            # BUILT: Card-by-card walkthrough — swipe/keyboard nav, segmented progress bar, card type labels, back-to-overview link
@@ -191,6 +197,7 @@ vedansh-history/
 | `/figures` | FigureMode | **BUILT** (Phase 7) |
 | `/flashcards` | FlashcardMode | **BUILT** (Phase 8) |
 | `/exam` | ExamPractice | **BUILT** (Phase 8) |
+| `/dashboard` | TeacherDashboard | **BUILT** (Phase 10-E) — teacher-only, school-scoped |
 
 ---
 
@@ -266,7 +273,7 @@ vedansh-history/
 - **100 Flashcards**: SM-2 spaced repetition cards across all 6 sections
 - **10 NCERT Exercise Questions**: 5 "Write in Brief" + 5 "Discuss" (with full sample answers)
 - **~98 Activities**: 22 MCQ, 12 fill-blank, 15 true-false, 10 match, 7 timeline, 10 map, 9 image analysis, 3 source analysis
-- **~116 Narrative Cards**: with inline quizzes, highlights, figure references, vocabulary and source cards
+- **~134 Narrative Cards**: with inline quizzes, highlights, figure references, vocabulary and source cards (expanded in Phase 11-1 revamp: +18 story thread, WHY, and rewritten cards)
 
 ### Figure Images (extracted from NCERT PDF)
 Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_Rise of Nationalism in Europe.pdf`
@@ -356,11 +363,15 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 | 7 | Figure Analysis (FigureHotspotOverlay with pulsing dots + tooltips, FigureAnalysisPanel always-expanded with What You See/What It Means/Exam Tip, FigureDetail with prev/next nav + tag pills, FigureGallery 2-col grid with section+type filters, ImageAnalysisCard MCQ+free-text practice, FigureMode orchestrator with home/gallery/detail/practice/results phases, 9 image analysis activities wired (24 sub-Qs), QuizResults reused with image-analysis label, route `/figures`) | **DONE** |
 | 8 | Source Analysis + Flashcards + Exam Practice (FlashcardSingle 3D flip card with SM-2 rating, FlashcardMode orchestrator with home/browse/practice/stats phases, SourceReader parchment-styled with analysis, SourceQuizCard MCQ+free-text comprehension, ExamPractice orchestrator with home/source-read/source-practice/ncert/results phases, 100 flashcards wired with spaced repetition, 3 source readers + 9 source comprehension Qs + 10 NCERT exercise Qs with model answers, QuizResults reused with source-comprehension label, routes `/flashcards` and `/exam`, perspective-1000 CSS utility for card flip) | **DONE** |
 | 9 | Polish (responsive, keyboard nav, performance, dark mode) | Deferred |
+| 11-1 | **Content Revamp Phase 1**: Story thread (openers/closers for all 6 sections), Sorrieu recurring motif (S1,S3-S6), WHY explanation cards (6 new), rewrite ~15 dry textbook-tone cards to teacher voice. ~18 new cards added, ~15 rewritten. See `REVAMP_PLAN.md` for full plan. | **DONE** |
+| 11-2 | Content Revamp Phase 2: Vocabulary expansion (8→22+ terms), symbols (Marianne, Britannia), additional sources | Pending |
+| 11-3 | Content Revamp Phase 3: Integrated section experience (timeline/maps/figures embedded per section) | Pending |
+| 11-4 | Content Revamp Phase 4: Assessment upgrades (cross-section synthesis, assertion-reason, MCQ distractors, remediation) | Pending |
 | 10-A | Deploy to Vercel (static hosting, auto-deploy on push) | **DONE** |
-| 10-B | Supabase setup (project, Google OAuth, database tables, RLS) | Next |
-| 10-C | Auth integration (login page, profile setup: name/school/role, auth guard) | Pending |
-| 10-D | Progress sync + activity logging (replace localStorage, track usage) | Pending |
-| 10-E | Teacher dashboard (student list, login counts, activity stats) | Pending |
+| 10-B | Supabase setup (project, Google OAuth, database tables, RLS) | **DONE** |
+| 10-C | Auth integration (login page, profile setup: name/school/role, auth guard) | **DONE** |
+| 10-D | Progress sync + activity logging (replace localStorage, track usage) | **DONE** |
+| 10-E | Teacher dashboard (student list, login counts, activity stats) | **DONE** |
 | 10-F | Custom domain (optional) | Pending |
 
 ---
@@ -374,6 +385,11 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 
 ### Backend (Phase 10-B onwards)
 - **Supabase** (BaaS): Auth + PostgreSQL + REST API
-- **Region**: Mumbai (for low latency)
+- **Region**: Mumbai (ref: zqryzlkvieljadntlomz)
 - **Auth**: Google OAuth + profile setup (name, school, role: Student/Teacher/Parent)
+- **Admin teacher emails**: Configured in `src/lib/adminEmails.ts` — skip profile setup, auto-redirect to `/dashboard`
+  - Currently: `uday@teknomatics.com` only
+- **Teacher Dashboard**: `/dashboard` — overview stats, activity breakdown, student table (school-scoped via RLS)
+- **Activity logging**: All completions logged to `activity_logs` table
+- **Progress sync**: Zustand state synced to `student_progress` table (debounced 1s), localStorage as offline fallback
 - **Detailed plan**: See `PLAN_AUTH_AND_ANALYTICS.md`

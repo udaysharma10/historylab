@@ -5,16 +5,26 @@ export const section6Subsections: Subsection[] = [
     id: 's6-transformation',
     title: 'Nationalism Becomes Imperialism',
     narrativeCards: [
+      // OPENING CARD — Story So Far + Sorrieu reference
+      {
+        id: 's6-opener',
+        title: 'The Story So Far...',
+        type: 'text',
+        text: 'Remember **Sorrieu\'s painting** from the very beginning of this chapter? All nations marching together in peace. Christ and angels watching from above, symbolising **fraternity among nations**.\n\nWe\'ve now followed the journey of that dream across five sections — from the French Revolution\'s idealism, through underground movements, 1848\'s failed revolutions, Bismarck\'s wars, and the changing face of Germania.\n\nNow comes the final chapter of the story. And it\'s the darkest one.',
+        highlight: '**The arc of the chapter:** Dream (S1) → Underground survival (S2) → Revolutionary explosion (S3) → State power (S4) → Symbolic manipulation (S5) → **Imperialism and war (S6)**',
+      },
       {
         id: 's6-tr-1',
+        title: 'The Dream Becomes a Weapon',
         type: 'text',
-        text: 'By the last quarter of the nineteenth century, nationalism no longer retained its idealistic liberal-democratic sentiment. It became a narrow creed with limited ends. Nationalist groups became increasingly intolerant of each other and ever ready to go to war.',
-        highlight: 'Late 19th century: nationalism lost liberal idealism, became narrow and intolerant',
+        text: 'By the last quarter of the nineteenth century, nationalism had **lost its soul**. It was no longer about liberty, equality, and fraternity. It had become a **narrow, aggressive creed** — my nation is better than yours, my people deserve more land than yours. Nationalist groups became **intolerant of each other** and ever ready to go to war.',
+        highlight: 'Late 19th century: nationalism lost liberal idealism, became **narrow, aggressive, and intolerant**',
       },
       {
         id: 's6-tr-2',
+        title: 'Imperialism Hijacks Nationalism',
         type: 'text',
-        text: 'The major European powers, in turn, manipulated the nationalist aspirations of the subject peoples in Europe to further their own imperialist aims.',
+        text: 'The great powers — Britain, France, Russia, Germany, Austria-Hungary — now **manipulated** the nationalist aspirations of smaller peoples to further their own **imperialist aims**. Nationalism, which was supposed to liberate people, became the justification for **conquering** them.',
       },
     ],
   },
@@ -88,6 +98,14 @@ export const section6Subsections: Subsection[] = [
           correctIndex: 1,
           explanation: 'Nationalism, aligned with imperialism, led to intense rivalry among European powers over trade, colonies and military might — culminating in the First World War (1914).',
         },
+      },
+      // FINAL CLOSING CARD — The complete arc
+      {
+        id: 's6-closing',
+        title: 'The Dream That Changed the World',
+        type: 'text',
+        text: 'Go back to **Sorrieu\'s painting** one last time. The peoples of the world marching together. Liberty holding her torch. Angels watching in peace.\n\nBy **1914**, those same nations were marching — **into the trenches of World War I**. The torch had become a gun. The fraternity had become rivalry. The dream didn\'t just die. **It killed.**\n\nBut here\'s the final lesson: the idea that people should govern themselves — that nations belong to their citizens — **that idea survived**. It spread from Europe to Asia, Africa, and the Americas. India\'s own freedom movement drew on these same ideals. The dream was imperfect, and it was abused. But it **changed the world forever**.\n\nThat is the story of the Rise of Nationalism in Europe.',
+        highlight: '**The complete arc:** Sorrieu\'s dream of peaceful nations (1848) → French Revolution\'s idealism → Napoleon\'s paradox → underground movements → 1848 failure → blood and iron → symbols of power → imperialism and WWI. The dream was betrayed — but the idea survived and spread worldwide.',
       },
     ],
   },

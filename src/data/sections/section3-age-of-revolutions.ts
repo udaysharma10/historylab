@@ -5,10 +5,19 @@ export const section3Subsections: Subsection[] = [
     id: 's3-intro',
     title: 'Liberalism and Revolution in the 1830s',
     narrativeCards: [
+      // OPENING CARD — Story So Far
+      {
+        id: 's3-opener',
+        title: 'The Story So Far...',
+        type: 'text',
+        text: '**1830. France sneezes, and Europe catches cold.**\n\nThe old powers tried everything — censorship, secret police, the Treaty of Vienna. But the dream of nationalism refused to die. Now it\'s about to explode.\n\nIn this section, we\'ll see **two kinds of revolution** happening at once: **political revolution** (people fighting in the streets) and **cultural revolution** (artists, poets, and musicians building national identity through stories and songs). Both are equally important — and CBSE tests the cultural side heavily.',
+        highlight: '**Two revolutions:** Political (street revolts, 1830 & 1848) + Cultural (Romanticism — folk tales, music, language as tools of national identity)',
+      },
       {
         id: 's3-intro-1',
+        title: 'Revolution Becomes the Only Option',
         type: 'text',
-        text: 'As conservative regimes tried to consolidate their power, liberalism and nationalism came to be increasingly associated with revolution in many regions of Europe — the Italian and German states, provinces of the Ottoman Empire, Ireland and Poland.',
+        text: 'As conservative regimes tightened their grip, **liberalism and nationalism became inseparable from revolution**. Across Europe — in the Italian and German states, in the Ottoman Empire, in Ireland and Poland — the only way to achieve freedom was to **fight for it**.',
       },
       {
         id: 's3-intro-2',
@@ -86,8 +95,10 @@ export const section3Subsections: Subsection[] = [
       },
       {
         id: 's3-rom-2',
+        title: 'Romanticism — Feeling Over Reason',
         type: 'text',
-        text: 'Romanticism was a cultural movement which sought to develop a particular form of nationalist sentiment. Romantic artists and poets criticised the glorification of reason and science and focused instead on emotions, intuition and mystical feelings.',
+        text: '**Romanticism** was a cultural movement that challenged the Enlightenment\'s worship of **reason and science**. Romantics said: "What makes us a nation isn\'t a constitution or a trade agreement — it\'s our **shared feelings**, our **stories**, our **songs**." They valued **emotions, intuition, and mystical connection** to the land and its people.\n\nWhy does this matter? Because the Enlightenment could build constitutions, but **Romanticism built identities**.',
+        highlight: '**Enlightenment** said: reason makes us equal. **Romanticism** said: our culture makes us unique. One built constitutions, the other built national identities.',
       },
       {
         id: 's3-rom-3',
@@ -115,6 +126,14 @@ export const section3Subsections: Subsection[] = [
         id: 's3-rom-7',
         type: 'infobox',
         text: 'The Grimm Brothers — Jacob and Wilhelm Grimm — collected old folktales, travelling from village to village for six years. They published their first collection in 1812. They saw French domination as a threat to German culture and believed folktales expressed a pure, authentic German spirit. Their project of collecting folktales and developing the German language was part of the wider effort to oppose French domination and create a German national identity.',
+      },
+      // WHY card — mechanism of cultural nationalism
+      {
+        id: 's3-rom-8',
+        title: 'Why Stories and Songs Built Nations',
+        type: 'text',
+        text: 'Here\'s the mechanism that most students miss — and that CBSE loves to ask about:\n\nImagine a farmer in Bavaria and a merchant in Hamburg. They\'ve never met. They live 600 km apart. But if they both grew up hearing the **same fairy tales** from the Brothers Grimm, singing the **same folk songs**, speaking the **same language** — they start to feel a connection. They feel **German**.\n\n**Shared stories = shared identity.** That\'s why culture was as powerful a tool of nationalism as any army. The Grimm Brothers weren\'t just collecting fairy tales — they were **building a nation**.',
+        highlight: '**HOW culture creates nations:** Shared stories + shared songs + shared language = shared identity across regions. The Grimm Brothers weren\'t collecting fairy tales — they were building German national identity.',
       },
     ],
   },
@@ -198,6 +217,22 @@ export const section3Subsections: Subsection[] = [
         id: 's3-48-8',
         type: 'vocabulary',
         text: 'Ideology — System of ideas reflecting a particular social and political vision.',
+      },
+      // WHY card — Frankfurt's failure and its consequences
+      {
+        id: 's3-48-why',
+        title: 'Why Frankfurt Failed — And Why It Changed Everything',
+        type: 'text',
+        text: 'The Frankfurt Parliament failed for three reasons that every student must understand:\n\n**1. The professors wanted a constitution.** But the workers who had actually fought on the barricades wanted **bread, jobs, and land**.\n**2. The king rejected the offer.** Friedrich Wilhelm IV didn\'t want a crown given by "the people" — he wanted divine right.\n**3. The middle class and workers split.** Without unity, the parliament had no power to enforce anything.\n\nThis failure changed the course of European history. After Frankfurt, the European mind made a devastating calculation: **democracy can\'t build nations. Only power can.** That\'s why Bismarck — not a parliament — would unify Germany.',
+        highlight: '**Why Frankfurt matters:** Its failure proved (to Europeans at that time) that democracy alone couldn\'t build nations. This opened the door for Bismarck\'s "blood and iron" approach.',
+      },
+      // SORRIEU REFERENCE + CLOSING CARD
+      {
+        id: 's3-closing',
+        title: 'What Comes Next...',
+        type: 'text',
+        text: 'Remember **Sorrieu\'s painting** from the very beginning? He painted it in **this exact year — 1848**. All around him, people were trying to make his dream real. At Frankfurt, they tried to build a democratic German nation through debate and constitution-writing.\n\n**They failed.**\n\nThe dreamers lost. The idealists were crushed. Now the **realists** take over — men like **Bismarck** who will build nations not with speeches and votes, but with **"blood and iron"**. In the next section, we\'ll see how Germany and Italy were actually unified — and it\'s not the story Sorrieu dreamed of.',
+        highlight: '**The turning point:** 1848 revolutions failed. Sorrieu\'s dream of democratic nations was replaced by Bismarck\'s blood-and-iron reality. The dream survived, but it changed shape.',
       },
     ],
   },

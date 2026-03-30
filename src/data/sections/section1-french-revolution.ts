@@ -5,12 +5,20 @@ export const section1Subsections: Subsection[] = [
     id: 's1-intro',
     title: 'Introduction: Sorrieu\'s Vision',
     narrativeCards: [
+      // Card 0: THE HOOK — storyteller opening
+      {
+        id: 's1-hook',
+        title: 'The Dream That Changed Europe',
+        type: 'text',
+        text: 'It\'s **1848**. Europe is on fire. In Paris, workers are tearing up cobblestones to build barricades. In Vienna, the most powerful minister on the continent — **Metternich** — is fleeing in disguise. In Frankfurt, professors and lawyers are drafting a constitution for a country that **doesn\'t even exist yet**: Germany.\n\nAnd in a small studio in France, an artist named **Frédéric Sorrieu** is painting a dream — a dream of all nations, free and equal, marching together toward liberty.\n\nIt\'s a beautiful dream. And by the end of this chapter, you\'ll understand **why it died**.',
+        highlight: '**1848** — the year of revolutions. This chapter tells the story of how the dream of free nations was born, fought for, and ultimately betrayed.',
+      },
       // Card 1: Context — WHY 1848 matters
       {
         id: 's1-intro-0',
         title: 'Why 1848 Was a Turning Point',
         type: 'text',
-        text: 'The year **1848** was a turning point in European history. Across the continent, people **rose in revolt** — demanding **democratic rights**, **national unification**, and an **end to autocratic monarchies**. It was in this charged atmosphere of revolution and hope that a French artist created one of the most iconic images of European nationalism.',
+        text: 'The year **1848** was a turning point in European history. Across the continent, people **rose in revolt** — demanding **democratic rights**, **national unification**, and an **end to autocratic monarchies**. It was in this charged atmosphere of revolution and hope that Sorrieu created one of the most iconic images of European nationalism.',
         highlight: '**1848** — year of revolutions across Europe. People demanded **democracy, liberty, and national unification**.',
       },
       // Card 2: Who was Sorrieu + what he created
@@ -128,19 +136,29 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
     narrativeCards: [
       {
         id: 's1-ns-1',
+        title: 'What Changed — And Why It Matters',
         type: 'text',
-        text: 'During the nineteenth century, nationalism emerged as a force which brought about sweeping changes in the political and mental world of Europe. The end result was the emergence of the nation-state in place of the multi-national dynastic empires.',
-        highlight: 'Nation-state replaced multi-national dynastic empires',
+        text: 'Sorrieu\'s painting shows us a **dream**. But how did that dream actually reshape Europe? Here\'s the big picture: before the nineteenth century, Europe was ruled by **multi-national dynastic empires** — a single king might rule over Germans, Italians, Hungarians, and Czechs who shared nothing in common except the same ruler.\n\nNationalism changed that. It replaced empires with **nation-states** — countries where the people, not just the king, felt they belonged together.',
+        highlight: '**Key shift:** Multi-national empires (one king, many peoples) → Nation-states (one people, one country)',
       },
       {
         id: 's1-ns-2',
+        title: 'What Is a Nation-State?',
         type: 'text',
-        text: 'A nation-state was one in which the majority of its citizens, and not only its rulers, came to develop a sense of common identity and shared history or descent. This commonness did not exist from time immemorial; it was forged through struggles.',
+        text: 'A **nation-state** is a country where the majority of citizens — not just the rulers — share a **sense of common identity**, a shared history, and a feeling of belonging together. Here\'s the crucial point: this "commonness" didn\'t exist from ancient times. **It was forged through struggles** — revolutions, wars, cultural movements, and political action. Nations aren\'t born. They are **built**.',
+        highlight: '**Nation-state** = citizens share common identity + shared history. This identity was **built through struggle**, not inherited from ancient times.',
       },
       {
         id: 's1-ns-3',
         type: 'source',
         text: 'Ernst Renan, in his 1882 lecture "What is a Nation?", argued: "A nation is the culmination of a long past of endeavours, sacrifice and devotion... Its existence is a daily plebiscite." He rejected the idea that nations are formed by common language, race, religion, or territory.',
+      },
+      {
+        id: 's1-ns-4',
+        title: 'Why Renan\'s Definition Matters',
+        type: 'text',
+        text: 'Pay close attention to what Renan is saying — it\'s **not what most people assume**. He says a nation is NOT about shared DNA, language, or religion. It\'s about **a daily choice** — people choosing, every day, to belong together because of shared memories and shared purpose. He calls it a **"daily plebiscite"** — a daily vote.\n\nThis matters because it challenged the dangerous idea that nations are based on **race or blood**. That idea would later fuel the worst atrocities of the twentieth century.',
+        highlight: '**Renan\'s key argument:** A nation = daily choice to belong together (shared memory + purpose). NOT based on race, language, or religion. This is frequently tested in CBSE source-based questions.',
       },
     ],
   },
@@ -150,14 +168,16 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
     narrativeCards: [
       {
         id: 's1-fr-1',
+        title: 'Before 1789: The King Owned France',
         type: 'text',
-        text: 'The first clear expression of nationalism came with the French Revolution in 1789. France was a full-fledged territorial state in 1789 under the rule of an absolute monarch.',
+        text: 'The first clear expression of nationalism came with the **French Revolution in 1789**. Before the revolution, France was already a territorial state — but it belonged to the **king**, not the people. An absolute monarch ruled with unlimited power.',
       },
       {
         id: 's1-fr-2',
+        title: 'After 1789: The People Owned France',
         type: 'text',
-        text: 'The political and constitutional changes that came in the wake of the French Revolution led to the transfer of sovereignty from the monarchy to a body of French citizens. The revolution proclaimed that it was the people who would henceforth constitute the nation and shape its destiny.',
-        highlight: 'Sovereignty transferred from monarchy to citizens — the people constitute the nation',
+        text: 'The revolution changed one fundamental thing: **sovereignty** — the ultimate authority — moved from the **monarchy** to the **citizens**. Before 1789, the King owned France. After 1789, **the people owned France**.\n\nThis single shift is what created the idea of a **nation**. The revolution declared that it was the people who would shape the destiny of the country — not a king sitting on a throne.',
+        highlight: '**The key shift:** Sovereignty moved from monarchy → citizens. The PEOPLE now constituted the nation and shaped its destiny.',
       },
       {
         id: 's1-fr-3',
@@ -177,14 +197,16 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
       },
       {
         id: 's1-fr-5',
+        title: 'Building One Nation from Many Regions',
         type: 'text',
-        text: 'A centralised administrative system was put in place with uniform laws for all citizens. Internal customs duties and dues were abolished and a uniform system of weights and measures was adopted. Regional dialects were discouraged and French became the common language of the nation.',
-        highlight: 'Uniform laws, abolition of internal customs, common language (French), standard weights and measures',
+        text: 'Here\'s **why** all these measures mattered: before the revolution, France wasn\'t truly "one country" in daily life. Different regions had different laws, different taxes at every border, different weights for measuring grain, and people spoke different dialects.\n\nThe revolutionaries changed all of this: **uniform laws** for everyone, **one currency**, **one system of weights and measures**, and **French** as the common language. Regional dialects were discouraged. The point was to make every citizen **feel French** — not Breton or Provençal or Alsatian.',
+        highlight: '**How they built national identity:** Uniform laws, abolished internal customs, one currency, standard weights & measures, French as common language',
       },
       {
         id: 's1-fr-6',
+        title: 'France\'s Mission — Liberate Europe',
         type: 'text',
-        text: 'The revolutionaries further declared that it was the mission and destiny of the French nation to liberate the peoples of Europe from despotism — to help other peoples become nations.',
+        text: 'The revolutionaries went further — they declared it was **France\'s mission** to liberate the peoples of Europe from despotism. France wouldn\'t just free itself; it would help **all peoples** become nations. This was an extraordinary claim — and it set the stage for what Napoleon would do next.',
       },
     ],
   },
@@ -231,6 +253,14 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
         type: 'figure',
         text: 'After the Battle of Leipzig in 1813, Napoleon\'s power declined rapidly. This caricature shows him as a postman losing letters — each bearing the name of a territory he lost.',
         imageId: 'fig-5',
+      },
+      // CLOSING CARD — What Comes Next
+      {
+        id: 's1-closing',
+        title: 'What Comes Next...',
+        type: 'text',
+        text: 'So here\'s where we stand: the French Revolution proved that **people can overthrow kings** and build nations. Napoleon **carried that idea across Europe** — but on the tip of a bayonet, not through democracy. He freed peasants from feudalism but crushed their freedom with taxes and conscription.\n\nNow Napoleon has fallen. The old kings are gathering to **put the genie back in the bottle**. But here\'s what they don\'t understand: **you can\'t kill an idea**.\n\nIn the next section, we\'ll see what happened when the old powers tried to crush the dream of nationalism — and why they failed.',
+        highlight: '**The story so far:** French Revolution created the idea of the nation → Napoleon spread it across Europe → He fell, and the old kings tried to reverse everything. But the idea survived.',
       },
     ],
   },
