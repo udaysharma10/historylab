@@ -1,0 +1,373 @@
+import { useState, useMemo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { MapExplorer, MapIdentifyCard, MapLabelCard } from '../components/map'
+import { QuizProgress } from '../components/quiz'
+import { QuizResults } from '../components/quiz/QuizResults'
+import { mapIdentifyActivities, mapLabelActivities } from '../data/activities/mapActivities'
+import { mapDefinitions } from '../data/maps'
+import { calculateStars } from '../engine/scoringEngine'
+import { calculateXP } from '../engine/scoringEngine'
+import { useProgressStore } from '../store/useProgressStore'
+import type { SectionId } from '../types/progress'
+import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
+
+type MapPhase = 'home' | 'explore' | 'playing-identify' | 'playing-label' | 'results'
+
+const SECTION_COLORS: Record<string, string> = {
+  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
+  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+}
+
+const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
+  easy: { label: 'Easy', color: '#27AE60' },
+  medium: { label: 'Medium', color: '#E67E22' },
+  hard: { label: 'Hard', color: '#C0392B' },
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const result = [...arr]
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]]
+  }
+  return result
+}
+
+export function MapMode() {
+  const navigate = useNavigate()
+  const completeProblem = useProgressStore(s => s.completeProblem)
+
+  const [phase, setPhase] = useState<MapPhase>('home')
+  const [identifyActivities, setIdentifyActivities] = useState(mapIdentifyActivities)
+  const [labelActivities, setLabelActivities] = useState(mapLabelActivities)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [questionResults, setQuestionResults] = useState<('correct' | 'wrong' | 'unanswered')[]>([])
+  const [totalMistakes, setTotalMistakes] = useState(0)
+  const [activeType, setActiveType] = useState<'identify' | 'label'>('identify')
+
+  const currentActivities = activeType === 'identify' ? identifyActivities : labelActivities
+
+  const handleStartPractice = useCallback((type: 'identify' | 'label') => {
+    setActiveType(type)
+    if (type === 'identify') {
+      const shuffled = shuffle(mapIdentifyActivities)
+      setIdentifyActivities(shuffled)
+      setQuestionResults(shuffled.map(() => 'unanswered'))
+    } else {
+      const shuffled = shuffle(mapLabelActivities)
+      setLabelActivities(shuffled)
+      setQuestionResults(shuffled.map(() => 'unanswered'))
+    }
+    setCurrentIndex(0)
+    setTotalMistakes(0)
+    setPhase(type === 'identify' ? 'playing-identify' : 'playing-label')
+  }, [])
+
+  const handleAnswer = useCallback((correct: boolean, _hintsUsed: number) => {
+    const newResults = [...questionResults]
+    newResults[currentIndex] = correct ? 'correct' : 'wrong'
+    setQuestionResults(newResults)
+    if (!correct) setTotalMistakes(m => m + 1)
+
+    const total = activeType === 'identify' ? identifyActivities.length : labelActivities.length
+
+    if (currentIndex < total - 1) {
+      setTimeout(() => setCurrentIndex(i => i + 1), 300)
+    } else {
+      const mistakes = newResults.filter(r => r === 'wrong').length
+      const stars = calculateStars(mistakes, 0)
+      // Save progress for primary section of the activities
+      const primarySection = (activeType === 'identify' ? identifyActivities : labelActivities)[0]?.sectionId || 's1'
+      completeProblem(primarySection as SectionId, stars)
+      setTimeout(() => setPhase('results'), 300)
+    }
+  }, [questionResults, currentIndex, activeType, identifyActivities, labelActivities, completeProblem])
+
+  const correctCount = useMemo(() => questionResults.filter(r => r === 'correct').length, [questionResults])
+  const stars = useMemo(() => calculateStars(totalMistakes, 0), [totalMistakes])
+  const xp = useMemo(() => calculateXP(stars, 'medium'), [stars])
+
+  // === EXPLORE MODE ===
+  if (phase === 'explore') {
+    return <MapExplorer onBack={() => setPhase('home')} />
+  }
+
+  // === PLAYING IDENTIFY ===
+  if (phase === 'playing-identify') {
+    const activity = identifyActivities[currentIndex] as MapIdentifyActivity
+    const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+
+    return (
+      <div className="max-w-lg mx-auto">
+        <motion.button
+          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
+          onClick={() => setPhase('home')}
+          whileHover={{ x: -3 }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to Maps
+        </motion.button>
+
+        <QuizProgress
+          current={currentIndex}
+          total={identifyActivities.length}
+          results={questionResults}
+          sectionColor={color}
+        />
+
+        <AnimatePresence mode="wait">
+          <motion.div key={activity.id}>
+            <MapIdentifyCard
+              activity={activity}
+              sectionColor={color}
+              questionNumber={currentIndex + 1}
+              totalQuestions={identifyActivities.length}
+              onAnswer={handleAnswer}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    )
+  }
+
+  // === PLAYING LABEL ===
+  if (phase === 'playing-label') {
+    const activity = labelActivities[currentIndex] as MapLabelActivity
+    const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+
+    return (
+      <div className="max-w-lg mx-auto">
+        <motion.button
+          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
+          onClick={() => setPhase('home')}
+          whileHover={{ x: -3 }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to Maps
+        </motion.button>
+
+        <QuizProgress
+          current={currentIndex}
+          total={labelActivities.length}
+          results={questionResults}
+          sectionColor={color}
+        />
+
+        <AnimatePresence mode="wait">
+          <motion.div key={activity.id}>
+            <MapLabelCard
+              activity={activity}
+              sectionColor={color}
+              questionNumber={currentIndex + 1}
+              totalQuestions={labelActivities.length}
+              onAnswer={handleAnswer}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    )
+  }
+
+  // === RESULTS PHASE ===
+  if (phase === 'results') {
+    const typeLabel = activeType === 'identify' ? 'map-identify' : 'map-label'
+    return (
+      <QuizResults
+        sectionColor="#2980B9"
+        activityType={typeLabel}
+        correct={correctCount}
+        total={currentActivities.length}
+        stars={stars}
+        xpEarned={xp}
+        onRetry={() => handleStartPractice(activeType)}
+        onBackToSection={() => setPhase('home')}
+      />
+    )
+  }
+
+  // === HOME PHASE ===
+  return (
+    <div className="max-w-lg mx-auto">
+      {/* Header */}
+      <motion.div
+        className="mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <motion.button
+          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
+          onClick={() => navigate('/')}
+          whileHover={{ x: -3 }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to Home
+        </motion.button>
+
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-hist-teal">
+            <span className="text-white text-2xl">🗺️</span>
+          </div>
+          <div>
+            <h1 className="font-display text-2xl font-bold text-hist-dark">Maps</h1>
+            <p className="font-body text-sm text-gray-400">{mapDefinitions.length} historical maps with {mapIdentifyActivities.length + mapLabelActivities.length} activities</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Three mode cards */}
+      <div className="grid grid-cols-1 gap-4 mb-6">
+        {/* Explore card */}
+        <motion.button
+          className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => setPhase('explore')}
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-xl bg-hist-teal/10 flex items-center justify-center text-3xl shrink-0">
+              🔍
+            </div>
+            <div>
+              <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Explore Maps</h2>
+              <p className="font-body text-sm text-gray-500 leading-relaxed">
+                Browse <strong>{mapDefinitions.length} historical maps</strong> — Europe 1815, German unification, Italian states. Tap regions to learn about each territory.
+              </p>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {mapDefinitions.map(m => (
+                  <span key={m.id} className="w-5 h-2 rounded-full" style={{ backgroundColor: m.sectionColor }} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.button>
+
+        {/* Identify practice card */}
+        <motion.button
+          className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => handleStartPractice('identify')}
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-xl bg-hist-gold/10 flex items-center justify-center text-3xl shrink-0">
+              📍
+            </div>
+            <div>
+              <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Practice: Identify Regions</h2>
+              <p className="font-body text-sm text-gray-500 leading-relaxed">
+                Read the description and tap the correct region on the map. <strong>{mapIdentifyActivities.length} questions</strong> across all maps.
+              </p>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {mapIdentifyActivities.map(a => {
+                  const d = DIFFICULTY_LABELS[a.difficulty]
+                  return (
+                    <span
+                      key={a.id}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                      style={{ backgroundColor: d.color }}
+                    >
+                      {d.label}
+                    </span>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </motion.button>
+
+        {/* Label practice card */}
+        <motion.button
+          className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => handleStartPractice('label')}
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 rounded-xl bg-hist-purple/10 flex items-center justify-center text-3xl shrink-0">
+              🏷️
+            </div>
+            <div>
+              <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Practice: Label Maps</h2>
+              <p className="font-body text-sm text-gray-500 leading-relaxed">
+                Place labels on the correct regions. <strong>{mapLabelActivities.length} activities</strong> — label empires, kingdoms, and states.
+              </p>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {mapLabelActivities.map(a => {
+                  const d = DIFFICULTY_LABELS[a.difficulty]
+                  return (
+                    <span
+                      key={a.id}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                      style={{ backgroundColor: d.color }}
+                    >
+                      {d.label}
+                    </span>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </motion.button>
+      </div>
+
+      {/* All activities list */}
+      <div>
+        <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Map Activities</h3>
+        <div className="space-y-2">
+          {[...mapIdentifyActivities, ...mapLabelActivities].map((activity, i) => {
+            const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+            const diff = DIFFICULTY_LABELS[activity.difficulty]
+            const isLabel = activity.type === 'map-label'
+
+            return (
+              <motion.div
+                key={activity.id}
+                className="bg-white rounded-xl p-4 shadow-card"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + i * 0.04 }}
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm shrink-0"
+                    style={{ backgroundColor: color }}
+                  >
+                    {isLabel ? '🏷️' : '📍'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-body text-sm text-hist-dark leading-snug">
+                      {isLabel ? (activity as MapLabelActivity).instruction : (activity as MapIdentifyActivity).question}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded text-white" style={{ backgroundColor: diff.color }}>
+                        {diff.label}
+                      </span>
+                      <span className="text-[10px] font-body text-gray-400">
+                        {isLabel ? 'Label' : 'Identify'}
+                      </span>
+                      {activity.examRelevance === 'high' && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-hist-gold/15 text-hist-gold">
+                          EXAM
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}

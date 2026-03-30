@@ -1,0 +1,1 @@
+export { FlashcardSingle } from './FlashcardSingle'

@@ -1,0 +1,5 @@
+export { FigureHotspotOverlay } from './FigureHotspotOverlay'
+export { FigureAnalysisPanel } from './FigureAnalysisPanel'
+export { FigureDetail } from './FigureDetail'
+export { FigureGallery } from './FigureGallery'
+export { ImageAnalysisCard } from './ImageAnalysisCard'
