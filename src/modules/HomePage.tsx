@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useProgressStore } from '../store/useProgressStore'
 import { ProgressRing } from '../components/common/ProgressRing'
 import { calculateMastery } from '../engine/scoringEngine'
 import { useAuthContext } from '../components/auth'
+import { isAdminTeacher } from '../lib/adminEmails'
 import type { SectionId } from '../types/progress'
 
 const SECTIONS = [
@@ -41,6 +43,13 @@ export function HomePage() {
   const overallProgress = totalProblems > 0 ? Math.round((totalCompleted / totalProblems) * 100) : 0
 
   const firstName = profile.name.split(' ')[0]
+
+  // Auto-redirect admin teachers to dashboard
+  useEffect(() => {
+    if (isAdminTeacher(profile.email)) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [profile.email, navigate])
 
   return (
     <div className="space-y-8 pb-8">

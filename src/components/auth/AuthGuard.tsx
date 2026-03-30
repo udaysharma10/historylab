@@ -1,9 +1,10 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import type { Profile } from '../../hooks/useAuth'
 import { LoginPage } from './LoginPage'
 import { ProfileSetup } from './ProfileSetup'
 import type { ProfileFormData } from './ProfileSetup'
+import { isAdminTeacher } from '../../lib/adminEmails'
 
 interface AuthContextValue {
   profile: Profile
@@ -26,6 +27,21 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const { user, profile, loading, signInWithGoogle, signOut, updateProfile } = useAuth()
   const [signingIn, setSigningIn] = useState(false)
   const [savingProfile, setSavingProfile] = useState(false)
+  const autoSetupDone = useRef(false)
+
+  // Auto-complete profile for admin teacher emails
+  useEffect(() => {
+    if (!user || !profile || profile.profile_completed || autoSetupDone.current) return
+    if (!isAdminTeacher(user.email)) return
+
+    autoSetupDone.current = true
+    updateProfile({
+      name: profile.name || user.user_metadata?.full_name || 'Teacher',
+      role: 'teacher',
+      school: 'Admin',
+      profile_completed: true,
+    })
+  }, [user, profile, updateProfile])
 
   // Loading state
   if (loading) {
@@ -60,6 +76,20 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   // Signed in but profile not completed
   if (!profile?.profile_completed) {
+    // Admin teachers are auto-completed via useEffect above, show loading
+    if (isAdminTeacher(user.email)) {
+      return (
+        <div className="min-h-dvh flex items-center justify-center"
+          style={{ background: 'linear-gradient(135deg, #FDF6EC, #F0E6D4)' }}
+        >
+          <div className="text-center">
+            <div className="text-5xl mb-4 animate-float">👩‍🏫</div>
+            <p className="text-gray-500 font-body">Setting up teacher account...</p>
+          </div>
+        </div>
+      )
+    }
+
     const handleProfileComplete = async (data: ProfileFormData) => {
       setSavingProfile(true)
       try {
