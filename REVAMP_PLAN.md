@@ -2,6 +2,7 @@
 ## "From Textbook to Storytelling"
 
 **Created**: 2026-03-31
+**Last Updated**: 2026-03-31
 **Context**: Expert History teacher review identified that while the app has excellent structure and exam coverage, it lacks the narrative thread that transforms 6 sections into ONE compelling story. The content needs to shift from "textbook with interactivity" to "a great teacher telling a story."
 
 **Core Insight**: A great History teacher is a great storyteller. The story of this chapter is:
@@ -48,8 +49,9 @@
 
 ---
 
-## Phase 1: The Story Thread (Content Rewrite)
+## Phase 1: The Story Thread (Content Rewrite) — **DONE** (2026-03-31)
 **Goal**: Transform the narrative from textbook paragraphs into a teacher's story.
+**Result**: ~18 new cards added, ~15 cards rewritten. Sorrieu motif stitched across S1-S6. WHY cards for 6 key concepts. All 6 sections now have story openers and closers. Zero build errors.
 
 ### 1A. "Story So Far" and "What Comes Next" Cards
 Add opening/closing cards to every section that explicitly connect to the previous/next section.
@@ -215,24 +217,24 @@ When a student scores 1 star (< 50%), show:
 
 ## Execution Order
 
-| Order | Phase | Description | Impact | Effort |
-|-------|-------|-------------|--------|--------|
-| 1 | 1A | Story thread cards (openers + closers) | Very High | Low |
-| 2 | 1D | Sorrieu recurring motif | High | Low |
-| 3 | 1C | "The WHY" explanation cards | Very High | Medium |
-| 4 | 1B | Rewrite dry narrative cards | High | High |
-| 5 | 2A | Expand vocabulary | High | Low |
-| 6 | 2B | Expand symbols (Marianne, Britannia) | Medium | Low |
-| 7 | 4A | Cross-section synthesis questions | High | Medium |
-| 8 | 4C | Section 5 quiz strengthening | Medium | Low |
-| 9 | 3A | Embed timeline per section | High | Medium |
-| 10 | 3B | Embed maps per section (+ new Balkans map) | High | Medium |
-| 11 | 3C | Embed figures inline (always-expanded analysis) | Medium | Medium |
-| 12 | 4B | Assertion-Reason questions | High | Medium |
-| 13 | 4D | MCQ distractor improvements | Medium | Low |
-| 14 | 2C | Additional primary sources | Medium | Medium |
-| 15 | 4E | Remediation guidance | Medium | High |
-| 16 | 3D | Reposition standalone modes as revision | Low | Low |
+| Order | Phase | Description | Impact | Effort | Status |
+|-------|-------|-------------|--------|--------|--------|
+| 1 | 1A | Story thread cards (openers + closers) | Very High | Low | **DONE** (2026-03-31) — 12 cards added |
+| 2 | 1D | Sorrieu recurring motif | High | Low | **DONE** (2026-03-31) — referenced in S1, S3-S6 |
+| 3 | 1C | "The WHY" explanation cards | Very High | Medium | **DONE** (2026-03-31) — 6 cards added |
+| 4 | 1B | Rewrite dry narrative cards | High | High | **DONE** (2026-03-31) — ~15 cards rewritten |
+| 5 | 2A | Expand vocabulary | High | Low | Pending |
+| 6 | 2B | Expand symbols (Marianne, Britannia) | Medium | Low | Pending |
+| 7 | 4A | Cross-section synthesis questions | High | Medium | Pending |
+| 8 | 4C | Section 5 quiz strengthening | Medium | Low | Pending |
+| 9 | 3A | Embed timeline per section | High | Medium | Pending |
+| 10 | 3B | Embed maps per section (+ new Balkans map) | High | Medium | Pending |
+| 11 | 3C | Embed figures inline (always-expanded analysis) | Medium | Medium | Pending |
+| 12 | 4B | Assertion-Reason questions | High | Medium | Pending |
+| 13 | 4D | MCQ distractor improvements | Medium | Low | Pending |
+| 14 | 2C | Additional primary sources | Medium | Medium | Pending |
+| 15 | 4E | Remediation guidance | Medium | High | Pending |
+| 16 | 3D | Reposition standalone modes as revision | Low | Low | Pending |
 
 ---
 
