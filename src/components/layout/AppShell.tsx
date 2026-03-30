@@ -1,13 +1,28 @@
+import { useState, useRef, useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useProgressStore } from '../../store/useProgressStore'
+import { useAuthContext } from '../auth'
 
 export function AppShell() {
   const location = useLocation()
   const navigate = useNavigate()
   const totalStars = useProgressStore((s) => s.totalStars)
-  const playerName = useProgressStore((s) => s.playerName)
+  const { profile, signOut } = useAuthContext()
   const isHome = location.pathname === '/'
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Close menu on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [menuOpen])
 
   return (
     <div className="min-h-dvh flex flex-col">
@@ -48,9 +63,50 @@ export function AppShell() {
               <span className="font-display font-bold text-hist-dark text-sm">{totalStars}</span>
             </div>
 
-            {/* Avatar */}
-            <div className="w-9 h-9 rounded-full bg-hist-blue flex items-center justify-center text-white font-display font-bold text-sm">
-              {playerName ? playerName[0].toUpperCase() : '?'}
+            {/* Avatar with dropdown */}
+            <div className="relative" ref={menuRef}>
+              <motion.button
+                className="w-9 h-9 rounded-full overflow-hidden border-2 border-transparent hover:border-hist-blue/30 transition-colors"
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                {profile.avatar_url ? (
+                  <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-hist-blue flex items-center justify-center text-white font-display font-bold text-sm">
+                    {profile.name ? profile.name[0].toUpperCase() : '?'}
+                  </div>
+                )}
+              </motion.button>
+
+              <AnimatePresence>
+                {menuOpen && (
+                  <motion.div
+                    className="absolute right-0 top-12 bg-white rounded-xl shadow-card-hover border border-gray-100 py-2 min-w-[200px] z-50"
+                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <div className="font-display font-bold text-sm text-hist-dark">{profile.name}</div>
+                      <div className="text-xs text-gray-400 capitalize">{profile.role}{profile.school ? ` · ${profile.school}` : ''}</div>
+                    </div>
+                    <button
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors flex items-center gap-2"
+                      onClick={async () => {
+                        setMenuOpen(false)
+                        await signOut()
+                      }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+                      </svg>
+                      Sign Out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useProgressStore } from '../store/useProgressStore'
 import { ProgressRing } from '../components/common/ProgressRing'
 import { calculateMastery } from '../engine/scoringEngine'
+import { useAuthContext } from '../components/auth'
 import type { SectionId } from '../types/progress'
 
 const SECTIONS = [
@@ -32,63 +32,15 @@ function getGreeting(): string {
 
 export function HomePage() {
   const navigate = useNavigate()
-  const playerName = useProgressStore((s) => s.playerName)
+  const { profile } = useAuthContext()
   const totalStars = useProgressStore((s) => s.totalStars)
   const sections = useProgressStore((s) => s.sections)
-  const setPlayerName = useProgressStore((s) => s.setPlayerName)
-  const [showNameInput, setShowNameInput] = useState(!playerName)
-  const [nameInput, setNameInput] = useState('')
-
-  useEffect(() => {
-    if (!playerName) setShowNameInput(true)
-  }, [playerName])
-
-  const handleSetName = () => {
-    if (nameInput.trim()) {
-      setPlayerName(nameInput.trim())
-      setShowNameInput(false)
-    }
-  }
 
   const totalCompleted = Object.values(sections).reduce((sum, s) => sum + s.completed, 0)
   const totalProblems = Object.values(sections).reduce((sum, s) => sum + s.total, 0)
   const overallProgress = totalProblems > 0 ? Math.round((totalCompleted / totalProblems) * 100) : 0
 
-  if (showNameInput) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <motion.div
-          className="bg-white rounded-3xl p-8 shadow-card max-w-md w-full text-center"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-        >
-          <div className="text-5xl mb-4">📜</div>
-          <h1 className="font-display text-3xl font-bold text-hist-dark mb-2">
-            Welcome to HistoryLab
-          </h1>
-          <p className="text-gray-500 mb-6">The Rise of Nationalism in Europe</p>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={nameInput}
-            onChange={(e) => setNameInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSetName()}
-            className="w-full px-4 py-3 rounded-xl border-2 border-hist-gold/30 focus:border-hist-gold focus:outline-none text-center font-body text-lg mb-4"
-            autoFocus
-          />
-          <motion.button
-            className="bg-hist-gold text-white font-display text-lg px-8 py-3 rounded-full shadow-button btn-press w-full"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleSetName}
-            disabled={!nameInput.trim()}
-          >
-            Start Learning
-          </motion.button>
-        </motion.div>
-      </div>
-    )
-  }
+  const firstName = profile.name.split(' ')[0]
 
   return (
     <div className="space-y-8 pb-8">
@@ -101,7 +53,7 @@ export function HomePage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-display text-2xl font-bold text-hist-dark">
-              {getGreeting()}, {playerName}!
+              {getGreeting()}, {firstName}!
             </h1>
             <p className="text-gray-500 mt-1">Chapter 1: Rise of Nationalism in Europe</p>
           </div>

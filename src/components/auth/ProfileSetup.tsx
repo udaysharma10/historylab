@@ -1,0 +1,164 @@
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+
+export interface ProfileFormData {
+  name: string
+  school: string
+  role: 'student' | 'teacher' | 'parent'
+  class: string
+}
+
+interface ProfileSetupProps {
+  initialName: string
+  initialEmail: string
+  avatarUrl: string | null
+  onComplete: (data: ProfileFormData) => void
+  saving?: boolean
+}
+
+const CLASSES = [
+  '10-A', '10-B', '10-C', '10-D', '10-E', '10-F',
+  '9-A', '9-B', '9-C', '9-D',
+  'Other',
+]
+
+const ROLES = [
+  { value: 'student' as const, label: 'Student', icon: '🎓', desc: 'I\'m here to learn' },
+  { value: 'teacher' as const, label: 'Teacher', icon: '👩‍🏫', desc: 'I teach history' },
+  { value: 'parent' as const, label: 'Parent', icon: '👨‍👩‍👧', desc: 'I\'m tracking my child\'s progress' },
+]
+
+export function ProfileSetup({ initialName, avatarUrl, onComplete, saving }: ProfileSetupProps) {
+  const [name, setName] = useState(initialName)
+  const [school, setSchool] = useState('')
+  const [role, setRole] = useState<'student' | 'teacher' | 'parent' | ''>('')
+  const [studentClass, setStudentClass] = useState('')
+
+  const canSubmit = name.trim() && school.trim() && role && (role !== 'student' || studentClass)
+
+  const handleSubmit = () => {
+    if (!canSubmit || !role) return
+    onComplete({
+      name: name.trim(),
+      school: school.trim(),
+      role,
+      class: role === 'student' ? studentClass : '',
+    })
+  }
+
+  return (
+    <div className="min-h-dvh flex items-center justify-center p-4"
+      style={{ background: 'linear-gradient(135deg, #FDF6EC, #F0E6D4)' }}
+    >
+      <motion.div
+        className="bg-white rounded-3xl p-8 shadow-card max-w-lg w-full"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', damping: 20 }}
+      >
+        {/* Header */}
+        <div className="text-center mb-6">
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="" className="w-16 h-16 rounded-full mx-auto mb-3 border-2 border-hist-gold/30" />
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-hist-blue mx-auto mb-3 flex items-center justify-center text-white text-2xl font-display font-bold">
+              {name ? name[0].toUpperCase() : '?'}
+            </div>
+          )}
+          <h2 className="font-display text-2xl font-bold text-hist-dark">Complete Your Profile</h2>
+          <p className="text-sm text-gray-500 mt-1">Tell us a bit about yourself</p>
+        </div>
+
+        <div className="space-y-5">
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-semibold text-hist-dark mb-1.5">Your Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-hist-blue focus:outline-none font-body text-base"
+              autoFocus
+            />
+          </div>
+
+          {/* School */}
+          <div>
+            <label className="block text-sm font-semibold text-hist-dark mb-1.5">School Name</label>
+            <input
+              type="text"
+              value={school}
+              onChange={(e) => setSchool(e.target.value)}
+              placeholder="e.g., DPS Gurugram"
+              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-hist-blue focus:outline-none font-body text-base"
+            />
+          </div>
+
+          {/* Role */}
+          <div>
+            <label className="block text-sm font-semibold text-hist-dark mb-2">I am a...</label>
+            <div className="grid grid-cols-3 gap-3">
+              {ROLES.map((r) => (
+                <motion.button
+                  key={r.value}
+                  className={`p-3 rounded-xl border-2 text-center transition-colors ${
+                    role === r.value
+                      ? 'border-hist-blue bg-hist-blue/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setRole(r.value)}
+                >
+                  <div className="text-2xl mb-1">{r.icon}</div>
+                  <div className="font-display font-bold text-sm text-hist-dark">{r.label}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{r.desc}</div>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
+          {/* Class (only for students) */}
+          {role === 'student' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              transition={{ duration: 0.2 }}
+            >
+              <label className="block text-sm font-semibold text-hist-dark mb-1.5">Your Class</label>
+              <div className="flex flex-wrap gap-2">
+                {CLASSES.map((c) => (
+                  <motion.button
+                    key={c}
+                    className={`px-4 py-2 rounded-lg border-2 text-sm font-semibold transition-colors ${
+                      studentClass === c
+                        ? 'border-hist-blue bg-hist-blue text-white'
+                        : 'border-gray-200 text-hist-dark hover:border-gray-300'
+                    }`}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setStudentClass(c)}
+                  >
+                    {c}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Submit */}
+          <motion.button
+            className={`w-full font-display text-lg px-8 py-3.5 rounded-xl shadow-button btn-press text-white font-bold ${
+              canSubmit ? 'bg-hist-gold' : 'bg-gray-300 cursor-not-allowed'
+            }`}
+            whileHover={canSubmit ? { scale: 1.02 } : {}}
+            whileTap={canSubmit ? { scale: 0.98 } : {}}
+            onClick={handleSubmit}
+            disabled={!canSubmit || saving}
+          >
+            {saving ? 'Saving...' : 'Start Learning'}
+          </motion.button>
+        </div>
+      </motion.div>
+    </div>
+  )
+}

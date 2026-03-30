@@ -355,4 +355,25 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 | 6 | Interactive Maps (3 PNG maps with %-based clickable regions, InteractiveMap renderer, MapIdentifyCard tap-to-identify with hints, MapLabelCard tap-label-then-region with per-label feedback, MapExplorer browse mode, MapMode orchestrator with explore/identify/label/results phases, 10 activities wired (7 identify + 3 label), QuizResults reused with map-identify/map-label labels, route `/maps`, Maps button on HomePage) | **DONE** |
 | 7 | Figure Analysis (FigureHotspotOverlay with pulsing dots + tooltips, FigureAnalysisPanel always-expanded with What You See/What It Means/Exam Tip, FigureDetail with prev/next nav + tag pills, FigureGallery 2-col grid with section+type filters, ImageAnalysisCard MCQ+free-text practice, FigureMode orchestrator with home/gallery/detail/practice/results phases, 9 image analysis activities wired (24 sub-Qs), QuizResults reused with image-analysis label, route `/figures`) | **DONE** |
 | 8 | Source Analysis + Flashcards + Exam Practice (FlashcardSingle 3D flip card with SM-2 rating, FlashcardMode orchestrator with home/browse/practice/stats phases, SourceReader parchment-styled with analysis, SourceQuizCard MCQ+free-text comprehension, ExamPractice orchestrator with home/source-read/source-practice/ncert/results phases, 100 flashcards wired with spaced repetition, 3 source readers + 9 source comprehension Qs + 10 NCERT exercise Qs with model answers, QuizResults reused with source-comprehension label, routes `/flashcards` and `/exam`, perspective-1000 CSS utility for card flip) | **DONE** |
-| 9 | Polish (responsive, keyboard nav, performance, dark mode) | Next |
+| 9 | Polish (responsive, keyboard nav, performance, dark mode) | Deferred |
+| 10-A | Deploy to Vercel (static hosting, auto-deploy on push) | **DONE** |
+| 10-B | Supabase setup (project, Google OAuth, database tables, RLS) | Next |
+| 10-C | Auth integration (login page, profile setup: name/school/role, auth guard) | Pending |
+| 10-D | Progress sync + activity logging (replace localStorage, track usage) | Pending |
+| 10-E | Teacher dashboard (student list, login counts, activity stats) | Pending |
+| 10-F | Custom domain (optional) | Pending |
+
+---
+
+## Hosting & Infrastructure
+
+### Live URL
+- **Vercel**: `https://historylab-kappa.vercel.app/`
+- **GitHub**: `https://github.com/udaysharma10/historylab` (branch: `main`)
+- **Auto-deploy**: Every push to `main` triggers a Vercel deploy
+
+### Backend (Phase 10-B onwards)
+- **Supabase** (BaaS): Auth + PostgreSQL + REST API
+- **Region**: Mumbai (for low latency)
+- **Auth**: Google OAuth + profile setup (name, school, role: Student/Teacher/Parent)
+- **Detailed plan**: See `PLAN_AUTH_AND_ANALYTICS.md`
