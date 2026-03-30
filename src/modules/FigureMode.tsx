@@ -8,6 +8,7 @@ import { figures } from '../data/figures'
 import { imageAnalysisActivities } from '../data/activities/imageAnalysis'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
+import { logActivity } from '../lib/activityLog'
 import type { SectionId } from '../types/progress'
 
 type FigurePhase = 'home' | 'gallery' | 'detail' | 'practice' | 'results'
@@ -85,6 +86,15 @@ export function FigureMode() {
       const stars = calculateStars(mistakes, 0)
       const primarySection = activities[0]?.sectionId || 's1'
       completeProblem(primarySection as SectionId, stars)
+      logActivity({
+        mode: 'figures',
+        section_id: primarySection,
+        activity_type: 'image-analysis',
+        stars_earned: stars,
+        score_percent: Math.round((finalCorrect / finalTotal) * 100),
+        total_questions: finalTotal,
+        correct_answers: finalCorrect,
+      })
       setTimeout(() => setPhase('results'), 300)
     }
   }, [questionResults, currentIndex, activities, totalCorrect, totalQuestions, completeProblem])

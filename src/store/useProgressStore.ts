@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { SectionId, SectionProgress, Achievement } from '../types/progress'
+import { saveProgressToSupabase } from '../lib/syncProgress'
 
 interface ProgressState {
   playerName: string
@@ -27,9 +28,20 @@ const defaultSection = (): SectionProgress => ({
   bestStreak: 0,
 })
 
+function syncToSupabase(state: ProgressState) {
+  const data = {
+    totalStars: state.totalStars,
+    currentStreak: state.currentStreak,
+    sections: state.sections,
+    completedSubsections: state.completedSubsections,
+    narrativeQuizStars: state.narrativeQuizStars,
+  }
+  saveProgressToSupabase('global', data)
+}
+
 export const useProgressStore = create<ProgressState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       playerName: '',
       totalStars: 0,
       currentStreak: 0,
@@ -47,7 +59,7 @@ export const useProgressStore = create<ProgressState>()(
 
       setPlayerName: (name) => set({ playerName: name }),
 
-      completeProblem: (sectionId, stars) =>
+      completeProblem: (sectionId, stars) => {
         set((state) => {
           const section = { ...state.sections[sectionId] }
           section.completed += 1
@@ -63,9 +75,11 @@ export const useProgressStore = create<ProgressState>()(
             totalStars: state.totalStars + stars,
             currentStreak: newStreak,
           }
-        }),
+        })
+        syncToSupabase(get())
+      },
 
-      resetSection: (sectionId) =>
+      resetSection: (sectionId) => {
         set((state) => {
           const section = state.sections[sectionId]
           const starsLost = section.stars
@@ -73,7 +87,9 @@ export const useProgressStore = create<ProgressState>()(
             sections: { ...state.sections, [sectionId]: { ...defaultSection(), total: section.total } },
             totalStars: Math.max(0, state.totalStars - starsLost),
           }
-        }),
+        })
+        syncToSupabase(get())
+      },
 
       addAchievement: (achievement) =>
         set((state) => ({
@@ -85,16 +101,20 @@ export const useProgressStore = create<ProgressState>()(
           sections: { ...state.sections, [sectionId]: { ...state.sections[sectionId], total } },
         })),
 
-      completeSubsection: (subsectionId) =>
+      completeSubsection: (subsectionId) => {
         set((state) => ({
           completedSubsections: { ...state.completedSubsections, [subsectionId]: true },
-        })),
+        }))
+        syncToSupabase(get())
+      },
 
-      setNarrativeQuizStars: (quizId, stars) =>
+      setNarrativeQuizStars: (quizId, stars) => {
         set((state) => ({
           narrativeQuizStars: { ...state.narrativeQuizStars, [quizId]: stars },
           totalStars: state.totalStars + stars - (state.narrativeQuizStars[quizId] || 0),
-        })),
+        }))
+        syncToSupabase(get())
+      },
     }),
     { name: 'vedansh-history-progress' }
   )

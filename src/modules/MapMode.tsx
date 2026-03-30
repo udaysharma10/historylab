@@ -9,6 +9,7 @@ import { mapDefinitions } from '../data/maps'
 import { calculateStars } from '../engine/scoringEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
+import { logActivity } from '../lib/activityLog'
 import type { SectionId } from '../types/progress'
 import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
 
@@ -80,6 +81,16 @@ export function MapMode() {
       // Save progress for primary section of the activities
       const primarySection = (activeType === 'identify' ? identifyActivities : labelActivities)[0]?.sectionId || 's1'
       completeProblem(primarySection as SectionId, stars)
+      const correctCount = newResults.filter(r => r === 'correct').length
+      logActivity({
+        mode: 'maps',
+        section_id: primarySection,
+        activity_type: activeType === 'identify' ? 'map-identify' : 'map-label',
+        stars_earned: stars,
+        score_percent: Math.round((correctCount / newResults.length) * 100),
+        total_questions: newResults.length,
+        correct_answers: correctCount,
+      })
       setTimeout(() => setPhase('results'), 300)
     }
   }, [questionResults, currentIndex, activeType, identifyActivities, labelActivities, completeProblem])

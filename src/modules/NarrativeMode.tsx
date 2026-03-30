@@ -7,6 +7,7 @@ import { SubsectionComplete } from '../components/narrative/SubsectionComplete'
 import { useSwipe } from '../hooks/useSwipe'
 import { useSound } from '../hooks/useSound'
 import { useProgressStore } from '../store/useProgressStore'
+import { logActivity } from '../lib/activityLog'
 
 interface NarrativeModeProps {
   subsection: Subsection
@@ -47,6 +48,13 @@ export function NarrativeMode({
     if (quizBlocking) return
     if (isLastCard) {
       completeSubsection(subsection.id)
+      logActivity({
+        mode: 'narrative',
+        section_id: subsection.id.split('-')[0],
+        activity_type: 'subsection-read',
+        total_questions: totalQuizzes,
+        correct_answers: quizzesCorrect,
+      })
       setShowComplete(true)
       onComplete()
       return

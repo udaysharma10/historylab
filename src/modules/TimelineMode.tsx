@@ -8,6 +8,7 @@ import { timelineActivities } from '../data/activities/timelineActivities'
 import { calculateStars } from '../engine/quizEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
+import { logActivity } from '../lib/activityLog'
 import type { SectionId } from '../types/progress'
 
 type TimelinePhase = 'home' | 'explore' | 'pick-activity' | 'playing' | 'results'
@@ -64,6 +65,15 @@ export function TimelineMode() {
       const mistakes = newResults.filter(r => r === 'wrong').length
       const stars = calculateStars(mistakes, 0)
       completeProblem('s1' as SectionId, stars)
+      const correctCount = newResults.filter(r => r === 'correct').length
+      logActivity({
+        mode: 'timeline',
+        activity_type: 'timeline-order',
+        stars_earned: stars,
+        score_percent: Math.round((correctCount / newResults.length) * 100),
+        total_questions: newResults.length,
+        correct_answers: correctCount,
+      })
       setTimeout(() => setPhase('results'), 300)
     }
   }, [questionResults, currentIndex, activities.length, completeProblem])

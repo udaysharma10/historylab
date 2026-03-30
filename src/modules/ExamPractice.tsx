@@ -9,6 +9,7 @@ import { sourceAnalysisActivities } from '../data/activities/sourceAnalysis'
 import { ncertQuestions } from '../data/activities/ncertQuestions'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
+import { logActivity } from '../lib/activityLog'
 import type { SectionId } from '../types/progress'
 import type { NCERTQuestion } from '../types/chapter'
 
@@ -85,6 +86,15 @@ export function ExamPractice() {
       const stars = calculateStars(mistakes, 0)
       const primarySection = activities[0]?.sectionId || 's1'
       completeProblem(primarySection as SectionId, stars)
+      logActivity({
+        mode: 'exam',
+        section_id: primarySection,
+        activity_type: 'source-comprehension',
+        stars_earned: stars,
+        score_percent: Math.round((finalCorrect / finalTotal) * 100),
+        total_questions: finalTotal,
+        correct_answers: finalCorrect,
+      })
       setTimeout(() => setPhase('results'), 300)
     }
   }, [questionResults, currentIndex, activities, totalCorrect, totalQuestions, completeProblem])
