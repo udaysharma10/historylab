@@ -1,22 +1,14 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FlashcardSingle } from '../components/flashcard'
-import { flashcards } from '../data/flashcards'
+import { getFlashcards, getChapter, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { useFlashcardStore } from '../store/useFlashcardStore'
 import { calculateNextReview, createInitialReviewState, isDueForReview } from '../engine/spacedRepetition'
 
 type FlashcardPhase = 'home' | 'browse' | 'practice' | 'stats'
 
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
-}
-
-const SECTION_NAMES: Record<string, string> = {
-  s1: 'French Revolution', s2: 'Making Nationalism', s3: 'Age of Revolutions',
-  s4: 'Germany & Italy', s5: 'Visualising Nation', s6: 'Nationalism & Imperialism',
-}
+// Section names will be derived from chapter data inside the component
 
 function shuffle<T>(arr: T[]): T[] {
   const result = [...arr]
@@ -29,6 +21,16 @@ function shuffle<T>(arr: T[]): T[] {
 
 export function FlashcardMode() {
   const navigate = useNavigate()
+  const { chapterId } = useParams<{ chapterId: string }>()
+  const cid = chapterId || 'ch1'
+  const flashcards = useMemo(() => getFlashcards(cid), [cid])
+  const chapter = getChapter(cid)
+  const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || {}
+  const SECTION_NAMES: Record<string, string> = useMemo(() => {
+    const names: Record<string, string> = {}
+    chapter?.sections.forEach(s => { names[s.id] = s.title })
+    return names
+  }, [chapter])
   const { reviewStates, updateReviewState } = useFlashcardStore()
 
   const [phase, setPhase] = useState<FlashcardPhase>('home')

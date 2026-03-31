@@ -38,13 +38,15 @@ export function HomePage() {
 
   const firstName = profile.name.split(' ')[0]
 
-  const MODES = [
-    { id: 'timeline', label: 'Timeline Review', icon: '📅', route: `${basePath}/timeline`, color: '#2980B9' },
-    { id: 'maps', label: 'Map Review', icon: '🗺️', route: `${basePath}/maps`, color: '#16A085' },
-    { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#7D3C98' },
-    { id: 'figures', label: 'Figure Review', icon: '🖼️', route: `${basePath}/figures`, color: '#E67E22' },
-    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C0392B' },
+  // Chapter-specific learning modes — only show modes that have data
+  const allModes = [
+    { id: 'timeline', label: 'Timeline Review', icon: '📅', route: `${basePath}/timeline`, color: '#2980B9', chapters: ['ch1'] },
+    { id: 'maps', label: 'Map Review', icon: '🗺️', route: `${basePath}/maps`, color: '#16A085', chapters: ['ch1'] },
+    { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#7D3C98', chapters: ['ch1', 'ch2'] },
+    { id: 'figures', label: 'Figure Review', icon: '🖼️', route: `${basePath}/figures`, color: '#E67E22', chapters: ['ch1'] },
+    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C0392B', chapters: ['ch1'] },
   ]
+  const MODES = allModes.filter(m => m.chapters.includes(cid))
 
   return (
     <div className="space-y-8 pb-8">
