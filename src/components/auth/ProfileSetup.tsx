@@ -13,6 +13,7 @@ interface ProfileSetupProps {
   initialEmail: string
   avatarUrl: string | null
   onComplete: (data: ProfileFormData) => void
+  onSignOut?: () => void
   saving?: boolean
   error?: string | null
 }
@@ -29,7 +30,7 @@ const ROLES = [
   { value: 'parent' as const, label: 'Parent', icon: '👨‍👩‍👧', desc: 'I\'m tracking my child\'s progress' },
 ]
 
-export function ProfileSetup({ initialName, avatarUrl, onComplete, saving, error }: ProfileSetupProps) {
+export function ProfileSetup({ initialName, avatarUrl, onComplete, onSignOut, saving, error }: ProfileSetupProps) {
   const [name, setName] = useState(initialName)
   const [school, setSchool] = useState('')
   const [role, setRole] = useState<'student' | 'teacher' | 'parent' | ''>('')
@@ -165,6 +166,16 @@ export function ProfileSetup({ initialName, avatarUrl, onComplete, saving, error
           >
             {saving ? 'Saving...' : 'Start Learning'}
           </motion.button>
+
+          {/* Sign out link */}
+          {onSignOut && (
+            <button
+              className="w-full text-center text-sm text-gray-400 hover:text-gray-600 font-body mt-2"
+              onClick={onSignOut}
+            >
+              Sign out and use a different account
+            </button>
+          )}
         </div>
       </motion.div>
     </div>

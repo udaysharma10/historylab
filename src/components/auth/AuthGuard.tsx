@@ -115,6 +115,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
         initialEmail={user.email || ''}
         avatarUrl={profile?.avatar_url || user.user_metadata?.avatar_url || null}
         onComplete={handleProfileComplete}
+        onSignOut={signOut}
         saving={savingProfile}
         error={saveError}
       />

@@ -30,11 +30,14 @@ export function useAuth() {
   })
 
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .single()
+    if (error) {
+      console.error('fetchProfile failed:', error)
+    }
     return data as Profile | null
   }, [])
 
