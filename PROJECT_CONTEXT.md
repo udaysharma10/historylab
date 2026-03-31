@@ -265,9 +265,9 @@ vedansh-history/
 
 ### Content Inventory (from NCERT textbook)
 - **20 Figures**: paintings, caricatures, maps, stamps, banners (all with exam-relevant analysis)
-- **3 Source Boxes**: Ernst Renan (Source A), Friedrich List (Source B), Welcker/Otto-Peters (Source C)
+- **6 Source Boxes**: Ernst Renan (Source A), Friedrich List (Source B), Welcker/Otto-Peters (Source C), Bismarck "Blood and Iron" (Source D), Mazzini "Duties of Man" (Source E), Herder "Spirit of the People" (Source F)
 - **3 Info Boxes**: Grimm Brothers (Box 1), Garibaldi (Box 2), Allegory Symbols (Box 3)
-- **8 Vocabulary Words**: Absolutist, Utopian, Plebiscite, Suffrage, Conservatism, Feminist, Ideology, Ethnic
+- **22 Vocabulary Words**: Absolutist, Utopian, Plebiscite, Sovereignty, Nation-state, Liberalism, Suffrage, Conservatism, Jacobin, Feudalism, Autocracy, Romanticism, Volksgeist, Feminist, Ideology, Ethnic, Junker, Realpolitik, Allegory, Imperialism, Slavs (expanded from 8 in Phase 11-2)
 - **~35 Key Timeline Events**: 1789-1914
 - **~15 Key Historical Figures**: Napoleon, Metternich, Mazzini, Bismarck, Cavour, Garibaldi, etc.
 - **100 Flashcards**: SM-2 spaced repetition cards across all 6 sections
@@ -364,7 +364,7 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 | 8 | Source Analysis + Flashcards + Exam Practice (FlashcardSingle 3D flip card with SM-2 rating, FlashcardMode orchestrator with home/browse/practice/stats phases, SourceReader parchment-styled with analysis, SourceQuizCard MCQ+free-text comprehension, ExamPractice orchestrator with home/source-read/source-practice/ncert/results phases, 100 flashcards wired with spaced repetition, 3 source readers + 9 source comprehension Qs + 10 NCERT exercise Qs with model answers, QuizResults reused with source-comprehension label, routes `/flashcards` and `/exam`, perspective-1000 CSS utility for card flip) | **DONE** |
 | 9 | Polish (responsive, keyboard nav, performance, dark mode) | Deferred |
 | 11-1 | **Content Revamp Phase 1**: Story thread (openers/closers for all 6 sections), Sorrieu recurring motif (S1,S3-S6), WHY explanation cards (6 new), rewrite ~15 dry textbook-tone cards to teacher voice. ~18 new cards added, ~15 rewritten. See `REVAMP_PLAN.md` for full plan. | **DONE** |
-| 11-2 | Content Revamp Phase 2: Vocabulary expansion (8→22+ terms), symbols (Marianne, Britannia), additional sources | Pending |
+| 11-2 | Content Revamp Phase 2: Vocabulary expansion (8→22 terms with examples), symbols (Marianne 5 symbols, Britannia 5 symbols, Germania progression 3 paintings, allegory explanation), sources (3→6: added Bismarck, Mazzini, Herder). See `REVAMP_PLAN.md`. | **DONE** |
 | 11-3 | Content Revamp Phase 3: Integrated section experience (timeline/maps/figures embedded per section) | Pending |
 | 11-4 | Content Revamp Phase 4: Assessment upgrades (cross-section synthesis, assertion-reason, MCQ distractors, remediation) | Pending |
 | 10-A | Deploy to Vercel (static hosting, auto-deploy on push) | **DONE** |

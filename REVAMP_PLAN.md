@@ -100,8 +100,9 @@ Sorrieu's painting becomes a thread stitched through the entire chapter:
 
 ---
 
-## Phase 2: Vocabulary & Knowledge Gaps
+## Phase 2: Vocabulary & Knowledge Gaps — **DONE** (2026-03-31)
 **Goal**: Fill critical content gaps identified in the teacher review.
+**Result**: Vocabulary expanded 8→22 terms (every section now has vocabulary). Symbols expanded from Germania-only to include Marianne (5 symbols), Britannia (5 symbols), Germania progression (3 paintings), and allegory explanation. Sources expanded 3→6 (added Bismarck "Blood and Iron", Mazzini "Duties of Man", Herder "Spirit of the People"). chapter1.ts vocabularyIds and sourceIds updated for all 6 sections.
 
 ### 2A. Expand Vocabulary (8 → 22+ terms)
 Add to `vocabulary.ts`:
@@ -223,8 +224,8 @@ When a student scores 1 star (< 50%), show:
 | 2 | 1D | Sorrieu recurring motif | High | Low | **DONE** (2026-03-31) — referenced in S1, S3-S6 |
 | 3 | 1C | "The WHY" explanation cards | Very High | Medium | **DONE** (2026-03-31) — 6 cards added |
 | 4 | 1B | Rewrite dry narrative cards | High | High | **DONE** (2026-03-31) — ~15 cards rewritten |
-| 5 | 2A | Expand vocabulary | High | Low | Pending |
-| 6 | 2B | Expand symbols (Marianne, Britannia) | Medium | Low | Pending |
+| 5 | 2A | Expand vocabulary | High | Low | **DONE** (2026-03-31) — 8→22 terms |
+| 6 | 2B | Expand symbols (Marianne, Britannia) | Medium | Low | **DONE** (2026-03-31) — +Marianne, Britannia, progression |
 | 7 | 4A | Cross-section synthesis questions | High | Medium | Pending |
 | 8 | 4C | Section 5 quiz strengthening | Medium | Low | Pending |
 | 9 | 3A | Embed timeline per section | High | Medium | Pending |
@@ -232,7 +233,7 @@ When a student scores 1 star (< 50%), show:
 | 11 | 3C | Embed figures inline (always-expanded analysis) | Medium | Medium | Pending |
 | 12 | 4B | Assertion-Reason questions | High | Medium | Pending |
 | 13 | 4D | MCQ distractor improvements | Medium | Low | Pending |
-| 14 | 2C | Additional primary sources | Medium | Medium | Pending |
+| 14 | 2C | Additional primary sources | Medium | Medium | **DONE** (2026-03-31) — 3→6 sources |
 | 15 | 4E | Remediation guidance | Medium | High | Pending |
 | 16 | 3D | Reposition standalone modes as revision | Low | Low | Pending |
 

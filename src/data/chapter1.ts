@@ -27,7 +27,7 @@ export const chapter1: Chapter = {
       ],
       figureIds: ['fig-1', 'fig-2', 'fig-3', 'fig-4', 'fig-5'],
       sourceIds: ['source-a'],
-      vocabularyIds: ['vocab-absolutist', 'vocab-utopian', 'vocab-plebiscite'],
+      vocabularyIds: ['vocab-absolutist', 'vocab-utopian', 'vocab-plebiscite', 'vocab-sovereignty', 'vocab-nation-state'],
     },
     {
       id: 's2',
@@ -45,8 +45,8 @@ export const chapter1: Chapter = {
         'Mazzini founded Young Italy and Young Europe — Metternich called him "most dangerous enemy"',
       ],
       figureIds: ['fig-6', 'fig-7'],
-      sourceIds: ['source-b'],
-      vocabularyIds: ['vocab-suffrage', 'vocab-conservatism'],
+      sourceIds: ['source-b', 'source-e'],
+      vocabularyIds: ['vocab-liberalism', 'vocab-suffrage', 'vocab-conservatism', 'vocab-jacobin', 'vocab-feudalism', 'vocab-autocracy'],
     },
     {
       id: 's3',
@@ -64,8 +64,8 @@ export const chapter1: Chapter = {
         'Women excluded from political rights despite active participation in movements',
       ],
       figureIds: ['fig-8', 'fig-9', 'fig-10'],
-      sourceIds: ['source-c'],
-      vocabularyIds: ['vocab-feminist', 'vocab-ideology'],
+      sourceIds: ['source-c', 'source-f'],
+      vocabularyIds: ['vocab-romanticism', 'vocab-volksgeist', 'vocab-feminist', 'vocab-ideology'],
     },
     {
       id: 's4',
@@ -83,8 +83,8 @@ export const chapter1: Chapter = {
         'Act of Union (1707), Ireland incorporated (1801), British identity through symbols',
       ],
       figureIds: ['fig-11', 'fig-12', 'fig-13', 'fig-14a', 'fig-14b', 'fig-15'],
-      sourceIds: [],
-      vocabularyIds: ['vocab-ethnic'],
+      sourceIds: ['source-d'],
+      vocabularyIds: ['vocab-ethnic', 'vocab-junker', 'vocab-realpolitik'],
     },
     {
       id: 's5',
@@ -102,7 +102,7 @@ export const chapter1: Chapter = {
       ],
       figureIds: ['fig-16', 'fig-17', 'fig-18', 'fig-19'],
       sourceIds: [],
-      vocabularyIds: [],
+      vocabularyIds: ['vocab-allegory'],
     },
     {
       id: 's6',
@@ -120,7 +120,7 @@ export const chapter1: Chapter = {
       ],
       figureIds: ['fig-20'],
       sourceIds: [],
-      vocabularyIds: [],
+      vocabularyIds: ['vocab-imperialism', 'vocab-slavs'],
     },
   ],
 }
