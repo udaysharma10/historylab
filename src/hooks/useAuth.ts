@@ -95,14 +95,25 @@ export function useAuth() {
 
   const updateProfile = useCallback(async (updates: Partial<Profile>) => {
     if (!state.user) return
+
     const { error } = await supabase
       .from('profiles')
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq('id', state.user.id)
-    if (error) throw error
 
-    // Refresh profile
-    const profile = await fetchProfile(state.user.id)
+    if (error) {
+      console.error('Profile update failed:', error)
+      throw error
+    }
+
+    // Refresh profile — retry a few times in case of propagation delay
+    let profile = await fetchProfile(state.user.id)
+    if (profile && !profile.profile_completed && updates.profile_completed) {
+      // Update didn't propagate yet — wait and retry
+      await new Promise(r => setTimeout(r, 500))
+      profile = await fetchProfile(state.user.id)
+    }
+
     setState((prev) => ({ ...prev, profile }))
   }, [state.user, fetchProfile])
 

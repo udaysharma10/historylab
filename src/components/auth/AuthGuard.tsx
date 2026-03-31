@@ -27,6 +27,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const { user, profile, loading, signInWithGoogle, signOut, updateProfile } = useAuth()
   const [signingIn, setSigningIn] = useState(false)
   const [savingProfile, setSavingProfile] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const autoSetupDone = useRef(false)
 
   // Auto-complete profile for admin teacher emails
@@ -92,6 +93,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
     const handleProfileComplete = async (data: ProfileFormData) => {
       setSavingProfile(true)
+      setSaveError(null)
       try {
         await updateProfile({
           name: data.name,
@@ -100,7 +102,9 @@ export function AuthGuard({ children }: AuthGuardProps) {
           class: data.class || null,
           profile_completed: true,
         })
-      } catch {
+      } catch (err) {
+        console.error('Profile save error:', err)
+        setSaveError('Failed to save profile. Please try again.')
         setSavingProfile(false)
       }
     }
@@ -112,6 +116,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
         avatarUrl={profile?.avatar_url || user.user_metadata?.avatar_url || null}
         onComplete={handleProfileComplete}
         saving={savingProfile}
+        error={saveError}
       />
     )
   }

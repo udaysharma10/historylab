@@ -14,6 +14,7 @@ interface ProfileSetupProps {
   avatarUrl: string | null
   onComplete: (data: ProfileFormData) => void
   saving?: boolean
+  error?: string | null
 }
 
 const CLASSES = [
@@ -28,7 +29,7 @@ const ROLES = [
   { value: 'parent' as const, label: 'Parent', icon: '👨‍👩‍👧', desc: 'I\'m tracking my child\'s progress' },
 ]
 
-export function ProfileSetup({ initialName, avatarUrl, onComplete, saving }: ProfileSetupProps) {
+export function ProfileSetup({ initialName, avatarUrl, onComplete, saving, error }: ProfileSetupProps) {
   const [name, setName] = useState(initialName)
   const [school, setSchool] = useState('')
   const [role, setRole] = useState<'student' | 'teacher' | 'parent' | ''>('')
@@ -143,6 +144,13 @@ export function ProfileSetup({ initialName, avatarUrl, onComplete, saving }: Pro
                 ))}
               </div>
             </motion.div>
+          )}
+
+          {/* Error message */}
+          {error && (
+            <div className="rounded-xl p-3 bg-red-50 border border-red-200 text-red-700 text-sm font-body">
+              {error}
+            </div>
           )}
 
           {/* Submit */}
