@@ -42,14 +42,31 @@ export function useAuth() {
   }, [])
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session with timeout (Supabase can hang on corrupted tokens)
+    let settled = false
+    const timeout = setTimeout(() => {
+      if (!settled) {
+        console.warn('Auth session check timed out — showing login')
+        settled = true
+        setState({ user: null, profile: null, session: null, loading: false })
+      }
+    }, 5000)
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
       if (session?.user) {
         const profile = await fetchProfile(session.user.id)
         setState({ user: session.user, profile, session, loading: false })
       } else {
         setState({ user: null, profile: null, session: null, loading: false })
       }
+    }).catch(() => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      setState({ user: null, profile: null, session: null, loading: false })
     })
 
     // Listen for auth changes
@@ -96,9 +113,11 @@ export function useAuth() {
   }, [])
 
   const signOut = useCallback(async () => {
-    // Clear all local state before signing out
-    localStorage.clear()
     await supabase.auth.signOut()
+    // Clear Supabase auth keys only (not all localStorage — progress data lives there too)
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('sb-')) localStorage.removeItem(key)
+    })
   }, [])
 
   const updateProfile = useCallback(async (updates: Partial<Profile>) => {
