@@ -87,12 +87,17 @@ export function useAuth() {
       provider: 'google',
       options: {
         redirectTo: window.location.origin,
+        queryParams: {
+          prompt: 'select_account',  // Force Google account picker every time
+        },
       },
     })
     if (error) throw error
   }, [])
 
   const signOut = useCallback(async () => {
+    // Clear all local state before signing out
+    localStorage.clear()
     await supabase.auth.signOut()
   }, [])
 
