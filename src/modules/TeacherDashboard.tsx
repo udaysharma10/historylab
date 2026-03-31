@@ -1,9 +1,16 @@
-import { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { useAuthContext } from '../components/auth'
 import { isAdminTeacher } from '../lib/adminEmails'
+
+interface SectionActivity {
+  sectionId: string
+  activities: number
+  stars: number
+  modes: string[]
+}
 
 interface UserRow {
   id: string
@@ -18,6 +25,25 @@ interface UserRow {
   last_login: string | null
   total_stars: number
   activities_completed: number
+  sections: SectionActivity[]
+}
+
+const SECTION_NAMES: Record<string, string> = {
+  s1: 'S1 — French Revolution',
+  s2: 'S2 — Making of Nationalism',
+  s3: 'S3 — Age of Revolutions',
+  s4: 'S4 — Germany & Italy',
+  s5: 'S5 — Visualising the Nation',
+  s6: 'S6 — Nationalism & Imperialism',
+}
+
+const SECTION_COLORS: Record<string, string> = {
+  s1: '#C0392B',
+  s2: '#2980B9',
+  s3: '#E67E22',
+  s4: '#27AE60',
+  s5: '#7D3C98',
+  s6: '#16A085',
 }
 
 interface LoginDateEntry {
@@ -60,6 +86,7 @@ export function TeacherDashboard() {
   const [loading, setLoading] = useState(true)
   const [timeFilter, setTimeFilter] = useState<'7d' | '30d' | 'all'>('30d')
   const [tab, setTab] = useState<'users' | 'logins' | 'activity'>('users')
+  const [expandedUserId, setExpandedUserId] = useState<string | null>(null)
 
   const isAdmin = isAdminTeacher(profile.email)
 
@@ -97,10 +124,10 @@ export function TeacherDashboard() {
         .select('user_id, logged_in_at')
         .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
-      // Fetch activity logs for all users
+      // Fetch activity logs for all users (include section_id for per-section breakdown)
       const { data: activityLogs } = await supabase
         .from('activity_logs')
-        .select('user_id, mode, stars_earned, completed_at')
+        .select('user_id, mode, section_id, stars_earned, completed_at')
         .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
       // Build user rows (ALL users, not just students)
@@ -110,6 +137,25 @@ export function TeacherDashboard() {
         const lastLogin = logins.length > 0
           ? logins.sort((a, b) => b.logged_in_at.localeCompare(a.logged_in_at))[0].logged_in_at
           : null
+
+        // Build per-section breakdown
+        const sectionMap: Record<string, { activities: number; stars: number; modes: Set<string> }> = {}
+        activities.forEach((a: { section_id?: string | null; stars_earned?: number | null; mode?: string }) => {
+          const sid = a.section_id || 'unknown'
+          if (!sectionMap[sid]) sectionMap[sid] = { activities: 0, stars: 0, modes: new Set() }
+          sectionMap[sid].activities++
+          sectionMap[sid].stars += a.stars_earned || 0
+          if (a.mode) sectionMap[sid].modes.add(a.mode)
+        })
+        const sections: SectionActivity[] = Object.entries(sectionMap)
+          .filter(([sid]) => sid !== 'unknown')
+          .map(([sectionId, data]) => ({
+            sectionId,
+            activities: data.activities,
+            stars: data.stars,
+            modes: Array.from(data.modes),
+          }))
+          .sort((a, b) => a.sectionId.localeCompare(b.sectionId))
 
         return {
           id: p.id,
@@ -124,6 +170,7 @@ export function TeacherDashboard() {
           last_login: lastLogin,
           total_stars: activities.reduce((sum: number, a: { stars_earned: number | null }) => sum + (a.stars_earned || 0), 0),
           activities_completed: activities.length,
+          sections,
         }
       })
 
@@ -322,39 +369,114 @@ export function TeacherDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {(timeFilter === 'all' ? users : filteredUsers).map((user, i) => (
-                    <tr key={user.id} className="border-b border-gray-50 hover:bg-gray-50/50">
-                      <td className="px-6 py-3 text-gray-400 font-body">{i + 1}</td>
-                      <td className="px-3 py-3">
-                        <div className="font-semibold text-hist-dark font-body">{user.name}</div>
-                        <div className="text-xs text-gray-400">{user.email}</div>
-                      </td>
-                      <td className="px-3 py-3">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                          user.role === 'teacher' ? 'bg-purple-100 text-purple-700'
-                            : user.role === 'parent' ? 'bg-blue-100 text-blue-700'
-                            : 'bg-green-100 text-green-700'
-                        }`}>
-                          {user.role}
-                        </span>
-                      </td>
-                      <td className="px-3 py-3 text-gray-600 font-body text-xs">{user.school || '—'}</td>
-                      <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{user.total_logins}</td>
-                      <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{user.activities_completed}</td>
-                      <td className="px-3 py-3 text-center">
-                        <span className="inline-flex items-center gap-1">
-                          <span className="text-yellow-500">★</span>
-                          <span className="font-bold text-hist-dark font-body">{user.total_stars}</span>
-                        </span>
-                      </td>
-                      <td className="px-3 py-3 text-gray-500 font-body text-xs">
-                        {formatDate(user.created_at)}
-                      </td>
-                      <td className="px-3 py-3 text-gray-500 font-body text-xs">
-                        {user.last_login ? formatRelativeTime(user.last_login) : 'Never'}
-                      </td>
-                    </tr>
-                  ))}
+                  {(timeFilter === 'all' ? users : filteredUsers).map((user, i) => {
+                  const isExpanded = expandedUserId === user.id
+                  return (
+                    <React.Fragment key={user.id}>
+                      <tr
+                        className={`border-b border-gray-50 cursor-pointer transition-colors ${isExpanded ? 'bg-blue-50/40' : 'hover:bg-gray-50/50'}`}
+                        onClick={() => setExpandedUserId(isExpanded ? null : user.id)}
+                      >
+                        <td className="px-6 py-3 text-gray-400 font-body">{i + 1}</td>
+                        <td className="px-3 py-3">
+                          <div className="flex items-center gap-1">
+                            <div className="font-semibold text-hist-dark font-body">{user.name}</div>
+                            <svg
+                              width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2"
+                              className={`shrink-0 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                            >
+                              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                          <div className="text-xs text-gray-400">{user.email}</div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                            user.role === 'teacher' ? 'bg-purple-100 text-purple-700'
+                              : user.role === 'parent' ? 'bg-blue-100 text-blue-700'
+                              : 'bg-green-100 text-green-700'
+                          }`}>
+                            {user.role}
+                          </span>
+                        </td>
+                        <td className="px-3 py-3 text-gray-600 font-body text-xs">{user.school || '—'}</td>
+                        <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{user.total_logins}</td>
+                        <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{user.activities_completed}</td>
+                        <td className="px-3 py-3 text-center">
+                          <span className="inline-flex items-center gap-1">
+                            <span className="text-yellow-500">★</span>
+                            <span className="font-bold text-hist-dark font-body">{user.total_stars}</span>
+                          </span>
+                        </td>
+                        <td className="px-3 py-3 text-gray-500 font-body text-xs">
+                          {formatDate(user.created_at)}
+                        </td>
+                        <td className="px-3 py-3 text-gray-500 font-body text-xs">
+                          {user.last_login ? formatRelativeTime(user.last_login) : 'Never'}
+                        </td>
+                      </tr>
+                      {/* Expanded section breakdown */}
+                      {isExpanded && (
+                        <tr>
+                          <td colSpan={9} className="px-6 py-4 bg-gray-50/60">
+                            {user.sections.length === 0 ? (
+                              <p className="text-sm text-gray-400 font-body text-center py-2">
+                                No section activity recorded yet
+                              </p>
+                            ) : (
+                              <div>
+                                <p className="font-display font-bold text-xs text-gray-500 uppercase tracking-wider mb-3">
+                                  Section Progress for {user.name}
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                  {['s1', 's2', 's3', 's4', 's5', 's6'].map(sid => {
+                                    const section = user.sections.find(s => s.sectionId === sid)
+                                    const color = SECTION_COLORS[sid] || '#999'
+                                    return (
+                                      <div
+                                        key={sid}
+                                        className="rounded-lg p-3 border"
+                                        style={{
+                                          borderColor: section ? `${color}40` : '#E5E7EB',
+                                          backgroundColor: section ? `${color}06` : '#FAFAFA',
+                                        }}
+                                      >
+                                        <div className="flex items-center justify-between mb-1">
+                                          <span
+                                            className="font-display font-bold text-xs"
+                                            style={{ color: section ? color : '#9CA3AF' }}
+                                          >
+                                            {SECTION_NAMES[sid] || sid}
+                                          </span>
+                                          {section ? (
+                                            <span className="text-green-500 text-xs font-bold">Active</span>
+                                          ) : (
+                                            <span className="text-gray-300 text-xs">Not started</span>
+                                          )}
+                                        </div>
+                                        {section && (
+                                          <div className="flex items-center gap-3 text-xs font-body text-gray-600 mt-1">
+                                            <span>{section.activities} activities</span>
+                                            <span className="inline-flex items-center gap-0.5">
+                                              <span className="text-yellow-500">★</span> {section.stars}
+                                            </span>
+                                            <span className="text-gray-400">
+                                              {section.modes.map(m => MODE_LABELS[m] || m).join(', ')}
+                                            </span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  )
+                })}
                 </tbody>
               </table>
             </div>
