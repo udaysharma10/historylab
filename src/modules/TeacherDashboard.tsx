@@ -63,15 +63,15 @@ export function TeacherDashboard() {
 
   const isAdmin = isAdminTeacher(profile.email)
 
-  // Redirect non-teachers
+  // Redirect non-admin users — only admin teachers can see the dashboard
   useEffect(() => {
-    if (profile.role !== 'teacher') {
+    if (!isAdmin) {
       navigate('/')
     }
-  }, [profile.role, navigate])
+  }, [isAdmin, navigate])
 
   useEffect(() => {
-    if (profile.role !== 'teacher') return
+    if (!isAdmin) return
 
     async function fetchData() {
       setLoading(true)
@@ -200,7 +200,7 @@ export function TeacherDashboard() {
     return loginDates.filter(d => d.date >= cutoff)
   }, [loginDates, timeFilter, now])
 
-  if (profile.role !== 'teacher') return null
+  if (!isAdmin) return null
 
   if (loading) {
     return (

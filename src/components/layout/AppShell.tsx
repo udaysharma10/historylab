@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useAuthContext } from '../auth'
+import { isAdminTeacher } from '../../lib/adminEmails'
 
 export function AppShell() {
   const location = useLocation()
@@ -63,8 +64,8 @@ export function AppShell() {
               <span className="font-display font-bold text-hist-dark text-sm">{totalStars}</span>
             </div>
 
-            {/* Teacher Dashboard button */}
-            {profile.role === 'teacher' && (
+            {/* Admin Dashboard button — only for admin teachers */}
+            {isAdminTeacher(profile.email) && (
               <motion.button
                 className="flex items-center gap-1.5 bg-hist-blue/10 hover:bg-hist-blue/20 px-3 py-1.5 rounded-full transition-colors"
                 whileTap={{ scale: 0.95 }}
