@@ -358,8 +358,10 @@ See `TEACHING_GUIDELINES.md` for the complete content and pedagogy reference:
 ---
 
 ## Source Material
-- NCERT PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_Rise of Nationalism in Europe.pdf`
-- 28 pages, Chapter 1 of "India and the Contemporary World" (Section I: Events and Processes)
+- NCERT Ch1 PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_Rise of Nationalism in Europe.pdf` (28 pages)
+- NCERT Ch2 PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/Nationalism in India.pdf` (22 pages)
+- Neha's PPT: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/Non-Cooperation (1).pptx` (teaching style reference)
+- Book: "India and the Contemporary World-II" (Class 10 NCERT History)
 
 ---
 
@@ -381,6 +383,8 @@ See `TEACHING_GUIDELINES.md` for the complete content and pedagogy reference:
 | 11-2 | Content Revamp Phase 2: Vocabulary expansion (8→22 terms with examples), symbols (Marianne 5 symbols, Britannia 5 symbols, Germania progression 3 paintings, allegory explanation), sources (3→6: added Bismarck, Mazzini, Herder). See `REVAMP_PLAN.md`. | **DONE** |
 | 11-3 | Content Revamp Phase 3: Integrated section experience — new `timeline-ref` and `map-ref` card types in narrative, 6 timeline + 5 map reference cards, SectionTimeline + SectionMaps interactive components on each section page (tappable year pills, clickable map regions), standalone modes relabeled as "Review" tools, Europe 1815 map coordinates fixed. See `REVAMP_PLAN.md`. | **DONE** |
 | 11-4 | Content Revamp Phase 4: Assessment upgrades (cross-section synthesis, assertion-reason, MCQ distractors, remediation) | Pending |
+| 12-A | Multi-chapter architecture: data in `ch1/` + `ch2/` subfolders, re-export barrels, `getChapter.ts` loader, `BookHome` page, chapter-scoped routes (`/chapter/:chapterId/...`), backward compat redirects | **DONE** |
+| 12-B | Chapter 2: Nationalism in India — 4 sections, ~110 narrative cards, 15 figures, 8 vocab, 20 dates, 14 people, 5 sources, 100 flashcards, 52 quiz activities, 10 match, 8 NCERT Qs. Chapter-aware components. Story plan in `ch2/CHAPTER_PLAN.md`. | **DONE** |
 | 10-A | Deploy to Vercel (static hosting, auto-deploy on push) | **DONE** |
 | 10-B | Supabase setup (project, Google OAuth, database tables, RLS) | **DONE** |
 | 10-C | Auth integration (login page, profile setup: name/school/role, auth guard) | **DONE** |

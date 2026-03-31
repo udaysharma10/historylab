@@ -3,6 +3,7 @@
 
 **Created**: 2026-03-31
 **Last Updated**: 2026-03-31
+**Note**: This plan covers Chapter 1 content revamp. Chapter 2 (Nationalism in India) has its own plan at `src/data/ch2/CHAPTER_PLAN.md`. Multi-chapter architecture and product roadmap at `BIGGER_PICTURE.md`.
 **Context**: Expert History teacher review identified that while the app has excellent structure and exam coverage, it lacks the narrative thread that transforms 6 sections into ONE compelling story. The content needs to shift from "textbook with interactivity" to "a great teacher telling a story."
 
 **Core Insight**: A great History teacher is a great storyteller. The story of this chapter is:

@@ -46,8 +46,8 @@ Platform (StudyLab)
 
 | # | Chapter | Section | Pages | Status |
 |---|---------|---------|-------|--------|
-| 1 | The Rise of Nationalism in Europe | Section I: Events & Processes | 3-28 | **BUILT** |
-| 2 | Nationalism in India | Section I: Events & Processes | 29-52 | Next |
+| 1 | The Rise of Nationalism in Europe | Section I: Events & Processes | 3-28 | **BUILT** (Ch1 — free) |
+| 2 | Nationalism in India | Section I: Events & Processes | 29-52 | **BUILT** (Ch2) |
 | 3 | The Making of a Global World | Section II: Livelihoods & Economies | 53-78 | Planned |
 | 4 | The Age of Industrialisation | Section II: Livelihoods & Economies | 79-104 | Planned |
 | 5 | Print Culture and the Modern World | Section III: Everyday Life & Culture | 105-? | Planned |
@@ -175,9 +175,9 @@ function canAccessChapter(chapterNum: number, subscription: UserSubscription): b
 
 | Phase | Description | Scope | Status |
 |-------|-------------|-------|--------|
-| **A** | Multi-chapter architecture: restructure routes, data folders, book home page, chapter selector | Routes + data reorganization | **NOW** |
-| **B** | Chapter 2: Nationalism in India — full content using same methodology and components | Content creation | Next |
-| **C** | Freemium gate: Ch1 free, rest locked, Razorpay payment, subscription table | Auth + payment | After B |
+| **A** | Multi-chapter architecture: restructure routes, data folders, book home page, chapter selector | Routes + data reorganization | **DONE** (2026-03-31) |
+| **B** | Chapter 2: Nationalism in India — full content (4 sections, ~110 cards, 15 figures, 100 flashcards, 52 quiz activities, 10 match, 8 NCERT Qs) | Content creation | **DONE** (2026-03-31) |
+| **C** | Freemium gate: Ch1 free, rest locked, Razorpay payment, subscription table | Auth + payment | Next |
 | **D** | Remaining history chapters (3, 4, 5) | Content creation | After C |
 | **E** | Other Class 10 books: Geography, Political Science, Economics | Content + subject adaptations | Future |
 | **F** | Other classes (9, 8, 7, 6) | Scale | Future |
