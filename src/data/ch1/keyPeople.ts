@@ -1,4 +1,4 @@
-import type { KeyPerson } from '../types/chapter'
+import type { KeyPerson } from '../../types/chapter'
 
 export const keyPeople: KeyPerson[] = [
   {

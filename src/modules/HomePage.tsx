@@ -1,59 +1,48 @@
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useProgressStore } from '../store/useProgressStore'
 import { ProgressRing } from '../components/common/ProgressRing'
 import { calculateMastery } from '../engine/scoringEngine'
 import { useAuthContext } from '../components/auth'
-import { isAdminTeacher } from '../lib/adminEmails'
+import { chapter1 } from '../data/chapter1'
 import type { SectionId } from '../types/progress'
 
-const SECTIONS = [
-  { id: 's1' as SectionId, number: 1, title: 'The French Revolution & the Nation', color: '#C0392B', icon: '🇫🇷', route: '/section/s1' },
-  { id: 's2' as SectionId, number: 2, title: 'Making of Nationalism in Europe', color: '#2980B9', icon: '🏛️', route: '/section/s2' },
-  { id: 's3' as SectionId, number: 3, title: 'Age of Revolutions: 1830-1848', color: '#E67E22', icon: '🔥', route: '/section/s3' },
-  { id: 's4' as SectionId, number: 4, title: 'Making of Germany & Italy', color: '#27AE60', icon: '🗺️', route: '/section/s4' },
-  { id: 's5' as SectionId, number: 5, title: 'Visualising the Nation', color: '#7D3C98', icon: '🎨', route: '/section/s5' },
-  { id: 's6' as SectionId, number: 6, title: 'Nationalism & Imperialism', color: '#16A085', icon: '🌍', route: '/section/s6' },
-]
+const SECTION_COLORS: Record<string, string> = {
+  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22', s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+}
 
-const MODES = [
-  { id: 'timeline', label: 'Timeline Review', icon: '📅', route: '/timeline', color: '#2980B9' },
-  { id: 'maps', label: 'Map Review', icon: '🗺️', route: '/maps', color: '#16A085' },
-  { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: '/flashcards', color: '#7D3C98' },
-  { id: 'figures', label: 'Figure Review', icon: '🖼️', route: '/figures', color: '#E67E22' },
-  { id: 'exam', label: 'Exam Prep', icon: '📝', route: '/exam', color: '#C0392B' },
-]
-
-function getGreeting(): string {
-  const hour = new Date().getHours()
-  if (hour < 12) return 'Good Morning'
-  if (hour < 17) return 'Good Afternoon'
-  return 'Good Evening'
+const SECTION_ICONS: Record<string, string> = {
+  s1: '🇫🇷', s2: '🏛️', s3: '🔥', s4: '🗺️', s5: '🎨', s6: '🌍',
 }
 
 export function HomePage() {
   const navigate = useNavigate()
+  const { chapterId } = useParams<{ chapterId: string }>()
   const { profile } = useAuthContext()
   const totalStars = useProgressStore((s) => s.totalStars)
-  const sections = useProgressStore((s) => s.sections)
+  const progressSections = useProgressStore((s) => s.sections)
 
-  const totalCompleted = Object.values(sections).reduce((sum, s) => sum + s.completed, 0)
-  const totalProblems = Object.values(sections).reduce((sum, s) => sum + s.total, 0)
+  // For now, only ch1 has data — future chapters will use dynamic loading
+  const chapter = chapter1
+  const basePath = `/chapter/${chapterId || 'ch1'}`
+
+  const totalCompleted = Object.values(progressSections).reduce((sum, s) => sum + s.completed, 0)
+  const totalProblems = Object.values(progressSections).reduce((sum, s) => sum + s.total, 0)
   const overallProgress = totalProblems > 0 ? Math.round((totalCompleted / totalProblems) * 100) : 0
 
   const firstName = profile.name.split(' ')[0]
 
-  // Auto-redirect admin teachers to dashboard
-  useEffect(() => {
-    if (isAdminTeacher(profile.email)) {
-      navigate('/dashboard', { replace: true })
-    }
-  }, [profile.email, navigate])
+  const MODES = [
+    { id: 'timeline', label: 'Timeline Review', icon: '📅', route: `${basePath}/timeline`, color: '#2980B9' },
+    { id: 'maps', label: 'Map Review', icon: '🗺️', route: `${basePath}/maps`, color: '#16A085' },
+    { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#7D3C98' },
+    { id: 'figures', label: 'Figure Review', icon: '🖼️', route: `${basePath}/figures`, color: '#E67E22' },
+    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C0392B' },
+  ]
 
   return (
     <div className="space-y-8 pb-8">
-      {/* Greeting + Stats */}
+      {/* Chapter Header + Stats */}
       <motion.div
         className="bg-white rounded-2xl p-6 shadow-card"
         initial={{ opacity: 0, y: 20 }}
@@ -61,10 +50,14 @@ export function HomePage() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-display text-2xl font-bold text-hist-dark">
-              {getGreeting()}, {firstName}!
+            <p className="text-sm text-gray-500 font-body mb-1">
+              <button className="hover:text-hist-dark" onClick={() => navigate('/')}>All Chapters</button>
+              {' → '}
+              Chapter {chapter.sections[0]?.number ? Math.ceil(chapter.sections[0].number / 6) : 1}
+            </p>
+            <h1 className="font-display text-xl font-bold text-hist-dark">
+              {chapter.title}
             </h1>
-            <p className="text-gray-500 mt-1">Chapter 1: Rise of Nationalism in Europe</p>
           </div>
           <ProgressRing
             progress={overallProgress}
@@ -89,10 +82,12 @@ export function HomePage() {
       <div>
         <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Sections</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {SECTIONS.map((section, i) => {
-            const progress = sections[section.id]
-            const pct = progress.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
-            const mastery = calculateMastery(progress)
+          {chapter.sections.map((section, i) => {
+            const color = SECTION_COLORS[section.id] || '#2C3E50'
+            const icon = SECTION_ICONS[section.id] || '📖'
+            const progress = progressSections[section.id as SectionId]
+            const pct = progress?.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
+            const mastery = progress ? calculateMastery(progress) : 'beginner'
 
             return (
               <motion.button
@@ -103,21 +98,21 @@ export function HomePage() {
                 transition={{ delay: i * 0.08 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate(section.route)}
+                onClick={() => navigate(`${basePath}/section/${section.id}`)}
               >
                 <div className="flex items-start gap-3">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0"
-                    style={{ backgroundColor: section.color + '15' }}
+                    style={{ backgroundColor: color + '15' }}
                   >
-                    {section.icon}
+                    {icon}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: section.color }}>
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: color }}>
                         S{section.number}
                       </span>
-                      {pct === 0 && progress.total > 0 && (
+                      {pct === 0 && progress?.total > 0 && (
                         <span className="text-xs font-bold text-hist-green bg-hist-green/10 px-2 py-0.5 rounded-full">NEW</span>
                       )}
                     </div>
@@ -129,7 +124,7 @@ export function HomePage() {
                 <div className="mt-3 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <motion.div
                     className="h-full rounded-full"
-                    style={{ backgroundColor: section.color }}
+                    style={{ backgroundColor: color }}
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
                     transition={{ duration: 0.8, delay: i * 0.08 + 0.3 }}

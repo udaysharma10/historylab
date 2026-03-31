@@ -1,4 +1,4 @@
-import type { Subsection } from '../../types/chapter'
+import type { Subsection } from '../../../types/chapter'
 
 export const section2Subsections: Subsection[] = [
   {

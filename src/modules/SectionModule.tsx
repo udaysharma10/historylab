@@ -19,8 +19,9 @@ const SECTION_COLORS: Record<string, string> = {
 }
 
 export function SectionModule() {
-  const { sectionId } = useParams<{ sectionId: string }>()
+  const { sectionId, chapterId } = useParams<{ sectionId: string; chapterId: string }>()
   const navigate = useNavigate()
+  const basePath = `/chapter/${chapterId || 'ch1'}`
   const [activeSubsection, setActiveSubsection] = useState<number | null>(null)
   const completedSubsections = useProgressStore((s) => s.completedSubsections)
   const sectionProgress = useProgressStore((s) => s.sections[sectionId as SectionId])
@@ -192,7 +193,7 @@ export function SectionModule() {
           className="w-full bg-white rounded-2xl p-4 sm:p-5 shadow-card hover:shadow-card-hover text-left"
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          onClick={() => navigate(`/section/${sectionId}/quiz`)}
+          onClick={() => navigate(`${basePath}/section/${sectionId}/quiz`)}
         >
           <div className="flex items-center gap-3">
             <div
