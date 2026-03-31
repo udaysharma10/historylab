@@ -72,11 +72,19 @@ export function SectionMaps({ sectionId, sectionColor }: SectionMapsProps) {
                       loading="lazy"
                     />
                   </div>
-                  <div className="p-3">
-                    <h4 className="font-display font-bold text-hist-dark text-sm">{map.title}</h4>
-                    <p className="text-xs text-gray-400 font-body mt-0.5">
-                      {map.regions.length} regions — {map.subtitle}
-                    </p>
+                  <div className="p-3 flex items-center gap-3">
+                    <div className="flex-1">
+                      <h4 className="font-display font-bold text-hist-dark text-sm">{map.title}</h4>
+                      <p className="text-xs text-gray-400 font-body mt-0.5">
+                        {map.regions.length} clickable regions
+                      </p>
+                    </div>
+                    <span
+                      className="shrink-0 text-xs font-display font-bold px-3 py-1.5 rounded-full text-white"
+                      style={{ backgroundColor: sectionColor }}
+                    >
+                      Tap to explore
+                    </span>
                   </div>
                 </motion.button>
               ))}
@@ -109,8 +117,22 @@ export function SectionMaps({ sectionId, sectionColor }: SectionMapsProps) {
                 sectionColor={sectionColor}
               />
 
-              {/* Region detail */}
-              <AnimatePresence>
+              {/* Hint or Region detail */}
+              <AnimatePresence mode="wait">
+                {!revealedRegion && (
+                  <motion.div
+                    key="map-hint"
+                    className="mt-3 rounded-xl p-3 text-center"
+                    style={{ backgroundColor: `${sectionColor}05`, border: `1px dashed ${sectionColor}25` }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <p className="text-sm text-gray-400 font-body">
+                      <span className="text-base mr-1">👆</span> Tap any labeled region on the map to learn about it
+                    </p>
+                  </motion.div>
+                )}
                 {revealedRegion && (() => {
                   const region = selectedMap.regions.find(r => r.id === revealedRegion)
                   if (!region) return null
