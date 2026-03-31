@@ -392,7 +392,9 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 - **Auth**: Google OAuth + profile setup (name, school, role: Student/Teacher/Parent)
 - **Admin teacher emails**: Configured in `src/lib/adminEmails.ts` — skip profile setup, auto-redirect to `/dashboard`
   - Currently: `uday@teknomatics.com` only
-- **Teacher Dashboard**: `/dashboard` — overview stats, activity breakdown, student table (school-scoped via RLS)
+- **Teacher Dashboard**: `/dashboard` — admin-only (via `adminEmails.ts`), 3 tabs: All Users (expandable per-section progress), Login History (date-wise), Activity Breakdown
+- **RLS Policies**: Fixed infinite recursion with `is_admin_teacher()` and `is_teacher_at_school()` security definer functions (see `supabase-admin-fix.sql`)
 - **Activity logging**: All completions logged to `activity_logs` table
 - **Progress sync**: Zustand state synced to `student_progress` table (debounced 1s), localStorage as offline fallback
+- **Auth UX**: Google OAuth with `prompt: 'select_account'` (forces account picker), sign-out clears localStorage, ProfileSetup shows errors + sign-out link
 - **Detailed plan**: See `PLAN_AUTH_AND_ANALYTICS.md`

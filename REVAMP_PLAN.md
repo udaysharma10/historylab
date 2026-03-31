@@ -146,7 +146,10 @@ Add:
 - SectionTimeline: tappable year pill buttons with radio-style indicators, selected event expands into detail card, "Important" badges, empty state hint.
 - SectionMaps: interactive NCERT maps with clickable regions, region detail popups, exam tips, "Tap to explore" CTA on map cards.
 - Fixed Europe 1815 map region coordinates (Great Britain was incorrectly placed over Iceland).
-- Dashboard restricted to admin teachers only (configurable via `src/lib/adminEmails.ts`). Added All Users tab, Login History tab (date-wise), per-user login count summary.
+- Dashboard restricted to admin teachers only (configurable via `src/lib/adminEmails.ts`). Added All Users tab (expandable rows with per-section progress), Login History tab (date-wise), Activity Breakdown tab.
+- Fixed Supabase RLS infinite recursion: created `is_admin_teacher()` and `is_teacher_at_school()` security definer functions to avoid profiles table self-referencing in policies.
+- Fixed profile setup stuck on "Saving": added error display, sign-out button on setup screen, fetchProfile error logging.
+- Fixed sign-out flow: `localStorage.clear()` on sign out + `prompt: 'select_account'` on Google OAuth to force account picker.
 
 ### 3A. Embed Timeline Events per Section
 Each section's narrative should include a mini-timeline of its relevant events:
