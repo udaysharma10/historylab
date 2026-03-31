@@ -10,7 +10,7 @@ import type { SectionId } from '../types/progress'
 export function HomePage() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
-  const { profile } = useAuthContext()
+  useAuthContext() // ensure auth is available
   const totalStars = useProgressStore((s) => s.totalStars)
   const progressSections = useProgressStore((s) => s.sections)
 
@@ -35,8 +35,6 @@ export function HomePage() {
   const totalCompleted = Object.values(progressSections).reduce((sum, s) => sum + s.completed, 0)
   const totalProblems = Object.values(progressSections).reduce((sum, s) => sum + s.total, 0)
   const overallProgress = totalProblems > 0 ? Math.round((totalCompleted / totalProblems) * 100) : 0
-
-  const firstName = profile.name.split(' ')[0]
 
   // Chapter-specific learning modes — only show modes that have data
   const allModes = [
