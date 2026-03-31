@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FigureGallery, FigureDetail, ImageAnalysisCard } from '../components/figure'
 import { QuizProgress } from '../components/quiz'
@@ -29,6 +29,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export function FigureMode() {
   const navigate = useNavigate()
+  const { chapterId } = useParams<{ chapterId: string }>()
   const completeProblem = useProgressStore(s => s.completeProblem)
 
   const [phase, setPhase] = useState<FigurePhase>('home')
@@ -87,6 +88,7 @@ export function FigureMode() {
       const primarySection = activities[0]?.sectionId || 's1'
       completeProblem(primarySection as SectionId, stars)
       logActivity({
+        chapter_id: chapterId || 'ch1',
         mode: 'figures',
         section_id: primarySection,
         activity_type: 'image-analysis',

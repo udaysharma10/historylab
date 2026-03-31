@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapExplorer, MapIdentifyCard, MapLabelCard } from '../components/map'
 import { QuizProgress } from '../components/quiz'
@@ -37,6 +37,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export function MapMode() {
   const navigate = useNavigate()
+  const { chapterId } = useParams<{ chapterId: string }>()
   const completeProblem = useProgressStore(s => s.completeProblem)
 
   const [phase, setPhase] = useState<MapPhase>('home')
@@ -83,6 +84,7 @@ export function MapMode() {
       completeProblem(primarySection as SectionId, stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
+        chapter_id: chapterId || 'ch1',
         mode: 'maps',
         section_id: primarySection,
         activity_type: activeType === 'identify' ? 'map-identify' : 'map-label',

@@ -2,7 +2,7 @@ import { supabase } from './supabase'
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
-export async function saveProgressToSupabase(sectionId: string, progressData: unknown) {
+export async function saveProgressToSupabase(sectionId: string, progressData: unknown, chapterId: string = 'ch1') {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
 
@@ -12,6 +12,7 @@ export async function saveProgressToSupabase(sectionId: string, progressData: un
     await supabase.from('student_progress').upsert({
       user_id: user.id,
       section_id: sectionId,
+      chapter_id: chapterId,
       progress_data: progressData,
       updated_at: new Date().toISOString(),
     })

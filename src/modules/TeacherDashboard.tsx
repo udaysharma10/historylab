@@ -29,21 +29,24 @@ interface UserRow {
 }
 
 const SECTION_NAMES: Record<string, string> = {
-  s1: 'S1 — French Revolution',
-  s2: 'S2 — Making of Nationalism',
-  s3: 'S3 — Age of Revolutions',
-  s4: 'S4 — Germany & Italy',
-  s5: 'S5 — Visualising the Nation',
-  s6: 'S6 — Nationalism & Imperialism',
+  // Ch1 sections
+  'ch1:s1': 'Ch1 S1 — French Revolution',
+  'ch1:s2': 'Ch1 S2 — Making of Nationalism',
+  'ch1:s3': 'Ch1 S3 — Age of Revolutions',
+  'ch1:s4': 'Ch1 S4 — Germany & Italy',
+  'ch1:s5': 'Ch1 S5 — Visualising the Nation',
+  'ch1:s6': 'Ch1 S6 — Nationalism & Imperialism',
+  // Ch2 sections
+  'ch2:s1': 'Ch2 S1 — WWI, Khilafat & Non-Cooperation',
+  'ch2:s2': 'Ch2 S2 — Differing Strands',
+  'ch2:s3': 'Ch2 S3 — Civil Disobedience',
+  'ch2:s4': 'Ch2 S4 — Collective Belonging',
 }
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B',
-  s2: '#2980B9',
-  s3: '#E67E22',
-  s4: '#27AE60',
-  s5: '#7D3C98',
-  s6: '#16A085',
+  'ch1:s1': '#C0392B', 'ch1:s2': '#2980B9', 'ch1:s3': '#E67E22',
+  'ch1:s4': '#27AE60', 'ch1:s5': '#7D3C98', 'ch1:s6': '#16A085',
+  'ch2:s1': '#C0392B', 'ch2:s2': '#2980B9', 'ch2:s3': '#E67E22', 'ch2:s4': '#7D3C98',
 }
 
 interface LoginDateEntry {
@@ -124,10 +127,10 @@ export function TeacherDashboard() {
         .select('user_id, logged_in_at')
         .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
-      // Fetch activity logs for all users (include section_id for per-section breakdown)
+      // Fetch activity logs for all users (include chapter_id + section_id)
       const { data: activityLogs } = await supabase
         .from('activity_logs')
-        .select('user_id, mode, section_id, stars_earned, completed_at')
+        .select('user_id, mode, chapter_id, section_id, stars_earned, completed_at')
         .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
       // Build user rows (ALL users, not just students)
@@ -138,19 +141,21 @@ export function TeacherDashboard() {
           ? logins.sort((a, b) => b.logged_in_at.localeCompare(a.logged_in_at))[0].logged_in_at
           : null
 
-        // Build per-section breakdown
+        // Build per-chapter-section breakdown
         const sectionMap: Record<string, { activities: number; stars: number; modes: Set<string> }> = {}
-        activities.forEach((a: { section_id?: string | null; stars_earned?: number | null; mode?: string }) => {
+        activities.forEach((a: { chapter_id?: string | null; section_id?: string | null; stars_earned?: number | null; mode?: string }) => {
+          const chId = a.chapter_id || 'ch1'
           const sid = a.section_id || 'unknown'
-          if (!sectionMap[sid]) sectionMap[sid] = { activities: 0, stars: 0, modes: new Set() }
-          sectionMap[sid].activities++
-          sectionMap[sid].stars += a.stars_earned || 0
-          if (a.mode) sectionMap[sid].modes.add(a.mode)
+          const key = `${chId}:${sid}`
+          if (!sectionMap[key]) sectionMap[key] = { activities: 0, stars: 0, modes: new Set() }
+          sectionMap[key].activities++
+          sectionMap[key].stars += a.stars_earned || 0
+          if (a.mode) sectionMap[key].modes.add(a.mode)
         })
         const sections: SectionActivity[] = Object.entries(sectionMap)
-          .filter(([sid]) => sid !== 'unknown')
-          .map(([sectionId, data]) => ({
-            sectionId,
+          .filter(([key]) => !key.endsWith(':unknown'))
+          .map(([key, data]) => ({
+            sectionId: key, // format: "ch1:s1" or "ch2:s3"
             activities: data.activities,
             stars: data.stars,
             modes: Array.from(data.modes),
@@ -429,7 +434,7 @@ export function TeacherDashboard() {
                                   Section Progress for {user.name}
                                 </p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                                  {['s1', 's2', 's3', 's4', 's5', 's6'].map(sid => {
+                                  {Object.keys(SECTION_NAMES).map(sid => {
                                     const section = user.sections.find(s => s.sectionId === sid)
                                     const color = SECTION_COLORS[sid] || '#999'
                                     return (

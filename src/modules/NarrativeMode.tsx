@@ -7,6 +7,7 @@ import { SubsectionComplete } from '../components/narrative/SubsectionComplete'
 import { useSwipe } from '../hooks/useSwipe'
 import { useSound } from '../hooks/useSound'
 import { useProgressStore } from '../store/useProgressStore'
+import { useParams } from 'react-router-dom'
 import { logActivity } from '../lib/activityLog'
 
 interface NarrativeModeProps {
@@ -28,6 +29,7 @@ export function NarrativeMode({
   onNextSubsection,
   onBackToSection,
 }: NarrativeModeProps) {
+  const { chapterId } = useParams<{ chapterId: string }>()
   const cards = subsection.narrativeCards
   const [cardIndex, setCardIndex] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -50,6 +52,7 @@ export function NarrativeMode({
       completeSubsection(subsection.id)
       logActivity({
         mode: 'narrative',
+        chapter_id: chapterId || 'ch1',
         section_id: subsection.id.split('-')[0],
         activity_type: 'subsection-read',
         total_questions: totalQuizzes,

@@ -100,6 +100,7 @@ export function QuizMode() {
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
         mode: 'quiz',
+        chapter_id: cid,
         section_id: sectionId,
         activity_type: activityType,
         stars_earned: stars,

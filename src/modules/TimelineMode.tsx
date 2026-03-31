@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TimelineExplorer, TimelineOrderCard } from '../components/timeline'
 import { QuizProgress } from '../components/quiz'
@@ -35,6 +35,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export function TimelineMode() {
   const navigate = useNavigate()
+  const { chapterId } = useParams<{ chapterId: string }>()
   const completeProblem = useProgressStore(s => s.completeProblem)
 
   const [phase, setPhase] = useState<TimelinePhase>('home')
@@ -67,6 +68,7 @@ export function TimelineMode() {
       completeProblem('s1' as SectionId, stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
+        chapter_id: chapterId || 'ch1',
         mode: 'timeline',
         activity_type: 'timeline-order',
         stars_earned: stars,
