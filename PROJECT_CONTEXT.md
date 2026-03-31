@@ -160,6 +160,9 @@ vedansh-history/
 │   │   ├── flashcard/                   # BUILT (Phase 8)
 │   │   │   ├── FlashcardSingle.tsx    # 3D flip card: front (question) / back (answer), section color, tags, 3-button SM-2 rating (Didn't Know / Okay / Easy!)
 │   │   │   └── index.ts              # Barrel export
+│   │   ├── section/                       # BUILT (Phase 11-3)
+│   │   │   ├── SectionTimeline.tsx    # Per-section interactive timeline: tappable year pills, expandable event details
+│   │   │   └── SectionMaps.tsx        # Per-section interactive maps: clickable regions, exam tips, "Tap to explore"
 │   │   └── source/                      # BUILT (Phase 8)
 │   │       ├── SourceReader.tsx        # Parchment-styled source text display: quotation marks, author/year, numbered analysis points, exam tip
 │   │       ├── SourceQuizCard.tsx      # Source comprehension quiz: MCQ + free-text, compact source excerpt, sub-question progress dots
@@ -197,7 +200,7 @@ vedansh-history/
 | `/figures` | FigureMode | **BUILT** (Phase 7) |
 | `/flashcards` | FlashcardMode | **BUILT** (Phase 8) |
 | `/exam` | ExamPractice | **BUILT** (Phase 8) |
-| `/dashboard` | TeacherDashboard | **BUILT** (Phase 10-E) — teacher-only, school-scoped |
+| `/dashboard` | TeacherDashboard | **BUILT** (Phase 10-E, updated Phase 11-3) — admin-only (configured via `adminEmails.ts`), 3 tabs: All Users / Login History (date-wise) / Activity Breakdown |
 
 ---
 
@@ -365,7 +368,7 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 | 9 | Polish (responsive, keyboard nav, performance, dark mode) | Deferred |
 | 11-1 | **Content Revamp Phase 1**: Story thread (openers/closers for all 6 sections), Sorrieu recurring motif (S1,S3-S6), WHY explanation cards (6 new), rewrite ~15 dry textbook-tone cards to teacher voice. ~18 new cards added, ~15 rewritten. See `REVAMP_PLAN.md` for full plan. | **DONE** |
 | 11-2 | Content Revamp Phase 2: Vocabulary expansion (8→22 terms with examples), symbols (Marianne 5 symbols, Britannia 5 symbols, Germania progression 3 paintings, allegory explanation), sources (3→6: added Bismarck, Mazzini, Herder). See `REVAMP_PLAN.md`. | **DONE** |
-| 11-3 | Content Revamp Phase 3: Integrated section experience — new `timeline-ref` and `map-ref` card types in NarrativeCard.tsx, 6 timeline cards + 5 map reference cards embedded in sections, figure analysis already always-expanded, standalone modes relabeled as "Review" tools. See `REVAMP_PLAN.md`. | **DONE** |
+| 11-3 | Content Revamp Phase 3: Integrated section experience — new `timeline-ref` and `map-ref` card types in narrative, 6 timeline + 5 map reference cards, SectionTimeline + SectionMaps interactive components on each section page (tappable year pills, clickable map regions), standalone modes relabeled as "Review" tools, Europe 1815 map coordinates fixed. See `REVAMP_PLAN.md`. | **DONE** |
 | 11-4 | Content Revamp Phase 4: Assessment upgrades (cross-section synthesis, assertion-reason, MCQ distractors, remediation) | Pending |
 | 10-A | Deploy to Vercel (static hosting, auto-deploy on push) | **DONE** |
 | 10-B | Supabase setup (project, Google OAuth, database tables, RLS) | **DONE** |

@@ -141,6 +141,13 @@ Add:
 **Goal**: Each section becomes a complete lesson — narrative + timeline + maps + figures woven together.
 **Result**: Added static reference cards (timeline-ref, map-ref) as new NarrativeCard types. 6 timeline cards (one per section), 5 map reference cards (S2: Vienna, S4: Germany + Italy, S6: Balkans + British Empire). New card type rendering in NarrativeCard.tsx with visual timeline dots and map panels. Figure analysis already always-expanded (verified). Standalone modes relabeled as "Review" tools on HomePage.
 
+**Additional (post-Phase 3)**:
+- Added **SectionTimeline** and **SectionMaps** interactive components embedded in each section's landing page (SectionModule.tsx). These are full explore experiences — not just static cards — filtered to show only events/maps relevant to that section.
+- SectionTimeline: tappable year pill buttons with radio-style indicators, selected event expands into detail card, "Important" badges, empty state hint.
+- SectionMaps: interactive NCERT maps with clickable regions, region detail popups, exam tips, "Tap to explore" CTA on map cards.
+- Fixed Europe 1815 map region coordinates (Great Britain was incorrectly placed over Iceland).
+- Dashboard restricted to admin teachers only (configurable via `src/lib/adminEmails.ts`). Added All Users tab, Login History tab (date-wise), per-user login count summary.
+
 ### 3A. Embed Timeline Events per Section
 Each section's narrative should include a mini-timeline of its relevant events:
 
