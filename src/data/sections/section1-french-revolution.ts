@@ -254,6 +254,20 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
         text: 'After the Battle of Leipzig in 1813, Napoleon\'s power declined rapidly. This caricature shows him as a postman losing letters — each bearing the name of a territory he lost.',
         imageId: 'fig-5',
       },
+      // TIMELINE REFERENCE — Section 1 key dates
+      {
+        id: 's1-timeline',
+        title: 'Section 1 Timeline: Revolution to Napoleon',
+        type: 'timeline-ref',
+        text: `1789 — **French Revolution** begins; sovereignty transfers from monarchy to citizens
+1791 — National Assembly formed; new constitution; tricolour flag adopted
+1799 — Napoleon rises to power in France
+1804 — **Napoleonic Code** introduced: equality before law, abolished birth privileges, right to property
+1806 — Napoleon dissolves the Holy Roman Empire
+1813 — **Battle of Leipzig**: Napoleon defeated; begins losing territories
+1815 — Napoleon defeated at **Waterloo**; exiled; old powers gather at Vienna`,
+        highlight: '**Key exam dates from this section:** 1789 (Revolution), 1804 (Napoleonic Code), 1815 (Waterloo). These dates appear in almost every CBSE paper.',
+      },
       // CLOSING CARD — What Comes Next
       {
         id: 's1-closing',

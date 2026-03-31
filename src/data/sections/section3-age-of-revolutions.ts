@@ -226,6 +226,23 @@ export const section3Subsections: Subsection[] = [
         text: 'The Frankfurt Parliament failed for three reasons that every student must understand:\n\n**1. The professors wanted a constitution.** But the workers who had actually fought on the barricades wanted **bread, jobs, and land**.\n**2. The king rejected the offer.** Friedrich Wilhelm IV didn\'t want a crown given by "the people" — he wanted divine right.\n**3. The middle class and workers split.** Without unity, the parliament had no power to enforce anything.\n\nThis failure changed the course of European history. After Frankfurt, the European mind made a devastating calculation: **democracy can\'t build nations. Only power can.** That\'s why Bismarck — not a parliament — would unify Germany.',
         highlight: '**Why Frankfurt matters:** Its failure proved (to Europeans at that time) that democracy alone couldn\'t build nations. This opened the door for Bismarck\'s "blood and iron" approach.',
       },
+      // TIMELINE REFERENCE — Section 3 key dates
+      {
+        id: 's3-timeline',
+        title: 'Section 3 Timeline: The Age of Revolutions',
+        type: 'timeline-ref',
+        text: `1821 — **Greek war of independence** begins against Ottoman Empire
+1824 — Lord Byron dies fighting for Greek independence at Missolonghi
+1830 — **July Revolution** in France: Bourbon kings overthrown; Louis Philippe installed
+1831 — Belgium breaks away from the United Kingdom of the Netherlands
+1832 — **Treaty of Constantinople**: Greece recognised as an independent nation
+1845 — Silesian weavers' revolt against contractors who cut their wages
+1848 — **Year of revolutions**: food shortages + unemployment → revolts across Europe
+1848 — Louis Philippe flees Paris; Republic proclaimed; universal male suffrage (21+)
+1848 — **Frankfurt Parliament** convenes in Church of St Paul (18 May); drafts constitution
+1848 — Friedrich Wilhelm IV **rejects** the crown; Frankfurt Parliament fails and disbands`,
+        highlight: '**The most important date:** 1848 — the year everything changed. Sorrieu painted his dream, Frankfurt tried democracy, and it all failed. This failure opened the door for Bismarck.',
+      },
       // SORRIEU REFERENCE + CLOSING CARD
       {
         id: 's3-closing',

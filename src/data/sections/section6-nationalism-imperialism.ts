@@ -99,6 +99,28 @@ export const section6Subsections: Subsection[] = [
           explanation: 'Nationalism, aligned with imperialism, led to intense rivalry among European powers over trade, colonies and military might — culminating in the First World War (1914).',
         },
       },
+      // TIMELINE REFERENCE — Section 6 key dates
+      {
+        id: 's6-timeline',
+        title: 'Section 6 Timeline: From Nationalism to World War',
+        type: 'timeline-ref',
+        text: `1871 — German Empire consolidated; European nationalism enters imperial phase
+1878 — **Treaty of Berlin**: Great powers redraw Balkan boundaries
+1905 — **Slavic nationalism** gathers force in Habsburg and Ottoman Empires
+1908 — Austria-Hungary annexes Bosnia-Herzegovina — fuels Serbian anger
+1912-13 — **Balkan Wars**: Balkan states fight Ottoman Empire, then each other
+1914 — Assassination of Archduke Franz Ferdinand in Sarajevo → **World War I begins**`,
+        highlight: '**The final connection:** Balkan tensions (nationalism + Ottoman decline + big-power rivalry) directly triggered World War I. This is the chapter\'s ultimate lesson: nationalism, unchecked, destroys.',
+      },
+      // MAP REFERENCE — British Empire
+      {
+        id: 's6-map',
+        title: 'Map: The British Empire and the Irony of "Freedom"',
+        type: 'map-ref',
+        imageId: 'fig-20',
+        text: 'Look at this map carefully — it shows Britannia sitting triumphantly over the globe, with angels carrying a banner that reads **"Freedom"**. But the map is celebrating the **British Empire** — colonies in Asia, Africa, and the Americas where people were ruled by force, not freed.\n\nThis is the great irony at the end of the chapter: **nationalism, which began as a dream of freedom, became the justification for conquering the world**.',
+        highlight: '**Exam tip:** CBSE asks about the irony in this image. The answer: claiming "Freedom" while colonising nations is a contradiction. Nationalism became imperialism.',
+      },
       // FINAL CLOSING CARD — The complete arc
       {
         id: 's6-closing',

@@ -172,6 +172,42 @@ export const section4Subsections: Subsection[] = [
         type: 'vocabulary',
         text: 'Ethnic — Relates to a common racial, tribal, or cultural origin or background that a community identifies with or claims.',
       },
+      // TIMELINE REFERENCE — Section 4 key dates
+      {
+        id: 's4-timeline',
+        title: 'Section 4 Timeline: Unification by Blood and Iron',
+        type: 'timeline-ref',
+        text: `1858 — Cavour engineers alliance with France (Napoleon III) against Austria
+1859 — Sardinia-Piedmont defeats Austria with French help
+1860 — **Garibaldi's Expedition of the Thousand** conquers southern Italy
+1861 — **Victor Emmanuel II** proclaimed king of united Italy
+1864 — Bismarck's **first war**: Prussia + Austria defeat Denmark (win Schleswig-Holstein)
+1866 — Bismarck's **second war**: Prussia defeats Austria (wins dominance of German states)
+1867 — Habsburg rulers grant autonomy to Hungary
+1870 — **Franco-Prussian War** begins; France withdraws from Rome; Papal States join Italy
+1871 — **German Empire proclaimed** at Palace of Versailles (18 January); William I becomes Kaiser
+1707 — Act of Union: England + Scotland form United Kingdom of Great Britain
+1801 — Ireland forcibly incorporated into the United Kingdom`,
+        highlight: '**Two unification stories:** Italy (1858-1870) and Germany (1864-1871). CBSE often asks you to compare the two. Key difference: Germany = military force (Bismarck); Italy = diplomacy (Cavour) + popular uprising (Garibaldi).',
+      },
+      // MAP REFERENCE — Germany unification
+      {
+        id: 's4-map-germany',
+        title: 'Map: Unification of Germany (1866-1871)',
+        type: 'map-ref',
+        imageId: 'fig-12',
+        text: 'This map shows how Germany was unified in stages through Bismarck\'s three wars. **Prussia** (dark) is the core — already the largest German state. After the war with Austria (1866), Prussia absorbed northern states. After the Franco-Prussian War (1871), southern German states joined to form the **German Empire**. Notice that **Austria is excluded** — Bismarck deliberately kept it out (the "kleindeutsch" or small-Germany solution).',
+        highlight: '**Exam tip:** When CBSE asks about German unification, always mention: Bismarck + three wars + "blood and iron" + proclaimed at Versailles 1871 + Austria excluded.',
+      },
+      // MAP REFERENCE — Italy before/after
+      {
+        id: 's4-map-italy',
+        title: 'Map: Italy Before and After Unification',
+        type: 'map-ref',
+        imageId: 'fig-14a',
+        text: 'Before unification, Italy was **seven separate states**: Sardinia-Piedmont (only one with Italian rulers), Lombardy and Venetia (Austrian), Papal States, Kingdom of Two Sicilies (Spanish Bourbon), and several smaller duchies. After unification, all these became one kingdom under **Victor Emmanuel II** by 1870. The Papal States were the last to join — only when France withdrew its troops during the Franco-Prussian War.',
+        highlight: '**Exam tip:** CBSE asks "Which was the only Italian state ruled by an Italian princely house?" Answer: **Sardinia-Piedmont**. Also know: Papal States joined last (1870).',
+      },
       // CLOSING CARD — What Comes Next
       {
         id: 's4-closing',

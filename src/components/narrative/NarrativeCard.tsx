@@ -383,6 +383,113 @@ export function NarrativeCard({ card, sectionColor }: NarrativeCardProps) {
     )
   }
 
+  // ── Timeline Reference Card ──
+  if (type === 'timeline-ref') {
+    // Parse timeline events from text: "YEAR — Event" per line
+    const events = card.text.split('\n').filter((l) => l.trim()).map((line) => {
+      const match = line.match(/^(\d{4}(?:\s*[-–]\s*\d{2,4})?)\s*[-–—]\s*(.+)$/)
+      return match ? { year: match[1], event: match[2] } : null
+    }).filter(Boolean) as { year: string; event: string }[]
+
+    return (
+      <motion.div
+        className="rounded-2xl overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', border: '2px solid #BFDBFE' }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -30 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="p-6 sm:p-7">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: sectionColor }}>
+              <span className="text-white text-base">📅</span>
+            </div>
+            <span className="font-display font-bold text-base" style={{ color: sectionColor }}>
+              {card.title || 'Section Timeline'}
+            </span>
+          </div>
+
+          {/* Timeline visual */}
+          <div className="relative pl-6 space-y-0">
+            {/* Vertical line */}
+            <div className="absolute left-[11px] top-2 bottom-2 w-0.5" style={{ backgroundColor: `${sectionColor}30` }} />
+
+            {events.map((evt, i) => (
+              <motion.div
+                key={i}
+                className="relative flex gap-4 items-start pb-4"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + i * 0.08 }}
+              >
+                {/* Dot on timeline */}
+                <div
+                  className="absolute left-[-17px] top-1.5 w-3.5 h-3.5 rounded-full border-2 bg-white shrink-0 z-10"
+                  style={{ borderColor: sectionColor }}
+                />
+                {/* Year badge */}
+                <span
+                  className="shrink-0 text-sm font-display font-bold px-2.5 py-0.5 rounded-full"
+                  style={{ backgroundColor: `${sectionColor}15`, color: sectionColor }}
+                >
+                  {evt.year}
+                </span>
+                {/* Event text */}
+                <p className="font-body text-[0.95rem] text-hist-dark/85 leading-snug pt-0.5">
+                  <RichText text={evt.event} />
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          {card.highlight && (
+            <HighlightBox text={card.highlight} color={sectionColor} />
+          )}
+        </div>
+      </motion.div>
+    )
+  }
+
+  // ── Map Reference Card ──
+  if (type === 'map-ref') {
+    return (
+      <motion.div
+        className="rounded-2xl overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)', border: '2px solid #A7F3D0' }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -30 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="p-6 sm:p-7">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: sectionColor }}>
+              <span className="text-white text-base">🗺️</span>
+            </div>
+            <span className="font-display font-bold text-base" style={{ color: sectionColor }}>
+              {card.title || 'Map Reference'}
+            </span>
+          </div>
+
+          {/* Map image if provided */}
+          {card.imageId && (
+            <FigurePanel figureId={card.imageId} sectionColor={sectionColor} />
+          )}
+
+          {/* Description text */}
+          <p className="font-body text-lg leading-relaxed text-hist-dark/90">
+            <RichText text={card.text} />
+          </p>
+
+          {card.highlight && (
+            <HighlightBox text={card.highlight} color={sectionColor} />
+          )}
+        </div>
+      </motion.div>
+    )
+  }
+
   // ── Default Text Card ──
   return (
     <motion.div

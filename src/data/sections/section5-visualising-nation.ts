@@ -104,6 +104,18 @@ export const section5Subsections: Subsection[] = [
           explanation: 'Replacing the Kaiser\'s crown with broken chains symbolises the shift from monarchical authority to the aspiration for freedom and liberation — the hope of 1848 liberal-nationalists.',
         },
       },
+      // TIMELINE REFERENCE — Germania progression dates
+      {
+        id: 's5-timeline',
+        title: 'Section 5 Timeline: How the Symbols Changed',
+        type: 'timeline-ref',
+        text: `1789 — French Revolution creates allegories of **Liberty, Justice, Republic** as female figures
+1848 — Philip Veit paints **Germania** with broken chains and tricolour — **hope and liberation**
+1848 — Marianne (France) established: red cap, tricolour, cockade — placed on coins, stamps, public squares
+1850 — Julius Hubner paints **The Fallen Germania** — defeat after Frankfurt Parliament's failure
+1860 — Lorenz Clasen paints **Germania Guarding the Rhine** — armored, militaristic, aggressive`,
+        highlight: '**The paintings tell the whole story:** Germania 1848 (broken chains = freedom) → 1850 (fallen = defeat) → 1860 (sword + armor = power). This progression is tested almost every year in CBSE.',
+      },
       // CLOSING CARD — Sorrieu thread + What Comes Next
       {
         id: 's5-closing',

@@ -172,6 +172,8 @@ export function NarrativeMode({
             {cards[cardIndex]?.type === 'vocabulary' ? '📖 Vocabulary'
               : cards[cardIndex]?.type === 'source' ? '📜 Source'
               : cards[cardIndex]?.type === 'figure' ? '🖼️ Figure'
+              : cards[cardIndex]?.type === 'timeline-ref' ? '📅 Timeline'
+              : cards[cardIndex]?.type === 'map-ref' ? '🗺️ Map'
               : cards[cardIndex]?.inlineQuiz ? '🧠 Quiz'
               : '📄 Reading'}
           </span>

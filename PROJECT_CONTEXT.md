@@ -365,7 +365,7 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 | 9 | Polish (responsive, keyboard nav, performance, dark mode) | Deferred |
 | 11-1 | **Content Revamp Phase 1**: Story thread (openers/closers for all 6 sections), Sorrieu recurring motif (S1,S3-S6), WHY explanation cards (6 new), rewrite ~15 dry textbook-tone cards to teacher voice. ~18 new cards added, ~15 rewritten. See `REVAMP_PLAN.md` for full plan. | **DONE** |
 | 11-2 | Content Revamp Phase 2: Vocabulary expansion (8→22 terms with examples), symbols (Marianne 5 symbols, Britannia 5 symbols, Germania progression 3 paintings, allegory explanation), sources (3→6: added Bismarck, Mazzini, Herder). See `REVAMP_PLAN.md`. | **DONE** |
-| 11-3 | Content Revamp Phase 3: Integrated section experience (timeline/maps/figures embedded per section) | Pending |
+| 11-3 | Content Revamp Phase 3: Integrated section experience — new `timeline-ref` and `map-ref` card types in NarrativeCard.tsx, 6 timeline cards + 5 map reference cards embedded in sections, figure analysis already always-expanded, standalone modes relabeled as "Review" tools. See `REVAMP_PLAN.md`. | **DONE** |
 | 11-4 | Content Revamp Phase 4: Assessment upgrades (cross-section synthesis, assertion-reason, MCQ distractors, remediation) | Pending |
 | 10-A | Deploy to Vercel (static hosting, auto-deploy on push) | **DONE** |
 | 10-B | Supabase setup (project, Google OAuth, database tables, RLS) | **DONE** |

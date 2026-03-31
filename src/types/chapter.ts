@@ -33,7 +33,7 @@ export interface NarrativeCard {
   imageId?: string
   highlight?: string
   inlineQuiz?: InlineQuiz
-  type?: 'text' | 'vocabulary' | 'source' | 'infobox' | 'figure' | 'exam-prep'
+  type?: 'text' | 'vocabulary' | 'source' | 'infobox' | 'figure' | 'exam-prep' | 'timeline-ref' | 'map-ref'
 }
 
 export interface InlineQuiz {

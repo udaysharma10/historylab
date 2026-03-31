@@ -211,6 +211,28 @@ export const section2Subsections: Subsection[] = [
           explanation: 'Austrian Chancellor Metternich described Mazzini as "the most dangerous enemy" because his ideas of democratic republics threatened the conservative order.',
         },
       },
+      // TIMELINE REFERENCE — Section 2 key dates
+      {
+        id: 's2-timeline',
+        title: 'Section 2 Timeline: From Vienna to Secret Societies',
+        type: 'timeline-ref',
+        text: `1815 — **Congress of Vienna**: Metternich restores conservative order; redraws map of Europe
+1815 — Bourbon dynasty restored in France; buffer states created around France
+1820s — Secret societies spring up across Europe; liberal-nationalists go underground
+1831 — Mazzini founds **Young Italy** in Marseilles
+1833 — Mazzini founds **Young Europe** in Berne
+1834 — **Zollverein** formed: Prussian customs union abolishes tariff barriers, reduces currencies from 30+ to 2`,
+        highlight: '**Key exam dates:** 1815 (Congress of Vienna), 1831 (Young Italy), 1834 (Zollverein). The Zollverein is a favourite CBSE question topic.',
+      },
+      // MAP REFERENCE — Europe after Congress of Vienna
+      {
+        id: 's2-map',
+        title: 'Map: Europe After the Congress of Vienna (1815)',
+        type: 'map-ref',
+        imageId: 'fig-3',
+        text: 'This map shows how Metternich redrew the boundaries of Europe at the Congress of Vienna. Notice: **France** is surrounded by buffer states. **Prussia** gets important western frontiers. **Austria** controls northern Italy (Lombardy and Venetia). **Russia** gets part of Poland. The entire map is designed to **contain France** and prevent another Napoleon from rising.',
+        highlight: '**Exam tip:** CBSE often asks "What changes were made by the Treaty of Vienna 1815?" Use this map to remember: Bourbon restoration, buffer states, Prussia expanded, Austria got N. Italy, Russia got Poland.',
+      },
       // CLOSING CARD — What Comes Next
       {
         id: 's2-closing',

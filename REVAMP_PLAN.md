@@ -137,8 +137,9 @@ Add:
 
 ---
 
-## Phase 3: Integrated Section Experience
+## Phase 3: Integrated Section Experience — **DONE** (2026-03-31)
 **Goal**: Each section becomes a complete lesson — narrative + timeline + maps + figures woven together.
+**Result**: Added static reference cards (timeline-ref, map-ref) as new NarrativeCard types. 6 timeline cards (one per section), 5 map reference cards (S2: Vienna, S4: Germany + Italy, S6: Balkans + British Empire). New card type rendering in NarrativeCard.tsx with visual timeline dots and map panels. Figure analysis already always-expanded (verified). Standalone modes relabeled as "Review" tools on HomePage.
 
 ### 3A. Embed Timeline Events per Section
 Each section's narrative should include a mini-timeline of its relevant events:
@@ -228,14 +229,14 @@ When a student scores 1 star (< 50%), show:
 | 6 | 2B | Expand symbols (Marianne, Britannia) | Medium | Low | **DONE** (2026-03-31) — +Marianne, Britannia, progression |
 | 7 | 4A | Cross-section synthesis questions | High | Medium | Pending |
 | 8 | 4C | Section 5 quiz strengthening | Medium | Low | Pending |
-| 9 | 3A | Embed timeline per section | High | Medium | Pending |
-| 10 | 3B | Embed maps per section (+ new Balkans map) | High | Medium | Pending |
-| 11 | 3C | Embed figures inline (always-expanded analysis) | Medium | Medium | Pending |
+| 9 | 3A | Embed timeline per section | High | Medium | **DONE** (2026-03-31) — 6 timeline-ref cards |
+| 10 | 3B | Embed maps per section (+ new Balkans map) | High | Medium | **DONE** (2026-03-31) — 5 map-ref cards |
+| 11 | 3C | Embed figures inline (always-expanded analysis) | Medium | Medium | **DONE** — already always-expanded |
 | 12 | 4B | Assertion-Reason questions | High | Medium | Pending |
 | 13 | 4D | MCQ distractor improvements | Medium | Low | Pending |
 | 14 | 2C | Additional primary sources | Medium | Medium | **DONE** (2026-03-31) — 3→6 sources |
 | 15 | 4E | Remediation guidance | Medium | High | Pending |
-| 16 | 3D | Reposition standalone modes as revision | Low | Low | Pending |
+| 16 | 3D | Reposition standalone modes as revision | Low | Low | **DONE** (2026-03-31) — relabeled |
 
 ---
 

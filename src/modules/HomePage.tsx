@@ -18,10 +18,10 @@ const SECTIONS = [
 ]
 
 const MODES = [
-  { id: 'timeline', label: 'Timeline', icon: '📅', route: '/timeline', color: '#2980B9' },
-  { id: 'maps', label: 'Maps', icon: '🗺️', route: '/maps', color: '#16A085' },
+  { id: 'timeline', label: 'Timeline Review', icon: '📅', route: '/timeline', color: '#2980B9' },
+  { id: 'maps', label: 'Map Review', icon: '🗺️', route: '/maps', color: '#16A085' },
   { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: '/flashcards', color: '#7D3C98' },
-  { id: 'figures', label: 'Figures', icon: '🖼️', route: '/figures', color: '#E67E22' },
+  { id: 'figures', label: 'Figure Review', icon: '🖼️', route: '/figures', color: '#E67E22' },
   { id: 'exam', label: 'Exam Prep', icon: '📝', route: '/exam', color: '#C0392B' },
 ]
 
