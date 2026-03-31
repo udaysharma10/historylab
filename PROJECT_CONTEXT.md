@@ -386,6 +386,13 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 - **GitHub**: `https://github.com/udaysharma10/historylab` (branch: `main`)
 - **Auto-deploy**: Every push to `main` triggers a Vercel deploy
 
+### Development Workflow
+- **`dev` branch**: All new development and testing happens here first
+- **`main` branch**: Production only — merged from `dev` when approved
+- **Local dev server**: `PATH="/Users/udaysharma/.nvm/versions/node/v20.20.0/bin:$PATH" npx vite --host` → `http://localhost:5173/`
+- **Deploy flow**: `git checkout main && git merge dev && git push origin main` → Vercel auto-deploys → `git checkout dev`
+- **Never push directly to `main`** without explicit approval
+
 ### Backend (Phase 10-B onwards)
 - **Supabase** (BaaS): Auth + PostgreSQL + REST API
 - **Region**: Mumbai (ref: zqryzlkvieljadntlomz)
