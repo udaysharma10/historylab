@@ -10,6 +10,8 @@
 
 **Arc**: Hope → Failure → Co-option → Manipulation → Destruction
 
+**Teaching Guidelines**: See `TEACHING_GUIDELINES.md` for the complete methodology — voice/tone rules, content accuracy standards, assessment design principles, and the 5 rules that govern all content creation.
+
 ---
 
 ## The Three-Act Story Structure

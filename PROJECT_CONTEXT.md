@@ -331,6 +331,17 @@ Source PDF: `/Users/udaysharma/Documents/Blostem/Claude_Projects/History/NCERT_R
 
 ---
 
+## Teaching Methodology
+See `TEACHING_GUIDELINES.md` for the complete content and pedagogy reference:
+- **Voice**: Teacher voice, not textbook. Direct address, bold key terms, short sentences.
+- **WHY**: Every concept must explain the mechanism, not just the event.
+- **Story**: One narrative arc across 6 sections (Hope → Failure → Co-option → Manipulation → Destruction). Sorrieu as recurring motif.
+- **Assessment**: Bloom's taxonomy balance (target 10% Evaluate level). All CBSE formats including Assertion-Reason.
+- **Methodology**: Attempt-first pedagogy, inline quiz gates, SM-2 spaced repetition, multi-modal learning, section = complete lesson.
+- **5 Rules**: Sound like a teacher | Every concept needs a WHY | One story six chapters | Test understanding not memory | Each section is a complete lesson
+
+---
+
 ## Key Architecture Decisions
 
 1. **Separate project** from aarav-shin-shapes — different audience (Grade 10 vs Grade 4), different domain (history vs math)
