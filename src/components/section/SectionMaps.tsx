@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getMapsBySection } from '../../data/maps'
+import { getMapsBySection } from '../../data/getChapter'
 import { InteractiveMap } from '../map/InteractiveMap'
 
 interface SectionMapsProps {
   sectionId: string
   sectionColor: string
+  chapterId?: string
 }
 
-export function SectionMaps({ sectionId, sectionColor }: SectionMapsProps) {
-  const maps = getMapsBySection(sectionId)
+export function SectionMaps({ sectionId, sectionColor, chapterId = 'ch1' }: SectionMapsProps) {
+  const maps = getMapsBySection(chapterId, sectionId)
   const [selectedMapId, setSelectedMapId] = useState<string | null>(null)
   const [revealedRegion, setRevealedRegion] = useState<string | null>(null)
 

@@ -1,20 +1,21 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { keyDates } from '../../data/keyDates'
+import { getKeyDates } from '../../data/getChapter'
 
 interface SectionTimelineProps {
   sectionId: string
   sectionColor: string
+  chapterId?: string
 }
 
-export function SectionTimeline({ sectionId, sectionColor }: SectionTimelineProps) {
+export function SectionTimeline({ sectionId, sectionColor, chapterId = 'ch1' }: SectionTimelineProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const events = useMemo(() =>
-    keyDates
+    getKeyDates(chapterId)
       .filter(d => d.sectionId === sectionId)
       .sort((a, b) => a.year - b.year),
-    [sectionId]
+    [sectionId, chapterId]
   )
 
   if (events.length === 0) return null

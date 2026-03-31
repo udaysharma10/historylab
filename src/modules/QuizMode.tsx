@@ -1,9 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { chapter1 } from '../data/chapter1'
-import { mcqActivities, fillBlankActivities, trueFalseActivities } from '../data/activities/quizActivities'
-import { matchActivities } from '../data/activities/matchActivities'
+import { getChapter, getMcqActivities, getFillBlankActivities, getTrueFalseActivities, getMatchActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { MCQCard, FillBlankCard, TrueFalseCard, MatchColumns, QuizProgress, QuizResults } from '../components/quiz'
 import { calculateStars } from '../engine/quizEngine'
 import { calculateXP } from '../engine/scoringEngine'
@@ -14,11 +12,6 @@ import type { MCQActivity, FillBlankActivity, TrueFalseActivity, MatchActivity }
 
 type ActivityType = 'mcq' | 'fill-blank' | 'true-false' | 'match-following'
 type QuizPhase = 'pick-type' | 'playing' | 'results'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
-}
 
 const TYPE_CONFIG: { type: ActivityType; label: string; icon: string }[] = [
   { type: 'mcq', label: 'Multiple Choice', icon: '🔤' },
@@ -36,22 +29,31 @@ function shuffle<T>(arr: T[]): T[] {
   return result
 }
 
-function getActivities(sectionId: string, type: ActivityType) {
-  switch (type) {
-    case 'mcq': return mcqActivities.filter(a => a.sectionId === sectionId)
-    case 'fill-blank': return fillBlankActivities.filter(a => a.sectionId === sectionId)
-    case 'true-false': return trueFalseActivities.filter(a => a.sectionId === sectionId)
-    case 'match-following': return matchActivities.filter(a => a.sectionId === sectionId)
-  }
-}
-
 export function QuizMode() {
-  const { sectionId } = useParams<{ sectionId: string }>()
+  const { sectionId, chapterId } = useParams<{ sectionId: string; chapterId: string }>()
   const navigate = useNavigate()
   const completeProblem = useProgressStore(s => s.completeProblem)
 
-  const section = chapter1.sections.find(s => s.id === sectionId)
-  const color = SECTION_COLORS[sectionId || ''] || '#2C3E50'
+  const cid = chapterId || 'ch1'
+  const chapter = getChapter(cid)
+  const section = chapter?.sections.find(s => s.id === sectionId)
+  const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
+  const color = sectionColors[sectionId || ''] || '#2C3E50'
+
+  // Get chapter-specific activities
+  const chMcq = useMemo(() => getMcqActivities(cid), [cid])
+  const chFb = useMemo(() => getFillBlankActivities(cid), [cid])
+  const chTf = useMemo(() => getTrueFalseActivities(cid), [cid])
+  const chMatch = useMemo(() => getMatchActivities(cid), [cid])
+
+  function getActivities(sid: string, type: ActivityType) {
+    switch (type) {
+      case 'mcq': return chMcq.filter(a => a.sectionId === sid)
+      case 'fill-blank': return chFb.filter(a => a.sectionId === sid)
+      case 'true-false': return chTf.filter(a => a.sectionId === sid)
+      case 'match-following': return chMatch.filter(a => a.sectionId === sid)
+    }
+  }
 
   const [phase, setPhase] = useState<QuizPhase>('pick-type')
   const [activityType, setActivityType] = useState<ActivityType | null>(null)
@@ -63,11 +65,11 @@ export function QuizMode() {
 
   // Available counts per type for this section
   const counts = useMemo(() => ({
-    mcq: mcqActivities.filter(a => a.sectionId === sectionId).length,
-    'fill-blank': fillBlankActivities.filter(a => a.sectionId === sectionId).length,
-    'true-false': trueFalseActivities.filter(a => a.sectionId === sectionId).length,
-    'match-following': matchActivities.filter(a => a.sectionId === sectionId).length,
-  }), [sectionId])
+    mcq: chMcq.filter(a => a.sectionId === sectionId).length,
+    'fill-blank': chFb.filter(a => a.sectionId === sectionId).length,
+    'true-false': chTf.filter(a => a.sectionId === sectionId).length,
+    'match-following': chMatch.filter(a => a.sectionId === sectionId).length,
+  }), [sectionId, chMcq, chFb, chTf, chMatch])
 
   const handleSelectType = useCallback((type: ActivityType) => {
     const items = getActivities(sectionId || '', type) as (MCQActivity | FillBlankActivity | TrueFalseActivity | MatchActivity)[]

@@ -222,7 +222,7 @@ export function SectionModule() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45 }}
       >
-        <SectionTimeline sectionId={section.id} sectionColor={color} />
+        <SectionTimeline sectionId={section.id} sectionColor={color} chapterId={cid} />
       </motion.div>
 
       {/* Explore Maps for this section */}
@@ -232,7 +232,7 @@ export function SectionModule() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        <SectionMaps sectionId={section.id} sectionColor={color} />
+        <SectionMaps sectionId={section.id} sectionColor={color} chapterId={cid} />
       </motion.div>
 
       {/* Start reading CTA */}
