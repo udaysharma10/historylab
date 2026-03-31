@@ -5,6 +5,8 @@ import { chapter1 } from '../data/chapter1'
 import { SectionHeader } from '../components/layout/SectionHeader'
 import { NarrativeMode } from './NarrativeMode'
 import { useProgressStore } from '../store/useProgressStore'
+import { SectionTimeline } from '../components/section/SectionTimeline'
+import { SectionMaps } from '../components/section/SectionMaps'
 import type { SectionId } from '../types/progress'
 
 const SECTION_COLORS: Record<string, string> = {
@@ -218,12 +220,32 @@ export function SectionModule() {
         </motion.button>
       </motion.div>
 
+      {/* Explore Timeline for this section */}
+      <motion.div
+        className="mt-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+      >
+        <SectionTimeline sectionId={section.id} sectionColor={color} />
+      </motion.div>
+
+      {/* Explore Maps for this section */}
+      <motion.div
+        className="mt-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <SectionMaps sectionId={section.id} sectionColor={color} />
+      </motion.div>
+
       {/* Start reading CTA */}
       <motion.div
-        className="mt-4 text-center"
+        className="mt-6 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.6 }}
       >
         <motion.button
           className="text-white font-display text-lg px-8 py-3 rounded-full shadow-button btn-press"
