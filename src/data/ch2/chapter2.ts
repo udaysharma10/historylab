@@ -1,0 +1,93 @@
+import type { Chapter } from '../../types/chapter'
+import { section1Subsections } from './sections/section1-wwi-khilafat-noncooperation'
+import { section2Subsections } from './sections/section2-differing-strands'
+import { section3Subsections } from './sections/section3-civil-disobedience'
+import { section4Subsections } from './sections/section4-collective-belonging'
+
+export const chapter2: Chapter = {
+  id: 'ch2',
+  title: 'Nationalism in India',
+  subtitle: 'India and the Contemporary World — Chapter 2',
+  sections: [
+    {
+      id: 's1',
+      number: 1,
+      title: 'The First World War, Khilafat and Non-Cooperation',
+      color: 'hist-red',
+      icon: '🔥',
+      subsections: section1Subsections,
+      keyPoints: [
+        'First World War created economic hardship — taxes doubled, forced recruitment, famine, influenza (12-13 million died)',
+        'Gandhi returned from South Africa (1915) with the idea of satyagraha — truth-force, not passive resistance',
+        'Early satyagrahas: Champaran (1917), Ahmedabad (1918), Kheda (1918) — proved the method worked',
+        'Rowlatt Act (1919) allowed detention without trial — Gandhi called a nationwide hartal (6 April)',
+        'Jallianwala Bagh massacre (13 April 1919) — General Dyer fired on unarmed crowd; hundreds killed',
+        'Khilafat issue united Hindus and Muslims — Gandhi linked Khilafat with Non-Cooperation',
+        'Non-Cooperation Movement launched at Nagpur Congress (December 1920) — boycott British institutions, titles, courts, goods',
+      ],
+      figureIds: ['ch2-fig-1', 'ch2-fig-2', 'ch2-fig-3', 'ch2-fig-4'],
+      sourceIds: ['ch2-source-a'],
+      vocabularyIds: ['ch2-vocab-satyagraha', 'ch2-vocab-forced-recruitment', 'ch2-vocab-hartal'],
+    },
+    {
+      id: 's2',
+      number: 2,
+      title: 'Differing Strands Within the Movement',
+      color: 'hist-blue',
+      icon: '🤝',
+      subsections: section2Subsections,
+      keyPoints: [
+        'Non-Cooperation was NOT one movement — five different groups joined for five different reasons',
+        'Middle class in towns: boycotted schools, courts, titles, foreign cloth — but khadi was expensive, alternatives slow',
+        'Awadh peasants (led by Baba Ramchandra): fought talukdars, demanded end of begar and high rents',
+        'Gudem Hills tribals (led by Alluri Sitaram Raju): used guerrilla warfare for forest rights — executed 1924',
+        'Assam plantation workers: left plantations believing "Gandhi Raj" was coming — stranded, beaten by police',
+        'Chauri Chaura (February 1922): police station burnt, 22 policemen killed — Gandhi called off entire movement',
+        'Gandhi withdrew because non-violence was a moral principle, not just a strategy',
+      ],
+      figureIds: ['ch2-fig-5'],
+      sourceIds: ['ch2-source-b'],
+      vocabularyIds: ['ch2-vocab-boycott', 'ch2-vocab-begar', 'ch2-vocab-picket', 'ch2-vocab-swaraj'],
+    },
+    {
+      id: 's3',
+      number: 3,
+      title: 'Towards Civil Disobedience',
+      color: 'hist-orange',
+      icon: '🧂',
+      subsections: section3Subsections,
+      keyPoints: [
+        'After 1922: Congress split — Swaraj Party (council politics) vs mass agitation (Nehru, Bose)',
+        'Bhagat Singh and HSRA (1928): revolutionary violence as alternative — "Inquilab Zindabad!"',
+        'Simon Commission (1928): all-British, no Indian member — "Go Back Simon!" united parties in protest',
+        'Lahore Congress (December 1929): formal demand for Purna Swaraj — 26 January 1930 = Independence Day',
+        'Salt March (12 March - 6 April 1930): 78 volunteers, 240 miles, Sabarmati to Dandi — launched Civil Disobedience',
+        'CDM different from NCM: not just boycott but active law-breaking — manufacturing salt, refusing revenue',
+        'Limits of CDM: Dalits (Ambedkar demanded separate electorates), Muslims felt alienated from Congress',
+        'Poona Pact (1932): reserved seats for Dalits but within joint electorates',
+      ],
+      figureIds: ['ch2-fig-6', 'ch2-fig-7', 'ch2-fig-8', 'ch2-fig-9', 'ch2-fig-10'],
+      sourceIds: ['ch2-source-c', 'ch2-source-d'],
+      vocabularyIds: ['ch2-vocab-purna-swaraj'],
+    },
+    {
+      id: 's4',
+      number: 4,
+      title: 'The Sense of Collective Belonging',
+      color: 'hist-purple',
+      icon: '🎨',
+      subsections: section4Subsections,
+      keyPoints: [
+        'Bharat Mata: Bankim Chandra\'s Vande Mataram (1870s) → Abanindranath Tagore\'s painting (1905) → later versions with trishul',
+        'Folk revival: Tagore collected ballads in Bengal, Natesa Sastri collected Tamil folk tales — like Grimm Brothers in Europe',
+        'The flag evolved: Swadeshi tricolour → Gandhian Swaraj flag (1921) with spinning wheel → symbol of defiance',
+        'Rewriting history: nationalist historians celebrated India\'s "golden age" — but it was largely Hindu history',
+        'The limit: when symbols draw from one religion\'s imagery, other communities feel excluded',
+        'Compare with Chapter 1: Bharat Mata = Indian version of Germania/Marianne (female allegory of nation)',
+      ],
+      figureIds: ['ch2-fig-11', 'ch2-fig-12', 'ch2-fig-13', 'ch2-fig-14a', 'ch2-fig-14b'],
+      sourceIds: ['ch2-source-e'],
+      vocabularyIds: [],
+    },
+  ],
+}
