@@ -46,7 +46,7 @@ export const historyBook: Book = {
       title: 'Nationalism in India',
       subtitle: 'Section I: Events and Processes',
       icon: '🇮🇳',
-      status: 'coming-soon',
+      status: 'live',
       isFree: false,
     },
     {

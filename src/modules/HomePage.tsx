@@ -4,16 +4,8 @@ import { useProgressStore } from '../store/useProgressStore'
 import { ProgressRing } from '../components/common/ProgressRing'
 import { calculateMastery } from '../engine/scoringEngine'
 import { useAuthContext } from '../components/auth'
-import { chapter1 } from '../data/chapter1'
+import { getChapter, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_ICONS } from '../data/getChapter'
 import type { SectionId } from '../types/progress'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22', s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
-}
-
-const SECTION_ICONS: Record<string, string> = {
-  s1: '🇫🇷', s2: '🏛️', s3: '🔥', s4: '🗺️', s5: '🎨', s6: '🌍',
-}
 
 export function HomePage() {
   const navigate = useNavigate()
@@ -22,9 +14,23 @@ export function HomePage() {
   const totalStars = useProgressStore((s) => s.totalStars)
   const progressSections = useProgressStore((s) => s.sections)
 
-  // For now, only ch1 has data — future chapters will use dynamic loading
-  const chapter = chapter1
-  const basePath = `/chapter/${chapterId || 'ch1'}`
+  const cid = chapterId || 'ch1'
+  const chapter = getChapter(cid)
+  const basePath = `/chapter/${cid}`
+  const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
+  const sectionIcons = CHAPTER_SECTION_ICONS[cid] || {}
+
+  if (!chapter) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <div className="text-5xl mb-4">🔍</div>
+          <h2 className="font-display text-xl font-bold text-hist-dark mb-2">Chapter Not Found</h2>
+          <button className="text-hist-blue underline font-body" onClick={() => navigate('/')}>Back to Home</button>
+        </div>
+      </div>
+    )
+  }
 
   const totalCompleted = Object.values(progressSections).reduce((sum, s) => sum + s.completed, 0)
   const totalProblems = Object.values(progressSections).reduce((sum, s) => sum + s.total, 0)
@@ -83,8 +89,8 @@ export function HomePage() {
         <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Sections</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {chapter.sections.map((section, i) => {
-            const color = SECTION_COLORS[section.id] || '#2C3E50'
-            const icon = SECTION_ICONS[section.id] || '📖'
+            const color = sectionColors[section.id] || '#2C3E50'
+            const icon = sectionIcons[section.id] || section.icon || '📖'
             const progress = progressSections[section.id as SectionId]
             const pct = progress?.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
             const mastery = progress ? calculateMastery(progress) : 'beginner'

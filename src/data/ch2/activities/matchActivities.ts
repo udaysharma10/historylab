@@ -1,0 +1,176 @@
+import type { MatchActivity } from '../../../types/activity'
+
+export const ch2MatchActivities: MatchActivity[] = [
+  {
+    id: 'ch2-match-001', type: 'match-following', sectionId: 's1', difficulty: 'medium', examRelevance: 'high', tags: ['movements', 'characteristics'],
+    title: 'Match the movement/campaign with its key characteristic',
+    leftColumn: [
+      { id: 'l1', text: 'Rowlatt Satyagraha (1919)' },
+      { id: 'l2', text: 'Khilafat Movement' },
+      { id: 'l3', text: 'Non-Cooperation Movement' },
+      { id: 'l4', text: 'Civil Disobedience Movement' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Refusal to obey unjust laws, not just non-participation' },
+      { id: 'r2', text: 'First mass movement led by Gandhi against unjust laws' },
+      { id: 'r3', text: 'Hindu-Muslim unity to restore Ottoman Caliph\'s powers' },
+      { id: 'r4', text: 'Boycott of British institutions, surrender of titles and councils' },
+    ],
+    correctPairs: [['l1', 'r2'], ['l2', 'r3'], ['l3', 'r4'], ['l4', 'r1']],
+  },
+  {
+    id: 'ch2-match-002', type: 'match-following', sectionId: 's2', difficulty: 'medium', examRelevance: 'high', tags: ['events', 'dates'],
+    title: 'Match the event with its date',
+    leftColumn: [
+      { id: 'l1', text: 'Jallianwala Bagh massacre' },
+      { id: 'l2', text: 'Rowlatt Act passed' },
+      { id: 'l3', text: 'Chauri Chaura incident' },
+      { id: 'l4', text: 'Gandhi\'s Dandi March begins' },
+      { id: 'l5', text: 'Simon Commission arrives in India' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: '1928' },
+      { id: 'r2', text: '13 April 1919' },
+      { id: 'r3', text: 'February 1922' },
+      { id: 'r4', text: '12 March 1930' },
+      { id: 'r5', text: '1919' },
+    ],
+    correctPairs: [['l1', 'r2'], ['l2', 'r5'], ['l3', 'r3'], ['l4', 'r4'], ['l5', 'r1']],
+  },
+  {
+    id: 'ch2-match-003', type: 'match-following', sectionId: 's1', difficulty: 'easy', examRelevance: 'high', tags: ['people', 'roles'],
+    title: 'Match the leader with their role in the national movement',
+    leftColumn: [
+      { id: 'l1', text: 'Mahatma Gandhi' },
+      { id: 'l2', text: 'Alluri Sitarama Raju' },
+      { id: 'l3', text: 'Baba Ramchandra' },
+      { id: 'l4', text: 'Muhammad Ali & Shaukat Ali' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Led peasant movement in Awadh against talukdars' },
+      { id: 'r2', text: 'Led tribal uprising in Andhra Pradesh (Gudem Hills)' },
+      { id: 'r3', text: 'Leaders of the Khilafat Movement' },
+      { id: 'r4', text: 'Developed philosophy of satyagraha in South Africa' },
+    ],
+    correctPairs: [['l1', 'r4'], ['l2', 'r2'], ['l3', 'r1'], ['l4', 'r3']],
+  },
+  {
+    id: 'ch2-match-004', type: 'match-following', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['groups', 'demands'],
+    title: 'Match the social group with their demands during Non-Cooperation',
+    leftColumn: [
+      { id: 'l1', text: 'Peasants in Awadh' },
+      { id: 'l2', text: 'Plantation workers in Assam' },
+      { id: 'l3', text: 'Tribal people in Gudem Hills' },
+      { id: 'l4', text: 'Urban middle class' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Boycotted British institutions, returned titles, left government jobs' },
+      { id: 'r2', text: 'Opposed forced labour (begar), demanded reduction of revenue' },
+      { id: 'r3', text: 'Defied the Inland Emigration Act, left plantations for their villages' },
+      { id: 'r4', text: 'Attacked police stations and traders, demanded forest access' },
+    ],
+    correctPairs: [['l1', 'r2'], ['l2', 'r3'], ['l3', 'r4'], ['l4', 'r1']],
+  },
+  {
+    id: 'ch2-match-005', type: 'match-following', sectionId: 's2', difficulty: 'easy', examRelevance: 'high', tags: ['vocabulary'],
+    title: 'Match the key term with its meaning',
+    leftColumn: [
+      { id: 'l1', text: 'Satyagraha' },
+      { id: 'l2', text: 'Boycott' },
+      { id: 'l3', text: 'Swadeshi' },
+      { id: 'l4', text: 'Begar' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Refusal to deal with or buy goods from a person, organisation or country' },
+      { id: 'r2', text: 'Labour that villagers were forced to do without payment' },
+      { id: 'r3', text: 'Truth-force: non-violent resistance appealing to oppressor\'s conscience' },
+      { id: 'r4', text: 'Of one\'s own country; using goods made in India' },
+    ],
+    correctPairs: [['l1', 'r3'], ['l2', 'r1'], ['l3', 'r4'], ['l4', 'r2']],
+  },
+  {
+    id: 'ch2-match-006', type: 'match-following', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['events', 'dates'],
+    title: 'Match the round table conference / pact with its year',
+    leftColumn: [
+      { id: 'l1', text: 'First Round Table Conference' },
+      { id: 'l2', text: 'Gandhi-Irwin Pact' },
+      { id: 'l3', text: 'Second Round Table Conference' },
+      { id: 'l4', text: 'Poona Pact' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: '1932' },
+      { id: 'r2', text: '1930' },
+      { id: 'r3', text: 'March 1931' },
+      { id: 'r4', text: 'December 1931' },
+    ],
+    correctPairs: [['l1', 'r2'], ['l2', 'r3'], ['l3', 'r4'], ['l4', 'r1']],
+  },
+  {
+    id: 'ch2-match-007', type: 'match-following', sectionId: 's3', difficulty: 'hard', examRelevance: 'high', tags: ['people', 'roles'],
+    title: 'Match the leader with their specific contribution',
+    leftColumn: [
+      { id: 'l1', text: 'Jawaharlal Nehru' },
+      { id: 'l2', text: 'Dr B.R. Ambedkar' },
+      { id: 'l3', text: 'Abdul Ghaffar Khan' },
+      { id: 'l4', text: 'Subhas Chandra Bose' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Led Khudai Khidmatgar movement in NWFP' },
+      { id: 'r2', text: 'Organised oppressed castes, clashed with Gandhi on separate electorates' },
+      { id: 'r3', text: 'Presided over Congress session that declared Purna Swaraj (1929)' },
+      { id: 'r4', text: 'Radical nationalist who believed in militant action for freedom' },
+    ],
+    correctPairs: [['l1', 'r3'], ['l2', 'r2'], ['l3', 'r1'], ['l4', 'r4']],
+  },
+  {
+    id: 'ch2-match-008', type: 'match-following', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['movements', 'characteristics'],
+    title: 'Match the satyagraha with the issue it opposed',
+    leftColumn: [
+      { id: 'l1', text: 'Champaran Satyagraha (1917)' },
+      { id: 'l2', text: 'Kheda Satyagraha (1917)' },
+      { id: 'l3', text: 'Ahmedabad Mill Strike (1918)' },
+      { id: 'l4', text: 'Salt March (1930)' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'British monopoly on salt — taxing a basic necessity' },
+      { id: 'r2', text: 'Indigo planters\' oppressive tinkathia system in Bihar' },
+      { id: 'r3', text: 'Mill workers demanded fair wages during plague and famine' },
+      { id: 'r4', text: 'Crop failure and plague — peasants demanded revenue relaxation' },
+    ],
+    correctPairs: [['l1', 'r2'], ['l2', 'r4'], ['l3', 'r3'], ['l4', 'r1']],
+  },
+  {
+    id: 'ch2-match-009', type: 'match-following', sectionId: 's5', difficulty: 'medium', examRelevance: 'high', tags: ['groups', 'demands'],
+    title: 'Match the community/group with their stance during the national movement',
+    leftColumn: [
+      { id: 'l1', text: 'Muslim League' },
+      { id: 'l2', text: 'Hindu Mahasabha' },
+      { id: 'l3', text: 'Depressed Classes Association' },
+      { id: 'l4', text: 'Indian merchants and industrialists' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Feared dominance of Hindus in a democratic setup — demanded separate electorates' },
+      { id: 'r2', text: 'Supported CDM — wanted protection against imports and a rupee-sterling exchange ratio' },
+      { id: 'r3', text: 'Hostile to non-Hindus, opposed unity moves — wanted Hindu consolidation' },
+      { id: 'r4', text: 'Led by Ambedkar, demanded reserved seats and separate electorates for Dalits' },
+    ],
+    correctPairs: [['l1', 'r1'], ['l2', 'r3'], ['l3', 'r4'], ['l4', 'r2']],
+  },
+  {
+    id: 'ch2-match-010', type: 'match-following', sectionId: 's5', difficulty: 'medium', examRelevance: 'high', tags: ['symbols', 'nationalism'],
+    title: 'Match the image/symbol of Indian nationalism with its significance',
+    leftColumn: [
+      { id: 'l1', text: 'Bharat Mata by Abanindranath Tagore' },
+      { id: 'l2', text: 'Tricolour flag (Swaraj flag)' },
+      { id: 'l3', text: 'Charkha (spinning wheel)' },
+      { id: 'l4', text: 'Vande Mataram (Bankim Chandra)' },
+    ],
+    rightColumn: [
+      { id: 'r1', text: 'Self-reliance — symbol of Swadeshi and rejection of foreign cloth' },
+      { id: 'r2', text: 'Song that became anthem of the national movement (from Anandamath)' },
+      { id: 'r3', text: 'Depicted as an ascetic figure — calm, composed, divine, bestowing learning' },
+      { id: 'r4', text: 'Red, green and white with spinning wheel — unity of all communities' },
+    ],
+    correctPairs: [['l1', 'r3'], ['l2', 'r4'], ['l3', 'r1'], ['l4', 'r2']],
+  },
+]
