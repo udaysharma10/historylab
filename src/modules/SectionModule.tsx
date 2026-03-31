@@ -1,22 +1,13 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { chapter1 } from '../data/chapter1'
+import { getChapter, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { SectionHeader } from '../components/layout/SectionHeader'
 import { NarrativeMode } from './NarrativeMode'
 import { useProgressStore } from '../store/useProgressStore'
 import { SectionTimeline } from '../components/section/SectionTimeline'
 import { SectionMaps } from '../components/section/SectionMaps'
 import type { SectionId } from '../types/progress'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B',
-  s2: '#2980B9',
-  s3: '#E67E22',
-  s4: '#27AE60',
-  s5: '#7D3C98',
-  s6: '#16A085',
-}
 
 export function SectionModule() {
   const { sectionId, chapterId } = useParams<{ sectionId: string; chapterId: string }>()
@@ -26,7 +17,9 @@ export function SectionModule() {
   const completedSubsections = useProgressStore((s) => s.completedSubsections)
   const sectionProgress = useProgressStore((s) => s.sections[sectionId as SectionId])
 
-  const section = chapter1.sections.find((s) => s.id === sectionId)
+  const cid = chapterId || 'ch1'
+  const chapter = getChapter(cid)
+  const section = chapter?.sections.find((s) => s.id === sectionId)
 
   if (!section) {
     return (
@@ -47,7 +40,8 @@ export function SectionModule() {
     )
   }
 
-  const color = SECTION_COLORS[section.id] || '#2C3E50'
+  const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
+  const color = sectionColors[section.id] || '#2C3E50'
   const completedCount = section.subsections.filter((sub) => completedSubsections[sub.id]).length
   const progress = section.subsections.length > 0
     ? Math.round((completedCount / section.subsections.length) * 100)
