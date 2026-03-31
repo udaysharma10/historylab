@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { useAuthContext } from '../components/auth'
+import { isAdminTeacher } from '../lib/adminEmails'
 
-interface StudentRow {
+interface UserRow {
   id: string
   name: string
   email: string
@@ -12,10 +13,17 @@ interface StudentRow {
   class: string | null
   role: string
   created_at: string
+  profile_completed: boolean
   total_logins: number
   last_login: string | null
   total_stars: number
   activities_completed: number
+}
+
+interface LoginDateEntry {
+  date: string
+  count: number
+  users: string[]
 }
 
 interface ActivityBreakdown {
@@ -46,10 +54,14 @@ const MODE_COLORS: Record<string, string> = {
 export function TeacherDashboard() {
   const navigate = useNavigate()
   const { profile } = useAuthContext()
-  const [students, setStudents] = useState<StudentRow[]>([])
+  const [users, setUsers] = useState<UserRow[]>([])
+  const [loginDates, setLoginDates] = useState<LoginDateEntry[]>([])
   const [activityBreakdown, setActivityBreakdown] = useState<ActivityBreakdown[]>([])
   const [loading, setLoading] = useState(true)
   const [timeFilter, setTimeFilter] = useState<'7d' | '30d' | 'all'>('30d')
+  const [tab, setTab] = useState<'users' | 'logins' | 'activity'>('users')
+
+  const isAdmin = isAdminTeacher(profile.email)
 
   // Redirect non-teachers
   useEffect(() => {
@@ -64,34 +76,35 @@ export function TeacherDashboard() {
     async function fetchData() {
       setLoading(true)
 
-      // Fetch all profiles in same school
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('school', profile.school)
+      // Admin teachers see ALL users, school-scoped teachers see their school only
+      let profileQuery = supabase.from('profiles').select('*')
+      if (!isAdmin) {
+        profileQuery = profileQuery.eq('school', profile.school)
+      }
+      const { data: profiles } = await profileQuery
 
-      if (!profiles) {
+      if (!profiles || profiles.length === 0) {
+        setUsers([])
         setLoading(false)
         return
       }
 
-      const studentProfiles = profiles.filter(p => p.role === 'student')
-      const userIds = studentProfiles.map(p => p.id)
+      const allUserIds = profiles.map(p => p.id)
 
-      // Fetch login sessions
+      // Fetch login sessions for all users
       const { data: loginSessions } = await supabase
         .from('login_sessions')
         .select('user_id, logged_in_at')
-        .in('user_id', userIds.length > 0 ? userIds : ['none'])
+        .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
-      // Fetch activity logs
+      // Fetch activity logs for all users
       const { data: activityLogs } = await supabase
         .from('activity_logs')
         .select('user_id, mode, stars_earned, completed_at')
-        .in('user_id', userIds.length > 0 ? userIds : ['none'])
+        .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
-      // Build student rows
-      const rows: StudentRow[] = studentProfiles.map(p => {
+      // Build user rows (ALL users, not just students)
+      const rows: UserRow[] = profiles.map(p => {
         const logins = (loginSessions || []).filter(l => l.user_id === p.id)
         const activities = (activityLogs || []).filter(a => a.user_id === p.id)
         const lastLogin = logins.length > 0
@@ -100,12 +113,13 @@ export function TeacherDashboard() {
 
         return {
           id: p.id,
-          name: p.name,
-          email: p.email,
+          name: p.name || '(No name)',
+          email: p.email || '—',
           school: p.school,
           class: p.class,
-          role: p.role,
+          role: p.role || 'student',
           created_at: p.created_at,
+          profile_completed: p.profile_completed ?? false,
           total_logins: logins.length,
           last_login: lastLogin,
           total_stars: activities.reduce((sum: number, a: { stars_earned: number | null }) => sum + (a.stars_earned || 0), 0),
@@ -113,9 +127,23 @@ export function TeacherDashboard() {
         }
       })
 
-      // Sort by total stars descending (leaderboard style)
-      rows.sort((a, b) => b.total_stars - a.total_stars)
-      setStudents(rows)
+      // Sort by created_at descending (most recent first)
+      rows.sort((a, b) => b.created_at.localeCompare(a.created_at))
+      setUsers(rows)
+
+      // Build date-wise login data
+      const dateMap: Record<string, { count: number; users: Set<string> }> = {}
+      ;(loginSessions || []).forEach(session => {
+        const date = session.logged_in_at.slice(0, 10) // YYYY-MM-DD
+        if (!dateMap[date]) dateMap[date] = { count: 0, users: new Set() }
+        dateMap[date].count++
+        const user = profiles.find(p => p.id === session.user_id)
+        if (user) dateMap[date].users.add(user.name || user.email || session.user_id)
+      })
+      const dateEntries: LoginDateEntry[] = Object.entries(dateMap)
+        .map(([date, data]) => ({ date, count: data.count, users: Array.from(data.users) }))
+        .sort((a, b) => b.date.localeCompare(a.date))
+      setLoginDates(dateEntries)
 
       // Activity breakdown by mode
       const modeCount: Record<string, number> = {}
@@ -132,35 +160,45 @@ export function TeacherDashboard() {
     }
 
     fetchData()
-  }, [profile.school, profile.role])
+  }, [profile.school, profile.role, isAdmin])
 
   // Stats
   const now = new Date()
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
 
+  const students = useMemo(() => users.filter(u => u.role === 'student'), [users])
+
   const activeToday = useMemo(() =>
-    students.filter(s => s.last_login && s.last_login >= todayStart).length
-  , [students, todayStart])
+    users.filter(u => u.last_login && u.last_login >= todayStart).length
+  , [users, todayStart])
 
   const activeThisWeek = useMemo(() =>
-    students.filter(s => s.last_login && s.last_login >= weekAgo).length
-  , [students, weekAgo])
+    users.filter(u => u.last_login && u.last_login >= weekAgo).length
+  , [users, weekAgo])
 
   const totalStarsAll = useMemo(() =>
-    students.reduce((sum, s) => sum + s.total_stars, 0)
-  , [students])
+    users.reduce((sum, u) => sum + u.total_stars, 0)
+  , [users])
 
   const totalActivities = useMemo(() =>
-    students.reduce((sum, s) => sum + s.activities_completed, 0)
-  , [students])
+    users.reduce((sum, u) => sum + u.activities_completed, 0)
+  , [users])
 
-  // Time filter for student table
-  const filteredStudents = useMemo(() => {
-    if (timeFilter === 'all') return students
+  // Time filter for tables
+  const filteredUsers = useMemo(() => {
+    if (timeFilter === 'all') return users
     const cutoff = timeFilter === '7d' ? weekAgo : new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString()
-    return students.filter(s => s.last_login && s.last_login >= cutoff)
-  }, [students, timeFilter, weekAgo, now])
+    return users.filter(u => u.last_login && u.last_login >= cutoff)
+  }, [users, timeFilter, weekAgo, now])
+
+  const filteredLoginDates = useMemo(() => {
+    if (timeFilter === 'all') return loginDates
+    const cutoff = timeFilter === '7d'
+      ? new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+      : new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+    return loginDates.filter(d => d.date >= cutoff)
+  }, [loginDates, timeFilter, now])
 
   if (profile.role !== 'teacher') return null
 
@@ -181,14 +219,14 @@ export function TeacherDashboard() {
       <div>
         <h1 className="font-display text-2xl font-bold text-hist-dark">Teacher Dashboard</h1>
         <p className="text-gray-500 text-sm mt-1">
-          {profile.school} — {students.length} student{students.length !== 1 ? 's' : ''} registered
+          {isAdmin ? 'All users (Admin view)' : `${profile.school}`} — {users.length} user{users.length !== 1 ? 's' : ''} registered ({students.length} student{students.length !== 1 ? 's' : ''})
         </p>
       </div>
 
       {/* Overview Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Students', value: students.length, icon: '🎓', color: '#2980B9' },
+          { label: 'Total Users', value: users.length, icon: '👥', color: '#2980B9' },
           { label: 'Active Today', value: activeToday, icon: '📱', color: '#27AE60' },
           { label: 'Active This Week', value: activeThisWeek, icon: '📅', color: '#E67E22' },
           { label: 'Total Stars Earned', value: totalStarsAll, icon: '⭐', color: '#D4A017' },
@@ -207,120 +245,256 @@ export function TeacherDashboard() {
         ))}
       </div>
 
-      {/* Activity Breakdown */}
-      {activityBreakdown.length > 0 && (
+      {/* Tab Navigation */}
+      <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+        {[
+          { key: 'users' as const, label: 'All Users', icon: '👥' },
+          { key: 'logins' as const, label: 'Login History', icon: '📅' },
+          { key: 'activity' as const, label: 'Activity Breakdown', icon: '📊' },
+        ].map(t => (
+          <button
+            key={t.key}
+            className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1.5 ${
+              tab === t.key ? 'bg-white text-hist-dark shadow-sm' : 'text-gray-500'
+            }`}
+            onClick={() => setTab(t.key)}
+          >
+            <span>{t.icon}</span> {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Time Filter */}
+      <div className="flex justify-end">
+        <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+          {[
+            { key: '7d' as const, label: '7 days' },
+            { key: '30d' as const, label: '30 days' },
+            { key: 'all' as const, label: 'All time' },
+          ].map(f => (
+            <button
+              key={f.key}
+              className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
+                timeFilter === f.key ? 'bg-white text-hist-dark shadow-sm' : 'text-gray-500'
+              }`}
+              onClick={() => setTimeFilter(f.key)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* === TAB: All Users === */}
+      {tab === 'users' && (
         <motion.div
-          className="bg-white rounded-2xl p-6 shadow-card"
+          className="bg-white rounded-2xl shadow-card overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
         >
-          <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Activity Breakdown</h2>
-          <div className="space-y-3">
-            {activityBreakdown.map((item) => {
-              const maxCount = activityBreakdown[0]?.count || 1
-              const pct = Math.round((item.count / maxCount) * 100)
-              return (
-                <div key={item.mode} className="flex items-center gap-3">
-                  <div className="w-24 text-sm font-semibold text-hist-dark font-body">
-                    {MODE_LABELS[item.mode] || item.mode}
-                  </div>
-                  <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full rounded-full flex items-center justify-end pr-2"
-                      style={{ backgroundColor: MODE_COLORS[item.mode] || '#999' }}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${pct}%` }}
-                      transition={{ duration: 0.8 }}
-                    >
-                      <span className="text-white text-xs font-bold">{item.count}</span>
-                    </motion.div>
-                  </div>
-                </div>
-              )
-            })}
+          <div className="p-6 pb-3">
+            <h2 className="font-display text-lg font-bold text-hist-dark">
+              {timeFilter === 'all' ? 'All Registered Users' : `Users Active in Last ${timeFilter === '7d' ? '7 Days' : '30 Days'}`}
+            </h2>
+            <p className="text-xs text-gray-400 mt-1">
+              {timeFilter === 'all' ? users.length : filteredUsers.length} user{(timeFilter === 'all' ? users.length : filteredUsers.length) !== 1 ? 's' : ''}
+            </p>
           </div>
-          <div className="text-xs text-gray-400 mt-3">{totalActivities} total activities completed</div>
+
+          {(timeFilter === 'all' ? users : filteredUsers).length === 0 ? (
+            <div className="px-6 pb-6 text-center text-gray-400 text-sm py-8">
+              No users found
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100">
+                    <th className="text-left px-6 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">#</th>
+                    <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">User</th>
+                    <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Role</th>
+                    <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">School</th>
+                    <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Logins</th>
+                    <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Activities</th>
+                    <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Stars</th>
+                    <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Joined</th>
+                    <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Last Active</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(timeFilter === 'all' ? users : filteredUsers).map((user, i) => (
+                    <tr key={user.id} className="border-b border-gray-50 hover:bg-gray-50/50">
+                      <td className="px-6 py-3 text-gray-400 font-body">{i + 1}</td>
+                      <td className="px-3 py-3">
+                        <div className="font-semibold text-hist-dark font-body">{user.name}</div>
+                        <div className="text-xs text-gray-400">{user.email}</div>
+                      </td>
+                      <td className="px-3 py-3">
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                          user.role === 'teacher' ? 'bg-purple-100 text-purple-700'
+                            : user.role === 'parent' ? 'bg-blue-100 text-blue-700'
+                            : 'bg-green-100 text-green-700'
+                        }`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 text-gray-600 font-body text-xs">{user.school || '—'}</td>
+                      <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{user.total_logins}</td>
+                      <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{user.activities_completed}</td>
+                      <td className="px-3 py-3 text-center">
+                        <span className="inline-flex items-center gap-1">
+                          <span className="text-yellow-500">★</span>
+                          <span className="font-bold text-hist-dark font-body">{user.total_stars}</span>
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 text-gray-500 font-body text-xs">
+                        {formatDate(user.created_at)}
+                      </td>
+                      <td className="px-3 py-3 text-gray-500 font-body text-xs">
+                        {user.last_login ? formatRelativeTime(user.last_login) : 'Never'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </motion.div>
       )}
 
-      {/* Student Table */}
-      <motion.div
-        className="bg-white rounded-2xl shadow-card overflow-hidden"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <div className="p-6 pb-3 flex items-center justify-between">
-          <h2 className="font-display text-lg font-bold text-hist-dark">Student Activity</h2>
-          <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
-            {[
-              { key: '7d' as const, label: '7 days' },
-              { key: '30d' as const, label: '30 days' },
-              { key: 'all' as const, label: 'All time' },
-            ].map(f => (
-              <button
-                key={f.key}
-                className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
-                  timeFilter === f.key ? 'bg-white text-hist-dark shadow-sm' : 'text-gray-500'
-                }`}
-                onClick={() => setTimeFilter(f.key)}
-              >
-                {f.label}
-              </button>
-            ))}
+      {/* === TAB: Login History (Date-wise) === */}
+      {tab === 'logins' && (
+        <motion.div
+          className="bg-white rounded-2xl shadow-card overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="p-6 pb-3">
+            <h2 className="font-display text-lg font-bold text-hist-dark">Login History — Date Wise</h2>
+            <p className="text-xs text-gray-400 mt-1">
+              {filteredLoginDates.reduce((sum, d) => sum + d.count, 0)} total logins across {filteredLoginDates.length} day{filteredLoginDates.length !== 1 ? 's' : ''}
+            </p>
           </div>
-        </div>
 
-        {filteredStudents.length === 0 ? (
-          <div className="px-6 pb-6 text-center text-gray-400 text-sm py-8">
-            No student activity in this period
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left px-6 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">#</th>
-                  <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Student</th>
-                  <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Class</th>
-                  <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Logins</th>
-                  <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Activities</th>
-                  <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Stars</th>
-                  <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Last Active</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredStudents.map((student, i) => (
-                  <tr key={student.id} className="border-b border-gray-50 hover:bg-gray-50/50">
-                    <td className="px-6 py-3 text-gray-400 font-body">{i + 1}</td>
-                    <td className="px-3 py-3">
-                      <div className="font-semibold text-hist-dark font-body">{student.name}</div>
-                      <div className="text-xs text-gray-400">{student.email}</div>
-                    </td>
-                    <td className="px-3 py-3 text-gray-600 font-body">{student.class || '—'}</td>
-                    <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{student.total_logins}</td>
-                    <td className="px-3 py-3 text-center font-bold text-hist-dark font-body">{student.activities_completed}</td>
-                    <td className="px-3 py-3 text-center">
-                      <span className="inline-flex items-center gap-1">
-                        <svg width="14" height="14" viewBox="0 0 24 24">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#F1C40F" stroke="#E6A900" strokeWidth="0.5" />
-                        </svg>
-                        <span className="font-bold text-hist-dark font-body">{student.total_stars}</span>
-                      </span>
-                    </td>
-                    <td className="px-3 py-3 text-gray-500 font-body text-xs">
-                      {student.last_login
-                        ? formatRelativeTime(student.last_login)
-                        : 'Never'}
-                    </td>
+          {filteredLoginDates.length === 0 ? (
+            <div className="px-6 pb-6 text-center text-gray-400 text-sm py-8">
+              No login data in this period
+            </div>
+          ) : (
+            <div className="px-6 pb-6 space-y-3">
+              {filteredLoginDates.map((entry) => {
+                const maxCount = filteredLoginDates[0]?.count || 1
+                const pct = Math.min(100, Math.round((entry.count / maxCount) * 100))
+                const dayName = new Date(entry.date + 'T00:00:00').toLocaleDateString('en-IN', {
+                  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+                })
+
+                return (
+                  <div key={entry.date} className="flex items-center gap-3">
+                    <div className="w-36 sm:w-44 text-sm font-body text-hist-dark shrink-0">
+                      {dayName}
+                    </div>
+                    <div className="flex-1 h-7 bg-gray-100 rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full flex items-center justify-end pr-2.5"
+                        style={{ backgroundColor: '#2980B9' }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.max(pct, 15)}%` }}
+                        transition={{ duration: 0.6 }}
+                      >
+                        <span className="text-white text-xs font-bold">{entry.count}</span>
+                      </motion.div>
+                    </div>
+                    <div className="w-32 sm:w-48 text-xs text-gray-400 font-body truncate shrink-0" title={entry.users.join(', ')}>
+                      {entry.users.slice(0, 3).join(', ')}{entry.users.length > 3 ? ` +${entry.users.length - 3}` : ''}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Per-user login count summary */}
+          <div className="border-t border-gray-100 p-6">
+            <h3 className="font-display text-base font-bold text-hist-dark mb-3">Login Count per User</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100">
+                    <th className="text-left px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">User</th>
+                    <th className="text-center px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">Total Logins</th>
+                    <th className="text-left px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">Last Login</th>
+                    <th className="text-left px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">First Joined</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {[...users]
+                    .sort((a, b) => b.total_logins - a.total_logins)
+                    .map(user => (
+                    <tr key={user.id} className="border-b border-gray-50">
+                      <td className="px-3 py-2">
+                        <span className="font-semibold text-hist-dark font-body">{user.name}</span>
+                        <span className="text-xs text-gray-400 ml-2">({user.role})</span>
+                      </td>
+                      <td className="px-3 py-2 text-center font-bold text-hist-dark font-body">{user.total_logins}</td>
+                      <td className="px-3 py-2 text-gray-500 font-body text-xs">
+                        {user.last_login ? formatRelativeTime(user.last_login) : 'Never'}
+                      </td>
+                      <td className="px-3 py-2 text-gray-500 font-body text-xs">
+                        {formatDate(user.created_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        )}
-      </motion.div>
+        </motion.div>
+      )}
+
+      {/* === TAB: Activity Breakdown === */}
+      {tab === 'activity' && (
+        <motion.div
+          className="bg-white rounded-2xl shadow-card overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="p-6">
+            <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Activity Breakdown</h2>
+            {activityBreakdown.length === 0 ? (
+              <div className="text-center text-gray-400 text-sm py-8">
+                No activities completed yet
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {activityBreakdown.map((item) => {
+                  const maxCount = activityBreakdown[0]?.count || 1
+                  const pct = Math.round((item.count / maxCount) * 100)
+                  return (
+                    <div key={item.mode} className="flex items-center gap-3">
+                      <div className="w-24 text-sm font-semibold text-hist-dark font-body">
+                        {MODE_LABELS[item.mode] || item.mode}
+                      </div>
+                      <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                        <motion.div
+                          className="h-full rounded-full flex items-center justify-end pr-2"
+                          style={{ backgroundColor: MODE_COLORS[item.mode] || '#999' }}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ duration: 0.8 }}
+                        >
+                          <span className="text-white text-xs font-bold">{item.count}</span>
+                        </motion.div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+            <div className="text-xs text-gray-400 mt-3">{totalActivities} total activities completed</div>
+          </div>
+        </motion.div>
+      )}
     </div>
   )
 }
@@ -338,4 +512,10 @@ function formatRelativeTime(iso: string): string {
   if (diffHours < 24) return `${diffHours}h ago`
   if (diffDays < 7) return `${diffDays}d ago`
   return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+}
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  })
 }
