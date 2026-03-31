@@ -5,6 +5,7 @@
 **Source**: NCERT "India and the Contemporary World-II", Chapter 2 (pages 29-50)
 **Teaching Guidelines**: See `TEACHING_GUIDELINES.md`
 **CBSE Exam Research**: Based on previous year board questions (2019-2026)
+**Additional Reference**: Neha Sharma's Non-Cooperation Movement PPT (2017) — CBSE teacher's perspective on sequencing, stakeholder breakdown, and emotional escalation. See `memory/reference_neha-teaching-style.md`.
 
 ---
 
@@ -253,3 +254,51 @@ These are exam gold — CBSE loves "compare" questions:
 4. **Test understanding, not memory**: Not "When did Gandhi reach Dandi?" but "Why did Gandhi choose SALT as the symbol for Civil Disobedience? What made it more powerful than boycotting cloth?"
 
 5. **Each section is a complete lesson**: Reading + quiz + timeline + maps (where applicable) + figures + exam prep.
+
+---
+
+## Neha Sharma's Teaching Techniques (from Non-Cooperation PPT, 2017)
+
+Adapted from her CBSE classroom approach — to be applied throughout Ch2:
+
+### 1. Framework-First Opening
+Every section opens with **WHEN? WHO? WHAT? HOW? WHY? WHERE?** — gives students a mental map before diving into details. Apply this as the first card of each subsection.
+
+### 2. Word Breakdown for Key Terms
+Don't just define terms — break them apart:
+- **Satyagraha** = Satya (truth) + Agraha (insistence) = "insistence on truth"
+- **Non-Cooperation** = Non (refusal) + Cooperation (working together) = "refusing to work with the British system"
+- **Boycott** = Named after Captain Boycott in Ireland — refusing to deal with someone
+- **Swaraj** = Swa (self) + Raj (rule) = "self-rule"
+- **Hartal** = work stoppage as protest
+
+### 3. Historical Backdrop Before the Event
+Don't start at 1920. Build the 300-year context: 1612 (EIC arrives) → 1757 (British rule) → 1857 (first resistance) → 1905 (Gandhi returns from South Africa). Show WHY this time was different — national reach, single leader, non-violent method.
+
+### 4. Pattern Recognition Across Events
+After teaching Champaran, Ahmedabad, and Kheda satyagrahas, pause and ask: **"What was COMMON in all three?"** → Economic exploitation, limited regional impact, short-lived. Then show how Non-Cooperation was DIFFERENT — national, united, longer, multiple social groups.
+
+### 5. Emotional Escalation
+Build tension before key events. Jallianwala Bagh should FEEL devastating — don't just state facts. "General Dyer entered the enclosed ground. He blocked the exits. He didn't ask the crowd to disperse. He simply ordered his troops to fire. For ten minutes. On unarmed men, women, and children — some of whom had only come for the Baisakhi fair."
+
+### 6. Simple Stakeholder Cards
+When teaching "Different Strands," use a clean card-per-group approach:
+- **Middle class** → what they did, what swaraj meant to them
+- **Peasants (Awadh)** → what they did, what swaraj meant to them
+- **Tribals (Gudem)** → what they did, what swaraj meant to them
+- **Workers (Assam)** → what they did, what swaraj meant to them
+
+### 7. Maps for Every Major Event
+Geography reinforces history. Show on a map:
+- Champaran (Bihar), Ahmedabad & Kheda (Gujarat) — early satyagrahas
+- Amritsar — Jallianwala Bagh
+- Chauri Chaura (UP) — where it ended
+- Sabarmati to Dandi (Gujarat) — the Salt March route
+- Peshawar, Sholapur — where CDM spread
+
+### 8. End with Significance, Not Just Chronology
+Don't end a section with "and then it was called off." End with: "What was the IMPACT?"
+- Downfall of British economic confidence
+- Upliftment of working class consciousness
+- Influence on next-generation freedom fighters (Bhagat Singh, Bose)
+- Most importantly: for the first time, millions of ordinary Indians felt they were part of ONE nation
