@@ -166,3 +166,24 @@ Before marking a batch complete:
 - [ ] Story thread openers/closers still make sense after reordering
 - [ ] TypeScript builds clean
 - [ ] Tested locally in dev
+
+---
+
+## Implementation Log
+
+### Round 1 — Neha's feedback (Ch1 Google Sheet `History/HistoryLab_Feedback.xlsx` + Ch2 email), implemented on `dev`
+
+**Foundation:** Added two reusable narrative card types — `flowchart` (numbered boxes; tap a step to pop open its explanation) and `table` (rendered HTML table). Made narrative **figure cards interactive** (clickable `+` hotspots on the image + clickable legend tags, reusing `FigureHotspotOverlay`). Gave `InteractiveMap` **precise centre-pin markers** instead of vague rectangles.
+
+| Batch | Scope | Commit |
+|-------|-------|--------|
+| 1 | **Ch1 S1** — NCERT heading ("The French Revolution and the Idea of the Nation"), clickable Sorrieu hotspots, vocab (Absolutist/Utopian) moved before first use, Sovereignty vocab (removed "King owned France"), French collective-belonging **measures flowchart**, Napoleon restructure (who-was-Napoleon story, Napoleonic Code own heading + reforms flowchart, liberator→oppressor WHY, Jacobin-clubs figure moved to French-Rev unit), precise map markers | `aff16bf` |
+| 2 | **Ch1 S2** — fragmented-Europe map ref, Habsburg **table**, society-structure **table**, Liberalism split into Political/Social/Economic (suffrage integrated), Zollverein **flowchart**, Treaty of Vienna 5-marker **flowchart** | `7c5a79f` |
+| 3 | **Ch1 S3** — July-1830 heading+connect, Greek-war 3-marker exam card, "mystical" & "pauperism" explained, Silesian-weavers story (4 points), German middle-class **demands flowchart**, Frankfurt **rise/fall flowchart** | `90c9981` |
+| 4 | **Ch1 S4/S5/S6** — Germany/Italy/Britain **unification flowcharts** (5-markers), Marianne symbols flowchart (red cap/tricolour/**cockade**), **re-extracted fig-16 Marianne stamp** (was cut/unclear), Balkans→WWI 5-marker | `239569b` |
+| 5 | **Ch1 quiz** — rebalanced MCQ answer positions (was almost all option B / option A never correct → now 7/4/6/5 across A/B/C/D) | `908c322` |
+| 6 | **Ch2 Unit 1** — WWI impact moved to chapter start (new subsection) + NCERT-framed Rowlatt (rising nationalism → repression, not "post-war relief"), Satyagraha simplified as NCERT **idea flowchart**, **3-satyagraha flowchart** (Champaran/Kheda/Ahmedabad), Martial Law vocab | `2e76ad1` |
+| 7 | **Ch2 Unit 2/3** — NCM-participants recap converted from broken raw-markdown to a real **table**; Dandi-march facts as separate points | `2e067ca` |
+| 8 | **Ch2 Unit 4** — already had figures on `dev`; fixed mismatched Tilak-on-flag-card bug, added correctly-captioned Tilak print | `f632005` |
+
+**OPEN ITEM — Jallianwala Bagh photo:** Neha asked for Jallianwala Bagh massacre pictures. The NCERT Ch2 PDF has **no** such figure (only "crawling orders"), so it could not be extracted. A public-domain image must be sourced externally and dropped at `public/images/ch2/`, then wired into the massacre card (`ch2-s1-jallianwala`).
