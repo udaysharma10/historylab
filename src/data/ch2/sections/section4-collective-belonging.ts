@@ -76,10 +76,18 @@ export const section4Subsections: Subsection[] = [
       {
         id: 'ch2-s4-flag-evolution',
         title: 'The Flag — From Symbol to Weapon',
-        type: 'figure',
-        text: 'Symbols of unity evolved over time. The **national flag** went through several versions:\n\n**Swadeshi era (1905):** A tricolour flag — **red, green, and yellow** — with eight lotuses representing the eight provinces of British India, and a **crescent moon** to symbolise Hindu-Muslim unity.\n\n**1921:** Gandhiji designed the **Swaraj flag** — **red, green, and white** — with a **spinning wheel (charkha)** at the centre. The charkha represented **self-reliance** — the idea that Indians could weave their own cloth, build their own economy, and govern themselves.\n\nCarrying the flag during marches and protests became an **act of defiance** in itself. The flag wasn\'t just a symbol — it was a **weapon of resistance**.',
-        imageId: 'ch2-fig-11',
+        type: 'text',
+        text: 'Symbols of unity evolved over time. The **national flag** went through several versions:\n\n**Swadeshi era (1905):** A tricolour flag — **red, green, and yellow** — with **eight lotuses** representing the eight provinces of British India, and a **crescent moon** to symbolise **Hindu-Muslim unity**.\n\n**1921:** Gandhiji designed the **Swaraj flag** — **red, green, and white** — with a **spinning wheel (charkha)** at the centre. The charkha represented **self-reliance** — the idea that Indians could weave their own cloth, build their own economy, and govern themselves.\n\nCarrying the flag during marches and protests became an **act of defiance** in itself. The flag wasn\'t just a symbol — it was a **weapon of resistance**.',
         highlight: '**Flag evolution:** Swadeshi tricolour (8 lotuses + crescent moon) → Gandhian Swaraj flag (1921, with charkha/spinning wheel = self-reliance). Carrying it = act of defiance.',
+      },
+      // Figure — Tilak in popular prints (fig-11 now used correctly; was mismatched on the flag card)
+      {
+        id: 'ch2-s4-tilak-print',
+        title: 'Icons of the Nation — Popular Prints',
+        type: 'figure',
+        text: 'Shared symbols were not only flags and goddesses — they were also **the faces of leaders**, mass-produced as cheap prints for ordinary homes. This early-twentieth-century print shows **Bal Gangadhar Tilak**, the fiery nationalist who declared **"Swaraj is my birthright, and I shall have it."** Hung on a wall or carried in a procession, such images turned distant political leaders into **shared household icons** — another quiet way in which millions of Indians came to feel part of **one nation**.',
+        imageId: 'ch2-fig-11',
+        highlight: '**Popular prints (e.g. Tilak — "Swaraj is my birthright"):** mass-produced images of leaders gave Indians a shared visual vocabulary and deepened the sense of collective belonging.',
       },
       // Rewriting history
       {
