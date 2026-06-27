@@ -88,7 +88,7 @@ export const section3Subsections: Subsection[] = [
         id: 'ch2-s3-the-march',
         title: 'The March — Sabarmati to Dandi',
         type: 'figure',
-        text: '**12 March 1930.** Gandhi leaves his **Sabarmati Ashram** in Ahmedabad with just **78 trusted volunteers**. Their destination: **Dandi**, a small coastal town in Gujarat. The distance: **240 miles** (about 390 km). They walk roughly **10 miles a day**.\n\nAt every village along the way, Gandhi stops — explaining what swaraj means, urging people to defy the British peacefully, asking them to give up alcohol and untouchability. **Thousands join** along the way. Journalists from around the world follow the march. The whole world is watching.\n\nIt takes **24 days**.',
+        text: 'On **12 March 1930**, the most famous march in India\'s history began. The key facts to remember:\n\n**1. Start:** Gandhi set out from his **Sabarmati Ashram** in Ahmedabad.\n**2. Volunteers:** He began with just **78 trusted volunteers**.\n**3. Destination:** **Dandi**, a small coastal town in Gujarat.\n**4. Distance:** about **240 miles** (roughly 390 km), walking around **10 miles a day**.\n**5. Duration:** the march took **24 days**.\n\nAt every village along the way, Gandhi stopped — explaining what swaraj meant, urging people to defy the British peacefully, and asking them to give up alcohol and untouchability. **Thousands joined** as the march went on, and journalists from around the world followed it. The whole world was watching.',
         imageId: 'ch2-fig-7',
         highlight: '**The Dandi March:** 12 March 1930, Sabarmati to Dandi. 78 volunteers, 240 miles, 24 days. Gandhi stopped at every village. Thousands joined. The world watched.',
       },

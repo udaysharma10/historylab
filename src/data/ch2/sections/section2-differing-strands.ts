@@ -152,10 +152,19 @@ export const section2Subsections: Subsection[] = [
       // Pattern recognition card
       {
         id: 'ch2-s2-pattern',
-        title: 'The Pattern Across All Groups',
-        type: 'text',
-        text: 'Now step back and see the **pattern** across all four groups:\n\n| **Group** | **What they did** | **What swaraj meant** | **What went wrong** |\n|---|---|---|---|\n| **Middle class (towns)** | Boycotted schools, courts, foreign goods | Constitutions, parliaments | Khadi expensive, no alternatives |\n| **Awadh peasants** | Attacked landlords, seized grain | No rent, no begar, land | Went beyond Gandhi\'s programme |\n| **Gudem tribals** | Guerrilla warfare against British | Forest rights, no begar | Used violence, not non-violence |\n| **Assam workers** | Left plantations, headed home | Freedom to move | Stranded, beaten by police |\n\n**What\'s common:** Every group interpreted Gandhi\'s call through their own suffering. None of them were "wrong" — but none of them were doing what Gandhi actually intended. The movement was united in name only.',
-        highlight: '**The pattern:** Every group joined for their own reasons and interpreted Gandhi in their own way. The movement was ONE struggle in name — but FIVE different struggles in practice.',
+        title: 'Recap — Who Joined, and Why',
+        type: 'table',
+        text: 'Step back and see the whole movement at a glance. Each social group joined the Non-Cooperation Movement for its **own reasons** and gave swaraj its **own meaning**:',
+        table: {
+          headers: ['Group', 'What they did', 'What swaraj meant', 'What went wrong'],
+          rows: [
+            ['**Middle class (towns)**', 'Boycotted schools, courts and foreign goods', 'Constitutions and parliaments', 'Khadi was costly; no Indian alternatives ready'],
+            ['**Awadh peasants**', 'Attacked landlords, seized grain', 'No rent, no begar, land', 'Went beyond Gandhi\'s non-violent programme'],
+            ['**Gudem tribals**', 'Guerrilla warfare against the British', 'Forest rights, end of begar', 'Used violence, not non-violence'],
+            ['**Assam plantation workers**', 'Left the tea gardens, headed home', 'Freedom to move', 'Stranded by a strike, beaten by police'],
+          ],
+        },
+        highlight: '**The pattern:** Every group joined for its own reasons and read Gandhi in its own way. The movement was ONE struggle in name — but several different struggles in practice. (Frequently asked 5-marker: "Why did different social groups join the Non-Cooperation Movement?")',
         inlineQuiz: {
           question: 'What did "swaraj" mean to plantation workers in Assam?',
           options: [
