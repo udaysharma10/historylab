@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import type { NarrativeCard as NarrativeCardType } from '../../types/chapter'
 import { figures } from '../../data/figures'
+import { FigureHotspotOverlay } from '../figure/FigureHotspotOverlay'
 
 interface NarrativeCardProps {
   card: NarrativeCardType
@@ -39,9 +41,11 @@ const FIGURE_TYPE_ICONS: Record<string, string> = {
 
 function FigurePanel({ figureId, sectionColor }: { figureId: string; sectionColor: string }) {
   const figure = figures.find((f) => f.id === figureId)
+  const [activeHotspot, setActiveHotspot] = useState<string | null>(null)
   if (!figure) return null
 
   const typeIcon = FIGURE_TYPE_ICONS[figure.type] || '🖼️'
+  const hasHotspots = figure.hotspots.length > 0
 
   return (
     <div className="mb-5 rounded-2xl overflow-hidden" style={{ border: `2px solid ${sectionColor}30` }}>
@@ -68,15 +72,29 @@ function FigurePanel({ figureId, sectionColor }: { figureId: string; sectionColo
         )}
       </div>
 
-      {/* Actual figure image */}
-      <div className="relative">
-        <img
-          src={figure.imagePath}
-          alt={figure.title}
-          className="w-full object-contain"
-          loading="lazy"
-        />
-      </div>
+      {/* Actual figure image — interactive when hotspots exist */}
+      {hasHotspots ? (
+        <div className="p-3 bg-white">
+          <FigureHotspotOverlay
+            figure={figure}
+            sectionColor={sectionColor}
+            activeHotspotId={activeHotspot}
+            onHotspotClick={setActiveHotspot}
+          />
+          <p className="mt-2 text-xs font-body italic text-center text-gray-400">
+            👆 Tap the <span style={{ color: sectionColor }} className="font-bold">+</span> dots on the picture to explore each feature
+          </p>
+        </div>
+      ) : (
+        <div className="relative">
+          <img
+            src={figure.imagePath}
+            alt={figure.title}
+            className="w-full object-contain"
+            loading="lazy"
+          />
+        </div>
+      )}
 
       {/* Caption + title */}
       <div
@@ -92,20 +110,30 @@ function FigurePanel({ figureId, sectionColor }: { figureId: string; sectionColo
           </p>
         )}
 
-        {/* Hotspot tags */}
-        {figure.hotspots.length > 0 && (
+        {/* Hotspot tags — click to highlight the feature on the picture */}
+        {hasHotspots && (
           <div className="flex flex-wrap gap-1.5 mt-3">
-            {figure.hotspots.map((spot) => (
-              <motion.span
-                key={spot.id}
-                className="text-xs px-2.5 py-1 rounded-full font-body font-semibold cursor-default"
-                style={{ backgroundColor: `${sectionColor}12`, color: sectionColor, border: `1px solid ${sectionColor}25` }}
-                whileHover={{ scale: 1.05 }}
-                title={spot.description}
-              >
-                {spot.label}
-              </motion.span>
-            ))}
+            {figure.hotspots.map((spot) => {
+              const isActive = activeHotspot === spot.id
+              return (
+                <motion.button
+                  key={spot.id}
+                  type="button"
+                  onClick={() => setActiveHotspot(isActive ? null : spot.id)}
+                  className="text-xs px-2.5 py-1 rounded-full font-body font-semibold cursor-pointer"
+                  style={{
+                    backgroundColor: isActive ? sectionColor : `${sectionColor}12`,
+                    color: isActive ? 'white' : sectionColor,
+                    border: `1px solid ${isActive ? sectionColor : `${sectionColor}25`}`,
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title={spot.description}
+                >
+                  {spot.label}
+                </motion.button>
+              )
+            })}
           </div>
         )}
       </div>
@@ -490,6 +518,100 @@ export function NarrativeCard({ card, sectionColor }: NarrativeCardProps) {
     )
   }
 
+  // ── Flowchart Card (clickable steps with pop-up explanations) ──
+  if (type === 'flowchart') {
+    return (
+      <motion.div
+        className="rounded-2xl overflow-hidden bg-white"
+        style={{ border: '2px solid #F3F4F6', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -30 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${sectionColor}, ${sectionColor}60)` }} />
+        <div className="p-6 sm:p-8">
+          {card.title && (
+            <h3 className="font-display text-xl sm:text-2xl font-bold mb-2" style={{ color: sectionColor }}>
+              {card.title}
+            </h3>
+          )}
+          {card.text && card.text.trim() && (
+            <p className="font-body text-base text-hist-dark/70 mb-5 leading-relaxed">
+              <RichText text={card.text} />
+            </p>
+          )}
+          <FlowchartSteps steps={card.steps || []} color={sectionColor} />
+          {card.highlight && <HighlightBox text={card.highlight} color={sectionColor} />}
+        </div>
+      </motion.div>
+    )
+  }
+
+  // ── Table Card ──
+  if (type === 'table') {
+    const table = card.table
+    return (
+      <motion.div
+        className="rounded-2xl overflow-hidden bg-white"
+        style={{ border: '2px solid #F3F4F6', boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -30 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${sectionColor}, ${sectionColor}60)` }} />
+        <div className="p-5 sm:p-7">
+          {card.title && (
+            <h3 className="font-display text-xl sm:text-2xl font-bold mb-2" style={{ color: sectionColor }}>
+              {card.title}
+            </h3>
+          )}
+          {card.text && card.text.trim() && (
+            <p className="font-body text-base text-hist-dark/70 mb-4 leading-relaxed">
+              <RichText text={card.text} />
+            </p>
+          )}
+          {table && (
+            <div className="overflow-x-auto rounded-xl" style={{ border: `1px solid ${sectionColor}25` }}>
+              <table className="w-full border-collapse text-left">
+                <thead>
+                  <tr style={{ backgroundColor: `${sectionColor}12` }}>
+                    {table.headers.map((h, i) => (
+                      <th
+                        key={i}
+                        className="font-display font-bold text-sm sm:text-base px-3.5 py-2.5 align-top"
+                        style={{ color: sectionColor, borderBottom: `2px solid ${sectionColor}30` }}
+                      >
+                        <RichText text={h} />
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {table.rows.map((row, ri) => (
+                    <tr key={ri} style={{ backgroundColor: ri % 2 === 1 ? `${sectionColor}06` : 'transparent' }}>
+                      {row.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className="font-body text-[0.95rem] text-hist-dark/85 px-3.5 py-2.5 align-top leading-snug"
+                          style={{ borderBottom: `1px solid ${sectionColor}12` }}
+                        >
+                          <RichText text={cell} />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {card.highlight && <HighlightBox text={card.highlight} color={sectionColor} />}
+        </div>
+      </motion.div>
+    )
+  }
+
   // ── Default Text Card ──
   return (
     <motion.div
@@ -527,6 +649,82 @@ export function NarrativeCard({ card, sectionColor }: NarrativeCardProps) {
         )}
       </div>
     </motion.div>
+  )
+}
+
+function FlowchartSteps({ steps, color }: { steps: { label: string; detail: string }[]; color: string }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+
+  return (
+    <div className="space-y-0">
+      {steps.map((step, i) => {
+        const isOpen = openIndex === i
+        return (
+          <div key={i}>
+            <motion.button
+              type="button"
+              onClick={() => setOpenIndex(isOpen ? null : i)}
+              className="w-full text-left rounded-xl px-4 py-3 flex items-center gap-3 btn-press"
+              style={{
+                background: isOpen
+                  ? `linear-gradient(135deg, ${color}18, ${color}28)`
+                  : `linear-gradient(135deg, ${color}0C, ${color}14)`,
+                border: `2px solid ${isOpen ? color : `${color}30`}`,
+              }}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+            >
+              <span
+                className="shrink-0 w-8 h-8 rounded-full text-white text-sm font-bold flex items-center justify-center"
+                style={{ backgroundColor: color }}
+              >
+                {i + 1}
+              </span>
+              <span className="font-display font-bold text-base flex-1 leading-snug" style={{ color: 'var(--color-hist-dark, #2C3E50)' }}>
+                <RichText text={step.label} />
+              </span>
+              <motion.span
+                className="shrink-0 text-lg"
+                style={{ color }}
+                animate={{ rotate: isOpen ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                ›
+              </motion.span>
+            </motion.button>
+
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="overflow-hidden"
+                >
+                  <div
+                    className="mx-3 my-2 rounded-lg px-4 py-3 font-body text-[0.95rem] text-hist-dark/85 leading-relaxed"
+                    style={{ backgroundColor: `${color}08`, borderLeft: `4px solid ${color}` }}
+                  >
+                    <RichText text={step.detail} />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Connector arrow between steps */}
+            {i < steps.length - 1 && (
+              <div className="flex justify-center py-1">
+                <span className="text-lg leading-none" style={{ color: `${color}80` }}>↓</span>
+              </div>
+            )}
+          </div>
+        )
+      })}
+      <p className="mt-3 text-xs font-body italic text-center" style={{ color: `${color}AA` }}>
+        Tap each step to see the explanation
+      </p>
+    </div>
   )
 }
 

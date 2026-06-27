@@ -10,7 +10,7 @@ export const section1Subsections: Subsection[] = [
         id: 's1-hook',
         title: 'The Dream That Changed Europe',
         type: 'text',
-        text: 'It\'s **1848**. Europe is on fire. In Paris, workers are tearing up cobblestones to build barricades. In Vienna, the most powerful minister on the continent — **Metternich** — is fleeing in disguise. In Frankfurt, professors and lawyers are drafting a constitution for a country that **doesn\'t even exist yet**: Germany.\n\nAnd in a small studio in France, an artist named **Frédéric Sorrieu** is painting a dream — a dream of all nations, free and equal, marching together toward liberty.\n\nIt\'s a beautiful dream. And by the end of this chapter, you\'ll understand **why it died**.',
+        text: 'It\'s **1848**. Europe is on fire. In Paris, workers are tearing up cobblestones to build barricades. In Vienna, the most powerful minister on the continent — **Metternich** — is fleeing in disguise. In the German city of **Frankfurt**, professors and lawyers are drafting a constitution for a German nation that **does not yet exist** — in 1848 the German-speaking people were still scattered across dozens of separate states, with no single country called "Germany".\n\nAnd in a small studio in France, an artist named **Frédéric Sorrieu** is painting a dream — a dream of all nations, free and equal, marching together **towards** liberty.\n\nIt\'s a beautiful dream. And by the end of this chapter, you\'ll understand **why it died**.',
         highlight: '**1848** — the year of revolutions. This chapter tells the story of how the dream of free nations was born, fought for, and ultimately betrayed.',
       },
       // Card 1: Context — WHY 1848 matters
@@ -42,15 +42,27 @@ export const section1Subsections: Subsection[] = [
         id: 's1-intro-3',
         title: 'The Statue of Liberty — What She Holds',
         type: 'text',
-        text: 'Artists of the French Revolution **personified Liberty as a female figure**. In Sorrieu\'s print, she bears the **torch of Enlightenment** in one hand and the **Charter of the Rights of Man** in the other. The torch represents **knowledge and reason**, while the Charter represents **universal rights** that every citizen deserved.',
-        highlight: '**Statue of Liberty holds:** torch of Enlightenment (knowledge/reason) + Charter of Rights of Man (universal rights). This is asked almost every year!',
+        text: 'Why is there a **woman** at the centre of the picture? Because artists of the time could not draw an idea like "liberty" directly — so they **personified Liberty as a female figure** (this is called an *allegory*, something we\'ll study in detail later). She is the link that ties the whole march together: every nation in the procession is walking **towards her**.\n\nIn Sorrieu\'s print she bears the **torch of Enlightenment** in one hand and the **Charter of the Rights of Man** in the other. The torch stands for **knowledge and reason** lighting the way; the Charter stands for the **universal rights** that every citizen of a free nation deserved.',
+        highlight: '**Statue of Liberty holds:** torch of Enlightenment (knowledge/reason) + Charter of Rights of Man (universal rights). She is the female *allegory* of Liberty that every nation marches towards. This is asked almost every year!',
       },
-      // Card 5: Shattered absolutism + nations by flags
+      // Card 5: Vocabulary — Absolutist (defined BEFORE first use, below)
+      {
+        id: 's1-intro-5',
+        type: 'vocabulary',
+        text: 'Absolutist — A government or system of rule that has **no restraints on the power exercised**. In history, it refers to a form of **monarchical government** that was **centralised, militarised and repressive**. Think: kings with unlimited power, no parliament, no constitution. Keep this word in mind — you\'ll see it in the very next picture.',
+      },
+      // Card 6: Vocabulary — Utopian (defined BEFORE first use, below)
+      {
+        id: 's1-intro-6',
+        type: 'vocabulary',
+        text: 'Utopian — A vision of a society that is **so ideal that it is unlikely to actually exist**. The word comes from Thomas More\'s 1516 book "Utopia". You\'re about to read that Sorrieu painted a **utopian vision** — meaning a beautiful, perfect dream of free nations that, in **1848, did not yet exist** because most of Europe was still ruled by absolute monarchs.',
+      },
+      // Card 7: Shattered absolutism + nations by flags (terms above are now defined)
       {
         id: 's1-intro-4',
         title: 'Shattered Symbols on the Ground',
         type: 'text',
-        text: 'On the earth in the foreground lie the **shattered remains of the symbols of absolutist institutions**. In Sorrieu\'s **utopian vision**, the peoples of the world are grouped as **distinct nations**, identified through their **flags and national costume**.',
+        text: 'Now look at the ground. On the earth in the foreground lie the **shattered remains of the symbols of absolutist institutions** — the broken crowns, sceptres and chains of the old kings. In Sorrieu\'s **utopian vision**, the peoples of the world are grouped as **distinct nations**, each identified through its own **flag and national costume**.',
         inlineQuiz: {
           question: 'In Sorrieu\'s print, what do the shattered symbols on the ground represent?',
           options: ['Broken weapons of war', 'Remains of absolutist institutions', 'Ruins of ancient temples', 'Fragments of old maps'],
@@ -58,25 +70,13 @@ export const section1Subsections: Subsection[] = [
           explanation: 'The shattered remains represent the destruction of absolutist institutions — monarchies with unchecked, centralised power. This symbolises the rejection of autocratic rule.',
         },
       },
-      // Card 6: Vocabulary — Absolutist
-      {
-        id: 's1-intro-5',
-        type: 'vocabulary',
-        text: 'Absolutist — A government or system of rule that has **no restraints on the power exercised**. In history, it refers to a form of **monarchical government** that was **centralised, militarised and repressive**. Think: kings with unlimited power, no parliament, no constitution.',
-      },
-      // Card 7: Vocabulary — Utopian
-      {
-        id: 's1-intro-6',
-        type: 'vocabulary',
-        text: 'Utopian — A vision of a society that is **so ideal that it is unlikely to actually exist**. The word comes from Thomas More\'s 1516 book "Utopia". Sorrieu\'s dream was utopian because in **1848, most of Europe was still ruled by absolute monarchies** — his vision of free, democratic nations was a beautiful ideal, **not yet reality**.',
-      },
       // Card 8: Order of procession
       {
         id: 's1-intro-7',
         title: 'Who Marches in What Order?',
         type: 'text',
-        text: 'Leading the procession are the **United States and Switzerland** — already nation-states. **France**, identifiable by the **revolutionary tricolour**, has just reached the statue. She is followed by the peoples of **Germany**, bearing the **black, red and gold flag**.',
-        highlight: '**Procession order:** USA & Switzerland (already nations) → France (tricolour) → Germany (black-red-gold flag).',
+        text: 'The **order** of the march is not random — it tells a story. Leading the procession are the **United States and Switzerland**, which were **already nation-states** by 1848. **France**, identifiable by the **revolutionary tricolour**, has **just reached the statue**.\n\nWhat does that imply? France is shown as the **next nation to arrive at liberty** — fitting, because it was the French Revolution that lit the spark for the rest of Europe. Behind France come the peoples of **Germany**, bearing the **black, red and gold flag**, still on their way — a hint that Germany\'s journey to nationhood was yet to be completed.',
+        highlight: '**Procession order:** USA & Switzerland (already nations) → France (tricolour, just arriving = leading Europe to liberty) → Germany (black-red-gold flag, still on the way = not yet a nation).',
       },
       // Card 9: Germany didn't exist yet — significance
       {
@@ -164,30 +164,50 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
   },
   {
     id: 's1-french-rev',
-    title: 'The French Revolution and the Nation',
+    title: 'The French Revolution and the Idea of the Nation',
     narrativeCards: [
       {
         id: 's1-fr-1',
-        title: 'Before 1789: The King Owned France',
+        title: 'Before 1789: France Under an Absolute Monarch',
         type: 'text',
-        text: 'The first clear expression of nationalism came with the **French Revolution in 1789**. Before the revolution, France was already a territorial state — but it belonged to the **king**, not the people. An absolute monarch ruled with unlimited power.',
+        text: 'The first clear expression of nationalism came with the **French Revolution in 1789**. Before the revolution, France was already a territorial state — but power lay entirely in the hands of the **king**. An **absolute monarch** ruled with unlimited authority; the ordinary people were his **subjects**, not citizens with rights.',
+      },
+      // Vocabulary — Sovereignty (defined before it is used below)
+      {
+        id: 's1-fr-sovereignty',
+        type: 'vocabulary',
+        text: 'Sovereignty — The **supreme, ultimate power** to govern a country and take decisions for it. The key question in any state is: *who holds sovereignty?* Before 1789 it lay with the **king**. The French Revolution\'s biggest change was to shift sovereignty to the **people** (the citizens).',
       },
       {
         id: 's1-fr-2',
-        title: 'After 1789: The People Owned France',
+        title: 'After 1789: Sovereignty Passes to the People',
         type: 'text',
-        text: 'The revolution changed one fundamental thing: **sovereignty** — the ultimate authority — moved from the **monarchy** to the **citizens**. Before 1789, the King owned France. After 1789, **the people owned France**.\n\nThis single shift is what created the idea of a **nation**. The revolution declared that it was the people who would shape the destiny of the country — not a king sitting on a throne.',
-        highlight: '**The key shift:** Sovereignty moved from monarchy → citizens. The PEOPLE now constituted the nation and shaped its destiny.',
+        text: 'The revolution changed one fundamental thing: **sovereignty** moved from the **monarchy** to the **body of citizens**. The nation\'s authority would no longer flow from a king on a throne — it would flow from the **people themselves**.\n\nThis single shift is what created the modern idea of a **nation**: a community of citizens who together hold sovereignty and shape the destiny of their country.',
+        highlight: '**The key shift:** Sovereignty moved from monarchy → the people. The citizens now constituted the nation and shaped its destiny.',
       },
       {
         id: 's1-fr-3',
+        title: 'How Do You Make Strangers Feel Like One Nation?',
         type: 'text',
-        text: 'The French revolutionaries introduced various measures to create a sense of collective identity: the ideas of la patrie (the fatherland) and le citoyen (the citizen) emphasised a united community enjoying equal rights under a constitution.',
+        text: 'Shifting sovereignty to the people raised a practical problem: how do you make millions of strangers — who spoke different dialects and lived under different local laws — **feel** that they belonged to **one** nation?\n\nThe French revolutionaries answered this with a series of deliberate **measures to create a sense of collective belonging**. Tap each step below to see how it worked — this is one of the most frequently asked questions in the board exam.',
       },
+      // FLOWCHART — measures to create a sense of collective belonging (frequently asked 5-marker)
       {
-        id: 's1-fr-4',
-        type: 'text',
-        text: 'A new French flag, the tricolour, replaced the former royal standard. The Estates General was elected by active citizens and renamed the National Assembly. New hymns were composed, oaths taken and martyrs commemorated, all in the name of the nation.',
+        id: 's1-fr-measures',
+        title: 'Measures to Create Collective Belonging',
+        type: 'flowchart',
+        text: 'The steps the French revolutionaries took to forge one united nation:',
+        steps: [
+          { label: 'The ideas of *la patrie* and *le citoyen*', detail: 'The ideas of **la patrie** (the fatherland) and **le citoyen** (the citizen) emphasised the notion of a **united community enjoying equal rights under a constitution**. Every person was now a citizen of the fatherland, not a subject of a king.' },
+          { label: 'A new tricolour flag', detail: 'A **new French flag, the tricolour** (blue-white-red), replaced the former **royal standard**. A shared flag gave people a single symbol to rally around.' },
+          { label: 'The Estates General becomes the National Assembly', detail: 'The **Estates General** was elected by the body of **active citizens** and renamed the **National Assembly**. For the first time, the assembly represented the people rather than the three old estates.' },
+          { label: 'Hymns, oaths and martyrs', detail: 'New **hymns** were composed, **oaths** taken, and **martyrs commemorated** — all in the name of the nation. These shared rituals built emotional attachment to the country.' },
+          { label: 'A centralised system with uniform laws', detail: 'A **centralised administrative system** was put in place, framing **uniform laws** for all citizens within its territory. Everyone now lived under the same set of rules.' },
+          { label: 'Internal customs duties abolished', detail: 'Internal **customs duties and dues** were abolished. Earlier, goods were taxed at every regional border; removing these barriers helped knit the regions into one economy.' },
+          { label: 'A uniform system of weights and measures', detail: 'A **uniform system of weights and measures** was adopted, so that grain, cloth and land were measured the same way everywhere — replacing the confusing patchwork of regional units.' },
+          { label: 'A common national language', detail: 'The **dialect of Paris** (French) became the **common language** of the nation. **Regional dialects** were discouraged. The aim was to make every person — whether Breton, Provençal or Alsatian — **feel French**.' },
+        ],
+        highlight: '**Frequently asked (5 marks): "List the measures taken by the French revolutionaries to create a sense of collective identity/belonging."** Learn these eight steps — they are almost guaranteed in the board exam.',
         inlineQuiz: {
           question: 'What replaced the Estates General during the French Revolution?',
           options: ['The Parliament', 'The National Assembly', 'The Senate', 'The Council of Ministers'],
@@ -196,17 +216,18 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
         },
       },
       {
-        id: 's1-fr-5',
-        title: 'Building One Nation from Many Regions',
-        type: 'text',
-        text: 'Here\'s **why** all these measures mattered: before the revolution, France wasn\'t truly "one country" in daily life. Different regions had different laws, different taxes at every border, different weights for measuring grain, and people spoke different dialects.\n\nThe revolutionaries changed all of this: **uniform laws** for everyone, **one currency**, **one system of weights and measures**, and **French** as the common language. Regional dialects were discouraged. The point was to make every citizen **feel French** — not Breton or Provençal or Alsatian.',
-        highlight: '**How they built national identity:** Uniform laws, abolished internal customs, one currency, standard weights & measures, French as common language',
-      },
-      {
         id: 's1-fr-6',
         title: 'France\'s Mission — Liberate Europe',
         type: 'text',
         text: 'The revolutionaries went further — they declared it was **France\'s mission** to liberate the peoples of Europe from despotism. France wouldn\'t just free itself; it would help **all peoples** become nations. This was an extraordinary claim — and it set the stage for what Napoleon would do next.',
+      },
+      // Spread of the revolution — Jacobin clubs and French armies (moved here from Napoleon unit: it belongs to the French Revolution's export of its ideas)
+      {
+        id: 's1-fr-7',
+        title: 'The Revolution Spreads Beyond France',
+        type: 'figure',
+        text: 'And spread it did. When news of the revolution reached other countries, **students and members of the educated middle classes** began setting up **Jacobin clubs**. Their activities and campaigns prepared the way for the **French armies** which moved into **Holland, Belgium, Switzerland and much of Italy** in the **1790s** — carrying the idea of the nation with them.',
+        imageId: 'fig-2',
       },
     ],
   },
@@ -214,44 +235,57 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
     id: 's1-napoleon',
     title: 'Napoleon and the Spread of Nationalism',
     narrativeCards: [
+      // NEW — Who was Napoleon and how he rose to power (story opener Neha asked for)
       {
-        id: 's1-nap-1',
-        type: 'figure',
-        text: 'When news of the revolution spread, students and educated middle classes in European cities began setting up Jacobin clubs. Their activities prepared the way for the French armies which moved into Holland, Belgium, Switzerland and much of Italy in the 1790s.',
-        imageId: 'fig-2',
+        id: 's1-nap-intro',
+        title: 'Who Was Napoleon?',
+        type: 'text',
+        text: 'So who was this man whose armies carried the revolution across Europe? **Napoleon Bonaparte** was a brilliant young **general** who made his name winning battles for the French Republic. As the revolution at home slid into chaos and infighting, France longed for a strong hand — and in **1799 Napoleon seized power**, later crowning himself **Emperor of France in 1804**.\n\nHere lies the great irony of his story: Napoleon had **destroyed democracy in France** (an emperor is not elected) — yet in the way he *ran* his empire, he **kept many of the revolution\'s best ideas**.',
+        highlight: '**Napoleon:** a French general who seized power in **1799** and became Emperor in **1804**. He ended democracy at home but spread the revolution\'s administrative ideas across Europe.',
       },
       {
         id: 's1-nap-2',
+        title: 'What Was Napoleon Famous For?',
         type: 'text',
-        text: 'Napoleon had destroyed democracy in France, but in the administrative field he had incorporated revolutionary principles to make the system more rational and efficient.',
+        text: 'Napoleon is remembered above all as a **reformer of administration**. He took the messy, unequal systems of the old kingdoms and made them **rational and efficient** — applying the principles of the revolution to law and government. His single most famous achievement was a new law code that still shapes legal systems today: the **Napoleonic Code**.',
       },
+      // Napoleonic Code — own heading + point-wise reforms as a flowchart (Neha: separate heading, make point-wise, connect)
       {
-        id: 's1-nap-3',
-        type: 'text',
-        text: 'The Civil Code of 1804 — usually known as the Napoleonic Code — did away with all privileges based on birth, established equality before the law and secured the right to property. This Code was exported to the regions under French control.',
-        highlight: 'Napoleonic Code (1804): No birth privileges, equality before law, right to property',
-      },
-      {
-        id: 's1-nap-4',
-        type: 'text',
-        text: 'In the Dutch Republic, Switzerland, Italy and Germany, Napoleon simplified administrative divisions, abolished the feudal system, freed peasants from serfdom and manorial dues. Guild restrictions were removed. Transport and communication systems were improved.',
+        id: 's1-nap-code',
+        title: 'The Napoleonic Code (1804)',
+        type: 'flowchart',
+        text: 'The **Civil Code of 1804** — usually called the **Napoleonic Code** — swept away the privileges of the old order and was **exported to every region under French control**. Tap each reform to understand it:',
+        steps: [
+          { label: 'Did away with privileges based on birth', detail: 'No longer would a person\'s rights depend on whether they were born a noble or a commoner. **Birth-based privilege was abolished** — a revolutionary idea in a Europe ruled by aristocrats.' },
+          { label: 'Established equality before the law', detail: '**Every citizen was equal in the eyes of the law.** The same rules applied to rich and poor, noble and peasant alike.' },
+          { label: 'Secured the right to property', detail: 'The Code **guaranteed the right to own property** — protecting people\'s land and possessions from arbitrary seizure.' },
+          { label: 'Simplified administrative divisions', detail: 'In the **Dutch Republic, Switzerland, Italy and Germany**, Napoleon **simplified administrative divisions**, making government clearer and more uniform.' },
+          { label: 'Abolished feudalism and serfdom', detail: 'He **abolished the feudal system** and **freed peasants from serfdom** and from **manorial dues** — releasing millions from obligations to local lords.' },
+          { label: 'Removed guild restrictions', detail: '**Guild restrictions** on trade and crafts were removed, allowing businesses and markets to grow more freely.' },
+          { label: 'Improved transport and communication', detail: '**Transport and communication systems were improved**, helping trade, travel and the spread of ideas across the empire.' },
+        ],
+        highlight: '**Napoleonic Code (1804):** no birth privileges • equality before law • right to property • simplified administration • end of feudalism/serfdom • no guild restrictions • better transport. **Initially, businessmen and small-scale producers welcomed these changes.**',
         inlineQuiz: {
           question: 'Which of these was NOT a reform introduced by Napoleon in conquered territories?',
           options: ['Abolition of feudal system', 'Freedom of peasants from serfdom', 'Universal adult suffrage', 'Simplification of administrative divisions'],
           correctIndex: 2,
-          explanation: 'Napoleon did not introduce universal adult suffrage. The Napoleonic Code actually reduced women\'s status and went back to limited suffrage.',
+          explanation: 'Napoleon did not introduce universal adult suffrage. The Napoleonic Code actually reduced women\'s status and brought back limited suffrage.',
         },
       },
+      // Why he came to be disliked — tree of liberty (Neha: connect, then show tree picture)
       {
         id: 's1-nap-5',
+        title: 'From Liberators to Oppressors',
         type: 'figure',
-        text: 'However, in the areas conquered, reactions to French rule were mixed. Initially, the French armies were welcomed as harbingers of liberty. But the initial enthusiasm soon turned to hostility — increased taxation, censorship and forced conscription outweighed the advantages of administrative changes.',
+        text: 'At first, this all sounded wonderful — and in the conquered lands the French armies were **welcomed as harbingers of liberty**. The tree of liberty in this image was actually **planted by local people** to celebrate their new freedoms.\n\nBut the **enthusiasm soon turned to hostility**. The reality of being a conquered territory set in: **increased taxation, censorship, and forced conscription** of young men into Napoleon\'s armies. For most people these burdens **outweighed** the benefits of the new administrative system — and they began to see the French not as liberators, but as **occupiers**.',
         imageId: 'fig-4',
+        highlight: '**WHY people turned against Napoleon:** heavy taxation + censorship + forced conscription outweighed the benefits of his reforms. Liberty imposed by a foreign army no longer felt like liberty.',
       },
       {
         id: 's1-nap-6',
+        title: 'The Fall of Napoleon',
         type: 'figure',
-        text: 'After the Battle of Leipzig in 1813, Napoleon\'s power declined rapidly. This caricature shows him as a postman losing letters — each bearing the name of a territory he lost.',
+        text: 'The end came on the battlefield. After the **Battle of Leipzig in 1813**, Napoleon\'s power declined rapidly, and he was finally defeated at **Waterloo in 1815**. This caricature captures it perfectly: Napoleon is drawn as a **postman losing his letters** — each falling letter bearing the name of a territory he has lost.',
         imageId: 'fig-5',
       },
       // TIMELINE REFERENCE — Section 1 key dates

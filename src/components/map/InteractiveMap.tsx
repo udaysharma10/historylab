@@ -91,27 +91,54 @@ export function InteractiveMap({
           borderColor = `${sectionColor}80`
         }
 
+        // Precise location marker at the exact centre of the region
+        const markerColor = highlight ? HIGHLIGHT_COLORS[highlight].border : sectionColor
+        const centerX = region.x + region.width / 2
+        const centerY = region.y + region.height / 2
+
         return (
-          <motion.button
-            key={region.id}
-            className="absolute rounded-lg transition-colors"
-            style={{
-              left: `${region.x}%`,
-              top: `${region.y}%`,
-              width: `${region.width}%`,
-              height: `${region.height}%`,
-              backgroundColor: bgColor,
-              border: `2px solid ${borderColor}`,
-              cursor: disabled ? 'default' : 'pointer',
-              opacity: isDimmed ? 0.3 : 1,
-            }}
-            onClick={() => handleRegionClick(region)}
-            onPointerEnter={(e) => handlePointerEnter(region, e)}
-            onPointerLeave={handlePointerLeave}
-            whileHover={!disabled ? { scale: 1.02 } : {}}
-            whileTap={!disabled ? { scale: 0.98 } : {}}
-            aria-label={`Map region: ${region.label}`}
-          />
+          <div key={region.id}>
+            {/* Clickable hit-area (rectangle, subtle) */}
+            <motion.button
+              className="absolute rounded-lg transition-colors"
+              style={{
+                left: `${region.x}%`,
+                top: `${region.y}%`,
+                width: `${region.width}%`,
+                height: `${region.height}%`,
+                backgroundColor: bgColor,
+                border: borderColor === 'transparent' ? '2px solid transparent' : `2px solid ${borderColor}`,
+                cursor: disabled ? 'default' : 'pointer',
+                opacity: isDimmed ? 0.3 : 1,
+              }}
+              onClick={() => handleRegionClick(region)}
+              onPointerEnter={(e) => handlePointerEnter(region, e)}
+              onPointerLeave={handlePointerLeave}
+              whileHover={!disabled ? { scale: 1.02 } : {}}
+              whileTap={!disabled ? { scale: 0.98 } : {}}
+              aria-label={`Map region: ${region.label}`}
+            />
+
+            {/* Precise pin dot at the centre — marks the exact spot */}
+            <motion.div
+              className="absolute pointer-events-none rounded-full"
+              style={{
+                left: `${centerX}%`,
+                top: `${centerY}%`,
+                width: 14,
+                height: 14,
+                marginLeft: -7,
+                marginTop: -7,
+                backgroundColor: markerColor,
+                border: '2.5px solid white',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.4)',
+                opacity: isDimmed ? 0.3 : 1,
+                zIndex: 5,
+              }}
+              animate={highlight || isHovered ? { scale: [1, 1.25, 1] } : { scale: 1 }}
+              transition={{ duration: 0.8, repeat: (highlight || isHovered) ? Infinity : 0, ease: 'easeInOut' }}
+            />
+          </div>
         )
       })}
 
@@ -121,16 +148,17 @@ export function InteractiveMap({
         if (!highlight) return null
 
         const color = HIGHLIGHT_COLORS[highlight]
+        const labelX = region.x + region.width / 2
+        const labelY = region.y + region.height / 2
 
         return (
           <motion.div
             key={`label-${region.id}`}
             className="absolute pointer-events-none flex items-center justify-center"
             style={{
-              left: `${region.x}%`,
-              top: `${region.y}%`,
-              width: `${region.width}%`,
-              height: `${region.height}%`,
+              left: `${labelX}%`,
+              top: `${labelY}%`,
+              transform: 'translate(-50%, calc(-100% - 12px))',
             }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

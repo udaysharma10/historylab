@@ -26,6 +26,16 @@ export interface Subsection {
   narrativeCards: NarrativeCard[]
 }
 
+export interface FlowStep {
+  label: string
+  detail: string
+}
+
+export interface TableData {
+  headers: string[]
+  rows: string[][]
+}
+
 export interface NarrativeCard {
   id: string
   title?: string
@@ -33,7 +43,11 @@ export interface NarrativeCard {
   imageId?: string
   highlight?: string
   inlineQuiz?: InlineQuiz
-  type?: 'text' | 'vocabulary' | 'source' | 'infobox' | 'figure' | 'exam-prep' | 'timeline-ref' | 'map-ref'
+  type?: 'text' | 'vocabulary' | 'source' | 'infobox' | 'figure' | 'exam-prep' | 'timeline-ref' | 'map-ref' | 'flowchart' | 'table'
+  // For type === 'flowchart': ordered steps, each clickable to reveal its explanation
+  steps?: FlowStep[]
+  // For type === 'table'
+  table?: TableData
 }
 
 export interface InlineQuiz {
