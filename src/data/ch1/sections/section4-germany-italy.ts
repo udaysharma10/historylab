@@ -40,13 +40,29 @@ export const section4Subsections: Subsection[] = [
       {
         id: 's4-ger-3',
         type: 'text',
-        text: 'Three wars over seven years — with Austria, Denmark and France — ended in Prussian victory and completed the process of unification.',
+        text: 'Bismarck\'s strategy is summed up in his own famous phrase: the great questions of the day would be settled not by speeches and majority votes, but by **"blood and iron"** — that is, by **war and military strength**. Over **seven years he fought three wars** — against Denmark, Austria and France — each ending in Prussian victory, and together they completed German unification.',
         inlineQuiz: {
           question: 'Bismarck fought wars against which three countries to unify Germany?',
           options: ['Russia, Italy, Spain', 'Austria, Denmark, France', 'Britain, Netherlands, Belgium', 'Sweden, Poland, Ottoman Empire'],
           correctIndex: 1,
           explanation: 'Bismarck fought three wars — against Denmark (1864), Austria (1866), and France (1870-71) — to complete German unification.',
         },
+      },
+      // FLOWCHART — Unification of Germany (5-marker, Neha requested)
+      {
+        id: 's4-ger-flowchart',
+        title: 'How Germany Was Unified — Step by Step',
+        type: 'flowchart',
+        text: 'The "blood and iron" road to one Germany — tap each stage:',
+        steps: [
+          { label: '1848 — The liberal attempt fails', detail: 'Middle-class liberals tried to unite the German states into a nation governed by an **elected parliament** (Frankfurt). This was **crushed** by the combined forces of the monarchy, the military and the **Junkers** (large landowners) of Prussia.' },
+          { label: 'Prussia takes the lead under Bismarck', detail: 'From then on, **Prussia led** the unification drive. Its chief minister, **Otto von Bismarck**, was the architect of the process, using the **Prussian army and bureaucracy** — "blood and iron", not democracy.' },
+          { label: '1864 — War with Denmark', detail: 'The **first war** (with Austria as an ally) defeated **Denmark**, winning the duchies of Schleswig and Holstein.' },
+          { label: '1866 — War with Austria', detail: 'The **second war** defeated **Austria**, ending Austrian influence over the German states and leaving Prussia dominant. (Austria was deliberately left *out* of the new Germany.)' },
+          { label: '1870–71 — War with France', detail: 'The **third war**, the Franco-Prussian War, defeated **France** and rallied the southern German states to Prussia\'s side.' },
+          { label: '18 January 1871 — German Empire proclaimed', detail: 'In the **Hall of Mirrors at the Palace of Versailles**, the Prussian king **William I was proclaimed German Emperor (Kaiser)**. Germany was now one nation, forged by the Prussian state.' },
+        ],
+        highlight: '**Unification of Germany (5 marks):** 1848 liberal attempt fails → Prussia + Bismarck lead with "blood and iron" → wars vs Denmark (1864), Austria (1866), France (1870–71) → German Empire proclaimed at Versailles, 18 Jan 1871.',
       },
       {
         id: 's4-ger-4',
@@ -116,6 +132,22 @@ export const section4Subsections: Subsection[] = [
         text: 'In 1861, Victor Emmanuel II was proclaimed king of united Italy. However, much of the Italian population remained unaware of liberal-nationalist ideology. The peasant masses who supported Garibaldi in southern Italy had never heard of Italia — and believed "La Talia" was Victor Emmanuel\'s wife!',
         highlight: '1861: Victor Emmanuel II proclaimed king of united Italy',
       },
+      // FLOWCHART — Unification of Italy (5-marker, Neha requested)
+      {
+        id: 's4-it-flowchart',
+        title: 'How Italy Was Unified — Step by Step',
+        type: 'flowchart',
+        text: 'Italy was unified through three different forces — idea, diplomacy and the sword. Tap each stage:',
+        steps: [
+          { label: '1830s — Mazzini sows the idea', detail: '**Giuseppe Mazzini** sought to weld Italy into a single **unitary republic** through his society **Young Italy**. He gave the movement its *idea* and inspiration — but the revolutionary uprisings of **1831 and 1848 failed**.' },
+          { label: 'Leadership passes to Sardinia-Piedmont', detail: 'After those failures, the task of unification fell to the only Italian-ruled state, **Sardinia-Piedmont**, under King **Victor Emmanuel II**.' },
+          { label: 'Cavour\'s diplomacy defeats Austria (1859)', detail: 'Chief Minister **Cavour** — neither a revolutionary nor a democrat — engineered a clever **diplomatic alliance with France**, and Sardinia-Piedmont **defeated Austria in 1859**, freeing the north.' },
+          { label: '1860 — Garibaldi conquers the south', detail: '**Giuseppe Garibaldi** led his volunteer **Red Shirts** in the **Expedition of the Thousand** into the south. With peasant support, he captured the **Kingdom of the Two Sicilies** and drove out the Spanish Bourbon rulers.' },
+          { label: '1861 — Victor Emmanuel II crowned King of Italy', detail: 'The north and south were joined, and in **1861 Victor Emmanuel II was proclaimed King of a united Italy**.' },
+          { label: '1870 — Rome and the Papal States join', detail: 'Finally, in **1870**, when France withdrew its troops from Rome during the Franco-Prussian War, the **Papal States (Rome) joined Italy**, completing unification.' },
+        ],
+        highlight: '**Unification of Italy (5 marks):** Mazzini (idea, Young Italy) → uprisings of 1831 & 1848 fail → Sardinia-Piedmont leads (Victor Emmanuel II) → Cavour\'s diplomacy beats Austria (1859) → Garibaldi\'s Red Shirts take the south (1860) → Victor Emmanuel crowned King (1861) → Rome joins (1870).',
+      },
       {
         id: 's4-it-7',
         type: 'figure',
@@ -166,6 +198,21 @@ export const section4Subsections: Subsection[] = [
         type: 'text',
         text: 'Ireland suffered a similar fate. After a failed revolt by Wolfe Tone and his United Irishmen (1798), Ireland was forcibly incorporated into the United Kingdom in 1801. A new "British" nation was forged through symbols: the British flag (Union Jack), the national anthem (God Save Our Noble King), and the English language.',
         highlight: 'Ireland forcibly incorporated in 1801; British identity promoted through flag, anthem, language',
+      },
+      // FLOWCHART — The "strange" case of Britain (5-marker, Neha requested)
+      {
+        id: 's4-br-flowchart',
+        title: 'How Britain Became a Nation — Step by Step',
+        type: 'flowchart',
+        text: 'Britain is the "strange case" — no revolution, just a slow build-up over centuries. Tap each stage:',
+        steps: [
+          { label: 'Before the 18th century — no British nation', detail: 'There was **no British nation** as such. People\'s primary identities were **ethnic** — English, Welsh, Scot or Irish — each with its own culture and traditions.' },
+          { label: '1688 — The English Parliament rises', detail: 'The **English Parliament seized power from the monarchy in 1688**. As England grew in wealth and power, Parliament became the **instrument** through which it extended its influence over the other nations of the islands.' },
+          { label: '1707 — Act of Union (England + Scotland)', detail: 'The **Act of Union (1707)** joined England and Scotland into the **"United Kingdom of Great Britain"**. Scotland\'s distinctive institutions were suppressed — Highlanders were **forbidden to speak Gaelic or wear their national dress**.' },
+          { label: '1801 — Ireland is absorbed', detail: 'After a failed Irish revolt (Wolfe Tone\'s United Irishmen, 1798), **Ireland was forcibly incorporated** into the United Kingdom in **1801**.' },
+          { label: 'A new "British" identity is promoted', detail: 'A British nation was forged through shared **symbols** — the **Union Jack** flag, the national anthem (**God Save Our Noble King**) and the **English language** — while the older nations were made subordinate partners.' },
+        ],
+        highlight: '**The case of Britain (5 marks):** no revolution, a gradual process → ethnic identities at first → English Parliament (1688) extends power → Act of Union with Scotland (1707) → Ireland incorporated (1801) → British identity built through Union Jack, anthem and English.',
       },
       {
         id: 's4-br-5',

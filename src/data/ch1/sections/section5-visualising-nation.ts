@@ -39,13 +39,27 @@ export const section5Subsections: Subsection[] = [
       {
         id: 's5-mar-1',
         type: 'text',
-        text: 'In France, the female allegory of the nation was christened Marianne — a popular Christian name. Her characteristics were drawn from those of Liberty and the Republic: the red cap, the tricolour, the cockade.',
+        text: 'In France, the female allegory of the nation was christened **Marianne** — chosen because it was a **popular Christian name**, so ordinary people would feel she was *one of them*. Her appearance was no accident: every item she wears is a **symbol** borrowed from Liberty and the Republic — the **red cap**, the **tricolour** and the **cockade**. Let\'s decode each one, because CBSE loves asking what these symbols mean.',
       },
       {
         id: 's5-mar-2',
+        title: 'Marianne on Stamps — The Nation in Everyday Life',
         type: 'figure',
-        text: 'Statues of Marianne were erected in public squares to remind the public of the national symbol of unity. Marianne images were marked on coins and stamps — becoming part of everyday life.',
+        text: 'Marianne was everywhere. **Statues** of her were erected in public squares to remind people of the nation, and her image was stamped on **coins and postage stamps** — so that every time a citizen posted a letter or handled money, they "met" the nation. This made the abstract idea of the Republic **tangible and familiar** to everyone. Look closely at the stamps below and try to spot her red cap.',
         imageId: 'fig-16',
+      },
+      // FLOWCHART — Marianne's symbols decoded (Neha: explain all terms, esp. cockade, with the picture)
+      {
+        id: 's5-mar-symbols',
+        title: 'Marianne\'s Symbols — Decoded',
+        type: 'flowchart',
+        text: 'Tap each symbol to learn what it means:',
+        steps: [
+          { label: 'The red cap (Cap of Liberty)', detail: 'The **red cap** — also called the *Phrygian cap* or *cap of liberty*. In ancient Rome, a freed slave was given such a cap, so it came to stand for **liberty and freedom**. Wearing it, Marianne announces that France is a free nation.' },
+          { label: 'The tricolour', detail: 'The **tricolour** is the three-coloured **blue-white-red flag** of the French Revolution, which replaced the old royal standard. On Marianne it represents the **French Republic** itself.' },
+          { label: 'The cockade', detail: 'A **cockade** is a **rosette or knot of ribbons** in the national colours (blue-white-red), pinned to a hat or coat as a **badge**. During the Revolution, patriots wore the cockade to **show their loyalty to the nation** — a walking sign of "I belong to the Republic."' },
+        ],
+        highlight: '**Marianne\'s symbols (commonly asked):** red cap = liberty (freed slaves of ancient Rome) • tricolour = the Republic • cockade = a ribbon-badge in national colours worn to show loyalty to the nation.',
       },
       {
         id: 's5-mar-3',

@@ -65,6 +65,19 @@ export const section6Subsections: Subsection[] = [
         text: 'Matters were further complicated because the Balkans also became the scene of big-power rivalry. Russia, Germany, England and Austro-Hungary were each keen on countering the hold of other powers over the Balkans and extending their own control. This led to a series of wars and finally the First World War.',
         highlight: 'Big-power rivalry in the Balkans (Russia, Germany, England, Austria-Hungary) → led to WWI',
       },
+      // EXAM PREP — 5-marker for the last unit (Neha requested)
+      {
+        id: 's6-bal-exam',
+        type: 'exam-prep',
+        text: `Q: Why did the Balkans become the most serious source of nationalist tension in Europe after 1871? How did it lead to the First World War?
+Marks: 5 Marks
+A: The Balkans was a region of great ethnic and geographical diversity, inhabited broadly by the Slavs. A large part of it was under the control of the Ottoman Empire.
+A: The spread of the ideas of romantic nationalism, together with the gradual disintegration of the Ottoman Empire, made the region intensely explosive.
+A: One by one, the Balkan peoples broke away from Ottoman rule and declared independence, each using history to claim it was winning back a long-lost freedom.
+A: The newly independent Balkan states were fiercely jealous of one another, and each hoped to gain more territory at the expense of its neighbours — leading to constant conflict among them.
+A: The situation worsened because of big-power rivalry: Russia, Germany, England and Austria-Hungary each wanted to extend their own control over the Balkans and counter the others. This intense competition led to a series of wars and finally to the outbreak of the First World War in 1914.
+Tip: This is one of the most important 5-mark questions in the chapter. Structure your answer as: (1) who lived there + Ottoman control, (2) romantic nationalism + Ottoman decline, (3) break-away states, (4) rivalry among Balkan states, (5) big-power rivalry → WWI.`,
+      },
     ],
   },
   {
