@@ -42,6 +42,37 @@ export const section1Subsections: Subsection[] = [
     ],
   },
   {
+    id: 'ch2-s1-wwi',
+    title: 'The First World War and Its Impact',
+    narrativeCards: [
+      {
+        id: 'ch2-s1-wwi-intro',
+        title: 'A New Political and Economic Situation',
+        type: 'text',
+        text: 'Before we meet Gandhi, we must understand the **world he stepped into** — because, as the NCERT puts it, the **First World War (1914–1918) created a new economic and political situation** in India. The war was fought thousands of kilometres away in Europe, yet it **changed the lives of ordinary Indians** completely. The hardship it caused is the soil in which Indian nationalism grew. Let\'s see exactly how the war broke India.',
+        highlight: '**Start here (NCERT):** The First World War created a new economic and political situation in India. Understanding the war\'s impact is the foundation of this whole chapter.',
+      },
+      {
+        id: 'ch2-s1-wwi-impact',
+        title: 'The War That Broke India',
+        type: 'text',
+        text: 'The First World War **devastated India** even though the fighting was in Europe:\n\n**1.** **Defence spending soared**, paid for by **war loans** and by **raising taxes** — customs duties were raised and **income tax was introduced** for the first time.\n**2.** **Prices doubled** — between 1913 and 1918, prices roughly doubled, hitting the common people hardest.\n**3.** **Forced recruitment** — villages were compelled to supply soldiers for a war they had nothing to do with, causing deep anger.\n**4.** **Crops failed** (1918–19 and 1920–21), leading to acute **food shortages**.\n**5.** An **influenza epidemic** struck — and according to the 1921 census, **12 to 13 million people** died of famine and disease.\n\nPeople hoped that when the war ended, their hardship would end too. **It didn\'t.**',
+        highlight: '**WWI\'s impact on India (very frequently asked):** higher taxes + war loans • prices doubled • forced recruitment • crop failures & food shortages • influenza epidemic (12–13 million dead).',
+        inlineQuiz: {
+          question: 'Roughly how many people in India died due to famine and the influenza epidemic linked to the war years?',
+          options: ['1–2 million', '5 million', '12–13 million', '20 million'],
+          correctIndex: 2,
+          explanation: 'According to the 1921 census, 12 to 13 million people perished as a result of famines and the influenza epidemic during 1918–1921.',
+        },
+      },
+      {
+        id: 'ch2-s1-wwi-vocab',
+        type: 'vocabulary',
+        text: 'Forced Recruitment — A process by which the colonial state **forced people to join the army against their will**. During the First World War, the British compelled villages in many parts of India to supply young men as soldiers. It was **coercion, not voluntary service** — and the resentment it caused ran deep across the countryside.',
+      },
+    ],
+  },
+  {
     id: 'ch2-s1-satyagraha',
     title: 'The Idea of Satyagraha',
     narrativeCards: [
@@ -54,7 +85,22 @@ export const section1Subsections: Subsection[] = [
       {
         id: 'ch2-s1-satyagraha-define',
         type: 'vocabulary',
-        text: 'Satyagraha — **Satya** (truth) + **Agraha** (insistence) = **insistence on truth**. Gandhi was very clear about what satyagraha was NOT: it was **not passive resistance**. He called it "the weapon of the strong, not the weak." A satyagrahi does not destroy the enemy — they seek to **convert** the enemy through truth and suffering. Non-violence is not weakness. It requires MORE strength than violence.',
+        text: 'Satyagraha — **Satya** (truth) + **Agraha** (insistence) = **insistence on / holding firmly to the truth**. It was the novel method of mass agitation that Gandhi had developed in South Africa and now brought to India.',
+      },
+      // NEW — NCERT-aligned, broken-down explanation of the IDEA (Neha: simplify, align to NCERT)
+      {
+        id: 'ch2-s1-satyagraha-idea',
+        title: 'The Idea of Satyagraha — In Simple Steps',
+        type: 'flowchart',
+        text: 'NCERT explains satyagraha as a chain of simple ideas. Tap each one to understand it:',
+        steps: [
+          { label: 'The power of truth', detail: 'Satyagraha emphasised the **power of truth** and the **need to search for truth**. Gandhi believed truth itself was a force more powerful than any weapon.' },
+          { label: 'If the cause is true, no violence is needed', detail: 'If the cause was **true** and the struggle was **against injustice**, then **physical force was not necessary** to fight the oppressor. A just cause does not need a sword.' },
+          { label: 'Win without vengeance — through non-violence', detail: 'Without seeking **vengeance** or being **aggressive**, a satyagrahi could **win the battle through non-violence**. The satyagrahi is patient and self-suffering, never hateful.' },
+          { label: 'Appeal to the oppressor\'s conscience', detail: 'This was done by **appealing to the conscience of the oppressor**. People — including the oppressors — had to be **persuaded to see the truth**, not forced to accept it through violence.' },
+          { label: 'Truth must ultimately triumph', detail: 'By this struggle, **truth was bound to ultimately triumph**. Gandhi believed this *dharma* of non-violence could **unite all Indians** in a single struggle.' },
+        ],
+        highlight: '**Satyagraha (NCERT):** power of truth → a true cause needs no physical force → win through non-violence without vengeance → appeal to the oppressor\'s conscience → truth must finally win. It is "the weapon of the strong, not the weak."',
       },
       {
         id: 'ch2-s1-source-a',
@@ -88,6 +134,19 @@ export const section1Subsections: Subsection[] = [
         text: '**Ahmedabad, 1918:** Cotton mill workers demanded fair wages. Gandhi supported them with a satyagraha. **Workers won.**\n\n**Kheda, Gujarat, 1918:** Crops failed. Peasants couldn\'t pay revenue. Gandhi organised them to demand tax relief. **The British agreed.**\n\nThree satyagrahas in two years. All three won. Gandhi had proved the method worked.',
         highlight: '**Three satyagrahas, three wins:** Champaran (1917), Ahmedabad (1918), Kheda (1918). All about economic exploitation. All won through non-violent pressure.',
       },
+      // FLOWCHART — the three early satyagrahas (Neha requested, important for boards)
+      {
+        id: 'ch2-s1-three-satyagrahas',
+        title: 'Gandhi\'s Three Early Satyagrahas (1916–1918)',
+        type: 'flowchart',
+        text: 'Three local satyagrahas in which Gandhi tested and proved his method. Tap each:',
+        steps: [
+          { label: 'Champaran, 1917 — Indigo farmers (Bihar)', detail: 'Gandhi travelled to **Champaran in Bihar** to inspire the peasants to struggle against the **oppressive plantation system** that forced them to grow indigo. This was his **first satyagraha in India** — and it won the farmers relief.' },
+          { label: 'Kheda, 1917–18 — Peasants (Gujarat)', detail: 'In the **Kheda district of Gujarat**, **crops failed** and a plague spread, yet the government demanded full **land revenue**. Gandhi organised a satyagraha to support the peasants\' demand for **relaxation of revenue collection**.' },
+          { label: 'Ahmedabad, 1918 — Cotton mill workers', detail: 'In **1918, Gandhi went to Ahmedabad** to organise a satyagraha movement among **cotton mill workers**, helping them demand **fair wages**.' },
+        ],
+        highlight: '**The three satyagrahas (commonly asked):** Champaran 1917 (indigo farmers, Bihar) • Kheda 1917–18 (peasants, Gujarat) • Ahmedabad 1918 (cotton mill workers). All local, all about economic injustice, all successful.',
+      },
       {
         id: 'ch2-s1-pattern',
         title: 'But Notice the Pattern...',
@@ -108,23 +167,11 @@ export const section1Subsections: Subsection[] = [
     title: 'The Tipping Point — Rowlatt Act & Jallianwala Bagh',
     narrativeCards: [
       {
-        id: 'ch2-s1-wwi-impact',
-        title: 'The War That Broke India',
-        type: 'text',
-        text: 'The First World War (1914-1918) **devastated India** even though the fighting was in Europe:\n\n**Taxes doubled** — customs duties raised, income tax introduced for the first time\n**Prices doubled** — between 1913 and 1918, everything became more expensive\n**Forced recruitment** — villages were ordered to send men to fight in a war they had nothing to do with\n**Crops failed** (1918-19, 1920-21) — leading to severe food shortages\n**Influenza epidemic** — 12 to 13 million Indians died\n\nPeople hoped that when the war ended, the hardship would end too. **It didn\'t.**',
-        highlight: '**WWI\'s impact on India:** Taxes doubled, prices doubled, forced recruitment, crop failure, influenza (12-13 million dead). People expected relief after the war. They got the Rowlatt Act instead.',
-      },
-      {
-        id: 'ch2-s1-wwi-vocab',
-        type: 'vocabulary',
-        text: 'Forced Recruitment — A process by which the colonial state **forced people to join the army**. During World War I, villagers were compelled to serve as soldiers against their will. This wasn\'t voluntary service — it was coercion. The resentment this caused was deep and widespread.',
-      },
-      {
         id: 'ch2-s1-rowlatt',
         title: 'The Rowlatt Act — The Spark',
         type: 'text',
-        text: '**February 1919.** Instead of relief, the British pass the **Rowlatt Act**. This law gave the government enormous powers:\n\n- **Arrest anyone** suspected of anti-government activity\n- **Detain them without trial** for up to **two years**\n- **No evidence needed** — just suspicion\n\nThe Act was passed despite **unanimous opposition** from Indian members of the Imperial Legislative Council. The British simply overruled them.\n\nGandhi saw the Rowlatt Act as an insult to every Indian. He called for a **nationwide hartal** on **6 April 1919**.',
-        highlight: '**Rowlatt Act (1919):** Arrest without evidence, detention without trial for 2 years. Passed despite unanimous Indian opposition. Gandhi called a nationwide hartal on 6 April 1919.',
+        text: 'Gandhi\'s three victories had a deeper effect than just helping farmers and workers. Across India, ordinary people now saw that the British **could be challenged** — and **anti-British feeling was rising fast**. The government grew alarmed at this growing political activity.\n\nSo, in **February 1919**, the British struck back with a harsh new law to **crush political activity** — the **Rowlatt Act**. It gave the government enormous powers:\n\n- **Arrest anyone** suspected of anti-government activity\n- **Detain them without trial** for up to **two years**\n- **No evidence needed** — just suspicion\n\nThe Act was rushed through despite the **unanimous opposition** of the Indian members of the Imperial Legislative Council. Indians realised they had **no real voice** in their own government. Gandhi saw the Act as an insult to every Indian and called for a **nationwide hartal** on **6 April 1919**.',
+        highlight: '**Why the Rowlatt Act? (NCERT framing):** Gandhi\'s satyagrahas had stirred rising nationalist feeling → the alarmed government passed the Rowlatt Act to crush political activity → arrest without evidence, detention without trial for 2 years → Gandhi called a nationwide hartal (6 April 1919).',
         inlineQuiz: {
           question: 'Why were Indians outraged by the Rowlatt Act?',
           options: [
@@ -144,11 +191,17 @@ export const section1Subsections: Subsection[] = [
         text: 'On **6 April**, the hartal began. Rallies were organised across the country. Workers went on strike in railway workshops. Shops closed down. The British were alarmed — they had never seen protest on this scale. Scared that communications would be disrupted, they decided to **clamp down**. Local leaders were arrested in Amritsar. Gandhi was barred from entering Delhi. On **10 April**, police in Amritsar fired on a peaceful procession.',
         imageId: 'ch2-fig-1',
       },
+      // Vocabulary — Martial Law (Neha: not explained; it followed the Rowlatt Act and led to the massacre)
+      {
+        id: 'ch2-s1-martial-law',
+        type: 'vocabulary',
+        text: 'Martial Law — **Rule by the army instead of the normal government.** Ordinary laws and courts are suspended, and a military commander takes charge with the power to ban gatherings, arrest people and use force. As the Rowlatt protests spread in Amritsar, the British **imposed martial law** there as an extension of their crackdown, and handed command to **General Dyer**. It was under this martial law that the Jallianwala Bagh massacre took place.',
+      },
       {
         id: 'ch2-s1-jallianwala-buildup',
         title: '13 April 1919 — The Day That Changed India',
         type: 'text',
-        text: 'Three days after the police firing, on **13 April 1919**, a large crowd gathered in the enclosed ground of **Jallianwala Bagh** in Amritsar.\n\nSome had come to protest the Rowlatt Act. But many were **villagers from outside the city** who had come for the annual **Baisakhi fair**. They didn\'t even know that **martial law** had been imposed.\n\nThe ground was surrounded by walls on all sides. There were only a few **narrow exits**.',
+        text: 'With **martial law in force and General Dyer in command**, the city of Amritsar was tense. Then, on **13 April 1919**, a large crowd gathered in the enclosed ground of **Jallianwala Bagh**.\n\nSome had come to protest the Rowlatt Act. But many were **villagers from outside the city** who had come for the annual **Baisakhi fair**. Crucially, **they did not even know that martial law had been imposed** — so they had no idea they were breaking any order by gathering.\n\nThe ground was surrounded by **high walls on all sides**, with only a few **narrow exits**.',
       },
       {
         id: 'ch2-s1-jallianwala',
