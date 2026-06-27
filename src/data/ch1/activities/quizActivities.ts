@@ -5,8 +5,8 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-001', type: 'mcq', sectionId: 's1', difficulty: 'easy', examRelevance: 'high', tags: ['french-revolution'],
     question: 'Who prepared a series of four prints visualising "democratic and social Republics" in 1848?',
-    options: ['Eugène Delacroix', 'Frédéric Sorrieu', 'Philip Veit', 'Karl Kaspar Fritz'],
-    correctIndex: 1, explanation: 'Frédéric Sorrieu, a French artist, prepared these prints in 1848 showing peoples of Europe and America marching towards the Statue of Liberty.', hints: ['He was a French artist', 'His print is the first figure in the chapter'],
+    options: ['Frédéric Sorrieu', 'Eugène Delacroix', 'Philip Veit', 'Karl Kaspar Fritz'],
+    correctIndex: 0, explanation: 'Frédéric Sorrieu, a French artist, prepared these prints in 1848 showing peoples of Europe and America marching towards the Statue of Liberty.', hints: ['He was a French artist', 'His print is the first figure in the chapter'],
   },
   {
     id: 'mcq-002', type: 'mcq', sectionId: 's1', difficulty: 'easy', examRelevance: 'high', tags: ['napoleon'],
@@ -31,8 +31,8 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-005', type: 'mcq', sectionId: 's2', difficulty: 'easy', examRelevance: 'high', tags: ['liberalism'],
     question: 'The term "liberalism" derives from the Latin root "liber" which means:',
-    options: ['Equal', 'Free', 'Liberal', 'Law'],
-    correctIndex: 1, explanation: 'Liberalism derives from the Latin root liber meaning free. For the new middle classes, it stood for freedom of the individual and equality before the law.', hints: ['Think of the English word "liberate"'],
+    options: ['Free', 'Equal', 'Liberal', 'Law'],
+    correctIndex: 0, explanation: 'Liberalism derives from the Latin root liber meaning free. For the new middle classes, it stood for freedom of the individual and equality before the law.', hints: ['Think of the English word "liberate"'],
   },
   {
     id: 'mcq-006', type: 'mcq', sectionId: 's2', difficulty: 'medium', examRelevance: 'high', tags: ['economic-nationalism'],
@@ -49,16 +49,16 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-008', type: 'mcq', sectionId: 's2', difficulty: 'medium', examRelevance: 'high', tags: ['key-person'],
     question: 'Giuseppe Mazzini founded which two secret societies?',
-    options: ['Carbonari and Young Italy', 'Young Italy and Young Europe', 'Young Europe and the Zollverein', 'The Carbonari and Young Europe'],
-    correctIndex: 1, explanation: 'Mazzini founded Young Italy in Marseilles (1831) and Young Europe in Berne (1833). He was earlier a member of the Carbonari.', hints: ['Both had "Young" in the name'],
+    options: ['Carbonari and Young Italy', 'Young Europe and the Zollverein', 'The Carbonari and Young Europe', 'Young Italy and Young Europe'],
+    correctIndex: 3, explanation: 'Mazzini founded Young Italy in Marseilles (1831) and Young Europe in Berne (1833). He was earlier a member of the Carbonari.', hints: ['Both had "Young" in the name'],
   },
 
   // === SECTION 3 ===
   {
     id: 'mcq-009', type: 'mcq', sectionId: 's3', difficulty: 'easy', examRelevance: 'high', tags: ['revolution'],
     question: 'The July Revolution of 1830 in France installed which ruler?',
-    options: ['Napoleon III', 'Louis Philippe', 'Friedrich Wilhelm IV', 'Metternich'],
-    correctIndex: 1, explanation: 'The Bourbon kings were overthrown and a constitutional monarchy was installed with Louis Philippe at its head.', hints: ['He became a constitutional monarch'],
+    options: ['Louis Philippe', 'Napoleon III', 'Friedrich Wilhelm IV', 'Metternich'],
+    correctIndex: 0, explanation: 'The Bourbon kings were overthrown and a constitutional monarchy was installed with Louis Philippe at its head.', hints: ['He became a constitutional monarch'],
   },
   {
     id: 'mcq-010', type: 'mcq', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['greece'],
@@ -75,14 +75,14 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-012', type: 'mcq', sectionId: 's3', difficulty: 'hard', examRelevance: 'high', tags: ['revolution'],
     question: 'The Frankfurt parliament (1848) was convened in:',
-    options: ['The Berlin Palace', 'The Church of St Paul', 'The Vienna Opera House', 'The Hall of Mirrors, Versailles'],
-    correctIndex: 1, explanation: '831 elected representatives convened in the Church of St Paul, Frankfurt on 18 May 1848 to draft a constitution for a united Germany.', hints: ['It was a religious building in Frankfurt'],
+    options: ['The Berlin Palace', 'The Vienna Opera House', 'The Hall of Mirrors, Versailles', 'The Church of St Paul'],
+    correctIndex: 3, explanation: '831 elected representatives convened in the Church of St Paul, Frankfurt on 18 May 1848 to draft a constitution for a united Germany.', hints: ['It was a religious building in Frankfurt'],
   },
   {
     id: 'mcq-013', type: 'mcq', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['revolution'],
     question: 'Why did Friedrich Wilhelm IV reject the crown offered by the Frankfurt parliament?',
-    options: ['He wanted to be Emperor of Austria instead', 'He would not accept a crown from a parliament elected by "the people"', 'He was already King of Bavaria', 'The crown was offered by Napoleon'],
-    correctIndex: 1, explanation: 'Friedrich Wilhelm IV, King of Prussia, rejected the crown and joined other monarchs to oppose the elected assembly. He would not accept a crown "from the gutter".', hints: ['He was a monarch who did not respect democratic assemblies'],
+    options: ['He would not accept a crown from a parliament elected by "the people"', 'He wanted to be Emperor of Austria instead', 'He was already King of Bavaria', 'The crown was offered by Napoleon'],
+    correctIndex: 0, explanation: 'Friedrich Wilhelm IV, King of Prussia, rejected the crown and joined other monarchs to oppose the elected assembly. He would not accept a crown "from the gutter".', hints: ['He was a monarch who did not respect democratic assemblies'],
   },
 
   // === SECTION 4 ===
@@ -95,8 +95,8 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-015', type: 'mcq', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['germany'],
     question: 'The German Empire was proclaimed in 1871 at:',
-    options: ['The Church of St Paul, Frankfurt', 'The Reichstag, Berlin', 'The Hall of Mirrors, Versailles', 'The Vienna Congress Hall'],
-    correctIndex: 2, explanation: 'On 18 January 1871, Kaiser William I was proclaimed German Emperor in the Hall of Mirrors at the Palace of Versailles — a deliberate humiliation of France.', hints: ['It was in a famous French palace'],
+    options: ['The Hall of Mirrors, Versailles', 'The Reichstag, Berlin', 'The Church of St Paul, Frankfurt', 'The Vienna Congress Hall'],
+    correctIndex: 0, explanation: 'On 18 January 1871, Kaiser William I was proclaimed German Emperor in the Hall of Mirrors at the Palace of Versailles — a deliberate humiliation of France.', hints: ['It was in a famous French palace'],
   },
   {
     id: 'mcq-016', type: 'mcq', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['italy'],
@@ -107,8 +107,8 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-017', type: 'mcq', sectionId: 's4', difficulty: 'easy', examRelevance: 'high', tags: ['italy'],
     question: 'Garibaldi\'s volunteers were popularly known as:',
-    options: ['Blue Coats', 'Red Shirts', 'Black Shirts', 'White Guards'],
-    correctIndex: 1, explanation: 'Garibaldi\'s armed volunteers who marched into South Italy in 1860 were popularly known as Red Shirts. They grew from about 1,000 to 30,000.', hints: ['Named after the colour of their clothing'],
+    options: ['Blue Coats', 'Black Shirts', 'White Guards', 'Red Shirts'],
+    correctIndex: 3, explanation: 'Garibaldi\'s armed volunteers who marched into South Italy in 1860 were popularly known as Red Shirts. They grew from about 1,000 to 30,000.', hints: ['Named after the colour of their clothing'],
   },
   {
     id: 'mcq-018', type: 'mcq', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['britain'],
@@ -121,22 +121,22 @@ export const mcqActivities: MCQActivity[] = [
   {
     id: 'mcq-019', type: 'mcq', sectionId: 's5', difficulty: 'easy', examRelevance: 'high', tags: ['allegory'],
     question: 'Marianne and Germania are examples of:',
-    options: ['Real historical women', 'Female allegories of nations', 'Queens of France and Germany', 'Romantic painters'],
-    correctIndex: 1, explanation: 'Marianne (France) and Germania (Germany) are female allegories — symbolic female figures used to personify their respective nations.', hints: ['They represent abstract ideas, not real people'],
+    options: ['Real historical women', 'Queens of France and Germany', 'Romantic painters', 'Female allegories of nations'],
+    correctIndex: 3, explanation: 'Marianne (France) and Germania (Germany) are female allegories — symbolic female figures used to personify their respective nations.', hints: ['They represent abstract ideas, not real people'],
   },
   {
     id: 'mcq-020', type: 'mcq', sectionId: 's5', difficulty: 'medium', examRelevance: 'high', tags: ['symbols'],
     question: 'In the allegory of Germania, the crown of oak leaves symbolises:',
-    options: ['Royalty', 'Peace', 'Heroism', 'Wealth'],
-    correctIndex: 2, explanation: 'The crown of oak leaves symbolises heroism — the German oak stands for bravery.', hints: ['The German oak is associated with bravery'],
+    options: ['Heroism', 'Royalty', 'Peace', 'Wealth'],
+    correctIndex: 0, explanation: 'The crown of oak leaves symbolises heroism — the German oak stands for bravery.', hints: ['The German oak is associated with bravery'],
   },
 
   // === SECTION 6 ===
   {
     id: 'mcq-021', type: 'mcq', sectionId: 's6', difficulty: 'medium', examRelevance: 'high', tags: ['balkans'],
     question: 'The inhabitants of the Balkans were broadly known as:',
-    options: ['Gauls', 'Slavs', 'Celts', 'Franks'],
-    correctIndex: 1, explanation: 'The inhabitants of the Balkans — Romania, Bulgaria, Albania, Greece, Serbia, etc. — were broadly known as the Slavs.', hints: ['This ethnic group is still associated with Eastern Europe'],
+    options: ['Slavs', 'Gauls', 'Celts', 'Franks'],
+    correctIndex: 0, explanation: 'The inhabitants of the Balkans — Romania, Bulgaria, Albania, Greece, Serbia, etc. — were broadly known as the Slavs.', hints: ['This ethnic group is still associated with Eastern Europe'],
   },
   {
     id: 'mcq-022', type: 'mcq', sectionId: 's6', difficulty: 'hard', examRelevance: 'high', tags: ['balkans', 'imperialism'],
