@@ -19,6 +19,15 @@ export const section2Subsections: Subsection[] = [
         type: 'text',
         text: 'Look at a map of mid-eighteenth-century Europe and you\'ll notice something striking: **there were no "nation-states" as we know them today**. What we call Germany was broken into dozens of kingdoms and duchies. Italy was split into seven states. Switzerland was a patchwork of cantons. Each ruler controlled their own little territory.',
       },
+      // MAP — visualise the fragmented Europe (Neha: "put a map so as to make it clear")
+      {
+        id: 's2-intro-map',
+        title: 'See It on the Map',
+        type: 'map-ref',
+        imageId: 'fig-3',
+        text: 'This map of Europe shows just how **fragmented** the continent was. Where we expect to see one "Germany" or one "Italy", there were instead **many small states** packed together. Run your eye across the centre of the map: dozens of separate borders, each a different ruler. This is the patchwork that nationalists would later dream of stitching into single nations.',
+        highlight: '**Map work tip:** In the exam, be able to point out that Germany and Italy did NOT exist as single countries — they were collections of many states.',
+      },
       {
         id: 's2-intro-2',
         title: 'Many Peoples, No Shared Identity',
@@ -28,13 +37,33 @@ export const section2Subsections: Subsection[] = [
       },
       {
         id: 's2-intro-3',
+        title: 'Case Study: The Habsburg Empire',
         type: 'text',
-        text: 'The Habsburg Empire, for example, was a patchwork of many different regions and peoples. It included the Alpine regions (Tyrol, Austria, Sudetenland), Bohemia (German-speaking aristocracy), Italian-speaking Lombardy and Venetia, and Hungary (Magyar-speaking).',
+        text: 'Take the **Habsburg Empire** — the perfect example of this patchwork. A single emperor ruled over a bewildering mix of regions and peoples who shared **no common language, religion or culture**. The only thing tying them together was their **ruler**. Look at the table below to see just how many different peoples lived under one crown.',
+      },
+      // TABLE — Habsburg composition (Neha: depict the patchwork visually, lots of content)
+      {
+        id: 's2-intro-habsburg-table',
+        title: 'The Habsburg Empire — A Patchwork of Peoples',
+        type: 'table',
+        text: 'One empire, many peoples and languages — with nothing in common but the same emperor:',
+        table: {
+          headers: ['Region', 'People / Language'],
+          rows: [
+            ['Alpine regions — Tyrol, Austria, the Sudetenland', 'German-speaking'],
+            ['Bohemia', 'German-speaking aristocracy over a Czech-speaking majority'],
+            ['Lombardy and Venetia (northern Italy)', 'Italian-speaking'],
+            ['Hungary', 'Half spoke Magyar, the other half a variety of dialects'],
+            ['Galicia', 'Polish-speaking aristocracy'],
+            ['Across the empire', 'A mass of **Slavs** — Bohemians, Slovaks, Slovenes, Croats'],
+          ],
+        },
+        highlight: '**The big idea:** The Habsburg Empire was held together only by its ruler, not by any shared national identity. This is exactly the kind of empire that nationalism would later tear apart.',
         inlineQuiz: {
           question: 'The Habsburg Empire was best described as:',
           options: ['A unified nation-state', 'A patchwork of diverse regions and peoples', 'A democratic republic', 'A collection of city-states'],
           correctIndex: 1,
-          explanation: 'The Habsburg Empire was a multi-ethnic patchwork of regions — Alpine, Bohemian, Italian, Hungarian — with diverse languages and cultures.',
+          explanation: 'The Habsburg Empire was a multi-ethnic patchwork of regions — Alpine, Bohemian, Italian, Hungarian, Galician — with diverse languages and cultures, held together only by a common ruler.',
         },
       },
     ],
@@ -45,15 +74,30 @@ export const section2Subsections: Subsection[] = [
     narrativeCards: [
       {
         id: 's2-ar-1',
-        title: 'The Old Rulers: Aristocrats Without Borders',
+        title: 'Who Ran This Patchwork? The Aristocracy',
         type: 'text',
-        text: 'Who actually ran Europe? The **landed aristocracy**. These were families who owned vast estates and held political power. Here\'s what\'s interesting: a French aristocrat had more in common with a Prussian aristocrat than with a French peasant living on his own land. They spoke French for diplomacy, intermarried across borders, and shared the same way of life. **They didn\'t need nations** — they already had power.',
+        text: 'We just saw that empires like the Habsburgs\' were a jumble of peoples. So **who actually held power** across all these states? One small group: the **landed aristocracy**.\n\nThese were families who **owned vast estates** in the countryside (and often a town-house as well) and dominated **politics, the army and society**. Socially and politically, they were **the dominant class** of Europe. Here\'s what\'s striking — a French aristocrat had more in common with a Prussian aristocrat than with a French peasant in his own village. They **spoke French** for diplomacy and high society, and **intermarried across borders**. Because they already held all the power, **they didn\'t need nations.**',
       },
       {
         id: 's2-ar-2',
         title: 'The Majority: Peasants With No Voice',
         type: 'text',
-        text: 'The vast majority of people were **peasants**. In Western Europe, they farmed as tenants or small landowners. In Eastern and Central Europe, they were **serfs** — bound to the land, essentially the property of their lords. Peasants had no political voice, no representation, and no shared identity beyond their village.',
+        text: 'But the aristocracy was a **tiny minority**. The **vast majority** of people were **peasants**. In Western Europe, they farmed as tenants or small landowners. In Eastern and Central Europe, they were **serfs** — bound to the land and obliged to work for their lords. Peasants had no political voice, no representation, and no shared identity beyond their village. To picture the society of the time, compare the two groups side by side:',
+      },
+      // TABLE — societal structure (Neha: tabular presentation of society's divisions + features)
+      {
+        id: 's2-ar-society-table',
+        title: 'European Society in the Mid-18th Century',
+        type: 'table',
+        text: 'Two groups, worlds apart:',
+        table: {
+          headers: ['Class', 'Size', 'Position & Features'],
+          rows: [
+            ['**Landed aristocracy**', 'Tiny minority', 'Dominant class — owned vast estates, controlled politics, army and society. United across Europe by a common way of life; spoke French; intermarried across borders.'],
+            ['**Peasantry**', 'Overwhelming majority', 'Tenants and small owners in the west; **serfs** bound to the land in the east. No political rights, no voice, identity limited to the village.'],
+          ],
+        },
+        highlight: '**Remember:** Power rested with a tiny landed aristocracy; the vast majority were voiceless peasants. The class that would later demand a *nation* — the middle class — did not yet exist in strength. That changes next.',
       },
       {
         id: 's2-ar-3',
@@ -82,21 +126,37 @@ export const section2Subsections: Subsection[] = [
         text: 'The dream of national unity wasn\'t just an emotion — it was built on a specific **ideology**: **liberalism**. The word comes from the Latin *liber*, meaning **free**. And that tells you everything about what the middle class wanted.',
       },
       {
-        id: 's2-lib-2',
-        title: 'What Liberalism Actually Meant',
+        id: 's2-lib-1b',
+        title: 'Liberalism Had Two Sides — Political and Economic',
         type: 'text',
-        text: 'For the new middle classes, liberalism stood for three big ideas:\n\n**1. Personal freedom** — the individual is free, with rights no government can take away\n**2. Equality before the law** — no special privileges for aristocrats or clergy\n**3. Government by consent** — rulers must have the people\'s permission to govern, through a **constitution** and an elected **parliament**\n\nIn short: **end the kings, write a constitution, let the people vote**.',
-        highlight: '**Liberalism =** individual freedom + equality before law + government by consent (constitution + parliament)',
+        text: 'Here\'s the key to understanding liberalism for the exam: it meant **different things in different spheres of life**. We\'ll take them one at a time — first what liberalism meant in **politics**, then what it meant for **society**, and finally what it meant in the **economy**.',
+        highlight: '**Exam structure:** Liberalism = (1) Political sphere + (2) Social limits + (3) Economic sphere. Answer in these three parts.',
+      },
+      // FLOWCHART — Political liberalism, three pillars each clickable (Neha: each point separate + explanation)
+      {
+        id: 's2-lib-2',
+        title: '1. Liberalism in the Political Sphere',
+        type: 'flowchart',
+        text: 'In politics, liberalism rested on **three pillars**. Tap each one:',
+        steps: [
+          { label: 'Personal freedom', detail: 'The individual is **free**, with rights that **no government can take away** — freedom of speech, opinion and belief.' },
+          { label: 'Equality before the law', detail: 'Everyone is **equal in the eyes of the law** — an end to the **special privileges** that aristocrats and the clergy had enjoyed for centuries.' },
+          { label: 'Government by consent', detail: 'No one may rule without the **people\'s permission**. This meant an end to autocracy and clerical privileges, a **written constitution**, and government through an **elected parliament**.' },
+        ],
+        highlight: '**Political liberalism =** individual freedom + equality before law + government by consent (constitution + elected parliament). In short: end absolute kings, write a constitution, let the people\'s representatives govern.',
       },
       {
         id: 's2-lib-3',
         type: 'vocabulary',
-        text: 'Suffrage — The right to vote. In revolutionary France, voting rights were granted exclusively to property-owning men. Women and non-propertied men were excluded.',
+        text: 'Suffrage — The **right to vote** in elections. Watch this word: liberals demanded *government by the people*, but in practice they did **not** mean *all* the people — as the next card shows.',
       },
+      // Social sphere — the limits of liberal equality (suffrage now defined just above)
       {
         id: 's2-lib-4',
+        title: '2. Liberalism in the Social Sphere — Who Was Left Out?',
         type: 'text',
-        text: 'Equality before the law did not necessarily stand for universal suffrage. In revolutionary France, the right to vote was granted only to property-owning men. The Napoleonic Code reduced women to the status of a minor, subject to fathers and husbands.',
+        text: 'There was a **catch**. Liberalism preached equality, but **equality before the law did not mean the right to vote for everyone (universal suffrage)**. Throughout the nineteenth century, the **right to vote was restricted to property-owning men**. **Women and the property-less were left out** entirely. In fact, the **Napoleonic Code reduced women to the status of a minor**, subject to the authority of their fathers and husbands.\n\nThis is why, all through the century, **women and non-propertied men ran movements demanding equal political rights.** Liberalism was a great step forward — but it was **not yet democracy**.',
+        highlight: '**Important nuance (often tested):** Liberal "equality before law" ≠ universal suffrage. Only property-owning men could vote; women and the poor were excluded.',
         inlineQuiz: {
           question: 'Under the Napoleonic Code, women were:',
           options: ['Given equal voting rights', 'Allowed to own property but not vote', 'Reduced to the status of a minor', 'Elected to the National Assembly'],
@@ -106,14 +166,24 @@ export const section2Subsections: Subsection[] = [
       },
       {
         id: 's2-lib-5',
+        title: '3. Liberalism in the Economic Sphere',
         type: 'text',
-        text: 'In the economic sphere, liberalism stood for freedom of markets and the abolition of state-imposed restrictions on the movement of goods and capital. Napoleon\'s measures had created a confederation of 39 states with their own currencies, weights and measures.',
+        text: 'In the **economy**, liberalism meant the **freedom of markets** and the **abolition of state-imposed restrictions** on the movement of goods and capital. To see why this mattered, picture the problem the middle-class businessman faced: the German-speaking lands were a **confederation of 39 states, each with its own currency, weights and measures**.\n\nA merchant sending goods from Hamburg to Nuremberg had to pass through **numerous customs barriers**, paying a duty at each — and every duty was calculated differently because the weights and measures kept changing. It was a nightmare for trade. The liberal solution? **Sweep the barriers away.**',
+        highlight: '**Economic liberalism =** free markets + no state restrictions on goods/capital. The obstacle: 39 states, each with its own currency, weights, measures and customs duties.',
       },
+      // FLOWCHART — the Zollverein chain and its implications (Neha: Zollverein + implications + example)
       {
         id: 's2-lib-6',
-        type: 'text',
-        text: 'In 1834, a customs union or Zollverein was formed at the initiative of Prussia. It abolished tariff barriers and reduced the number of currencies from over thirty to two. Railways further stimulated economic nationalism.',
-        highlight: 'Zollverein (1834): Customs union — abolished tariff barriers, reduced currencies from 30+ to 2',
+        title: 'The Zollverein — Economic Unity Builds a Nation',
+        type: 'flowchart',
+        text: 'How free trade quietly built Germany — tap each step:',
+        steps: [
+          { label: '1834 — Prussia forms the Zollverein (customs union)', detail: 'In **1834**, a **customs union** called the **Zollverein** was formed at the initiative of **Prussia**. Most of the German states joined it.' },
+          { label: 'Tariff barriers abolished, currencies cut from 30+ to 2', detail: 'The union **abolished tariff (customs) barriers** between member states and **reduced the number of currencies from over thirty to just two**, making trade vastly simpler.' },
+          { label: 'A railway network ties the states together', detail: 'A growing **network of railways** further stimulated mobility and **economic nationalism**, physically connecting the German states and binding their economies together.' },
+          { label: 'Implication: economic unity creates national feeling', detail: 'As Friedrich List put it, the Zollverein **bound the Germans economically into a nation** and **awakened national feeling** through material prosperity — *before* Germany was politically united.' },
+        ],
+        highlight: '**Zollverein (1834):** Prussian customs union → abolished tariff barriers, cut currencies 30+ → 2, railways added. **Implication: economic unity came before, and helped create, political unity.**',
       },
       {
         id: 's2-lib-7',
@@ -157,8 +227,18 @@ export const section2Subsections: Subsection[] = [
       },
       {
         id: 's2-con-5',
-        type: 'text',
-        text: 'The Treaty of Vienna of 1815 aimed to undo the changes of the Napoleonic wars: the Bourbon dynasty was restored in France, buffer states were created around France, Prussia got western frontiers, Austria got northern Italy, and Russia got part of Poland.',
+        title: 'The Treaty of Vienna, 1815 — What Changed',
+        type: 'flowchart',
+        text: 'The settlement had one big aim: **undo the changes of the Napoleonic wars and contain France**. Tap each change — this is a favourite **5-mark** question:',
+        steps: [
+          { label: 'The Bourbon dynasty was restored in France', detail: 'The **Bourbon dynasty**, deposed during the revolution, was **put back on the throne** in France — turning the clock back to before 1789.' },
+          { label: 'France lost the territories Napoleon had annexed', detail: 'France was **stripped of the lands it had annexed** under Napoleon, shrinking it back towards its old borders.' },
+          { label: 'A ring of buffer states was set up around France', detail: 'A series of **buffer states** was created on France\'s borders to **block any future French expansion** — for example, the **Kingdom of the Netherlands** in the north and the addition of **Genoa to Piedmont** in the south.' },
+          { label: 'Prussia gained important new territory in the west', detail: '**Prussia** was given **new western frontiers** (parts of the Rhineland and Saxony) as a reward and as a strong guard against France.' },
+          { label: 'Austria gained control of northern Italy', detail: '**Austria** was handed control of **northern Italy — Lombardy and Venetia**, tightening its grip on the Italian peninsula.' },
+          { label: 'Russia received part of Poland', detail: '**Russia** was given a **part of Poland**, while Prussia received a portion of Saxony — the great powers simply redrew the map among themselves.' },
+        ],
+        highlight: '**Treaty of Vienna 1815 (5 marks):** Bourbons restored • France shrunk & ringed with buffer states • Prussia expanded west • Austria got N. Italy (Lombardy-Venetia) • Russia got part of Poland. **The whole aim: restore the old order and contain France.**',
         inlineQuiz: {
           question: 'Who hosted the Congress of Vienna in 1815?',
           options: ['Napoleon Bonaparte', 'Duke Metternich', 'Tsar Alexander I', 'Friedrich Wilhelm IV'],
