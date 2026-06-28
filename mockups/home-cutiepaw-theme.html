@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Home (CutiePaw-inspired theme mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* CutiePaw colour language */
+    --navy:#2D2A5C; --navy-soft:#46427a;
+    --peach-bg:#FFF5EE; --peach:#FFE9DD; --peach-deep:#FFCBAA;
+    --indigo:#6366F1; --violet:#7C3AED; --coral:#FF9AAB; --pink:#FFC0CB; --pink-100:#FCE7F3; --amber:#FEF3C7;
+    --card:#FFFFFF; --muted:#8A86A8;
+    --shadow:0 10px 30px rgba(45,42,92,.10);
+    --shadow-sm:0 4px 14px rgba(45,42,92,.07);
+    /* section colours (kept for navigation) */
+    --s1:#C0392B; --s2:#2980B9; --s3:#E67E22; --s4:#27AE60; --s5:#7D3C98; --s6:#16A085;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;color:var(--navy);
+    background:linear-gradient(160deg,var(--peach-bg) 0%,var(--peach) 100%);
+    min-height:100vh;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:18px 20px 60px}
+
+  /* ---- top bar ---- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 18px}
+  .brand{font-family:'Pacifico',cursive;font-size:30px;color:var(--navy);letter-spacing:.3px}
+  .brand .lab{color:var(--coral)}
+  .top-actions{display:flex;align-items:center;gap:12px}
+  .icon-btn{width:42px;height:42px;border-radius:14px;background:var(--card);box-shadow:var(--shadow-sm);
+    display:grid;place-items:center;font-size:18px;cursor:pointer;border:none}
+  .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--violet));
+    color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px}
+
+  .crumb{font-size:13px;font-weight:700;color:var(--muted);margin:2px 4px 14px}
+  .crumb b{color:var(--navy)}
+
+  /* ---- hero card ---- */
+  .hero{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:24px 26px;
+    display:flex;align-items:center;gap:24px;position:relative;overflow:hidden;margin-bottom:26px}
+  .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,var(--peach-deep) 0%,transparent 70%);opacity:.55}
+  .hero-text{flex:1;z-index:1}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;
+    color:var(--violet);background:var(--pink-100);padding:5px 12px;border-radius:999px;margin-bottom:10px}
+  .hero h1{font-size:30px;font-weight:900;line-height:1.12;margin-bottom:6px}
+  .hero p{color:var(--muted);font-weight:600;font-size:15px;margin-bottom:16px}
+  .chips{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:7px;background:var(--peach-bg);border:1.5px solid var(--peach-deep);
+    padding:8px 14px;border-radius:999px;font-weight:800;font-size:14px}
+  .chip.alt{background:#EEF0FF;border-color:#D7DBFF;color:var(--indigo)}
+  .chip .em{font-size:16px}
+  /* progress ring */
+  .ring{width:108px;height:108px;flex-shrink:0;z-index:1;position:relative;display:grid;place-items:center}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .pct{position:absolute;text-align:center}
+  .ring .pct b{font-size:24px;font-weight:900;display:block;line-height:1}
+  .ring .pct span{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+  /* ---- section heading ---- */
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:6px 4px 14px}
+  .sec-head h2{font-size:20px;font-weight:900}
+  .sec-head .sub{font-size:13px;font-weight:700;color:var(--muted)}
+
+  /* ---- section cards ---- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow-sm);padding:18px;cursor:pointer;
+    border:1.5px solid #fff;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .card .bar{position:absolute;left:0;top:0;height:6px;width:100%}
+  .card .row{display:flex;align-items:center;gap:14px;margin-top:6px}
+  .badge{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:24px;flex-shrink:0;color:#fff}
+  .card h3{font-size:15.5px;font-weight:800;line-height:1.2;margin-bottom:3px}
+  .card .meta{font-size:12.5px;font-weight:700;color:var(--muted)}
+  .prog{height:7px;border-radius:999px;background:#EFEAF4;margin-top:12px;overflow:hidden}
+  .prog i{display:block;height:100%;border-radius:999px}
+  .pill{position:absolute;right:16px;top:16px;font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px}
+
+  /* ---- study tools ---- */
+  .tools-wrap{margin-top:30px}
+  .tools{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+  .tool{background:var(--card);border-radius:18px;box-shadow:var(--shadow-sm);padding:16px 8px;text-align:center;
+    cursor:pointer;border:1.5px solid #fff;transition:transform .15s}
+  .tool:hover{transform:translateY(-3px)}
+  .tool .t-ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin:0 auto 8px;font-size:22px}
+  .tool span{font-size:13px;font-weight:800}
+  .t1{background:#EAF2FB} .t2{background:#E7F6F1} .t3{background:#FDEEE3} .t4{background:#F1ECFB} .t5{background:#FDE9EC}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">History<span class="lab">Lab</span></div>
+    <div class="top-actions">
+      <button class="icon-btn">⚙️</button>
+      <div class="avatar">V</div>
+    </div>
+  </div>
+
+  <div class="crumb">All Chapters &nbsp;·&nbsp; <b>Chapter 1</b></div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <span class="eyebrow">India &amp; the Contemporary World — Ch 1</span>
+      <h1>The Rise of Nationalism in Europe</h1>
+      <p>Hi Vedansh — pick up where you left off, or revise with the study tools below.</p>
+      <div class="chips">
+        <div class="chip"><span class="em">⭐</span> 18 stars</div>
+        <div class="chip alt"><span class="em">✅</span> 12 activities done</div>
+      </div>
+    </div>
+    <div class="ring">
+      <svg width="108" height="108">
+        <circle cx="54" cy="54" r="47" stroke="#EFEAF4" stroke-width="11" fill="none"/>
+        <circle cx="54" cy="54" r="47" stroke="url(#g)" stroke-width="11" fill="none"
+          stroke-linecap="round" stroke-dasharray="295" stroke-dashoffset="118"/>
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#FF9AAB"/></linearGradient></defs>
+      </svg>
+      <div class="pct"><b>60%</b><span>complete</span></div>
+    </div>
+  </div>
+
+  <!-- SECTIONS -->
+  <div class="sec-head"><h2>Sections</h2><span class="sub">6 topics · tap to learn</span></div>
+  <div class="grid">
+    <div class="card"><div class="bar" style="background:var(--s1)"></div>
+      <span class="pill" style="background:#FDEAE8;color:var(--s1)">Continue</span>
+      <div class="row"><div class="badge" style="background:var(--s1)">⚔️</div>
+        <div><h3>The French Revolution &amp; the Idea of the Nation</h3><div class="meta">4 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:75%;background:var(--s1)"></i></div></div>
+
+    <div class="card"><div class="bar" style="background:var(--s2)"></div>
+      <span class="pill" style="background:#E7F0F9;color:var(--s2)">Continue</span>
+      <div class="row"><div class="badge" style="background:var(--s2)">🤝</div>
+        <div><h3>The Making of Nationalism in Europe</h3><div class="meta">5 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:60%;background:var(--s2)"></i></div></div>
+
+    <div class="card"><div class="bar" style="background:var(--s3)"></div>
+      <span class="pill" style="background:#FDEEE0;color:var(--s3)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s3)">🔥</div>
+        <div><h3>The Age of Revolutions: 1830–1848</h3><div class="meta">5 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:30%;background:var(--s3)"></i></div></div>
+
+    <div class="card"><div class="bar" style="background:var(--s4)"></div>
+      <span class="pill" style="background:#E6F6EC;color:var(--s4)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s4)">🏰</div>
+        <div><h3>The Making of Germany &amp; Italy</h3><div class="meta">4 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:10%;background:var(--s4)"></i></div></div>
+
+    <div class="card"><div class="bar" style="background:var(--s5)"></div>
+      <span class="pill" style="background:#F1EAF6;color:var(--s5)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s5)">🎨</div>
+        <div><h3>Visualising the Nation</h3><div class="meta">3 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:0%;background:var(--s5)"></i></div></div>
+
+    <div class="card"><div class="bar" style="background:var(--s6)"></div>
+      <span class="pill" style="background:#E5F4F1;color:var(--s6)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s6)">🌍</div>
+        <div><h3>Nationalism &amp; Imperialism</h3><div class="meta">3 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:0%;background:var(--s6)"></i></div></div>
+  </div>
+
+  <!-- STUDY TOOLS -->
+  <div class="tools-wrap">
+    <div class="sec-head"><h2>Study Tools</h2><span class="sub">Revise across the whole chapter</span></div>
+    <div class="tools">
+      <div class="tool"><div class="t-ic t1">📅</div><span>Timeline</span></div>
+      <div class="tool"><div class="t-ic t2">🗺️</div><span>Maps</span></div>
+      <div class="tool"><div class="t-ic t3">🖼️</div><span>Figures</span></div>
+      <div class="tool"><div class="t-ic t4">🃏</div><span>Flashcards</span></div>
+      <div class="tool"><div class="t-ic t5">📝</div><span>Exam Prep</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
