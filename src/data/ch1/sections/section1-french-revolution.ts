@@ -155,18 +155,13 @@ Tip: CBSE frequently asks source-based questions using the exact NCERT paragraph
         text: 'The revolution changed one fundamental thing: **sovereignty** moved from the **monarchy** to the **body of citizens**. The nation\'s authority would no longer flow from a king on a throne — it would flow from the **people themselves**.\n\nThis single shift is what created the modern idea of a **nation**: a community of citizens who together hold sovereignty and shape the destiny of their country.',
         highlight: '**The key shift:** Sovereignty moved from monarchy → the people. The citizens now constituted the nation and shaped its destiny.',
       },
-      {
-        id: 's1-fr-3',
-        title: 'How Do You Make Strangers Feel Like One Nation?',
-        type: 'text',
-        text: 'Shifting sovereignty to the people raised a practical problem: how do you make millions of strangers — who spoke different dialects and lived under different local laws — **feel** that they belonged to **one** nation?\n\nThe French revolutionaries answered this with a series of deliberate **measures to create a sense of collective belonging**. Tap each step below to see how it worked — this is one of the most frequently asked questions in the board exam.',
-      },
-      // FLOWCHART — measures to create a sense of collective belonging (frequently asked 5-marker)
+      // FLOWCHART — intro + tappable measures. Merged from the old standalone text card so the
+      // "tap each step below" prompt sits directly above the steps it refers to (frequently asked 5-marker).
       {
         id: 's1-fr-measures',
-        title: 'Measures to Create Collective Belonging',
+        title: 'How Do You Make Strangers Feel Like One Nation?',
         type: 'flowchart',
-        text: 'The steps the French revolutionaries took to forge one united nation:',
+        text: 'Shifting sovereignty to the people raised a practical problem: how do you make millions of strangers — who spoke different dialects and lived under different local laws — **feel** that they belonged to **one** nation?\n\nThe French revolutionaries answered with a series of deliberate **measures to create a sense of collective belonging**. Tap each step below to see how it worked — this is one of the most frequently asked questions in the board exam.',
         steps: [
           { label: 'The ideas of *la patrie* and *le citoyen*', detail: 'The ideas of **la patrie** (the fatherland) and **le citoyen** (the citizen) emphasised the notion of a **united community enjoying equal rights under a constitution**. Every person was now a citizen of the fatherland, not a subject of a king.' },
           { label: 'A new tricolour flag', detail: 'A **new French flag, the tricolour** (blue-white-red), replaced the former **royal standard**. A shared flag gave people a single symbol to rally around.' },

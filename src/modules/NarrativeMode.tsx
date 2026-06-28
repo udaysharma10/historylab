@@ -199,12 +199,28 @@ export function NarrativeMode({
             transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             {hasQuiz ? (
-              <InlineQuizCard
-                quiz={currentCard.inlineQuiz!}
-                cardText={currentCard.text}
-                sectionColor={sectionColor}
-                onAnswered={handleQuizAnswered}
-              />
+              currentCard.type === 'text' ? (
+                // Text card + quiz: the quiz card renders the context text itself.
+                <InlineQuizCard
+                  quiz={currentCard.inlineQuiz!}
+                  cardText={currentCard.text}
+                  sectionColor={sectionColor}
+                  onAnswered={handleQuizAnswered}
+                />
+              ) : (
+                // Rich card (flowchart/table/figure/…) + quiz: show the full card body
+                // (steps/table/image/highlight) AND the quiz beneath it. Previously the quiz
+                // replaced the body entirely, hiding the tappable steps/table.
+                <div className="space-y-4">
+                  <NarrativeCard card={currentCard} sectionColor={sectionColor} />
+                  <InlineQuizCard
+                    quiz={currentCard.inlineQuiz!}
+                    cardText=""
+                    sectionColor={sectionColor}
+                    onAnswered={handleQuizAnswered}
+                  />
+                </div>
+              )
             ) : (
               <NarrativeCard card={currentCard} sectionColor={sectionColor} />
             )}

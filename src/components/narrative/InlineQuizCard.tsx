@@ -39,15 +39,17 @@ export function InlineQuizCard({ quiz, cardText, sectionColor, onAnswered }: Inl
       {/* Top accent */}
       <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${sectionColor}, ${sectionColor}60)` }} />
 
-      {/* Context text */}
-      <div className="p-6 sm:p-8 pb-4">
-        <p className="font-body text-lg sm:text-xl leading-[1.8] text-hist-dark/85">
-          {cardText}
-        </p>
-      </div>
+      {/* Context text (skipped when the card body is shown separately above the quiz) */}
+      {cardText && cardText.trim() && (
+        <div className="p-6 sm:p-8 pb-4">
+          <p className="font-body text-lg sm:text-xl leading-[1.8] text-hist-dark/85">
+            {cardText}
+          </p>
+        </div>
+      )}
 
       {/* Quiz section */}
-      <div className="mx-4 mb-5 sm:mx-5">
+      <div className={`mx-4 mb-5 sm:mx-5 ${cardText && cardText.trim() ? '' : 'mt-5'}`}>
         <div
           className="rounded-2xl p-5 sm:p-6"
           style={{

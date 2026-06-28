@@ -35,18 +35,13 @@ export const section2Subsections: Subsection[] = [
         text: 'Eastern and Central Europe were ruled by **autocratic monarchies** — but here\'s the key point: the people living under these monarchies had **nothing in common** with each other. A Hungarian farmer, a Czech merchant, and an Italian nobleman might all be subjects of the same emperor, but they spoke different languages, followed different customs, and **didn\'t think of themselves as one people**.',
         highlight: '**No nation-states** in 18th century Europe — diverse peoples under autocratic monarchies with no shared identity',
       },
-      {
-        id: 's2-intro-3',
-        title: 'Case Study: The Habsburg Empire',
-        type: 'text',
-        text: 'Take the **Habsburg Empire** — the perfect example of this patchwork. A single emperor ruled over a bewildering mix of regions and peoples who shared **no common language, religion or culture**. The only thing tying them together was their **ruler**. Look at the table below to see just how many different peoples lived under one crown.',
-      },
-      // TABLE — Habsburg composition (Neha: depict the patchwork visually, lots of content)
+      // TABLE — Habsburg composition. Intro merged in from the old standalone text card so the
+      // "table below" it refers to sits in the same card (Neha: depict the patchwork visually).
       {
         id: 's2-intro-habsburg-table',
-        title: 'The Habsburg Empire — A Patchwork of Peoples',
+        title: 'Case Study: The Habsburg Empire',
         type: 'table',
-        text: 'One empire, many peoples and languages — with nothing in common but the same emperor:',
+        text: 'Take the **Habsburg Empire** — the perfect example of this patchwork. A single emperor ruled over a bewildering mix of regions and peoples who shared **no common language, religion or culture**. The only thing tying them together was their **ruler**. The table below shows just how many different peoples lived under one crown:',
         table: {
           headers: ['Region', 'People / Language'],
           rows: [
