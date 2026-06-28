@@ -1,6 +1,6 @@
 # HistoryLab — Session Handover (read this first)
 
-**Last updated:** 2026-06-28 · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `cab337e`
+**Last updated:** 2026-06-28 (Round 4) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `28994c5`
 **Repo:** `github.com/udaysharma10/historylab` · **Local:** `/Users/udaysharma/Documents/Blostem/Claude_Projects/vedansh-history`
 
 This is a Grade-10 CBSE History self-learning web app (NCERT "India and the Contemporary World"). Ch1 = Rise of Nationalism in Europe, Ch2 = Nationalism in India. See `PROJECT_CONTEXT.md` for full architecture, `CONTENT_REVIEW_PROCESS.md` for the review log.
@@ -14,30 +14,31 @@ This is a Grade-10 CBSE History self-learning web app (NCERT "India and the Cont
 ### 1. CONTENT TRACK (active — with Neha) — fixing content issues first, before theme/UX
 Neha reviews **one section at a time**; we fix, deploy, she re-reviews.
 
-**Status:** Only **Ch1 S1 ("Introduction: Sorrieu's Vision")** reviewed so far.
-- ✅ Tightened S1 intro **13 → 9 cards** (merged hook+1848, Meet-Sorrieu into the figure card, Who-Marches + Nations-didn't-exist; dropped redundant "Why Sorrieu" card, its quiz moved to the Utopian vocab card). All exam content + vocab-before-use order preserved.
-- ✅ Fixed Sorrieu (fig-1) hotspots (Christ, Shattered) + the tooltip-clipping bug.
+**Status:** Neha has reviewed **Ch1 S1** + flagged a flowchart bug. Ch1 figure hotspots fully re-verified.
+- ✅ Tightened S1 intro **13 → 9 cards**; fixed Sorrieu (fig-1) hotspots + tooltip-clipping bug.
+- ✅ **ALL Ch1 figure hotspots re-verified at full resolution** (Round 4, commit `3c31ff6`). Notable fixes: fig-13 Bismarck/deputies were **swapped**; fig-20 Britannia was mid-ocean → **bottom-centre**; fig-10 women's gallery → **upper-left**; fig-4 German inscription → **white placard under the Tree of Liberty** (confirmed, no longer a guess); plus figs 3,7,8,11,12,15,17,18,19. Method: full-res PIL grid overlay (`scratchpad/annotate.py` — recreate, doesn't persist).
+- ✅ **Fixed a systemic rendering bug** (commit `c2090b3`): a card with BOTH a rich body (flowchart/table/figure) AND an `inlineQuiz` showed ONLY the quiz — the steps/table/image were never rendered (this was Neha's "tap each step below — where?" bug). `NarrativeMode` now renders the full card body AND the quiz beneath it for non-text cards; `InlineQuizCard` hides its text block when empty. Also merged the two stranded intro text cards into their flowchart/table cards (S1 French measures, S2 Habsburg).
 
-**OPEN — hotspot accuracy (do this next):**
-- A **global popup-clipping bug** was fixed in `FigureHotspotOverlay.tsx`: the tooltip now flips **above** the dot when `spot.y >= 58` and clamps horizontally (was always below → clipped for low dots).
-- Neha has flagged mis-placed dots on figs **1, 2, 4, 5** (now fixed). **fig-4 "German inscription" (h4-4) is a BEST-GUESS at (82,40) — Neha must confirm or we remove that single dot.**
-- **RECOMMENDED NEXT ACTION:** proactively **re-verify EVERY remaining figure's hotspots at FULL resolution** (all Ch1 figs 3,6–20 + all Ch2) — don't wait for Neha to catch each. **Critical: verify at full image resolution, NOT small thumbnails** (thumbnail checks missed the errors Neha caught).
+**OPEN — content track:**
+- **NEXT: re-verify ALL Ch2 figure hotspots at full resolution** (same method as Ch1; not yet done). Ch2 hotspot field order is `label, description, x, y`.
 - Neha has **not** reviewed S2–S6 (Ch1) or any Ch2 content card-by-card yet.
+- The `FigureHotspotOverlay.tsx` tooltip flips **above** the dot when `spot.y >= 58` and clamps horizontally (so dots up to ~92 are fine).
 
 **Neha's structural rulings — DO NOT RELITIGATE:**
 1. Keep **flowcharts** even for parallel-list content (students grasp/remember them better).
 2. Keep **tap-to-reveal + per-card highlights** (do not design down to passive students).
 3. Tighten Sorrieu intro — ✅ done.
 
-### 2. UI THEME TRACK (PARKED — resume after content)
-Uday found the current parchment+Playfair theme "boring"; wants CutiePaw's warmth but **mature, not cute**.
-- Mockups in `mockups/`: `home-cutiepaw-theme.html` (too cute — rejected), **`home-mature.html` + `section-mature.html`** (refined: **Fraunces** serif wordmark, warm cream `#FBF5EE→#F4E8DA`, navy `#2A2750` text, **gold `#C0911F` + indigo `#5B5BD6`** accents, dropped pink/coral, kept the 6 section colours).
-- CutiePaw palette source: `/Users/udaysharma/Documents/cutiepaw/apps/web/tailwind.config.ts` (navy `#2D2A5C` + peach family + indigo/pink accents, Pacifico).
-- **Open before locking:** confirm wordmark font (Fraunces vs Spectral/Newsreader), gold shade, background warmth. Then apply locked theme to the real app. NOT applied to app code yet.
+### 2. UI THEME TRACK (✅ DONE — mature theme implemented + deployed, commit `28994c5`)
+Approved `home-mature.html` + `section-mature.html` mockups implemented across the app.
+- **Fonts:** `@fontsource-variable/fraunces` (display) + `@fontsource-variable/inter` (body); Playfair/Source-Sans uninstalled. Family names: `"Fraunces Variable"`, `"Inter Variable"`.
+- **Theme tokens** (`src/styles/globals.css` `@theme`): cream gradient bg `#FBF5EE→#F4E8DA` (165deg), navy `#2A2750` / ink `#322E55` text, gold `#C0911F` + indigo `#5B5BD6` accents, mauve-tinted shadows, section colours s3 `#D9821F` / s4 `#1F9E57`. New tokens: `hist-navy/ink/muted/line/indigo/indigo-soft/gold-soft`. All hardcoded old hexes migrated app-wide (incl. `CHAPTER_SECTION_COLORS`).
+- **HomePage** redesigned to the mockup (hero w/ eyebrow + welcome + chips + gold→indigo ring; 2-col section cards w/ accent bar + Start/Continue pill + "N topics · 1 quiz"; 5-tile Study Tools). SectionModule already matched the mockup after the token swap.
+- **Known pre-existing issue (NOT from this revamp — verified against old code):** horizontal overflow at ~390px phone width (cards/header bleed right). App was built for iPad (wide); fix is a separate mobile-IA task. Mockups are desktop-width.
 
 ### 3. UX / IA TRACK (PARKED — resume after content)
-- ✅ Done: chapter-level "Learning Modes" → **"Study Tools"** (plain tile names); section page **"Start Reading" moved to a prominent top CTA**.
-- **Open:** verify chapter-home "Study Tools" tile count (Ch1 should show 5: Timeline/Maps/Figures/Flashcards/Exam — a screenshot looked like only ~2 rendered; confirm on live); "Topics" list mixes "Practice Quiz" in with lesson topics; full screen-by-screen IA + **mobile** pass (use the screenshot method below).
+- ✅ Done: "Learning Modes" → **"Study Tools"**; section "Start Reading" top CTA; **Study Tools confirmed showing all 5 tiles** (Timeline/Maps/Figures/Flashcards/Exam) on Ch1 during the revamp.
+- **Open:** "Topics" list still mixes "Practice Quiz" in with lesson topics; **mobile (~390px) horizontal overflow** (pre-existing, see Theme track); full screen-by-screen IA pass.
 
 ---
 
@@ -84,8 +85,9 @@ Commit co-author: `Co-Authored-By: Claude <noreply@anthropic.com>`.
 - Hotspot overlay (tooltip flip logic): `src/components/figure/FigureHotspotOverlay.tsx`
 - Map markers: `src/components/map/InteractiveMap.tsx`
 - Chapter home (Study Tools): `src/modules/HomePage.tsx` · Section page: `src/modules/SectionModule.tsx`
-- Theme mockups: `mockups/*.html`
+- Theme mockups: `mockups/*.html` (implemented). Theme tokens live in `src/styles/globals.css` `@theme`.
 - Card types: `src/types/chapter.ts` (`FlowStep`, `TableData`, `NarrativeCard.steps`, `.table`)
+- Reading view + quiz gating: `src/modules/NarrativeMode.tsx` (renders card body + inline quiz); `src/components/narrative/InlineQuizCard.tsx`. **Cards with both a rich body and a quiz now render both — don't revert to the quiz-only swap.**
 
 ## CONTENT WORK ALREADY SHIPPED (Neha review Batches 1–8 + figure round)
 See `CONTENT_REVIEW_PROCESS.md` for the full log. Summary: NCERT-aligned headings, vocab-before-use, flowcharts (French measures, Napoleonic Code, Zollverein, Treaty of Vienna, Germany/Italy/Britain unification, German 1848 demands, Frankfurt, Satyagraha, 3 satyagrahas), tables (Habsburg, society, NCM participants), Marianne symbols, Greek-war/Balkans exam cards, MCQ answer rebalance; Ch2 WWI-to-chapter-start + Rowlatt reframe + martial law + Jallianwala/Dyer figures; ALL 35 figures re-extracted clean + hotspots remapped; "Study Tools" relabel; section "Start Reading" CTA reorder.
