@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Home (refined "Lavender Warm Editorial Peach" theme)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ── Cool Peach & Lavender — peach-led (pastels grounded by a deep plum ink) ── */
+    --ink:#3E3548;          /* deep plum-slate — anchors the pastels, lighter than navy */
+    --body:#6E6478;         /* muted plum-gray — body copy */
+    --muted:#A1969F;        /* meta / secondary */
+    --bg-1:#FBE5D7; --bg-2:#EAE2F6;   /* cool peach → lavender (peach-led, stronger) */
+    --paper:#FFFFFF;
+    --line:#F0E5DF;         /* peach hairline */
+    --accent:#DC835F;       /* cool peach — lead accent */
+    --accent-soft:#FAE4D8;
+    --peach:#7E72C2;        /* dusty lavender — cool secondary */
+    --peach-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09);
+    --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    /* muted, jewel-toned section colours (harmonised with the lavender/peach ground) */
+    --s1:#C36B53; --s1-bg:#F9E9E3;
+    --s2:#5571B5; --s2-bg:#E9ECF8;
+    --s3:#C2893E; --s3-bg:#F7EFDD;
+    --s4:#5C9368; --s4-bg:#E8F1E9;
+    --s5:#9B5C9A; --s5-bg:#F4E9F3;
+    --s6:#3F8E84; --s6-bg:#E4F1EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:18px 22px 64px}
+  .serif{font-family:'Fraunces',serif}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 22px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink);letter-spacing:-.3px}
+  .brand .lab{color:var(--accent)}
+  .top-actions{display:flex;align-items:center;gap:11px}
+  .pillstar{display:flex;align-items:center;gap:7px;background:var(--accent-soft);color:var(--accent);
+    font-weight:700;font-size:13.5px;padding:7px 13px;border-radius:999px}
+  .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--ink),#5d564a);
+    color:#fff;display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif}
+
+  .crumb{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 2px 14px;letter-spacing:.2px}
+  .crumb b{color:var(--ink)}
+
+  /* hero — lighter: soft accent rule, generous air, single ochre ring */
+  .hero{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:28px 30px;
+    display:flex;align-items:center;gap:28px;position:relative;overflow:hidden;margin-bottom:30px;border:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),var(--peach))}
+  .hero-text{flex:1}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
+    color:var(--accent);margin-bottom:12px}
+  .hero h1{font-family:'Fraunces',serif;font-size:32px;font-weight:600;line-height:1.08;margin-bottom:10px;color:var(--ink)}
+  .hero p{color:var(--muted);font-weight:500;font-size:14.5px;margin-bottom:20px;max-width:46ch}
+  .chips{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:7px;background:var(--bg-1);border:1px solid var(--line);
+    padding:8px 14px;border-radius:11px;font-weight:600;font-size:13px;color:var(--body)}
+  .chip b{color:var(--ink);font-weight:700}
+  .ring{width:108px;height:108px;flex-shrink:0;position:relative;display:grid;place-items:center}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .pct{position:absolute;text-align:center}
+  .ring .pct b{font-family:'Fraunces',serif;font-size:26px;font-weight:600;display:block;line-height:1;color:var(--ink)}
+  .ring .pct span{font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin:6px 2px 16px}
+  .sec-head h2{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink)}
+  .sec-head .sub{font-size:12.5px;font-weight:600;color:var(--muted)}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--paper);border-radius:18px;box-shadow:var(--shadow-sm);padding:20px;cursor:pointer;
+    border:1px solid var(--line);transition:transform .16s,box-shadow .16s;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .card .row{display:flex;align-items:center;gap:14px}
+  /* SOFT TINTED badge (wash + coloured glyph) instead of a solid saturated fill */
+  .badge{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:22px;flex-shrink:0}
+  .card h3{font-family:'Fraunces',serif;font-size:16.5px;font-weight:600;line-height:1.18;margin-bottom:3px;color:var(--ink)}
+  .card .meta{font-size:12px;font-weight:600;color:var(--muted)}
+  .prog{height:6px;border-radius:999px;background:#F1EADD;margin-top:15px;overflow:hidden}
+  .prog i{display:block;height:100%;border-radius:999px;opacity:.9}
+  .pill{position:absolute;right:16px;top:16px;font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:999px;
+    text-transform:uppercase;letter-spacing:.5px}
+
+  .tools-wrap{margin-top:32px}
+  .tools{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-top:14px}
+  .tool{background:var(--paper);border-radius:16px;box-shadow:var(--shadow-sm);padding:18px 8px;text-align:center;
+    cursor:pointer;border:1px solid var(--line);transition:transform .16s}
+  .tool:hover{transform:translateY(-3px)}
+  .tool .t-ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin:0 auto 10px;font-size:21px;
+    background:var(--accent-soft)}
+  .tool span{font-size:12.5px;font-weight:700;color:var(--ink)}
+
+  /* tiny palette strip so the theme reads at a glance */
+  .swatches{display:flex;gap:8px;align-items:center;margin:34px 2px 0;flex-wrap:wrap}
+  .swatches .lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-right:4px}
+  .sw{width:30px;height:30px;border-radius:8px;border:1px solid rgba(0,0,0,.06)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">History<span class="lab">Lab</span></div>
+    <div class="top-actions"><div class="pillstar">⭐ 18</div><div class="avatar">V</div></div>
+  </div>
+
+  <div class="crumb">All Chapters &nbsp;·&nbsp; <b>Chapter 1</b></div>
+
+  <div class="hero">
+    <div class="hero-text">
+      <span class="eyebrow">India &amp; the Contemporary World · Chapter 1</span>
+      <h1>The Rise of Nationalism in Europe</h1>
+      <p>Welcome back, Vedansh. Continue where you left off, or revise with the study tools below.</p>
+      <div class="chips">
+        <div class="chip">⭐ <b>18 stars</b></div>
+        <div class="chip">✅ <b>12 activities done</b></div>
+      </div>
+    </div>
+    <div class="ring">
+      <svg width="108" height="108">
+        <circle cx="54" cy="54" r="46" stroke="#EEE9F2" stroke-width="9" fill="none"/>
+        <circle cx="54" cy="54" r="46" stroke="url(#lp)" stroke-width="9" fill="none"
+          stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="116"/>
+        <defs><linearGradient id="lp" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#DC835F"/><stop offset="1" stop-color="#7E72C2"/></linearGradient></defs>
+      </svg>
+      <div class="pct"><b>60%</b><span>complete</span></div>
+    </div>
+  </div>
+
+  <div class="sec-head"><h2>Sections</h2><span class="sub">6 topics · tap to learn</span></div>
+  <div class="grid">
+    <div class="card">
+      <span class="pill" style="background:var(--s1-bg);color:var(--s1)">Continue</span>
+      <div class="row"><div class="badge" style="background:var(--s1-bg);color:var(--s1)">⚔️</div>
+        <div><h3>The French Revolution &amp; the Idea of the Nation</h3><div class="meta">4 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:75%;background:var(--s1)"></i></div></div>
+    <div class="card">
+      <span class="pill" style="background:var(--s2-bg);color:var(--s2)">Continue</span>
+      <div class="row"><div class="badge" style="background:var(--s2-bg);color:var(--s2)">🤝</div>
+        <div><h3>The Making of Nationalism in Europe</h3><div class="meta">5 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:60%;background:var(--s2)"></i></div></div>
+    <div class="card">
+      <span class="pill" style="background:var(--s3-bg);color:var(--s3)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s3-bg);color:var(--s3)">🔥</div>
+        <div><h3>The Age of Revolutions: 1830–1848</h3><div class="meta">5 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:30%;background:var(--s3)"></i></div></div>
+    <div class="card">
+      <span class="pill" style="background:var(--s4-bg);color:var(--s4)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s4-bg);color:var(--s4)">🏰</div>
+        <div><h3>The Making of Germany &amp; Italy</h3><div class="meta">4 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:10%;background:var(--s4)"></i></div></div>
+    <div class="card">
+      <span class="pill" style="background:var(--s5-bg);color:var(--s5)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s5-bg);color:var(--s5)">🎨</div>
+        <div><h3>Visualising the Nation</h3><div class="meta">3 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:0%;background:var(--s5)"></i></div></div>
+    <div class="card">
+      <span class="pill" style="background:var(--s6-bg);color:var(--s6)">Start</span>
+      <div class="row"><div class="badge" style="background:var(--s6-bg);color:var(--s6)">🌍</div>
+        <div><h3>Nationalism &amp; Imperialism</h3><div class="meta">3 topics · 1 quiz</div></div></div>
+      <div class="prog"><i style="width:0%;background:var(--s6)"></i></div></div>
+  </div>
+
+  <div class="tools-wrap">
+    <div class="sec-head"><h2>Study Tools</h2><span class="sub">Revise across the whole chapter</span></div>
+    <div class="tools">
+      <div class="tool"><div class="t-ic">📅</div><span>Timeline</span></div>
+      <div class="tool"><div class="t-ic">🗺️</div><span>Maps</span></div>
+      <div class="tool"><div class="t-ic">🖼️</div><span>Figures</span></div>
+      <div class="tool"><div class="t-ic">🃏</div><span>Flashcards</span></div>
+      <div class="tool"><div class="t-ic">📝</div><span>Exam Prep</span></div>
+    </div>
+  </div>
+
+  <div class="swatches">
+    <span class="lbl">Palette</span>
+    <div class="sw" style="background:#3E3548" title="Ink #3E3548"></div>
+    <div class="sw" style="background:#6E6478" title="Body #6E6478"></div>
+    <div class="sw" style="background:#DC835F" title="Peach (lead) #DC835F"></div>
+    <div class="sw" style="background:#7E72C2" title="Lavender #7E72C2"></div>
+    <div class="sw" style="background:#FBE5D7" title="Peach bg #FBE5D7"></div>
+    <div class="sw" style="background:#EAE2F6" title="Lavender bg #EAE2F6"></div>
+    <div class="sw" style="background:#C36B53" title="S1 #C36B53"></div>
+    <div class="sw" style="background:#5571B5" title="S2 #5571B5"></div>
+    <div class="sw" style="background:#C2893E" title="S3 #C2893E"></div>
+    <div class="sw" style="background:#5C9368" title="S4 #5C9368"></div>
+    <div class="sw" style="background:#9B5C9A" title="S5 #9B5C9A"></div>
+    <div class="sw" style="background:#3F8E84" title="S6 #3F8E84"></div>
+  </div>
+</div>
+</body>
+</html>
