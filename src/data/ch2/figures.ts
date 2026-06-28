@@ -440,4 +440,63 @@ export const ch2Figures: Ch2Figure[] = [
       examTip: 'Know the key facts about Quit India: 8 August 1942, "Do or Die" speech, Congress Working Committee resolution at Wardha (14 July 1942), key leaders (Jayaprakash Narayan, Aruna Asaf Ali, Ram Manohar Lohia). British took over a year to suppress it.',
     },
   },
+  // ── Jallianwala Bagh figures ──
+  // NOTE: The NCERT Ch2 PDF has no Jallianwala Bagh figure. These two images are
+  // genuinely PUBLIC DOMAIN contemporary (1919-1920) images sourced from Wikimedia Commons:
+  //  • fig-15: "Jallianwallah.jpg" — the Jallianwala Bagh in 1919, months after the massacre (Public domain)
+  //  • fig-16: "Général Dyer ... (cliché Central News)" — press photo of General Dyer, 1920 (Public domain)
+  {
+    id: 'ch2-fig-15',
+    number: '15',
+    title: 'Jallianwala Bagh in 1919, Months After the Massacre',
+    year: '1919',
+    type: 'photograph',
+    imagePath: '/images/ch2/fig-15-jallianwala-bagh-1919.png',
+    sectionId: 's1',
+    examRelevance: 'high',
+    hotspots: [
+      { id: 'h1', label: 'The enclosed ground', description: 'The open ground where thousands had gathered on 13 April 1919 for the Baisakhi fair and to protest the Rowlatt Act.', x: 50, y: 55 },
+      { id: 'h2', label: 'Walls & houses on every side', description: 'The Bagh was hemmed in by high walls and the backs of houses on all sides — there was no easy way out once the firing began.', x: 78, y: 38 },
+      { id: 'h3', label: 'Few narrow exits', description: 'Only a few narrow lanes led out of the ground. General Dyer blocked the main exit with his troops before ordering them to fire.', x: 20, y: 45 },
+    ],
+    analysis: {
+      whatYouSee: [
+        'A large, open, dusty ground photographed in 1919, soon after the massacre',
+        'High walls and the backs of houses enclosing the ground on every side',
+        'Only a few narrow lanes leading in and out',
+        'A few people standing in the vast empty space',
+      ],
+      whatItMeans: [
+        'The photograph shows exactly why the massacre was so deadly — the crowd was trapped in an enclosed space with very few exits',
+        'On 13 April 1919, General Dyer blocked the main exit and ordered troops to fire on the unarmed crowd for about ten minutes',
+        'Hundreds were killed; many jumped into the well inside the compound while trying to escape the bullets',
+        'Dyer later said his aim was "to produce a moral effect" — to create terror in the minds of satyagrahis',
+      ],
+      examTip: 'Use this image to explain WHY Jallianwala Bagh was so deadly: an enclosed ground, walls on all sides, only narrow exits which Dyer blocked. Date to remember: 13 April 1919 (Baisakhi day). It became the tipping point that turned national anger into the demand for swaraj.',
+    },
+  },
+  {
+    id: 'ch2-fig-16',
+    number: '16',
+    title: 'General Reginald Dyer',
+    year: '1920',
+    type: 'photograph',
+    imagePath: '/images/ch2/fig-16-general-dyer.png',
+    sectionId: 's1',
+    examRelevance: 'medium',
+    hotspots: [],
+    analysis: {
+      whatYouSee: [
+        'A contemporary press photograph of General Reginald Dyer in military uniform',
+        'The British officer who commanded the troops at Jallianwala Bagh',
+      ],
+      whatItMeans: [
+        'General Dyer ordered his troops to open fire on the unarmed crowd at Jallianwala Bagh on 13 April 1919',
+        'He gave no warning to the crowd and deliberately blocked the exits before firing',
+        'He admitted his object was "to produce a moral effect" — to terrorise Indians into submission',
+        'The brutality, and the support Dyer received from many in Britain, shocked Indians and deepened the demand for self-rule',
+      ],
+      examTip: 'Remember the name: General Dyer commanded the firing at Jallianwala Bagh. His "crawling orders" and other humiliations in Amritsar (under martial law) further inflamed the country.',
+    },
+  },
 ]

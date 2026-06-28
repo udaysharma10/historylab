@@ -200,14 +200,16 @@ export const section1Subsections: Subsection[] = [
       {
         id: 'ch2-s1-jallianwala-buildup',
         title: '13 April 1919 — The Day That Changed India',
-        type: 'text',
-        text: 'With **martial law in force and General Dyer in command**, the city of Amritsar was tense. Then, on **13 April 1919**, a large crowd gathered in the enclosed ground of **Jallianwala Bagh**.\n\nSome had come to protest the Rowlatt Act. But many were **villagers from outside the city** who had come for the annual **Baisakhi fair**. Crucially, **they did not even know that martial law had been imposed** — so they had no idea they were breaking any order by gathering.\n\nThe ground was surrounded by **high walls on all sides**, with only a few **narrow exits**.',
+        type: 'figure',
+        text: 'With **martial law in force and General Dyer in command**, the city of Amritsar was tense. Then, on **13 April 1919**, a large crowd gathered in the enclosed ground of **Jallianwala Bagh** (shown here in a photograph taken in 1919, months after the massacre).\n\nSome had come to protest the Rowlatt Act. But many were **villagers from outside the city** who had come for the annual **Baisakhi fair**. Crucially, **they did not even know that martial law had been imposed** — so they had no idea they were breaking any order by gathering.\n\nAs you can see, the ground was surrounded by **high walls and houses on all sides**, with only a few **narrow exits**.',
+        imageId: 'ch2-fig-15',
       },
       {
         id: 'ch2-s1-jallianwala',
         title: 'Jallianwala Bagh',
-        type: 'text',
-        text: '**General Dyer** entered the ground with his troops. He didn\'t warn the crowd. He didn\'t ask them to leave. He **blocked the exits**.\n\nThen he **ordered his troops to open fire**.\n\nFor **ten minutes**, they fired on an unarmed crowd — men, women, children, elderly people who had only come for a fair.\n\n**Hundreds were killed.** Many jumped into a well inside the compound trying to escape the bullets.\n\nWhen asked later why he did it, Dyer said his object was **"to produce a moral effect"** — to create a feeling of **terror and awe** in the minds of satyagrahis.',
+        type: 'figure',
+        text: '**General Dyer** (pictured here) entered the ground with his troops. He didn\'t warn the crowd. He didn\'t ask them to leave. He **blocked the exits**.\n\nThen he **ordered his troops to open fire**.\n\nFor **ten minutes**, they fired on an unarmed crowd — men, women, children, elderly people who had only come for a fair.\n\n**Hundreds were killed.** Many jumped into a well inside the compound trying to escape the bullets.\n\nWhen asked later why he did it, Dyer said his object was **"to produce a moral effect"** — to create a feeling of **terror and awe** in the minds of satyagrahis.',
+        imageId: 'ch2-fig-16',
         highlight: '**Jallianwala Bagh (13 April 1919):** General Dyer blocked exits and ordered firing on unarmed crowd for 10 minutes. Hundreds killed. His goal: "to produce a moral effect." This became the tipping point of Indian nationalism.',
       },
       {
