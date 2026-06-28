@@ -74,7 +74,7 @@ export function FlashcardSingle({
       >
         {/* Front */}
         <div
-          className="absolute inset-0 rounded-2xl shadow-card overflow-hidden bg-white"
+          className="absolute inset-0 rounded-2xl shadow-card-hover overflow-hidden bg-white border border-hist-line"
           style={{ backfaceVisibility: 'hidden' }}
         >
           <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${color}, ${color}60)` }} />
@@ -100,7 +100,7 @@ export function FlashcardSingle({
 
         {/* Back */}
         <div
-          className="absolute inset-0 rounded-2xl shadow-card overflow-hidden bg-white"
+          className="absolute inset-0 rounded-2xl shadow-card-hover overflow-hidden bg-white border border-hist-line"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <div className="h-1.5" style={{ background: `linear-gradient(90deg, #5C9368, #5C936860)` }} />
