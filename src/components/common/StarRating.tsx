@@ -28,7 +28,7 @@ export function StarRating({ stars, maxStars = 3, size = 'md', animated = true }
           >
             <path
               d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-              fill={filled ? '#F1C40F' : '#E0E0E0'}
+              fill={filled ? '#C0911F' : '#E0E0E0'}
               stroke={filled ? '#E6A900' : '#CCCCCC'}
               strokeWidth="0.5"
             />

@@ -44,9 +44,9 @@ const SECTION_NAMES: Record<string, string> = {
 }
 
 const SECTION_COLORS: Record<string, string> = {
-  'ch1:s1': '#C0392B', 'ch1:s2': '#2980B9', 'ch1:s3': '#E67E22',
-  'ch1:s4': '#27AE60', 'ch1:s5': '#7D3C98', 'ch1:s6': '#16A085',
-  'ch2:s1': '#C0392B', 'ch2:s2': '#2980B9', 'ch2:s3': '#E67E22', 'ch2:s4': '#7D3C98',
+  'ch1:s1': '#C0392B', 'ch1:s2': '#2980B9', 'ch1:s3': '#D9821F',
+  'ch1:s4': '#1F9E57', 'ch1:s5': '#7D3C98', 'ch1:s6': '#16A085',
+  'ch2:s1': '#C0392B', 'ch2:s2': '#2980B9', 'ch2:s3': '#D9821F', 'ch2:s4': '#7D3C98',
 }
 
 interface LoginDateEntry {
@@ -73,11 +73,11 @@ const MODE_LABELS: Record<string, string> = {
 const MODE_COLORS: Record<string, string> = {
   quiz: '#2980B9',
   narrative: '#C0392B',
-  timeline: '#E67E22',
+  timeline: '#D9821F',
   maps: '#16A085',
   figures: '#7D3C98',
   exam: '#C0392B',
-  flashcards: '#27AE60',
+  flashcards: '#1F9E57',
 }
 
 export function TeacherDashboard() {
@@ -279,9 +279,9 @@ export function TeacherDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Users', value: users.length, icon: '👥', color: '#2980B9' },
-          { label: 'Active Today', value: activeToday, icon: '📱', color: '#27AE60' },
-          { label: 'Active This Week', value: activeThisWeek, icon: '📅', color: '#E67E22' },
-          { label: 'Total Stars Earned', value: totalStarsAll, icon: '⭐', color: '#D4A017' },
+          { label: 'Active Today', value: activeToday, icon: '📱', color: '#1F9E57' },
+          { label: 'Active This Week', value: activeThisWeek, icon: '📅', color: '#D9821F' },
+          { label: 'Total Stars Earned', value: totalStarsAll, icon: '⭐', color: '#C0911F' },
         ].map((card, i) => (
           <motion.div
             key={card.label}

@@ -38,7 +38,7 @@ export function QuizMode() {
   const chapter = getChapter(cid)
   const section = chapter?.sections.find(s => s.id === sectionId)
   const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
-  const color = sectionColors[sectionId || ''] || '#2C3E50'
+  const color = sectionColors[sectionId || ''] || '#2A2750'
 
   // Get chapter-specific activities
   const chMcq = useMemo(() => getMcqActivities(cid), [cid])

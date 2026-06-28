@@ -14,8 +14,8 @@ import type { SectionId } from '../types/progress'
 type FigurePhase = 'home' | 'gallery' | 'detail' | 'practice' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
+  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -278,7 +278,7 @@ export function FigureMode() {
                   <span
                     key={a.id}
                     className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-                    style={{ backgroundColor: '#E67E22' }}
+                    style={{ backgroundColor: '#D9821F' }}
                   >
                     Medium
                   </span>

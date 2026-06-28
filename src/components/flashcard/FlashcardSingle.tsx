@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
+  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
 }
 
 interface FlashcardSingleProps {
@@ -84,7 +84,7 @@ export function FlashcardSingle({
           className="absolute inset-0 rounded-2xl shadow-card overflow-hidden bg-white"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <div className="h-1.5" style={{ background: `linear-gradient(90deg, #27AE60, #27AE6060)` }} />
+          <div className="h-1.5" style={{ background: `linear-gradient(90deg, #1F9E57, #1F9E5760)` }} />
           <div className="p-6 sm:p-8 flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center gap-2 mb-4">

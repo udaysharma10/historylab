@@ -87,7 +87,7 @@ export const mapDefinitions: MapDefinition[] = [
     subtitle: 'Fig 12 — Prussia\'s expansion and the formation of the German Empire',
     imagePath: '/images/fig-12-germany-unification-map.png',
     sectionId: 's4',
-    sectionColor: '#27AE60',
+    sectionColor: '#1F9E57',
     examTip: 'CBSE asks: "How did Bismarck unify Germany through wars?" Know Prussia, Schleswig-Holstein, Bavaria, and the excluded Austrian Empire.',
     regions: [
       {
@@ -134,7 +134,7 @@ export const mapDefinitions: MapDefinition[] = [
     subtitle: 'Fig 14(a) — Seven states divided among ruling families',
     imagePath: '/images/fig-14a-italy-before.png',
     sectionId: 's4',
-    sectionColor: '#27AE60',
+    sectionColor: '#1F9E57',
     examTip: 'CBSE asks: "Which Italian state led the unification?" and "Name the states before unification." Know Sardinia-Piedmont, Papal State, and Two Sicilies.',
     regions: [
       {

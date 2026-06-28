@@ -16,8 +16,8 @@ import type { NCERTQuestion } from '../types/chapter'
 type ExamPhase = 'home' | 'source-read' | 'source-practice' | 'ncert' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
+  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
 }
 
 function shuffle<T>(arr: T[]): T[] {

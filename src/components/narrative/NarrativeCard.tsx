@@ -680,7 +680,7 @@ function FlowchartSteps({ steps, color }: { steps: { label: string; detail: stri
               >
                 {i + 1}
               </span>
-              <span className="font-display font-bold text-base flex-1 leading-snug" style={{ color: 'var(--color-hist-dark, #2C3E50)' }}>
+              <span className="font-display font-bold text-base flex-1 leading-snug" style={{ color: 'var(--color-hist-dark, #2A2750)' }}>
                 <RichText text={step.label} />
               </span>
               <motion.span

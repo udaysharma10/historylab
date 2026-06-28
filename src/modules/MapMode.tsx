@@ -16,13 +16,13 @@ import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
 type MapPhase = 'home' | 'explore' | 'playing-identify' | 'playing-label' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
+  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
 }
 
 const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: 'Easy', color: '#27AE60' },
-  medium: { label: 'Medium', color: '#E67E22' },
+  easy: { label: 'Easy', color: '#1F9E57' },
+  medium: { label: 'Medium', color: '#D9821F' },
   hard: { label: 'Hard', color: '#C0392B' },
 }
 

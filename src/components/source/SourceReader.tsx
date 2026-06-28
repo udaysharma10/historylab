@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import type { SourceBox } from '../../types/chapter'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
+  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
 }
 
 interface SourceReaderProps {
@@ -33,7 +33,7 @@ export function SourceReader({ source, onBack }: SourceReaderProps) {
         animate={{ opacity: 1, y: 0 }}
       >
         {/* Top accent */}
-        <div className="h-1.5" style={{ background: `linear-gradient(90deg, #D4A017, #E67E22)` }} />
+        <div className="h-1.5" style={{ background: `linear-gradient(90deg, #C0911F, #D9821F)` }} />
 
         <div className="p-5 sm:p-7">
           {/* Header */}

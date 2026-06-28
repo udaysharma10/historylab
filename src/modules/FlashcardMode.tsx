@@ -238,7 +238,7 @@ export function FlashcardMode() {
               key={i}
               className="h-1.5 flex-1 rounded-full transition-colors"
               style={{
-                backgroundColor: i < currentIndex ? '#27AE60' :
+                backgroundColor: i < currentIndex ? '#1F9E57' :
                   i === currentIndex ? color : '#E5E7EB',
               }}
             />

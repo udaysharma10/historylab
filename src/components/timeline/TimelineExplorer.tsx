@@ -6,8 +6,8 @@ import type { KeyDate } from '../../types/chapter'
 const SECTION_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
   s1: { label: 'French Revolution', color: '#C0392B', icon: '🇫🇷' },
   s2: { label: 'Making of Nationalism', color: '#2980B9', icon: '🏛️' },
-  s3: { label: 'Age of Revolutions', color: '#E67E22', icon: '🔥' },
-  s4: { label: 'Germany & Italy', color: '#27AE60', icon: '🗺️' },
+  s3: { label: 'Age of Revolutions', color: '#D9821F', icon: '🔥' },
+  s4: { label: 'Germany & Italy', color: '#1F9E57', icon: '🗺️' },
   s5: { label: 'Visualising the Nation', color: '#7D3C98', icon: '🎨' },
   s6: { label: 'Nationalism & Imperialism', color: '#16A085', icon: '🌍' },
 }

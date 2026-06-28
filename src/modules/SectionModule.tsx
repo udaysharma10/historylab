@@ -41,7 +41,7 @@ export function SectionModule() {
   }
 
   const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
-  const color = sectionColors[section.id] || '#2C3E50'
+  const color = sectionColors[section.id] || '#2A2750'
   const completedCount = section.subsections.filter((sub) => completedSubsections[sub.id]).length
   const progress = section.subsections.length > 0
     ? Math.round((completedCount / section.subsections.length) * 100)
@@ -165,7 +165,7 @@ export function SectionModule() {
                   className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-display font-bold text-sm"
                   style={
                     isCompleted
-                      ? { backgroundColor: '#27AE6020', color: '#27AE60' }
+                      ? { backgroundColor: '#1F9E5720', color: '#1F9E57' }
                       : { backgroundColor: `${color}15`, color }
                   }
                 >
@@ -191,7 +191,7 @@ export function SectionModule() {
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke={isCompleted ? '#27AE60' : color}
+                  stroke={isCompleted ? '#1F9E57' : color}
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"

@@ -42,7 +42,7 @@ export function SubsectionComplete({
     playLevelUp()
 
     if (stars >= 2) {
-      const colors = [sectionColor, '#F1C40F', '#27AE60', '#2980B9']
+      const colors = [sectionColor, '#C0911F', '#1F9E57', '#2980B9']
       const end = Date.now() + 1500
       const frame = () => {
         confetti({

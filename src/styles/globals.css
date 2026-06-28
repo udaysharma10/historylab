@@ -1,45 +1,54 @@
 @import "tailwindcss";
-@import "@fontsource/playfair-display";
-@import "@fontsource/source-sans-3";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/inter";
 
 @theme {
-  /* History scholarly palette */
+  /* History scholarly palette — refined "mature" theme */
   --color-hist-red: #C0392B;
   --color-hist-blue: #2980B9;
-  --color-hist-gold: #D4A017;
-  --color-hist-green: #27AE60;
+  --color-hist-gold: #C0911F;
+  --color-hist-green: #1F9E57;
   --color-hist-purple: #7D3C98;
-  --color-hist-orange: #E67E22;
+  --color-hist-orange: #D9821F;
   --color-hist-teal: #16A085;
-  --color-hist-dark: #2C3E50;
+  --color-hist-dark: #2A2750;     /* navy — headings, brand, primary text */
+
+  /* Extended mature-theme tokens */
+  --color-hist-navy: #2A2750;
+  --color-hist-ink: #322E55;      /* warm ink for body copy */
+  --color-hist-muted: #7E7A96;    /* secondary / meta text */
+  --color-hist-line: #EFE7DB;     /* hairline borders */
+  --color-hist-indigo: #5B5BD6;
+  --color-hist-indigo-soft: #ECECFB;
+  --color-hist-gold-soft: #FBF1D9;
 
   /* Section colors */
   --color-section-1: #C0392B;
   --color-section-2: #2980B9;
-  --color-section-3: #E67E22;
-  --color-section-4: #27AE60;
+  --color-section-3: #D9821F;
+  --color-section-4: #1F9E57;
   --color-section-5: #7D3C98;
   --color-section-6: #16A085;
 
   /* Backgrounds */
-  --color-bg-start: #FDF6EC;
-  --color-bg-end: #F0E6D4;
-  --color-card-warm: #FFF8F0;
-  --color-card-cool: #F0F4FF;
-  --color-card-green: #F0FFF4;
-  --color-card-purple: #F8F0FF;
+  --color-bg-start: #FBF5EE;
+  --color-bg-end: #F4E8DA;
+  --color-card-warm: #FBF5EE;
+  --color-card-cool: #ECECFB;
+  --color-card-green: #E7F4EC;
+  --color-card-purple: #F2EAF7;
 
   /* Stars */
-  --color-star-gold: #F1C40F;
+  --color-star-gold: #C0911F;
 
   /* Fonts */
-  --font-display: "Playfair Display", serif;
-  --font-body: "Source Sans 3", sans-serif;
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
 
-  /* Shadows */
-  --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
-  --shadow-button: 0 4px 0px rgba(0, 0, 0, 0.15);
+  /* Shadows — soft mauve-tinted */
+  --shadow-card: 0 6px 18px rgba(42, 39, 80, 0.07);
+  --shadow-card-hover: 0 14px 34px rgba(42, 39, 80, 0.12);
+  --shadow-button: 0 4px 0px rgba(42, 39, 80, 0.15);
 }
 
 /* Base styles */
@@ -56,10 +65,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 body {
-  background: linear-gradient(135deg, var(--color-bg-start), var(--color-bg-end));
+  background: linear-gradient(165deg, var(--color-bg-start), var(--color-bg-end));
   min-height: 100dvh;
   overflow-x: hidden;
-  color: var(--color-hist-dark);
+  color: var(--color-hist-ink);
+}
+
+/* Fraunces optical sizing — display headings look best at high optical size */
+h1, h2, h3, h4, h5, h6 {
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
 }
 
 /* Smooth scrolling */

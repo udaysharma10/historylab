@@ -26,7 +26,7 @@ export function calculateMastery(progress: SectionProgress): MasteryLevel {
 
 export function getMasteryColor(level: MasteryLevel): string {
   switch (level) {
-    case 'master': return '#D4A017'
+    case 'master': return '#C0911F'
     case 'confident': return '#95A5A6'
     case 'learning': return '#CD7F32'
     case 'beginner': return '#BDC3C7'

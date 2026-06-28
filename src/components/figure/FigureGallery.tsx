@@ -9,8 +9,8 @@ interface FigureGalleryProps {
 }
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#E67E22',
-  s4: '#27AE60', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
+  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -90,7 +90,7 @@ export function FigureGallery({ onSelectFigure, onBack }: FigureGalleryProps) {
         <button
           className="text-xs font-body font-semibold px-3 py-1.5 rounded-full transition-colors"
           style={{
-            backgroundColor: sectionFilter === 'all' ? '#2C3E50' : '#F3F4F6',
+            backgroundColor: sectionFilter === 'all' ? '#2A2750' : '#F3F4F6',
             color: sectionFilter === 'all' ? 'white' : '#6B7280',
           }}
           onClick={() => setSectionFilter('all')}
