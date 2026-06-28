@@ -201,3 +201,18 @@ Trigger: Neha flagged the interactive hotspot dots on the Sorrieu print as "all 
 **Rulings from Neha this round (do NOT relitigate):** keep flowcharts even for parallel-list content (students grasp/remember them better); keep tap-to-reveal + per-card highlights (don't design down to passive students); tighten the Sorrieu intro (still to do in content track).
 
 **Next: full UI/UX track (with Uday).** Open items: verify chapter-home Study-Tools tile count (Ch1 should show 5); "Topics" list mixes Practice Quiz with lesson topics; screen-by-screen IA + mobile review. Plus Neha resumes the content track card-by-card (starting with tightening Sorrieu S1).
+
+### Round 3 — S1 content review (Neha, card-by-card)
+
+Neha reviewed **Ch1 S1 only** and flagged: (a) the Sorrieu intro was still 13 slides (the missed "tighten" structural call), and (b) figure hotspot dots still mis-placed + popups clipping beneath the image frame.
+
+| Item | Fix | Commit |
+|------|-----|--------|
+| Sorrieu intro length | Tightened **13 → 9 cards** (merges; vocab + exam content preserved) | `6fdb92c` |
+| fig-1 Christ/Shattered dots | Recalibrated against the swapped (embedded) image — the image swap had changed the aspect ratio | `6fdb92c` |
+| Tooltip clipping (all figures) | `FigureHotspotOverlay`: popup flips **above** the dot when `spot.y >= 58`, clamps horizontally | `cab337e` |
+| Mis-placed dots figs 1/2/4/5 | Repositioned vs the real images (Shattered→bottom rubble; Fig2 inscription→right-panel text; Fig4 tree→pole, inscription→right banner [BEST-GUESS]; Fig5 letters→flying scrolls) | `cab337e` |
+
+**Process miss owned:** of Neha's 3 structural calls, the one action ("tighten Sorrieu") was verbally acknowledged but never entered the todo list, and a "fix dots first" detour buried it. Fixed by recording outstanding content items in memory + this log + `HANDOFF.md`.
+
+**OPEN for next session:** (1) proactively re-verify ALL remaining figure hotspots **at full resolution** (thumbnail checks were too coarse and missed these); (2) Neha to confirm/replace the fig-4 "German inscription" best-guess dot; (3) Neha has not yet reviewed Ch1 S2–S6 or any Ch2 content card-by-card. **See `HANDOFF.md` (repo root) — the canonical read-first state for the next session.**
