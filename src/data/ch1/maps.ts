@@ -52,7 +52,7 @@ export const mapDefinitions: MapDefinition[] = [
       {
         id: 'prussia',
         label: 'Prussia',
-        x: 34, y: 34, width: 14, height: 14,
+        x: 42, y: 40, width: 14, height: 14,
         description: 'Given important new territories in western Germany (Rhineland) and part of Saxony. Would later lead German unification.',
       },
       {
@@ -70,13 +70,13 @@ export const mapDefinitions: MapDefinition[] = [
       {
         id: 'ottoman-empire',
         label: 'Ottoman Empire',
-        x: 48, y: 70, width: 25, height: 18,
+        x: 48, y: 58, width: 25, height: 18,
         description: 'Controlled most of the Balkans including Greece, Serbia, Romania, Bulgaria. Its disintegration in the 19th century created the "powder keg" of Europe.',
       },
       {
         id: 'spain',
         label: 'Spain',
-        x: 12, y: 70, width: 16, height: 16,
+        x: 0, y: 58, width: 16, height: 16,
         description: 'Bourbon monarchy also restored here. Lost most of its Latin American colonies by the 1820s.',
       },
     ],

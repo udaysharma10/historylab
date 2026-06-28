@@ -16,7 +16,6 @@ export const figures: Figure[] = [
     hotspots: [
       { id: 'h1-1', x: 15, y: 43, label: 'Statue of Liberty', description: 'Personification of Liberty holding the torch of Enlightenment and the Charter of the Rights of Man.' },
       { id: 'h1-2', x: 50, y: 92, label: 'Shattered symbols', description: 'On the earth in the foreground lie the shattered remains of absolutist institutions.' },
-      { id: 'h1-3', x: 31, y: 72, label: 'United States & Switzerland', description: 'Leading the procession — already nation-states by 1848.' },
       { id: 'h1-4', x: 8, y: 64, label: 'France (tricolour)', description: 'Identifiable by the revolutionary tricolour, France has just reached the statue.' },
       { id: 'h1-5', x: 46, y: 58, label: 'Germany (black-red-gold)', description: 'German peoples carry the flag that expressed liberal hopes for unification in 1848.' },
       { id: 'h1-6', x: 50, y: 20, label: 'Christ, saints and angels', description: 'From the heavens above, they symbolise fraternity among the nations of the world.' },
