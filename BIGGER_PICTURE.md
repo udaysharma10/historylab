@@ -177,7 +177,7 @@ function canAccessChapter(chapterNum: number, subscription: UserSubscription): b
 |-------|-------------|-------|--------|
 | **A** | Multi-chapter architecture: restructure routes, data folders, book home page, chapter selector | Routes + data reorganization | **DONE** (2026-03-31) |
 | **B** | Chapter 2: Nationalism in India — full content (4 sections, ~110 cards, 15 figures, 100 flashcards, 52 quiz activities, 10 match, 8 NCERT Qs) | Content creation | **DONE** (2026-03-31) |
-| **C** | Freemium gate: Ch1 free, rest locked, Razorpay payment, subscription table | Auth + payment | Next |
+| **C** | Freemium gate: Ch1 free, rest locked, Razorpay payment, subscription table — **full technical plan in `PLAN_SUBSCRIPTION_LAUNCH.md`** (paywall enforcement, webhooks, entitlements, compliance) | Auth + payment | Next |
 | **D** | Remaining history chapters (3, 4, 5) | Content creation | After C |
 | **E** | Other Class 10 books: Geography, Political Science, Economics | Content + subject adaptations | Future |
 | **F** | Other classes (9, 8, 7, 6) | Scale | Future |
