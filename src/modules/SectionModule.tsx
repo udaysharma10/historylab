@@ -106,6 +106,35 @@ export function SectionModule() {
         </motion.div>
       )}
 
+      {/* Primary CTA — Start Reading (the main action sits up top, before the topic list and review tools) */}
+      <motion.div
+        className="mb-6"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+      >
+        <motion.button
+          className="w-full text-white font-display text-lg px-8 py-4 rounded-2xl shadow-button btn-press flex items-center justify-center gap-2"
+          style={{ backgroundColor: color }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => {
+            const firstIncomplete = section.subsections.findIndex((sub) => !completedSubsections[sub.id])
+            setActiveSubsection(firstIncomplete >= 0 ? firstIncomplete : 0)
+          }}
+        >
+          <span className="text-xl">📖</span>
+          {completedCount === 0
+            ? 'Start Reading'
+            : completedCount < section.subsections.length
+              ? 'Continue Reading'
+              : 'Read Again'}
+        </motion.button>
+        <p className="text-center text-xs text-gray-400 font-body mt-2">
+          Or jump to a specific topic below · timeline &amp; maps for revision are further down
+        </p>
+      </motion.div>
+
       {/* Subsection Cards */}
       <div className="space-y-3">
         <h3 className="font-display font-bold text-hist-dark flex items-center gap-2">
@@ -233,32 +262,6 @@ export function SectionModule() {
         transition={{ delay: 0.5 }}
       >
         <SectionMaps sectionId={section.id} sectionColor={color} chapterId={cid} />
-      </motion.div>
-
-      {/* Start reading CTA */}
-      <motion.div
-        className="mt-6 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-      >
-        <motion.button
-          className="text-white font-display text-lg px-8 py-3 rounded-full shadow-button btn-press"
-          style={{ backgroundColor: color }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            // Find first incomplete subsection, or start from beginning
-            const firstIncomplete = section.subsections.findIndex((sub) => !completedSubsections[sub.id])
-            setActiveSubsection(firstIncomplete >= 0 ? firstIncomplete : 0)
-          }}
-        >
-          {completedCount === 0
-            ? 'Start Reading'
-            : completedCount < section.subsections.length
-              ? 'Continue Reading'
-              : 'Read Again'}
-        </motion.button>
       </motion.div>
     </div>
   )
