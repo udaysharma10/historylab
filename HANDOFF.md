@@ -22,6 +22,7 @@ Neha reviews **one section at a time**; we fix, deploy, she re-reviews.
 **OPEN — content track:**
 - ✅ **ALL Ch2 figure hotspots re-verified at full resolution** (commit `f976c07`). Fixes: fig-7 Gandhi was on the wrong marcher; fig-10 Gandhi/Nehru/Azad all shifted (Gandhi's dot was on Nehru); fig-12 Bharat Mata symbols moved onto the actual hands/objects; fig-14a lion was on her dress; fig-13 onto the held image; fig-11 unity symbols → temple roundel; fig-3 soldier onto the soldier. (Ch2 field order: `label, description, x, y`.)
 - **fig-6 (Allahabad Congress leaders) FLAGGED `NEEDS NEHA`** in code: grainy group photo, individual identities (Patel/Nehru/Bose) can't be verified from the image and current coords contradict the "extreme left/right" caption. Left unchanged pending Neha's authoritative key (don't guess — risk of mislabelling leaders).
+- ✅ **Ch2 MCQ answer positions rebalanced** (commit `5f97cbd`) — inline quizzes + Practice-Quiz bank were "always B" (40/42 at option B); now 11 A / 10 B / 10 C / 11 D (options reordered, answer text preserved). Ch1 was already balanced.
 - Neha has **not** reviewed S2–S6 (Ch1) or any Ch2 content card-by-card yet.
 - The `FigureHotspotOverlay.tsx` tooltip flips **above** the dot when `spot.y >= 58` and clamps horizontally (so dots up to ~92 are fine).
 
