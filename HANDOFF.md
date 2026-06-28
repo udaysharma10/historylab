@@ -1,6 +1,6 @@
 # HistoryLab — Session Handover (read this first)
 
-**Last updated:** 2026-06-28 (Round 4) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `f976c07`
+**Last updated:** 2026-06-28 (Round 5) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `8edc6f7`
 **Repo:** `github.com/udaysharma10/historylab` · **Local:** `/Users/udaysharma/Documents/Blostem/Claude_Projects/vedansh-history`
 
 This is a Grade-10 CBSE History self-learning web app (NCERT "India and the Contemporary World"). Ch1 = Rise of Nationalism in Europe, Ch2 = Nationalism in India. See `PROJECT_CONTEXT.md` for full architecture, `CONTENT_REVIEW_PROCESS.md` for the review log.
@@ -30,12 +30,14 @@ Neha reviews **one section at a time**; we fix, deploy, she re-reviews.
 2. Keep **tap-to-reveal + per-card highlights** (do not design down to passive students).
 3. Tighten Sorrieu intro — ✅ done.
 
-### 2. UI THEME TRACK (✅ DONE — mature theme implemented + deployed, commit `28994c5`)
-Approved `home-mature.html` + `section-mature.html` mockups implemented across the app.
-- **Fonts:** `@fontsource-variable/fraunces` (display) + `@fontsource-variable/inter` (body); Playfair/Source-Sans uninstalled. Family names: `"Fraunces Variable"`, `"Inter Variable"`.
-- **Theme tokens** (`src/styles/globals.css` `@theme`): cream gradient bg `#FBF5EE→#F4E8DA` (165deg), navy `#2A2750` / ink `#322E55` text, gold `#C0911F` + indigo `#5B5BD6` accents, mauve-tinted shadows, section colours s3 `#D9821F` / s4 `#1F9E57`. New tokens: `hist-navy/ink/muted/line/indigo/indigo-soft/gold-soft`. All hardcoded old hexes migrated app-wide (incl. `CHAPTER_SECTION_COLORS`).
-- **HomePage** redesigned to the mockup (hero w/ eyebrow + welcome + chips + gold→indigo ring; 2-col section cards w/ accent bar + Start/Continue pill + "N topics · 1 quiz"; 5-tile Study Tools). SectionModule already matched the mockup after the token swap.
-- **Known pre-existing issue (NOT from this revamp — verified against old code):** horizontal overflow at ~390px phone width (cards/header bleed right). App was built for iPad (wide); fix is a separate mobile-IA task. Mockups are desktop-width.
+### 2. UI THEME TRACK (✅ DONE — "Cool Peach & Lavender" C2 live, commit `8edc6f7`)
+Fraunces (display) + Inter (body) via `@fontsource-variable/*`. Current palette = **C2 (peach-led)**; the earlier navy "mature" theme was replaced after Uday found it too dark.
+- **Theme tokens** (`src/styles/globals.css` `@theme`): deep plum ink `#3E3548`, **peach lead accent `#DC835F`** (brand "Lab", CTAs, ring), dusty lavender secondary `#7E72C2`, **peach→lavender bg `#FBEFE7→#F1ECFA`**, muted jewel section colours (`#C36B53 #5571B5 #C2893E #5C9368 #9B5C9A #3F8E84`), plum-tinted shadows; stars kept warm gold `#C99A3A`.
+- **Section badges are SOFT TINTED chips** (`color+'1A'` wash, not solid fills) — the key "less heavy" move. HomePage has no top accent bar; ring is peach→lavender.
+- All hardcoded old hexes migrated app-wide, including the **duplicated per-mode `SECTION_COLORS` maps** (figures/sources/flashcards/timeline/maps/exam) + `CHAPTER_SECTION_COLORS`. If you re-theme again, update those too.
+- Mockup exploration in `mockups/home-refined*.html` (A warm-cream, B cool-gallery, C/C1/C2/C3 lavender-peach). **C2 is the shipped one.**
+- Fixed: the breadcrumb was overlapping the hero (removed a negative margin).
+- **Known pre-existing issue (NOT from theme work):** horizontal overflow at ~390px phone width. App is iPad-first; separate mobile-IA task.
 
 ### 3. UX / IA TRACK (PARKED — resume after content)
 - ✅ Done: "Learning Modes" → **"Study Tools"**; section "Start Reading" top CTA; **Study Tools confirmed showing all 5 tiles** (Timeline/Maps/Figures/Flashcards/Exam) on Ch1 during the revamp.
