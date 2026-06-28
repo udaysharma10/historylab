@@ -5,37 +5,22 @@ export const section1Subsections: Subsection[] = [
     id: 's1-intro',
     title: 'Introduction: Sorrieu\'s Vision',
     narrativeCards: [
-      // Card 0: THE HOOK — storyteller opening
+      // Card 1: THE HOOK + why 1848 (merged)
       {
         id: 's1-hook',
         title: 'The Dream That Changed Europe',
         type: 'text',
-        text: 'It\'s **1848**. Europe is on fire. In Paris, workers are tearing up cobblestones to build barricades. In Vienna, the most powerful minister on the continent — **Metternich** — is fleeing in disguise. In the German city of **Frankfurt**, professors and lawyers are drafting a constitution for a German nation that **does not yet exist** — in 1848 the German-speaking people were still scattered across dozens of separate states, with no single country called "Germany".\n\nAnd in a small studio in France, an artist named **Frédéric Sorrieu** is painting a dream — a dream of all nations, free and equal, marching together **towards** liberty.\n\nIt\'s a beautiful dream. And by the end of this chapter, you\'ll understand **why it died**.',
-        highlight: '**1848** — the year of revolutions. This chapter tells the story of how the dream of free nations was born, fought for, and ultimately betrayed.',
+        text: 'It\'s **1848**, and Europe is on fire. In Paris, workers are tearing up cobblestones to build barricades. In Vienna, the most powerful minister on the continent — **Metternich** — is fleeing in disguise. In **Frankfurt**, professors and lawyers are drafting a constitution for a German nation that **does not yet exist**. Across the continent, people are **rising in revolt** — demanding **democratic rights, national unification, and an end to autocratic monarchies**.\n\nAnd in a small studio in France, an artist named **Frédéric Sorrieu** is painting a dream — a dream of all nations, free and equal, marching together **towards** liberty.\n\nIt\'s a beautiful dream. And by the end of this chapter, you\'ll understand **why it died**.',
+        highlight: '**1848 — the year of revolutions.** People across Europe demanded democracy, liberty and national unification. This chapter tells how that dream was born, fought for, and ultimately betrayed.',
       },
-      // Card 1: Context — WHY 1848 matters
-      {
-        id: 's1-intro-0',
-        title: 'Why 1848 Was a Turning Point',
-        type: 'text',
-        text: 'The year **1848** was a turning point in European history. Across the continent, people **rose in revolt** — demanding **democratic rights**, **national unification**, and an **end to autocratic monarchies**. It was in this charged atmosphere of revolution and hope that Sorrieu created one of the most iconic images of European nationalism.',
-        highlight: '**1848** — year of revolutions across Europe. People demanded **democracy, liberty, and national unification**.',
-      },
-      // Card 2: Who was Sorrieu + what he created
-      {
-        id: 's1-intro-1',
-        title: 'Meet Frédéric Sorrieu',
-        type: 'text',
-        text: '**Frédéric Sorrieu**, a **French artist**, prepared a series of **four prints** in **1848** visualising his dream of a world made up of **"democratic and social Republics"**. These prints captured the spirit of an age where people dreamt of nations built on **liberty and equality**, not on the power of kings.',
-        highlight: '**Who:** Frédéric Sorrieu, French artist. **What:** 4 prints (1848). **Theme:** World of democratic and social republics.',
-      },
-      // Card 3: The painting itself
+      // Card 2: Meet Sorrieu + the print itself (merged figure card)
       {
         id: 's1-intro-2',
-        title: 'What the Print Shows',
+        title: 'Meet Frédéric Sorrieu',
         type: 'figure',
-        text: 'The **first print** shows the peoples of **Europe and America** — men and women of all ages and social classes — **marching in a long train**, offering **homage to the Statue of Liberty** as they pass by it.',
+        text: '**Frédéric Sorrieu**, a **French artist**, prepared a series of **four prints** in **1848** visualising his dream of a world made up of **"democratic and social Republics"**.\n\nThis **first print** shows the peoples of **Europe and America** — men and women of all ages and social classes — **marching in a long train**, offering **homage to the Statue of Liberty** as they pass by it. Tap the dots on the picture to explore each part of it.',
         imageId: 'fig-1',
+        highlight: '**Who:** Frédéric Sorrieu, French artist. **What:** four prints (1848). **Theme:** a world of democratic and social republics.',
       },
       // Card 4: Liberty symbolism
       {
@@ -51,11 +36,22 @@ export const section1Subsections: Subsection[] = [
         type: 'vocabulary',
         text: 'Absolutist — A government or system of rule that has **no restraints on the power exercised**. In history, it refers to a form of **monarchical government** that was **centralised, militarised and repressive**. Think: kings with unlimited power, no parliament, no constitution. Keep this word in mind — you\'ll see it in the very next picture.',
       },
-      // Card 6: Vocabulary — Utopian (defined BEFORE first use, below)
+      // Card 4: Vocabulary — Utopian (defined BEFORE first use; carries the "why utopian" check)
       {
         id: 's1-intro-6',
         type: 'vocabulary',
         text: 'Utopian — A vision of a society that is **so ideal that it is unlikely to actually exist**. The word comes from Thomas More\'s 1516 book "Utopia". You\'re about to read that Sorrieu painted a **utopian vision** — meaning a beautiful, perfect dream of free nations that, in **1848, did not yet exist** because most of Europe was still ruled by absolute monarchs.',
+        inlineQuiz: {
+          question: 'Why is Sorrieu\'s vision called "utopian"?',
+          options: [
+            'Because it showed real events happening in Europe',
+            'Because it depicted an ideal world of democratic republics that did not yet exist',
+            'Because it was painted in the city of Utopia',
+            'Because the French government commissioned it',
+          ],
+          correctIndex: 1,
+          explanation: 'It is called "utopian" because it depicted an ideal world — all nations as democratic republics living in fraternity — which was far from reality in 1848 when most of Europe was still under absolute monarchies.',
+        },
       },
       // Card 7: Shattered absolutism + nations by flags (terms above are now defined)
       {
@@ -70,49 +66,23 @@ export const section1Subsections: Subsection[] = [
           explanation: 'The shattered remains represent the destruction of absolutist institutions — monarchies with unchecked, centralised power. This symbolises the rejection of autocratic rule.',
         },
       },
-      // Card 8: Order of procession
+      // Card 6: The marching nations + the nations that didn't exist yet (merged)
       {
         id: 's1-intro-7',
-        title: 'Who Marches in What Order?',
+        title: 'The Marching Nations',
         type: 'text',
-        text: 'The **order** of the march is not random — it tells a story. Leading the procession are the **United States and Switzerland**, which were **already nation-states** by 1848. **France**, identifiable by the **revolutionary tricolour**, has **just reached the statue**.\n\nWhat does that imply? France is shown as the **next nation to arrive at liberty** — fitting, because it was the French Revolution that lit the spark for the rest of Europe. Behind France come the peoples of **Germany**, bearing the **black, red and gold flag**, still on their way — a hint that Germany\'s journey to nationhood was yet to be completed.',
-        highlight: '**Procession order:** USA & Switzerland (already nations) → France (tricolour, just arriving = leading Europe to liberty) → Germany (black-red-gold flag, still on the way = not yet a nation).',
+        text: 'The **order** of the march is not random — it tells a story. Leading the procession are the **United States and Switzerland**, **already nation-states** by 1848. **France**, identifiable by the **revolutionary tricolour**, has **just reached the statue** — shown as the next nation to arrive at liberty, fitting because the French Revolution lit the spark for the rest of Europe. Behind France come the peoples of **Germany**, bearing the **black, red and gold flag**.\n\nHere\'s what makes the print so powerful: when Sorrieu painted it, **Germany and Italy did not yet exist as united nations!** The German flag was an expression of **liberal hopes in 1848** to unite the many German-speaking states into one nation. Sorrieu was painting nations that were still **dreams**.',
+        highlight: '**Procession:** USA & Switzerland (already nations) → France (tricolour, just arriving) → Germany (black-red-gold, still on the way). **Germany & Italy did NOT exist as nations in 1848** — Sorrieu painted them as he hoped they would become.',
       },
-      // Card 9: Germany didn't exist yet — significance
-      {
-        id: 's1-intro-8',
-        title: 'Painting Nations That Didn\'t Exist',
-        type: 'text',
-        text: 'Here\'s what makes the print so powerful — at the time Sorrieu created this image, the **German peoples did not yet exist as a united nation**! The flag they carry is an expression of **liberal hopes in 1848** to unify the numerous German-speaking principalities into **a nation-state under a democratic constitution**. Sorrieu was painting nations that were still **dreams**.',
-        highlight: '**Germany and Italy did not exist as unified nations in 1848.** Sorrieu painted them as he wished they would become — a dream, not reality.',
-      },
-      // Card 10: Fraternity — Christ, saints, angels
+      // Card 7: Fraternity — Christ, saints, angels
       {
         id: 's1-intro-9',
         title: 'The Heavenly Symbol — Fraternity',
         type: 'text',
-        text: 'From the heavens above, **Christ, saints and angels** gaze upon the scene, symbolising **fraternity among the nations** of the world. This is a key detail that students often miss — Sorrieu\'s vision was not just about individual nations gaining freedom, but about **all nations living together in brotherhood and harmony**.',
+        text: 'Finally, look up. From the heavens above, **Christ, saints and angels** gaze upon the scene, symbolising **fraternity among the nations** of the world. This is a key detail that students often miss — Sorrieu\'s vision was not just about individual nations gaining freedom, but about **all nations living together in brotherhood and harmony**.',
         highlight: '**Christ, saints and angels = fraternity among nations.** Sorrieu\'s full message: **liberty + equality + fraternity** for ALL nations of the world.',
       },
-      // Card 11: Reasoning quiz — WHY utopian
-      {
-        id: 's1-intro-10',
-        title: 'Why Did Sorrieu Create This Vision?',
-        type: 'text',
-        text: 'Sorrieu created these prints to **inspire people** with a vision of what the world could look like if the ideals of the French Revolution — **liberty, equality, fraternity** — were realised everywhere. In 1848, this was a **radical dream**: most European nations were ruled by monarchs, and countries like **Germany and Italy did not even exist** as unified nations yet.',
-        inlineQuiz: {
-          question: 'Why is Sorrieu\'s vision called "utopian"?',
-          options: [
-            'Because it showed real events happening in Europe',
-            'Because it depicted an ideal world of democratic republics that did not yet exist',
-            'Because it was painted in the city of Utopia',
-            'Because the French government commissioned it',
-          ],
-          correctIndex: 1,
-          explanation: 'It is called "utopian" because it depicted an ideal world — all nations as democratic republics living in fraternity — which was far from reality in 1848 when most of Europe was still under absolute monarchies.',
-        },
-      },
-      // Card 12: EXAM PREP — Synthesis card for 1, 3, and 5 mark answers
+      // Card 8: EXAM PREP — Synthesis card for 1, 3, and 5 mark answers
       {
         id: 's1-intro-exam',
         type: 'exam-prep',
