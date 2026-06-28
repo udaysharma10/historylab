@@ -87,8 +87,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's1',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Narrow street', description: 'The narrow lane in Amritsar where Indians were forced to crawl on the ground under Dyer\'s orders', x: 55, y: 30 },
-      { id: 'h2', label: 'British soldier', description: 'Armed British soldier enforcing the crawling order — a deliberate act of humiliation', x: 40, y: 60 },
+      { id: 'h1', label: 'Narrow street', description: 'The narrow lane in Amritsar where Indians were forced to crawl on the ground under Dyer\'s orders', x: 48, y: 42 },
+      { id: 'h2', label: 'British soldier', description: 'Armed British soldier enforcing the crawling order — a deliberate act of humiliation', x: 35, y: 78 },
     ],
     analysis: {
       whatYouSee: [
@@ -169,6 +169,10 @@ export const ch2Figures: Ch2Figure[] = [
     imagePath: '/images/ch2/fig-06-congress-leaders.png',
     sectionId: 's3',
     examRelevance: 'medium',
+    // NEEDS NEHA: this is a grainy group photo — individual identities (Patel/Nehru/Bose)
+    // cannot be reliably verified from the image, and the current coords don't match the
+    // caption's "extreme left / extreme right / fifth from right" cues. Left as-is pending
+    // an authoritative key from Neha before repositioning, to avoid mislabelling leaders.
     hotspots: [
       { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi — the central figure of the Congress and the independence movement', x: 38, y: 50 },
       { id: 'h2', label: 'Sardar Patel', description: 'Vallabhbhai Patel (extreme left) — led the Bardoli Satyagraha, known as "Sardar"', x: 52, y: 48 },
@@ -199,8 +203,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Gandhi leading', description: 'Gandhi walking with his famous staff — leading 78 volunteers on the 240-mile march from Sabarmati to Dandi', x: 25, y: 48 },
-      { id: 'h2', label: '78 volunteers', description: 'The trusted volunteers who started the march — by the time they reached Dandi, thousands had joined', x: 55, y: 55 },
+      { id: 'h1', label: 'Gandhi leading', description: 'Gandhi walking with his famous staff — leading 78 volunteers on the 240-mile march from Sabarmati to Dandi', x: 42, y: 45 },
+      { id: 'h2', label: '78 volunteers', description: 'The trusted volunteers who started the march — by the time they reached Dandi, thousands had joined', x: 62, y: 50 },
     ],
     analysis: {
       whatYouSee: [
@@ -282,9 +286,9 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'low',
     hotspots: [
-      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi at his ashram — the spiritual centre of the national movement', x: 50, y: 50 },
-      { id: 'h2', label: 'Nehru', description: 'Jawaharlal Nehru — by 1935, he was one of the most prominent Congress leaders', x: 33, y: 45 },
-      { id: 'h3', label: 'Maulana Azad', description: 'Maulana Abul Kalam Azad — a Muslim leader who remained committed to Hindu-Muslim unity and the Congress', x: 68, y: 45 },
+      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi at his ashram — the spiritual centre of the national movement', x: 26, y: 26 },
+      { id: 'h2', label: 'Nehru', description: 'Jawaharlal Nehru — by 1935, he was one of the most prominent Congress leaders', x: 48, y: 26 },
+      { id: 'h3', label: 'Maulana Azad', description: 'Maulana Abul Kalam Azad — a Muslim leader who remained committed to Hindu-Muslim unity and the Congress', x: 76, y: 26 },
     ],
     analysis: {
       whatYouSee: [
@@ -309,7 +313,7 @@ export const ch2Figures: Ch2Figure[] = [
     examRelevance: 'medium',
     hotspots: [
       { id: 'h1', label: 'Tilak', description: 'Bal Gangadhar Tilak — an early nationalist leader who popularised the idea of swaraj', x: 50, y: 42 },
-      { id: 'h2', label: 'Symbols of unity', description: 'Notice the temple, church, and masjid framing the image — symbols of different faiths united around the national leader', x: 50, y: 80 },
+      { id: 'h2', label: 'Symbols of unity', description: 'Notice the temple (top-left), masjid (top-right) and church framing the image — symbols of different faiths united around the national leader', x: 11, y: 8 },
     ],
     analysis: {
       whatYouSee: [
@@ -337,10 +341,10 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Ascetic figure', description: 'Bharat Mata is portrayed as calm, composed, divine, and spiritual — an ascetic, not a warrior', x: 50, y: 45 },
-      { id: 'h2', label: 'Mala (prayer beads)', description: 'The mala in one hand emphasises her spiritual, ascetic quality — connected to dharma, not power', x: 38, y: 58 },
-      { id: 'h3', label: 'Learning, food, clothing', description: 'She holds items representing what a mother provides — knowledge, nourishment, protection', x: 62, y: 52 },
-      { id: 'h4', label: 'Four arms', description: 'Four arms like a Hindu goddess — dispensing learning, food, clothing, and spiritual guidance', x: 50, y: 35 },
+      { id: 'h1', label: 'Ascetic figure', description: 'Bharat Mata is portrayed as calm, composed, divine, and spiritual — an ascetic, not a warrior', x: 50, y: 13 },
+      { id: 'h2', label: 'Mala (prayer beads)', description: 'The mala in one hand emphasises her spiritual, ascetic quality — connected to dharma, not power', x: 11, y: 45 },
+      { id: 'h3', label: 'Learning, food, clothing', description: 'She holds items representing what a mother provides — knowledge, nourishment, protection', x: 83, y: 36 },
+      { id: 'h4', label: 'Four arms', description: 'Four arms like a Hindu goddess — dispensing learning, food, clothing, and spiritual guidance', x: 50, y: 25 },
     ],
     analysis: {
       whatYouSee: [
@@ -369,7 +373,7 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Nehru with Bharat Mata', description: 'Nehru is shown holding the image of Bharat Mata and the map of India close to his heart', x: 50, y: 45 },
+      { id: 'h1', label: 'Nehru with Bharat Mata', description: 'Nehru is shown holding the image of Bharat Mata and the map of India close to his heart', x: 62, y: 68 },
     ],
     analysis: {
       whatYouSee: [
@@ -393,9 +397,9 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Trishul', description: 'The trident (trishul) — a weapon associated with Hindu deity Shiva. Unlike Tagore\'s version, this Bharat Mata is about POWER, not spirituality.', x: 42, y: 25 },
-      { id: 'h2', label: 'Lion', description: 'Symbol of power and authority — a departure from Tagore\'s calm, ascetic mother figure', x: 25, y: 58 },
-      { id: 'h3', label: 'Elephant', description: 'Another symbol of power, strength, and royalty — reinforcing the martial, powerful image', x: 75, y: 68 },
+      { id: 'h1', label: 'Trishul', description: 'The trident (trishul) — a weapon associated with Hindu deity Shiva. Unlike Tagore\'s version, this Bharat Mata is about POWER, not spirituality.', x: 43, y: 17 },
+      { id: 'h2', label: 'Lion', description: 'Symbol of power and authority — a departure from Tagore\'s calm, ascetic mother figure', x: 30, y: 81 },
+      { id: 'h3', label: 'Elephant', description: 'Another symbol of power, strength, and royalty — reinforcing the martial, powerful image', x: 70, y: 50 },
     ],
     analysis: {
       whatYouSee: [
