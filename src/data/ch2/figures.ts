@@ -30,8 +30,8 @@ export const ch2Figures: Ch2Figure[] = [
     examRelevance: 'medium',
     hotspots: [
       { id: 'h1', label: 'Dense crowd', description: 'Thousands of people filling the entire street — showing the massive scale of the hartal', x: 50, y: 60 },
-      { id: 'h2', label: 'Banners in Hindi', description: 'Protest banners in the local language — the movement was reaching ordinary people, not just English-speaking elites', x: 40, y: 30 },
-      { id: 'h3', label: 'White clothing', description: 'Most participants wearing white — many would later adopt khadi as a symbol of the national movement', x: 60, y: 50 },
+      { id: 'h2', label: 'Banners in Hindi', description: 'Protest banners in the local language — the movement was reaching ordinary people, not just English-speaking elites', x: 45, y: 30 },
+      { id: 'h3', label: 'White clothing', description: 'Most participants wearing white — many would later adopt khadi as a symbol of the national movement', x: 62, y: 62 },
     ],
     analysis: {
       whatYouSee: [
@@ -59,8 +59,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's1',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Workers marching', description: 'Indian workers from Newcastle marching to Transvaal — defying racist laws that denied rights to non-whites', x: 40, y: 50 },
-      { id: 'h2', label: 'Gandhi leading', description: 'Mahatma Gandhi was leading this march — his South African experience shaped satyagraha before he brought it to India', x: 20, y: 40 },
+      { id: 'h1', label: 'Workers marching', description: 'Indian workers from Newcastle marching to Transvaal — defying racist laws that denied rights to non-whites', x: 55, y: 55 },
+      { id: 'h2', label: 'Gandhi leading', description: 'Mahatma Gandhi was leading this march — his South African experience shaped satyagraha before he brought it to India', x: 22, y: 52 },
     ],
     analysis: {
       whatYouSee: [
@@ -87,8 +87,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's1',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Narrow street', description: 'The narrow lane in Amritsar where Indians were forced to crawl on the ground under Dyer\'s orders', x: 50, y: 40 },
-      { id: 'h2', label: 'British soldier', description: 'Armed British soldier enforcing the crawling order — a deliberate act of humiliation', x: 80, y: 50 },
+      { id: 'h1', label: 'Narrow street', description: 'The narrow lane in Amritsar where Indians were forced to crawl on the ground under Dyer\'s orders', x: 55, y: 30 },
+      { id: 'h2', label: 'British soldier', description: 'Armed British soldier enforcing the crawling order — a deliberate act of humiliation', x: 40, y: 60 },
     ],
     analysis: {
       whatYouSee: [
@@ -115,8 +115,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's2',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Bonfire of cloth', description: 'Foreign cloth being burnt in huge bonfires — a powerful visual act of resistance', x: 50, y: 40 },
-      { id: 'h2', label: 'Participants', description: 'People gathering to participate in the boycott — this was a public, communal act of defiance', x: 40, y: 60 },
+      { id: 'h1', label: 'Bonfire of cloth', description: 'Foreign cloth being burnt in huge bonfires — a powerful visual act of resistance', x: 52, y: 58 },
+      { id: 'h2', label: 'Participants', description: 'People gathering to participate in the boycott — this was a public, communal act of defiance', x: 28, y: 45 },
     ],
     analysis: {
       whatYouSee: [
@@ -143,7 +143,7 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's2',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Burnt ruins', description: 'The ruins of the police station that was set on fire by an angry mob on 4 February 1922', x: 50, y: 40 },
+      { id: 'h1', label: 'Burnt ruins', description: 'The ruins of the police station that was set on fire by an angry mob on 4 February 1922', x: 50, y: 52 },
     ],
     analysis: {
       whatYouSee: [
@@ -170,10 +170,10 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi — the central figure of the Congress and the independence movement', x: 40, y: 50 },
-      { id: 'h2', label: 'Sardar Patel', description: 'Vallabhbhai Patel (extreme left) — led the Bardoli Satyagraha, known as "Sardar"', x: 10, y: 40 },
-      { id: 'h3', label: 'Jawaharlal Nehru', description: 'Jawaharlal Nehru (extreme right) — presided over the Lahore Congress demanding Purna Swaraj', x: 90, y: 40 },
-      { id: 'h4', label: 'Subhas Chandra Bose', description: 'Subhas Chandra Bose (fifth from right) — represented the radical wing demanding mass agitation', x: 75, y: 40 },
+      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi — the central figure of the Congress and the independence movement', x: 38, y: 50 },
+      { id: 'h2', label: 'Sardar Patel', description: 'Vallabhbhai Patel (extreme left) — led the Bardoli Satyagraha, known as "Sardar"', x: 52, y: 48 },
+      { id: 'h3', label: 'Jawaharlal Nehru', description: 'Jawaharlal Nehru (extreme right) — presided over the Lahore Congress demanding Purna Swaraj', x: 66, y: 48 },
+      { id: 'h4', label: 'Subhas Chandra Bose', description: 'Subhas Chandra Bose (fifth from right) — represented the radical wing demanding mass agitation', x: 25, y: 55 },
     ],
     analysis: {
       whatYouSee: [
@@ -199,8 +199,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Gandhi leading', description: 'Gandhi walking with his famous staff — leading 78 volunteers on the 240-mile march from Sabarmati to Dandi', x: 30, y: 50 },
-      { id: 'h2', label: '78 volunteers', description: 'The trusted volunteers who started the march — by the time they reached Dandi, thousands had joined', x: 60, y: 50 },
+      { id: 'h1', label: 'Gandhi leading', description: 'Gandhi walking with his famous staff — leading 78 volunteers on the 240-mile march from Sabarmati to Dandi', x: 25, y: 48 },
+      { id: 'h2', label: '78 volunteers', description: 'The trusted volunteers who started the march — by the time they reached Dandi, thousands had joined', x: 55, y: 55 },
     ],
     analysis: {
       whatYouSee: [
@@ -228,7 +228,7 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Satyagrahis', description: 'Peaceful protestors being confronted by British police — maintaining non-violence under violent repression', x: 50, y: 50 },
+      { id: 'h1', label: 'Satyagrahis', description: 'Peaceful protestors being confronted by British police — maintaining non-violence under violent repression', x: 50, y: 58 },
     ],
     analysis: {
       whatYouSee: [
@@ -253,8 +253,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Women marchers', description: 'Women participating in nationalist processions — many left their homes for the first time to join the movement', x: 50, y: 40 },
-      { id: 'h2', label: 'Old women and mothers', description: 'Notice old women and mothers with children — showing that women of all ages joined', x: 60, y: 60 },
+      { id: 'h1', label: 'Women marchers', description: 'Women participating in nationalist processions — many left their homes for the first time to join the movement', x: 50, y: 50 },
+      { id: 'h2', label: 'Old women and mothers', description: 'Notice old women and mothers with children — showing that women of all ages joined', x: 30, y: 55 },
     ],
     analysis: {
       whatYouSee: [
@@ -282,9 +282,9 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'low',
     hotspots: [
-      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi at his ashram — the spiritual centre of the national movement', x: 30, y: 50 },
-      { id: 'h2', label: 'Nehru', description: 'Jawaharlal Nehru — by 1935, he was one of the most prominent Congress leaders', x: 60, y: 50 },
-      { id: 'h3', label: 'Maulana Azad', description: 'Maulana Abul Kalam Azad — a Muslim leader who remained committed to Hindu-Muslim unity and the Congress', x: 80, y: 50 },
+      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi at his ashram — the spiritual centre of the national movement', x: 50, y: 50 },
+      { id: 'h2', label: 'Nehru', description: 'Jawaharlal Nehru — by 1935, he was one of the most prominent Congress leaders', x: 33, y: 45 },
+      { id: 'h3', label: 'Maulana Azad', description: 'Maulana Abul Kalam Azad — a Muslim leader who remained committed to Hindu-Muslim unity and the Congress', x: 68, y: 45 },
     ],
     analysis: {
       whatYouSee: [
@@ -308,8 +308,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Tilak', description: 'Bal Gangadhar Tilak — an early nationalist leader who popularised the idea of swaraj', x: 50, y: 50 },
-      { id: 'h2', label: 'Symbols of unity', description: 'Notice the temple, church, and masjid framing the image — symbols of different faiths united around the national leader', x: 50, y: 15 },
+      { id: 'h1', label: 'Tilak', description: 'Bal Gangadhar Tilak — an early nationalist leader who popularised the idea of swaraj', x: 50, y: 42 },
+      { id: 'h2', label: 'Symbols of unity', description: 'Notice the temple, church, and masjid framing the image — symbols of different faiths united around the national leader', x: 50, y: 80 },
     ],
     analysis: {
       whatYouSee: [
@@ -337,10 +337,10 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Ascetic figure', description: 'Bharat Mata is portrayed as calm, composed, divine, and spiritual — an ascetic, not a warrior', x: 50, y: 40 },
-      { id: 'h2', label: 'Mala (prayer beads)', description: 'The mala in one hand emphasises her spiritual, ascetic quality — connected to dharma, not power', x: 35, y: 60 },
-      { id: 'h3', label: 'Learning, food, clothing', description: 'She holds items representing what a mother provides — knowledge, nourishment, protection', x: 55, y: 55 },
-      { id: 'h4', label: 'Four arms', description: 'Four arms like a Hindu goddess — dispensing learning, food, clothing, and spiritual guidance', x: 50, y: 50 },
+      { id: 'h1', label: 'Ascetic figure', description: 'Bharat Mata is portrayed as calm, composed, divine, and spiritual — an ascetic, not a warrior', x: 50, y: 45 },
+      { id: 'h2', label: 'Mala (prayer beads)', description: 'The mala in one hand emphasises her spiritual, ascetic quality — connected to dharma, not power', x: 38, y: 58 },
+      { id: 'h3', label: 'Learning, food, clothing', description: 'She holds items representing what a mother provides — knowledge, nourishment, protection', x: 62, y: 52 },
+      { id: 'h4', label: 'Four arms', description: 'Four arms like a Hindu goddess — dispensing learning, food, clothing, and spiritual guidance', x: 50, y: 35 },
     ],
     analysis: {
       whatYouSee: [
@@ -369,7 +369,7 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Nehru with Bharat Mata', description: 'Nehru is shown holding the image of Bharat Mata and the map of India close to his heart', x: 50, y: 50 },
+      { id: 'h1', label: 'Nehru with Bharat Mata', description: 'Nehru is shown holding the image of Bharat Mata and the map of India close to his heart', x: 50, y: 45 },
     ],
     analysis: {
       whatYouSee: [
@@ -393,9 +393,9 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Trishul', description: 'The trident (trishul) — a weapon associated with Hindu deity Shiva. Unlike Tagore\'s version, this Bharat Mata is about POWER, not spirituality.', x: 40, y: 30 },
-      { id: 'h2', label: 'Lion', description: 'Symbol of power and authority — a departure from Tagore\'s calm, ascetic mother figure', x: 30, y: 70 },
-      { id: 'h3', label: 'Elephant', description: 'Another symbol of power, strength, and royalty — reinforcing the martial, powerful image', x: 70, y: 70 },
+      { id: 'h1', label: 'Trishul', description: 'The trident (trishul) — a weapon associated with Hindu deity Shiva. Unlike Tagore\'s version, this Bharat Mata is about POWER, not spirituality.', x: 42, y: 25 },
+      { id: 'h2', label: 'Lion', description: 'Symbol of power and authority — a departure from Tagore\'s calm, ascetic mother figure', x: 25, y: 58 },
+      { id: 'h3', label: 'Elephant', description: 'Another symbol of power, strength, and royalty — reinforcing the martial, powerful image', x: 75, y: 68 },
     ],
     analysis: {
       whatYouSee: [
@@ -424,7 +424,7 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Women marchers', description: 'Women marching in large numbers during the Quit India Movement — the final mass struggle against British rule', x: 50, y: 50 },
+      { id: 'h1', label: 'Women marchers', description: 'Women marching in large numbers during the Quit India Movement — the final mass struggle against British rule', x: 50, y: 52 },
     ],
     analysis: {
       whatYouSee: [
