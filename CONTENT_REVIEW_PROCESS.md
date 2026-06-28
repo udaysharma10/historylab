@@ -186,4 +186,18 @@ Before marking a batch complete:
 | 7 | **Ch2 Unit 2/3** — NCM-participants recap converted from broken raw-markdown to a real **table**; Dandi-march facts as separate points | `2e067ca` |
 | 8 | **Ch2 Unit 4** — already had figures on `dev`; fixed mismatched Tilak-on-flag-card bug, added correctly-captioned Tilak print | `f632005` |
 
-**OPEN ITEM — Jallianwala Bagh photo:** Neha asked for Jallianwala Bagh massacre pictures. The NCERT Ch2 PDF has **no** such figure (only "crawling orders"), so it could not be extracted. A public-domain image must be sourced externally and dropped at `public/images/ch2/`, then wired into the massacre card (`ch2-s1-jallianwala`).
+**Jallianwala Bagh photo (resolved):** NCERT Ch2 PDF has no such figure, so two genuinely public-domain Wikimedia images were sourced — the **Jallianwala Bagh in 1919** (fig-15) and a **General Dyer** press photo (fig-16) — and wired into the buildup/massacre cards.
+
+### Round 2 — Figure & UX correctness (Neha + Uday live review)
+
+Trigger: Neha flagged the interactive hotspot dots on the Sorrieu print as "all mismatched." Investigation found a **systemic** issue: most figure files in **both** chapters were page-region captures with NCERT body text / Discuss-Activity boxes / captions / the page QR baked in, so hotspot %-coords could never align and the images looked cluttered.
+
+| Item | What was done | Commits |
+|------|---------------|---------|
+| Figure images | **Re-extracted all 35 figures clean** from the NCERT PDFs via `pdfimages` (embedded originals; matched to figures by page number) | `a1b9b55`, `03a22fb`, `a23b225` |
+| Hotspots | **Remapped + grid-verified ~97 hotspots** (Ch1 64 + Ch2 33) against the clean frames | `0c0d0ee`, `a23b225` |
+| UX | Chapter-level **"Learning Modes" → "Study Tools"** (plain tile names); section page **"Start Reading" moved to a prominent top CTA** | `a1b9b55`, `dc2c84e` |
+
+**Rulings from Neha this round (do NOT relitigate):** keep flowcharts even for parallel-list content (students grasp/remember them better); keep tap-to-reveal + per-card highlights (don't design down to passive students); tighten the Sorrieu intro (still to do in content track).
+
+**Next: full UI/UX track (with Uday).** Open items: verify chapter-home Study-Tools tile count (Ch1 should show 5); "Topics" list mixes Practice Quiz with lesson topics; screen-by-screen IA + mobile review. Plus Neha resumes the content track card-by-card (starting with tightening Sorrieu S1).
