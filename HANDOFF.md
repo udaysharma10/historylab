@@ -1,6 +1,6 @@
 # HistoryLab — Session Handover (read this first)
 
-**Last updated:** 2026-06-28 (Round 5) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `8edc6f7`
+**Last updated:** 2026-06-28 (Round 6) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `f4cc6d5`
 **Repo:** `github.com/udaysharma10/historylab` · **Local:** `/Users/udaysharma/Documents/Blostem/Claude_Projects/vedansh-history`
 
 This is a Grade-10 CBSE History self-learning web app (NCERT "India and the Contemporary World"). Ch1 = Rise of Nationalism in Europe, Ch2 = Nationalism in India. See `PROJECT_CONTEXT.md` for full architecture, `CONTENT_REVIEW_PROCESS.md` for the review log.
@@ -22,8 +22,9 @@ Neha reviews **one section at a time**; we fix, deploy, she re-reviews.
 **OPEN — content track:**
 - ✅ **ALL Ch2 figure hotspots re-verified at full resolution** (commit `f976c07`). Fixes: fig-7 Gandhi was on the wrong marcher; fig-10 Gandhi/Nehru/Azad all shifted (Gandhi's dot was on Nehru); fig-12 Bharat Mata symbols moved onto the actual hands/objects; fig-14a lion was on her dress; fig-13 onto the held image; fig-11 unity symbols → temple roundel; fig-3 soldier onto the soldier. (Ch2 field order: `label, description, x, y`.)
 - **fig-6 (Allahabad Congress leaders) FLAGGED `NEEDS NEHA`** in code: grainy group photo, individual identities (Patel/Nehru/Bose) can't be verified from the image and current coords contradict the "extreme left/right" caption. Left unchanged pending Neha's authoritative key (don't guess — risk of mislabelling leaders).
-- ✅ **Ch2 MCQ answer positions rebalanced** (commit `5f97cbd`) — inline quizzes + Practice-Quiz bank were "always B" (40/42 at option B); now 11 A / 10 B / 10 C / 11 D (options reordered, answer text preserved). Ch1 was already balanced.
-- Neha has **not** reviewed S2–S6 (Ch1) or any Ch2 content card-by-card yet.
+- ✅ **Ch2 MCQ answer positions rebalanced** (commit `5f97cbd`) — inline quizzes + Practice-Quiz bank were "always B" (40/42 at option B); now 11 A / 10 B / 10 C / 11 D (options reordered, answer text preserved). Ch1 was already balanced. **Rebalance method:** `scratchpad/rebalance.py` (swaps two option literals + updates `correctIndex`; doesn't persist — recreate if needed). If you ADD Ch2 MCQs later, re-check the distribution.
+- ✅ **Neha S1 round 2** (commit `e0e2136`): removed the **fig-1 "United States & Switzerland" hotspot** (not in NCERT — only that dot, nothing else); fixed the **Europe-1815 interactive map** dots that sat on water (Prussia, Spain, Ottoman) → moved their region centres onto land in `src/data/ch1/maps.ts`. NOTE: map dots = **centre of the `{x,y,width,height}` box** (`x+w/2, y+h/2`), `InteractiveMap.tsx`. The fig-3 *figure* Ottoman hotspot is at a similar low spot — nudge it too if Neha asks (left for now).
+- Neha has **not** reviewed S2–S6 (Ch1) or any Ch2 content card-by-card yet. Ch1 S1 is the only section reviewed; she is moving forward to broader review now.
 - The `FigureHotspotOverlay.tsx` tooltip flips **above** the dot when `spot.y >= 58` and clamps horizontally (so dots up to ~92 are fine).
 
 **Neha's structural rulings — DO NOT RELITIGATE:**
@@ -41,8 +42,14 @@ Fraunces (display) + Inter (body) via `@fontsource-variable/*`. Current palette 
 - **Known pre-existing issue (NOT from theme work):** horizontal overflow at ~390px phone width. App is iPad-first; separate mobile-IA task.
 
 ### 3. UX / IA TRACK (PARKED — resume after content)
-- ✅ Done: "Learning Modes" → **"Study Tools"**; section "Start Reading" top CTA; **Study Tools confirmed showing all 5 tiles** (Timeline/Maps/Figures/Flashcards/Exam) on Ch1 during the revamp.
+- ✅ Done: "Learning Modes" → **"Study Tools"**; section "Start Reading" top CTA; **Study Tools confirmed showing all 5 tiles** on Ch1.
+- ✅ **Breadcrumb navigation** (commit `f4cc6d5`): the header back arrow is `navigate(-1)` (history-based), so Section→Quiz→back stranded Neha with no way to the chapter menu. Added breadcrumbs (`All Chapters · Chapter N · Section [· Quiz]`, with Chapter/Section as links) on **SectionModule** + **QuizMode**. Also fixed QuizMode "back to section" to the chapter-aware route `/chapter/:cid/section/:sid` (was hitting the `/section/:sid` redirect). **TODO if wanted:** extend the same breadcrumb to the 5 study-tool screens (Timeline/Maps/Figures/Flashcards/Exam) for full consistency.
+- ✅ **Flashcard fixes** (`bfd3ff3` + `c09fe08`): (1) rating buttons were clipped on long answers — the flip card's two faces are `absolute inset-0` so they didn't grow a fixed-height container; `FlashcardSingle` now measures both faces (ResizeObserver) and sizes to the taller. (2) Card blended into the bg — added `border border-hist-line` + `shadow-card-hover`. **Flashcard modality = SM-2 spaced repetition** (`engine/spacedRepetition.ts`, persisted to localStorage `vedansh-history-flashcards`); "Review Due" is schedule-driven, "Practice All" = random 20, "Practice by Section" = filtered. Uday confirmed: **keep the modality as-is.**
 - **Open:** "Topics" list still mixes "Practice Quiz" in with lesson topics; **mobile (~390px) horizontal overflow** (pre-existing, see Theme track); full screen-by-screen IA pass.
+
+### INFRA / DEPLOY
+- ✅ **`vercel.json` SPA rewrite** (commit `5533824`): deep links / refreshes (e.g. `/chapter/ch1/section/s1`) were 404ing on Vercel (no fallback to `index.html`); catch-all rewrite fixes it and lets AuthGuard handle expiry → login.
+- **Custom domain `historylab.in` (PENDING UDAY — not code):** add in Vercel → Settings → Domains; DNS at registrar = A `@`→`76.76.21.21`, CNAME `www`→`cname.vercel-dns.com`. **Must also whitelist the new domain** in Supabase Auth (Site URL + Redirect URLs) and Google OAuth (authorized origins + the supabase `/auth/v1/callback` redirect) or login breaks. No repo changes needed.
 
 ---
 
