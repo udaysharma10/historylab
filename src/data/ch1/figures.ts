@@ -80,10 +80,10 @@ export const figures: Figure[] = [
     hotspots: [
       { id: 'h3-1', x: 78, y: 30, label: 'Russian Empire', description: 'Vast territory to the east. Russia was given part of Poland at Vienna.' },
       { id: 'h3-2', x: 56, y: 60, label: 'Austrian Empire', description: 'Austria was given control of northern Italy. Multi-ethnic Habsburg Empire.' },
-      { id: 'h3-3', x: 54, y: 42, label: 'Prussia', description: 'Given important new territories on its western frontiers.' },
+      { id: 'h3-3', x: 50, y: 47, label: 'Prussia', description: 'Given important new territories on its western frontiers.' },
       { id: 'h3-4', x: 26, y: 62, label: 'France', description: 'Bourbon dynasty restored. Lost territories annexed under Napoleon.' },
       { id: 'h3-5', x: 62, y: 80, label: 'Ottoman Empire', description: 'Controlled the Balkans — a source of future nationalist tension.' },
-      { id: 'h3-6', x: 42, y: 45, label: 'Kingdom of Netherlands', description: 'Set up on French boundary, including Belgium, to prevent French expansion.' },
+      { id: 'h3-6', x: 35, y: 46, label: 'Kingdom of Netherlands', description: 'Set up on French boundary, including Belgium, to prevent French expansion.' },
     ],
     analysis: {
       whatYouSee: [
@@ -115,7 +115,7 @@ export const figures: Figure[] = [
       { id: 'h4-1', x: 52, y: 22, label: 'Tree of Liberty', description: 'Symbolic tree planted by French armies in conquered territories.' },
       { id: 'h4-2', x: 62, y: 52, label: 'French soldiers', description: 'Recognisable by blue, white and red uniforms — portrayed as oppressors, not liberators.' },
       { id: 'h4-3', x: 30, y: 65, label: 'German peasant forced down', description: 'Shows how French "liberation" meant subjugation for local populations.' },
-      { id: 'h4-4', x: 82, y: 40, label: 'German inscription (sarcastic)', description: '"Take freedom and equality from us" — sarcastic tone criticises French claims of liberation.' },
+      { id: 'h4-4', x: 52, y: 39, label: 'German inscription (sarcastic)', description: '"Take freedom and equality from us" — sarcastic tone criticises French claims of liberation.' },
     ],
     analysis: {
       whatYouSee: [
@@ -206,8 +206,8 @@ export const figures: Figure[] = [
     sectionId: 's2',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h7-1', x: 52, y: 42, label: 'Giuseppe Mazzini', description: 'Italian revolutionary who founded Young Italy (Marseilles) and Young Europe (Berne).' },
-      { id: 'h7-2', x: 28, y: 58, label: 'Members from multiple nations', description: 'Young Europe had members from Poland, France, Italy and the German states.' },
+      { id: 'h7-1', x: 36, y: 31, label: 'Giuseppe Mazzini', description: 'Italian revolutionary who founded Young Italy (Marseilles) and Young Europe (Berne).' },
+      { id: 'h7-2', x: 13, y: 30, label: 'Members from multiple nations', description: 'Young Europe had members from Poland, France, Italy and the German states.' },
     ],
     analysis: {
       whatYouSee: [
@@ -239,7 +239,7 @@ export const figures: Figure[] = [
     examRelevance: 'high',
     hotspots: [
       { id: 'h8-1', x: 38, y: 58, label: 'Suffering Greeks', description: 'Women and children shown suffering — Delacroix focuses on human cost to evoke sympathy.' },
-      { id: 'h8-2', x: 75, y: 38, label: 'Ottoman soldiers', description: 'Turkish forces depicted as aggressors in the massacre at Chios.' },
+      { id: 'h8-2', x: 79, y: 42, label: 'Ottoman soldiers', description: 'Turkish forces depicted as aggressors in the massacre at Chios.' },
       { id: 'h8-3', x: 20, y: 45, label: 'Vivid colours', description: 'Delacroix used vivid Romantic colours to dramatise the incident and appeal to emotions.' },
     ],
     analysis: {
@@ -298,7 +298,7 @@ export const figures: Figure[] = [
     examRelevance: 'high',
     hotspots: [
       { id: 'h10-1', x: 50, y: 55, label: 'Frankfurt parliament', description: '831 elected representatives from German states met on 18 May 1848 to draft a constitution.' },
-      { id: 'h10-2', x: 50, y: 15, label: 'Women in the gallery', description: 'Women were admitted only as observers to the visitors\' gallery — denied suffrage rights.' },
+      { id: 'h10-2', x: 20, y: 30, label: 'Women in the gallery', description: 'Women were admitted only as observers to the visitors\' gallery — denied suffrage rights.' },
       { id: 'h10-3', x: 78, y: 30, label: 'Church of St Paul', description: 'The parliament convened in this church in Frankfurt — a symbol of liberal hopes for a unified German nation.' },
     ],
     analysis: {
@@ -331,10 +331,10 @@ export const figures: Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h11-1', x: 52, y: 28, label: 'Kaiser William I', description: 'Proclaimed German Emperor on 18 January 1871 in the Hall of Mirrors, Versailles.' },
-      { id: 'h11-2', x: 50, y: 52, label: 'Otto von Bismarck', description: 'Chief Minister of Prussia — the architect of German unification through "blood and iron".' },
-      { id: 'h11-3', x: 18, y: 22, label: 'Hall of Mirrors, Versailles', description: 'The ceremony was held in the French palace — a deliberate humiliation of France after the Franco-Prussian War.' },
-      { id: 'h11-4', x: 72, y: 58, label: 'Prussian army officers', description: 'Military dominance of Prussia is emphasised — the army was the architect of unification.' },
+      { id: 'h11-1', x: 33, y: 52, label: 'Kaiser William I', description: 'Proclaimed German Emperor on 18 January 1871 in the Hall of Mirrors, Versailles.' },
+      { id: 'h11-2', x: 44, y: 58, label: 'Otto von Bismarck', description: 'Chief Minister of Prussia — the architect of German unification through "blood and iron".' },
+      { id: 'h11-3', x: 66, y: 30, label: 'Hall of Mirrors, Versailles', description: 'The ceremony was held in the French palace — a deliberate humiliation of France after the Franco-Prussian War.' },
+      { id: 'h11-4', x: 74, y: 55, label: 'Prussian army officers', description: 'Military dominance of Prussia is emphasised — the army was the architect of unification.' },
     ],
     analysis: {
       whatYouSee: [
@@ -363,9 +363,9 @@ export const figures: Figure[] = [
     examRelevance: 'high',
     hotspots: [
       { id: 'h12-1', x: 52, y: 42, label: 'Prussia (before 1866)', description: 'The core state that led German unification through military might.' },
-      { id: 'h12-2', x: 50, y: 66, label: 'South German states', description: 'Joined with Prussia to form the German Empire in 1871.' },
-      { id: 'h12-3', x: 74, y: 74, label: 'Austrian Empire (excluded)', description: 'Excluded from the German Confederation after 1867 — "kleindeutsch" (small Germany) solution.' },
-      { id: 'h12-4', x: 32, y: 50, label: 'Rhineland', description: 'Won by Prussia in the Franco-Prussian War of 1871.' },
+      { id: 'h12-2', x: 25, y: 76, label: 'South German states', description: 'Joined with Prussia to form the German Empire in 1871.' },
+      { id: 'h12-3', x: 46, y: 86, label: 'Austrian Empire (excluded)', description: 'Excluded from the German Confederation after 1867 — "kleindeutsch" (small Germany) solution.' },
+      { id: 'h12-4', x: 9, y: 43, label: 'Rhineland', description: 'Won by Prussia in the Franco-Prussian War of 1871.' },
     ],
     analysis: {
       whatYouSee: [
@@ -393,8 +393,8 @@ export const figures: Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h13-1', x: 62, y: 38, label: 'Bismarck (towering figure)', description: 'Depicted as a giant dominating the tiny parliamentarians — shows his authoritarian power.' },
-      { id: 'h13-2', x: 28, y: 74, label: 'Small deputies', description: 'Elected members of parliament shown as tiny, insignificant figures under Bismarck\'s control.' },
+      { id: 'h13-1', x: 24, y: 45, label: 'Bismarck (towering figure)', description: 'Depicted as a giant dominating the tiny parliamentarians — shows his authoritarian power.' },
+      { id: 'h13-2', x: 74, y: 43, label: 'Small deputies', description: 'Elected members of parliament shown as tiny, insignificant figures under Bismarck\'s control.' },
     ],
     analysis: {
       whatYouSee: [
@@ -483,9 +483,9 @@ export const figures: Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h15-1', x: 32, y: 42, label: 'Garibaldi', description: 'Holding the base of the boot — represents his conquest of southern Italy.' },
-      { id: 'h15-2', x: 58, y: 35, label: 'Victor Emmanuel II', description: 'Entering the boot from the top — represents the monarchy leading unification from the north.' },
-      { id: 'h15-3', x: 48, y: 68, label: 'Boot-shaped Italy', description: 'The Italian peninsula\'s boot shape is used as a visual metaphor for unification.' },
+      { id: 'h15-1', x: 36, y: 52, label: 'Garibaldi', description: 'Holding the base of the boot — represents his conquest of southern Italy.' },
+      { id: 'h15-2', x: 62, y: 30, label: 'Victor Emmanuel II', description: 'Entering the boot from the top — represents the monarchy leading unification from the north.' },
+      { id: 'h15-3', x: 47, y: 66, label: 'Boot-shaped Italy', description: 'The Italian peninsula\'s boot shape is used as a visual metaphor for unification.' },
     ],
     analysis: {
       whatYouSee: [
@@ -545,9 +545,9 @@ export const figures: Figure[] = [
     examRelevance: 'high',
     hotspots: [
       { id: 'h17-1', x: 50, y: 11, label: 'Crown of oak leaves', description: 'Symbolises heroism — the German oak stands for bravery.' },
-      { id: 'h17-2', x: 37, y: 58, label: 'Sword', description: 'Readiness to fight for the nation.' },
-      { id: 'h17-3', x: 40, y: 64, label: 'Olive branch around sword', description: 'Willingness to make peace.' },
-      { id: 'h17-4', x: 50, y: 38, label: 'Breastplate with eagle', description: 'Symbol of the German empire — strength.' },
+      { id: 'h17-2', x: 15, y: 40, label: 'Sword', description: 'Readiness to fight for the nation.' },
+      { id: 'h17-3', x: 9, y: 33, label: 'Olive branch around sword', description: 'Willingness to make peace.' },
+      { id: 'h17-4', x: 48, y: 25, label: 'Breastplate with eagle', description: 'Symbol of the German empire — strength.' },
       { id: 'h17-5', x: 28, y: 18, label: 'Black, red and gold tricolour', description: 'Flag of the liberal-nationalists in 1848, banned by the Dukes of the German states.' },
       { id: 'h17-6', x: 72, y: 14, label: 'Rays of rising sun', description: 'Beginning of a new era for the German nation.' },
     ],
@@ -580,8 +580,8 @@ export const figures: Figure[] = [
     sectionId: 's5',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h18-1', x: 45, y: 48, label: 'Fallen Germania', description: 'Germania lies defeated on the ground — symbolises the failure of the 1848 revolution.' },
-      { id: 'h18-2', x: 68, y: 62, label: 'Broken symbols', description: 'The symbols of hope from Veit\'s painting are now broken and scattered.' },
+      { id: 'h18-1', x: 35, y: 32, label: 'Fallen Germania', description: 'Germania lies defeated on the ground — symbolises the failure of the 1848 revolution.' },
+      { id: 'h18-2', x: 16, y: 84, label: 'Broken symbols', description: 'The symbols of hope from Veit\'s painting are now broken and scattered.' },
     ],
     analysis: {
       whatYouSee: [
@@ -610,8 +610,8 @@ export const figures: Figure[] = [
     sectionId: 's5',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h19-1', x: 45, y: 45, label: 'Germania standing guard', description: 'A powerful, protective figure guarding the Rhine — the western border of the German lands.' },
-      { id: 'h19-2', x: 58, y: 55, label: 'Sword inscription', description: '"The German sword protects the German Rhine" — nationalist sentiment about defending German territory.' },
+      { id: 'h19-1', x: 45, y: 42, label: 'Germania standing guard', description: 'A powerful, protective figure guarding the Rhine — the western border of the German lands.' },
+      { id: 'h19-2', x: 33, y: 60, label: 'Sword inscription', description: '"The German sword protects the German Rhine" — nationalist sentiment about defending German territory.' },
     ],
     analysis: {
       whatYouSee: [
@@ -640,8 +640,8 @@ export const figures: Figure[] = [
     sectionId: 's6',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h20-1', x: 50, y: 14, label: 'Angels with "Freedom" banner', description: 'Ironic — the banner of "freedom" is used to justify imperial domination.' },
-      { id: 'h20-2', x: 50, y: 45, label: 'Britannia', description: 'Female allegory of Britain — triumphantly sitting over the globe.' },
+      { id: 'h20-1', x: 40, y: 7, label: 'Angels with "Freedom" banner', description: 'Ironic — the banner of "freedom" is used to justify imperial domination.' },
+      { id: 'h20-2', x: 47, y: 76, label: 'Britannia', description: 'Female allegory of Britain — triumphantly sitting over the globe.' },
       { id: 'h20-3', x: 75, y: 72, label: 'Colonial imagery', description: 'Tigers, elephants, forests and "primitive" people — stereotypical representation of colonies.' },
       { id: 'h20-4', x: 22, y: 55, label: 'World map', description: 'Shows the extent of the British Empire — nationalism merged with imperialism.' },
     ],
