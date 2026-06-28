@@ -33,7 +33,7 @@ export function InteractiveMap({
   onRegionClick,
   showLabels = false,
   dimUnselected = false,
-  sectionColor = '#2980B9',
+  sectionColor = '#5571B5',
   disabled = false,
 }: InteractiveMapProps) {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null)

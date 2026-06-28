@@ -29,7 +29,7 @@ export const historyBook: Book = {
   classNumber: 10,
   subject: 'History',
   icon: '📜',
-  color: '#C0392B',
+  color: '#C36B53',
   chapters: [
     {
       id: 'ch1',

@@ -3,52 +3,52 @@
 @import "@fontsource-variable/inter";
 
 @theme {
-  /* History scholarly palette — refined "mature" theme */
-  --color-hist-red: #C0392B;
-  --color-hist-blue: #2980B9;
-  --color-hist-gold: #C0911F;
-  --color-hist-green: #1F9E57;
-  --color-hist-purple: #7D3C98;
-  --color-hist-orange: #D9821F;
-  --color-hist-teal: #16A085;
-  --color-hist-dark: #2A2750;     /* navy — headings, brand, primary text */
+  /* History palette — "Cool Peach & Lavender" (C2: peach-led, grounded by plum ink) */
+  --color-hist-red: #C36B53;
+  --color-hist-blue: #5571B5;
+  --color-hist-gold: #DC835F;     /* peach — lead accent (brand "Lab", CTAs, ring) */
+  --color-hist-green: #5C9368;
+  --color-hist-purple: #9B5C9A;
+  --color-hist-orange: #C2893E;
+  --color-hist-teal: #3F8E84;
+  --color-hist-dark: #3E3548;     /* deep plum-slate — headings, brand, primary text */
 
-  /* Extended mature-theme tokens */
-  --color-hist-navy: #2A2750;
-  --color-hist-ink: #322E55;      /* warm ink for body copy */
-  --color-hist-muted: #7E7A96;    /* secondary / meta text */
-  --color-hist-line: #EFE7DB;     /* hairline borders */
-  --color-hist-indigo: #5B5BD6;
-  --color-hist-indigo-soft: #ECECFB;
-  --color-hist-gold-soft: #FBF1D9;
+  /* Extended theme tokens */
+  --color-hist-navy: #3E3548;
+  --color-hist-ink: #4E4760;      /* plum ink for body copy */
+  --color-hist-muted: #948B9C;    /* secondary / meta text */
+  --color-hist-line: #EFE3DC;     /* peach hairline borders */
+  --color-hist-indigo: #7E72C2;   /* dusty lavender — cool secondary accent */
+  --color-hist-indigo-soft: #ECE8F8;
+  --color-hist-gold-soft: #FAE4D8; /* peach soft wash */
 
-  /* Section colors */
-  --color-section-1: #C0392B;
-  --color-section-2: #2980B9;
-  --color-section-3: #D9821F;
-  --color-section-4: #1F9E57;
-  --color-section-5: #7D3C98;
-  --color-section-6: #16A085;
+  /* Section colors (muted jewel set) */
+  --color-section-1: #C36B53;
+  --color-section-2: #5571B5;
+  --color-section-3: #C2893E;
+  --color-section-4: #5C9368;
+  --color-section-5: #9B5C9A;
+  --color-section-6: #3F8E84;
 
-  /* Backgrounds */
-  --color-bg-start: #FBF5EE;
-  --color-bg-end: #F4E8DA;
-  --color-card-warm: #FBF5EE;
-  --color-card-cool: #ECECFB;
-  --color-card-green: #E7F4EC;
-  --color-card-purple: #F2EAF7;
+  /* Backgrounds — cool peach → lavender (peach-led) */
+  --color-bg-start: #FBEFE7;
+  --color-bg-end: #F1ECFA;
+  --color-card-warm: #FBEFE7;
+  --color-card-cool: #ECE8F8;
+  --color-card-green: #E8F1E9;
+  --color-card-purple: #F4E9F3;
 
-  /* Stars */
-  --color-star-gold: #C0911F;
+  /* Stars — kept a warm gold so achievement reads distinct from the peach accent */
+  --color-star-gold: #C99A3A;
 
   /* Fonts */
   --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
   --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
 
-  /* Shadows — soft mauve-tinted */
-  --shadow-card: 0 6px 18px rgba(42, 39, 80, 0.07);
-  --shadow-card-hover: 0 14px 34px rgba(42, 39, 80, 0.12);
-  --shadow-button: 0 4px 0px rgba(42, 39, 80, 0.15);
+  /* Shadows — soft plum-tinted */
+  --shadow-card: 0 6px 18px rgba(70, 60, 100, 0.07);
+  --shadow-card-hover: 0 14px 34px rgba(70, 60, 100, 0.11);
+  --shadow-button: 0 4px 0px rgba(70, 60, 100, 0.15);
 }
 
 /* Base styles */

@@ -162,7 +162,7 @@ export function FlashcardMode() {
         {/* Cards list */}
         <div className="space-y-3">
           {browseCards.map((card, i) => {
-            const color = SECTION_COLORS[card.sectionId] || '#2980B9'
+            const color = SECTION_COLORS[card.sectionId] || '#5571B5'
             const state = reviewStates[card.id]
             const mastered = state && state.interval >= 21
 
@@ -218,7 +218,7 @@ export function FlashcardMode() {
   // === PRACTICE ===
   if (phase === 'practice') {
     const card = practiceCards[currentIndex]
-    const color = SECTION_COLORS[card.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[card.sectionId] || '#5571B5'
 
     return (
       <div className="max-w-lg mx-auto">
@@ -238,7 +238,7 @@ export function FlashcardMode() {
               key={i}
               className="h-1.5 flex-1 rounded-full transition-colors"
               style={{
-                backgroundColor: i < currentIndex ? '#1F9E57' :
+                backgroundColor: i < currentIndex ? '#5C9368' :
                   i === currentIndex ? color : '#E5E7EB',
               }}
             />
@@ -286,7 +286,7 @@ export function FlashcardMode() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="h-2" style={{ background: 'linear-gradient(90deg, #7D3C98, #7D3C9860)' }} />
+          <div className="h-2" style={{ background: 'linear-gradient(90deg, #9B5C9A, #9B5C9A60)' }} />
           <div className="p-6 sm:p-8 text-center">
             <motion.div
               className="text-6xl mb-3"

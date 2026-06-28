@@ -48,7 +48,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   if (loading) {
     return (
       <div className="min-h-dvh flex items-center justify-center"
-        style={{ background: 'linear-gradient(135deg, #FBF5EE, #F4E8DA)' }}
+        style={{ background: 'linear-gradient(135deg, #FBEFE7, #F1ECFA)' }}
       >
         <div className="text-center">
           <div className="text-5xl mb-4 animate-float">📜</div>
@@ -81,7 +81,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
     if (isAdminTeacher(user.email)) {
       return (
         <div className="min-h-dvh flex items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, #FBF5EE, #F4E8DA)' }}
+          style={{ background: 'linear-gradient(135deg, #FBEFE7, #F1ECFA)' }}
         >
           <div className="text-center">
             <div className="text-5xl mb-4 animate-float">👩‍🏫</div>

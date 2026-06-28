@@ -16,8 +16,8 @@ import type { NCERTQuestion } from '../types/chapter'
 type ExamPhase = 'home' | 'source-read' | 'source-practice' | 'ncert' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
-  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
+  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -119,7 +119,7 @@ export function ExamPractice() {
   if (phase === 'source-practice') {
     const activity = activities[currentIndex]
     const source = sources.find(s => s.id === activity.sourceId)
-    const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
 
     if (!source) return null
 
@@ -220,7 +220,7 @@ export function ExamPractice() {
   if (phase === 'results') {
     return (
       <QuizResults
-        sectionColor="#C0392B"
+        sectionColor="#C36B53"
         activityType="source-comprehension"
         correct={totalCorrect}
         total={totalQuestions}
@@ -285,7 +285,7 @@ export function ExamPractice() {
           </div>
           <div className="space-y-2">
             {sources.map(source => {
-              const color = SECTION_COLORS[source.sectionId] || '#2980B9'
+              const color = SECTION_COLORS[source.sectionId] || '#5571B5'
               return (
                 <motion.button
                   key={source.id}
@@ -400,7 +400,7 @@ function NCERTQuestionCard({
     if (!expanded) setShowAnswer(false)
   }
 
-  const typeColor = question.type === 'write-in-brief' ? '#2980B9' : '#7D3C98'
+  const typeColor = question.type === 'write-in-brief' ? '#5571B5' : '#9B5C9A'
   const typeLabel = question.type === 'write-in-brief' ? 'Write in Brief' : 'Discuss'
 
   return (

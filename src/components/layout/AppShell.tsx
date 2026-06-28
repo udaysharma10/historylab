@@ -56,8 +56,8 @@ export function AppShell() {
               <svg width="18" height="18" viewBox="0 0 24 24">
                 <path
                   d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                  fill="#C0911F"
-                  stroke="#E6A900"
+                  fill="#C99A3A"
+                  stroke="#B5841F"
                   strokeWidth="0.5"
                 />
               </svg>
@@ -71,7 +71,7 @@ export function AppShell() {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/dashboard')}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2980B9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5571B5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
                   <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
                 </svg>

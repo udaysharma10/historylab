@@ -14,8 +14,8 @@ import type { SectionId } from '../types/progress'
 type FigurePhase = 'home' | 'gallery' | 'detail' | 'practice' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
-  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
+  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -121,7 +121,7 @@ export function FigureMode() {
 
   // === DETAIL ===
   if (phase === 'detail' && selectedFigure) {
-    const color = SECTION_COLORS[selectedFigure.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[selectedFigure.sectionId] || '#5571B5'
     return (
       <FigureDetail
         figure={selectedFigure}
@@ -139,7 +139,7 @@ export function FigureMode() {
   if (phase === 'practice') {
     const activity = activities[currentIndex]
     const figure = figures.find(f => f.id === activity.figureId)
-    const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
 
     if (!figure) return null
 
@@ -181,7 +181,7 @@ export function FigureMode() {
   if (phase === 'results') {
     return (
       <QuizResults
-        sectionColor="#7D3C98"
+        sectionColor="#9B5C9A"
         activityType="image-analysis"
         correct={totalCorrect}
         total={totalQuestions}
@@ -278,7 +278,7 @@ export function FigureMode() {
                   <span
                     key={a.id}
                     className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-                    style={{ backgroundColor: '#D9821F' }}
+                    style={{ backgroundColor: '#C2893E' }}
                   >
                     Medium
                   </span>
@@ -320,7 +320,7 @@ export function FigureMode() {
         <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Figures</h3>
         <div className="space-y-2">
           {figures.map((figure, i) => {
-            const color = SECTION_COLORS[figure.sectionId] || '#2980B9'
+            const color = SECTION_COLORS[figure.sectionId] || '#5571B5'
             const typeIcons: Record<string, string> = {
               painting: '🎨', caricature: '✏️', map: '🗺️',
               photograph: '📷', stamp: '📮', banner: '🏴',

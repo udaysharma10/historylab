@@ -14,14 +14,14 @@ import type { SectionId } from '../types/progress'
 type TimelinePhase = 'home' | 'explore' | 'pick-activity' | 'playing' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
-  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
+  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
 }
 
 const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: 'Easy', color: '#1F9E57' },
-  medium: { label: 'Medium', color: '#D9821F' },
-  hard: { label: 'Hard', color: '#C0392B' },
+  easy: { label: 'Easy', color: '#5C9368' },
+  medium: { label: 'Medium', color: '#C2893E' },
+  hard: { label: 'Hard', color: '#C36B53' },
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -92,7 +92,7 @@ export function TimelineMode() {
   // === PLAYING PHASE ===
   if (phase === 'playing') {
     const currentActivity = activities[currentIndex]
-    const color = SECTION_COLORS[currentActivity.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[currentActivity.sectionId] || '#5571B5'
 
     return (
       <div className="max-w-lg mx-auto">
@@ -131,7 +131,7 @@ export function TimelineMode() {
   if (phase === 'results') {
     return (
       <QuizResults
-        sectionColor="#2980B9"
+        sectionColor="#5571B5"
         activityType="timeline-order"
         correct={correctCount}
         total={activities.length}
@@ -245,7 +245,7 @@ export function TimelineMode() {
         <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Timeline Activities</h3>
         <div className="space-y-2">
           {timelineActivities.map((activity, i) => {
-            const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+            const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
             const diff = DIFFICULTY_LABELS[activity.difficulty]
 
             return (

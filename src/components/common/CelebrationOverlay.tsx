@@ -30,7 +30,7 @@ export function CelebrationOverlay({ show, stars, message, onClose, onExplore, e
 
       const duration = 2000
       const end = Date.now() + duration
-      const colors = ['#C0911F', '#C0392B', '#2980B9', '#1F9E57', '#7D3C98']
+      const colors = ['#C0911F', '#C36B53', '#5571B5', '#5C9368', '#9B5C9A']
 
       const frame = () => {
         confetti({

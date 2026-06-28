@@ -8,7 +8,7 @@ interface LoginPageProps {
 export function LoginPage({ onSignIn, loading }: LoginPageProps) {
   return (
     <div className="min-h-dvh flex items-center justify-center p-4"
-      style={{ background: 'linear-gradient(135deg, #FBF5EE, #F4E8DA)' }}
+      style={{ background: 'linear-gradient(135deg, #FBEFE7, #F1ECFA)' }}
     >
       <motion.div
         className="bg-white rounded-3xl p-8 shadow-card max-w-md w-full text-center"

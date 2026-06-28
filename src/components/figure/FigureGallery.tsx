@@ -9,8 +9,8 @@ interface FigureGalleryProps {
 }
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
-  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
+  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -90,7 +90,7 @@ export function FigureGallery({ onSelectFigure, onBack }: FigureGalleryProps) {
         <button
           className="text-xs font-body font-semibold px-3 py-1.5 rounded-full transition-colors"
           style={{
-            backgroundColor: sectionFilter === 'all' ? '#2A2750' : '#F3F4F6',
+            backgroundColor: sectionFilter === 'all' ? '#3E3548' : '#F3F4F6',
             color: sectionFilter === 'all' ? 'white' : '#6B7280',
           }}
           onClick={() => setSectionFilter('all')}
@@ -124,7 +124,7 @@ export function FigureGallery({ onSelectFigure, onBack }: FigureGalleryProps) {
             key={value}
             className="text-xs font-body font-semibold px-3 py-1.5 rounded-full transition-colors"
             style={{
-              backgroundColor: typeFilter === value ? '#7D3C98' : '#F3F4F6',
+              backgroundColor: typeFilter === value ? '#9B5C9A' : '#F3F4F6',
               color: typeFilter === value ? 'white' : '#6B7280',
             }}
             onClick={() => setTypeFilter(typeFilter === value ? 'all' : value)}
@@ -137,7 +137,7 @@ export function FigureGallery({ onSelectFigure, onBack }: FigureGalleryProps) {
       {/* Figure grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {filteredFigures.map((figure, i) => {
-          const color = SECTION_COLORS[figure.sectionId] || '#2980B9'
+          const color = SECTION_COLORS[figure.sectionId] || '#5571B5'
           const typeIcon = FIGURE_TYPE_ICONS[figure.type] || '🖼️'
 
           return (

@@ -16,14 +16,14 @@ import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
 type MapPhase = 'home' | 'explore' | 'playing-identify' | 'playing-label' | 'results'
 
 const SECTION_COLORS: Record<string, string> = {
-  s1: '#C0392B', s2: '#2980B9', s3: '#D9821F',
-  s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085',
+  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
+  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
 }
 
 const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: 'Easy', color: '#1F9E57' },
-  medium: { label: 'Medium', color: '#D9821F' },
-  hard: { label: 'Hard', color: '#C0392B' },
+  easy: { label: 'Easy', color: '#5C9368' },
+  medium: { label: 'Medium', color: '#C2893E' },
+  hard: { label: 'Hard', color: '#C36B53' },
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -109,7 +109,7 @@ export function MapMode() {
   // === PLAYING IDENTIFY ===
   if (phase === 'playing-identify') {
     const activity = identifyActivities[currentIndex] as MapIdentifyActivity
-    const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
 
     return (
       <div className="max-w-lg mx-auto">
@@ -147,7 +147,7 @@ export function MapMode() {
   // === PLAYING LABEL ===
   if (phase === 'playing-label') {
     const activity = labelActivities[currentIndex] as MapLabelActivity
-    const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+    const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
 
     return (
       <div className="max-w-lg mx-auto">
@@ -187,7 +187,7 @@ export function MapMode() {
     const typeLabel = activeType === 'identify' ? 'map-identify' : 'map-label'
     return (
       <QuizResults
-        sectionColor="#2980B9"
+        sectionColor="#5571B5"
         activityType={typeLabel}
         correct={correctCount}
         total={currentActivities.length}
@@ -338,7 +338,7 @@ export function MapMode() {
         <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Map Activities</h3>
         <div className="space-y-2">
           {[...mapIdentifyActivities, ...mapLabelActivities].map((activity, i) => {
-            const color = SECTION_COLORS[activity.sectionId] || '#2980B9'
+            const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
             const diff = DIFFICULTY_LABELS[activity.difficulty]
             const isLabel = activity.type === 'map-label'
 

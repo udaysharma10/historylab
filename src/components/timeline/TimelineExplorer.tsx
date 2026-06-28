@@ -4,12 +4,12 @@ import { keyDates } from '../../data/keyDates'
 import type { KeyDate } from '../../types/chapter'
 
 const SECTION_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
-  s1: { label: 'French Revolution', color: '#C0392B', icon: '🇫🇷' },
-  s2: { label: 'Making of Nationalism', color: '#2980B9', icon: '🏛️' },
-  s3: { label: 'Age of Revolutions', color: '#D9821F', icon: '🔥' },
-  s4: { label: 'Germany & Italy', color: '#1F9E57', icon: '🗺️' },
-  s5: { label: 'Visualising the Nation', color: '#7D3C98', icon: '🎨' },
-  s6: { label: 'Nationalism & Imperialism', color: '#16A085', icon: '🌍' },
+  s1: { label: 'French Revolution', color: '#C36B53', icon: '🇫🇷' },
+  s2: { label: 'Making of Nationalism', color: '#5571B5', icon: '🏛️' },
+  s3: { label: 'Age of Revolutions', color: '#C2893E', icon: '🔥' },
+  s4: { label: 'Germany & Italy', color: '#5C9368', icon: '🗺️' },
+  s5: { label: 'Visualising the Nation', color: '#9B5C9A', icon: '🎨' },
+  s6: { label: 'Nationalism & Imperialism', color: '#3F8E84', icon: '🌍' },
 }
 
 const ALL_SECTIONS = ['all', 's1', 's2', 's3', 's4', 's5', 's6'] as const
@@ -38,7 +38,7 @@ export function TimelineExplorer({ onBack }: TimelineExplorerProps) {
     return [...map.entries()].sort(([a], [b]) => a - b)
   }, [filtered])
 
-  const activeColor = filter === 'all' ? '#2980B9' : SECTION_CONFIG[filter]?.color || '#2980B9'
+  const activeColor = filter === 'all' ? '#5571B5' : SECTION_CONFIG[filter]?.color || '#5571B5'
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -68,7 +68,7 @@ export function TimelineExplorer({ onBack }: TimelineExplorerProps) {
       <div className="flex flex-wrap gap-2 mb-6">
         {ALL_SECTIONS.map(s => {
           const active = filter === s
-          const cfg = s === 'all' ? { label: 'All', color: '#2980B9', icon: '📜' } : SECTION_CONFIG[s]
+          const cfg = s === 'all' ? { label: 'All', color: '#5571B5', icon: '📜' } : SECTION_CONFIG[s]
           return (
             <motion.button
               key={s}

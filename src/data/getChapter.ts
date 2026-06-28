@@ -110,8 +110,8 @@ export function getNcertQuestions(chapterId: string) {
 
 // Section color configs per chapter
 export const CHAPTER_SECTION_COLORS: Record<string, Record<string, string>> = {
-  ch1: { s1: '#C0392B', s2: '#2980B9', s3: '#D9821F', s4: '#1F9E57', s5: '#7D3C98', s6: '#16A085' },
-  ch2: { s1: '#C0392B', s2: '#2980B9', s3: '#D9821F', s4: '#7D3C98' },
+  ch1: { s1: '#C36B53', s2: '#5571B5', s3: '#C2893E', s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84' },
+  ch2: { s1: '#C36B53', s2: '#5571B5', s3: '#C2893E', s4: '#9B5C9A' },
 }
 
 export const CHAPTER_SECTION_ICONS: Record<string, Record<string, string>> = {

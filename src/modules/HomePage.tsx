@@ -37,11 +37,11 @@ export function HomePage() {
   // Chapter-level study tools — whole-chapter revision modalities (the in-section
   // timeline/maps cover one topic; these span all sections). Only show what has data.
   const allModes = [
-    { id: 'timeline', label: 'Timeline', icon: '📅', route: `${basePath}/timeline`, color: '#2980B9', chapters: ['ch1'] },
-    { id: 'maps', label: 'Maps', icon: '🗺️', route: `${basePath}/maps`, color: '#16A085', chapters: ['ch1'] },
-    { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#7D3C98', chapters: ['ch1', 'ch2'] },
-    { id: 'figures', label: 'Figures', icon: '🖼️', route: `${basePath}/figures`, color: '#D9821F', chapters: ['ch1'] },
-    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C0392B', chapters: ['ch1'] },
+    { id: 'timeline', label: 'Timeline', icon: '📅', route: `${basePath}/timeline`, color: '#5571B5', chapters: ['ch1'] },
+    { id: 'maps', label: 'Maps', icon: '🗺️', route: `${basePath}/maps`, color: '#3F8E84', chapters: ['ch1'] },
+    { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#9B5C9A', chapters: ['ch1', 'ch2'] },
+    { id: 'figures', label: 'Figures', icon: '🖼️', route: `${basePath}/figures`, color: '#C2893E', chapters: ['ch1'] },
+    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C36B53', chapters: ['ch1'] },
   ]
   const MODES = allModes.filter(m => m.chapters.includes(cid))
 
@@ -53,7 +53,7 @@ export function HomePage() {
   return (
     <div className="space-y-7 pb-10">
       {/* Breadcrumb */}
-      <p className="text-[12.5px] font-semibold text-hist-muted -mb-3 px-0.5">
+      <p className="text-[12.5px] font-semibold text-hist-muted px-0.5">
         <button className="hover:text-hist-navy transition-colors" onClick={() => navigate('/')}>All Chapters</button>
         {'  ·  '}
         <span className="text-hist-navy">Chapter {chapterNumber}</span>
@@ -80,14 +80,14 @@ export function HomePage() {
             <div className="flex items-center gap-1.5 bg-hist-gold-soft border border-hist-line px-3.5 py-2 rounded-[11px] font-bold text-[13.5px] text-hist-ink">
               ⭐ {totalStars} stars
             </div>
-            <div className="flex items-center gap-1.5 bg-hist-indigo-soft px-3.5 py-2 rounded-[11px] font-bold text-[13.5px] text-hist-indigo" style={{ border: '1px solid #DCDCF8' }}>
+            <div className="flex items-center gap-1.5 bg-hist-indigo-soft px-3.5 py-2 rounded-[11px] font-bold text-[13.5px] text-hist-indigo" style={{ border: '1px solid #E0D9F2' }}>
               ✅ {totalCompleted} activities done
             </div>
           </div>
         </div>
         <div className="relative shrink-0 hidden sm:grid place-items-center" style={{ width: 104, height: 104 }}>
           <svg width="104" height="104" className="-rotate-90">
-            <circle cx="52" cy="52" r="45" stroke="#F0EAE0" strokeWidth="10" fill="none" />
+            <circle cx="52" cy="52" r="45" stroke="#EDE6F0" strokeWidth="10" fill="none" />
             <motion.circle
               cx="52" cy="52" r="45" stroke="url(#ringGrad)" strokeWidth="10" fill="none"
               strokeLinecap="round" strokeDasharray={ringCirc}
@@ -97,8 +97,8 @@ export function HomePage() {
             />
             <defs>
               <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#C0911F" />
-                <stop offset="1" stopColor="#5B5BD6" />
+                <stop offset="0" stopColor="#DC835F" />
+                <stop offset="1" stopColor="#7E72C2" />
               </linearGradient>
             </defs>
           </svg>
@@ -117,7 +117,7 @@ export function HomePage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {chapter.sections.map((section, i) => {
-            const color = sectionColors[section.id] || '#2A2750'
+            const color = sectionColors[section.id] || '#3E3548'
             const icon = sectionIcons[section.id] || section.icon || '📖'
             const progress = progressSections[section.id as SectionId]
             const pct = progress?.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
@@ -135,7 +135,6 @@ export function HomePage() {
                 whileTap={{ scale: 0.99 }}
                 onClick={() => navigate(`${basePath}/section/${section.id}`)}
               >
-                <div className="absolute left-0 top-0 h-1 w-full" style={{ backgroundColor: color }} />
                 <span
                   className="absolute right-3.5 top-3.5 text-[10.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide"
                   style={{ backgroundColor: color + '1A', color }}
@@ -144,8 +143,8 @@ export function HomePage() {
                 </span>
                 <div className="flex items-center gap-3 mt-1">
                   <div
-                    className="w-[46px] h-[46px] rounded-[13px] grid place-items-center text-xl shrink-0 text-white"
-                    style={{ backgroundColor: color }}
+                    className="w-[46px] h-[46px] rounded-[13px] grid place-items-center text-xl shrink-0"
+                    style={{ backgroundColor: color + '1A' }}
                   >
                     {icon}
                   </div>
@@ -154,7 +153,7 @@ export function HomePage() {
                     <div className="text-xs font-semibold text-hist-muted">{topicCount} topics · 1 quiz</div>
                   </div>
                 </div>
-                <div className="h-1.5 rounded-full mt-3.5 overflow-hidden" style={{ backgroundColor: '#F0EAE0' }}>
+                <div className="h-1.5 rounded-full mt-3.5 overflow-hidden" style={{ backgroundColor: '#EDE7F0' }}>
                   <motion.div
                     className="h-full rounded-full"
                     style={{ backgroundColor: color }}
@@ -187,7 +186,7 @@ export function HomePage() {
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(mode.route)}
             >
-              <div className="w-11 h-11 rounded-xl grid place-items-center mx-auto mb-2.5 text-xl bg-hist-cream border border-hist-line" style={{ backgroundColor: '#FBF5EE' }}>
+              <div className="w-11 h-11 rounded-xl grid place-items-center mx-auto mb-2.5 text-xl border border-hist-line" style={{ backgroundColor: '#FAE4D8' }}>
                 {mode.icon}
               </div>
               <span className="text-[12.5px] font-bold text-hist-navy">{mode.label}</span>

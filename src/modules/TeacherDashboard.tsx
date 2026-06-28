@@ -44,9 +44,9 @@ const SECTION_NAMES: Record<string, string> = {
 }
 
 const SECTION_COLORS: Record<string, string> = {
-  'ch1:s1': '#C0392B', 'ch1:s2': '#2980B9', 'ch1:s3': '#D9821F',
-  'ch1:s4': '#1F9E57', 'ch1:s5': '#7D3C98', 'ch1:s6': '#16A085',
-  'ch2:s1': '#C0392B', 'ch2:s2': '#2980B9', 'ch2:s3': '#D9821F', 'ch2:s4': '#7D3C98',
+  'ch1:s1': '#C36B53', 'ch1:s2': '#5571B5', 'ch1:s3': '#C2893E',
+  'ch1:s4': '#5C9368', 'ch1:s5': '#9B5C9A', 'ch1:s6': '#3F8E84',
+  'ch2:s1': '#C36B53', 'ch2:s2': '#5571B5', 'ch2:s3': '#C2893E', 'ch2:s4': '#9B5C9A',
 }
 
 interface LoginDateEntry {
@@ -71,13 +71,13 @@ const MODE_LABELS: Record<string, string> = {
 }
 
 const MODE_COLORS: Record<string, string> = {
-  quiz: '#2980B9',
-  narrative: '#C0392B',
-  timeline: '#D9821F',
-  maps: '#16A085',
-  figures: '#7D3C98',
-  exam: '#C0392B',
-  flashcards: '#1F9E57',
+  quiz: '#5571B5',
+  narrative: '#C36B53',
+  timeline: '#C2893E',
+  maps: '#3F8E84',
+  figures: '#9B5C9A',
+  exam: '#C36B53',
+  flashcards: '#5C9368',
 }
 
 export function TeacherDashboard() {
@@ -278,10 +278,10 @@ export function TeacherDashboard() {
       {/* Overview Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Users', value: users.length, icon: '👥', color: '#2980B9' },
-          { label: 'Active Today', value: activeToday, icon: '📱', color: '#1F9E57' },
-          { label: 'Active This Week', value: activeThisWeek, icon: '📅', color: '#D9821F' },
-          { label: 'Total Stars Earned', value: totalStarsAll, icon: '⭐', color: '#C0911F' },
+          { label: 'Total Users', value: users.length, icon: '👥', color: '#5571B5' },
+          { label: 'Active Today', value: activeToday, icon: '📱', color: '#5C9368' },
+          { label: 'Active This Week', value: activeThisWeek, icon: '📅', color: '#C2893E' },
+          { label: 'Total Stars Earned', value: totalStarsAll, icon: '⭐', color: '#C99A3A' },
         ].map((card, i) => (
           <motion.div
             key={card.label}
@@ -524,7 +524,7 @@ export function TeacherDashboard() {
                     <div className="flex-1 h-7 bg-gray-100 rounded-full overflow-hidden">
                       <motion.div
                         className="h-full rounded-full flex items-center justify-end pr-2.5"
-                        style={{ backgroundColor: '#2980B9' }}
+                        style={{ backgroundColor: '#5571B5' }}
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.max(pct, 15)}%` }}
                         transition={{ duration: 0.6 }}
