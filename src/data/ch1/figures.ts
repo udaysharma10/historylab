@@ -15,7 +15,7 @@ export const figures: Figure[] = [
     examRelevance: 'high',
     hotspots: [
       { id: 'h1-1', x: 15, y: 43, label: 'Statue of Liberty', description: 'Personification of Liberty holding the torch of Enlightenment and the Charter of the Rights of Man.' },
-      { id: 'h1-2', x: 23, y: 88, label: 'Shattered symbols', description: 'On the earth in the foreground lie the shattered remains of absolutist institutions.' },
+      { id: 'h1-2', x: 50, y: 92, label: 'Shattered symbols', description: 'On the earth in the foreground lie the shattered remains of absolutist institutions.' },
       { id: 'h1-3', x: 31, y: 72, label: 'United States & Switzerland', description: 'Leading the procession — already nation-states by 1848.' },
       { id: 'h1-4', x: 8, y: 64, label: 'France (tricolour)', description: 'Identifiable by the revolutionary tricolour, France has just reached the statue.' },
       { id: 'h1-5', x: 46, y: 58, label: 'Germany (black-red-gold)', description: 'German peoples carry the flag that expressed liberal hopes for unification in 1848.' },
@@ -51,7 +51,7 @@ export const figures: Figure[] = [
     hotspots: [
       { id: 'h2-1', x: 28, y: 45, label: 'French Bastille', description: 'The storming of the Bastille — symbol of the French Revolution.' },
       { id: 'h2-2', x: 72, y: 45, label: 'German fortress (Kassel)', description: 'Represents despotic rule in the German province of Kassel — a parallel to the Bastille.' },
-      { id: 'h2-3', x: 50, y: 85, label: 'German inscription', description: '"The people must seize their own freedom!" — shows spread of revolutionary ideas to Germany.' },
+      { id: 'h2-3', x: 73, y: 70, label: 'German inscription', description: '"The people must seize their own freedom!" — shows spread of revolutionary ideas to Germany.' },
     ],
     analysis: {
       whatYouSee: [
@@ -112,10 +112,10 @@ export const figures: Figure[] = [
     sectionId: 's1',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h4-1', x: 42, y: 30, label: 'Tree of Liberty', description: 'Symbolic tree planted by French armies in conquered territories.' },
+      { id: 'h4-1', x: 52, y: 22, label: 'Tree of Liberty', description: 'Symbolic tree planted by French armies in conquered territories.' },
       { id: 'h4-2', x: 62, y: 52, label: 'French soldiers', description: 'Recognisable by blue, white and red uniforms — portrayed as oppressors, not liberators.' },
       { id: 'h4-3', x: 30, y: 65, label: 'German peasant forced down', description: 'Shows how French "liberation" meant subjugation for local populations.' },
-      { id: 'h4-4', x: 50, y: 10, label: 'German inscription (sarcastic)', description: '"Take freedom and equality from us" — sarcastic tone criticises French claims of liberation.' },
+      { id: 'h4-4', x: 82, y: 40, label: 'German inscription (sarcastic)', description: '"Take freedom and equality from us" — sarcastic tone criticises French claims of liberation.' },
     ],
     analysis: {
       whatYouSee: [
@@ -145,7 +145,7 @@ export const figures: Figure[] = [
     examRelevance: 'medium',
     hotspots: [
       { id: 'h5-1', x: 50, y: 42, label: 'Napoleon as postman', description: 'Satirical portrayal of Napoleon as a courier/postman losing his deliveries.' },
-      { id: 'h5-2', x: 70, y: 60, label: 'Falling letters', description: 'Each letter bears the name of a territory Napoleon lost after the Battle of Leipzig.' },
+      { id: 'h5-2', x: 82, y: 52, label: 'Falling letters', description: 'Each letter bears the name of a territory Napoleon lost after the Battle of Leipzig.' },
     ],
     analysis: {
       whatYouSee: [

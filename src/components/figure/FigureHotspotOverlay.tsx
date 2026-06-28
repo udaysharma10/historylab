@@ -90,32 +90,36 @@ export function FigureHotspotOverlay({
               </span>
             </motion.button>
 
-            {/* Tooltip */}
+            {/* Tooltip — flips above the dot when the dot is low, and clamps horizontally,
+                so it never gets clipped beneath/beside the image frame */}
             <AnimatePresence>
-              {isActive && (
-                <motion.div
-                  className="absolute z-20 pointer-events-none"
-                  style={{
-                    left: `${spot.x}%`,
-                    top: `${spot.y}%`,
-                    marginTop: 24,
-                    marginLeft: -100,
-                    width: 200,
-                  }}
-                  initial={{ opacity: 0, y: -5, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -5, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div
-                    className="rounded-xl px-4 py-3 shadow-lg text-white"
-                    style={{ backgroundColor: sectionColor }}
+              {isActive && (() => {
+                const tipBelow = spot.y < 58
+                const tx = spot.x < 24 ? '-12%' : spot.x > 76 ? '-88%' : '-50%'
+                return (
+                  <motion.div
+                    className="absolute z-20 pointer-events-none"
+                    style={{
+                      left: `${spot.x}%`,
+                      top: `${spot.y}%`,
+                      width: 200,
+                      transform: `translate(${tx}, ${tipBelow ? '22px' : 'calc(-100% - 22px)'})`,
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <p className="font-display font-bold text-sm mb-1">{spot.label}</p>
-                    <p className="font-body text-xs leading-relaxed opacity-90">{spot.description}</p>
-                  </div>
-                </motion.div>
-              )}
+                    <div
+                      className="rounded-xl px-4 py-3 shadow-lg text-white"
+                      style={{ backgroundColor: sectionColor }}
+                    >
+                      <p className="font-display font-bold text-sm mb-1">{spot.label}</p>
+                      <p className="font-body text-xs leading-relaxed opacity-90">{spot.description}</p>
+                    </div>
+                  </motion.div>
+                )
+              })()}
             </AnimatePresence>
           </div>
         )
