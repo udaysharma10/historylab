@@ -36,12 +36,13 @@ export function HomePage() {
   const totalProblems = Object.values(progressSections).reduce((sum, s) => sum + s.total, 0)
   const overallProgress = totalProblems > 0 ? Math.round((totalCompleted / totalProblems) * 100) : 0
 
-  // Chapter-specific learning modes — only show modes that have data
+  // Chapter-level study tools — whole-chapter revision modalities (the in-section
+  // timeline/maps cover one topic; these span all sections). Only show what has data.
   const allModes = [
-    { id: 'timeline', label: 'Timeline Review', icon: '📅', route: `${basePath}/timeline`, color: '#2980B9', chapters: ['ch1'] },
-    { id: 'maps', label: 'Map Review', icon: '🗺️', route: `${basePath}/maps`, color: '#16A085', chapters: ['ch1'] },
+    { id: 'timeline', label: 'Timeline', icon: '📅', route: `${basePath}/timeline`, color: '#2980B9', chapters: ['ch1'] },
+    { id: 'maps', label: 'Maps', icon: '🗺️', route: `${basePath}/maps`, color: '#16A085', chapters: ['ch1'] },
     { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#7D3C98', chapters: ['ch1', 'ch2'] },
-    { id: 'figures', label: 'Figure Review', icon: '🖼️', route: `${basePath}/figures`, color: '#E67E22', chapters: ['ch1'] },
+    { id: 'figures', label: 'Figures', icon: '🖼️', route: `${basePath}/figures`, color: '#E67E22', chapters: ['ch1'] },
     { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C0392B', chapters: ['ch1'] },
   ]
   const MODES = allModes.filter(m => m.chapters.includes(cid))
@@ -146,9 +147,10 @@ export function HomePage() {
         </div>
       </div>
 
-      {/* Learning Modes */}
+      {/* Study Tools — whole-chapter revision modalities */}
       <div>
-        <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Learning Modes</h2>
+        <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Study Tools</h2>
+        <p className="font-body text-sm text-hist-dark/60 mb-4">Practice and revise across the whole chapter</p>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {MODES.map((mode, i) => (
             <motion.button
