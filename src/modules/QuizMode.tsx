@@ -117,8 +117,10 @@ export function QuizMode() {
     if (activityType) handleSelectType(activityType)
   }
 
+  const cidSafe = chapterId || 'ch1'
+  const chapterNumber = cidSafe === 'ch2' ? 2 : 1
   const handleBackToSection = () => {
-    navigate(`/section/${sectionId}`)
+    navigate(`/chapter/${cidSafe}/section/${sectionId}`)
   }
 
   if (!section) {
@@ -146,14 +148,15 @@ export function QuizMode() {
       <div className="max-w-lg mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <motion.button
-            className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
-            onClick={handleBackToSection}
-            whileHover={{ x: -3 }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-            Back to {section.title}
-          </motion.button>
+          <nav className="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-[12.5px] font-semibold text-hist-muted mb-3 px-0.5">
+            <button className="hover:text-hist-navy transition-colors" onClick={() => navigate('/')}>All Chapters</button>
+            <span aria-hidden>·</span>
+            <button className="hover:text-hist-navy transition-colors" onClick={() => navigate(`/chapter/${cidSafe}`)}>Chapter {chapterNumber}</button>
+            <span aria-hidden>·</span>
+            <button className="hover:text-hist-navy transition-colors truncate max-w-[40%]" onClick={handleBackToSection}>{section.title}</button>
+            <span aria-hidden>·</span>
+            <span className="text-hist-navy">Quiz</span>
+          </nav>
 
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: color }}>

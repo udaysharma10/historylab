@@ -72,8 +72,19 @@ export function SectionModule() {
   }
 
   // Section overview with subsection list
+  const chapterNumber = cid === 'ch2' ? 2 : 1
   return (
     <div className="max-w-2xl mx-auto">
+      {/* Breadcrumb — always offers a direct path back to the chapter menu,
+          independent of browser history (the header back arrow uses history). */}
+      <nav className="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-[12.5px] font-semibold text-hist-muted mb-4 px-0.5">
+        <button className="hover:text-hist-navy transition-colors" onClick={() => navigate('/')}>All Chapters</button>
+        <span aria-hidden>·</span>
+        <button className="hover:text-hist-navy transition-colors" onClick={() => navigate(basePath)}>Chapter {chapterNumber}</button>
+        <span aria-hidden>·</span>
+        <span className="text-hist-navy truncate max-w-[55%]">{section.title}</span>
+      </nav>
+
       <SectionHeader
         title={section.title}
         sectionNumber={section.number}
