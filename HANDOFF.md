@@ -1,6 +1,6 @@
 # HistoryLab — Session Handover (read this first)
 
-**Last updated:** 2026-06-28 (Round 4) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `28994c5`
+**Last updated:** 2026-06-28 (Round 4) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `f976c07`
 **Repo:** `github.com/udaysharma10/historylab` · **Local:** `/Users/udaysharma/Documents/Blostem/Claude_Projects/vedansh-history`
 
 This is a Grade-10 CBSE History self-learning web app (NCERT "India and the Contemporary World"). Ch1 = Rise of Nationalism in Europe, Ch2 = Nationalism in India. See `PROJECT_CONTEXT.md` for full architecture, `CONTENT_REVIEW_PROCESS.md` for the review log.
@@ -20,7 +20,8 @@ Neha reviews **one section at a time**; we fix, deploy, she re-reviews.
 - ✅ **Fixed a systemic rendering bug** (commit `c2090b3`): a card with BOTH a rich body (flowchart/table/figure) AND an `inlineQuiz` showed ONLY the quiz — the steps/table/image were never rendered (this was Neha's "tap each step below — where?" bug). `NarrativeMode` now renders the full card body AND the quiz beneath it for non-text cards; `InlineQuizCard` hides its text block when empty. Also merged the two stranded intro text cards into their flowchart/table cards (S1 French measures, S2 Habsburg).
 
 **OPEN — content track:**
-- **NEXT: re-verify ALL Ch2 figure hotspots at full resolution** (same method as Ch1; not yet done). Ch2 hotspot field order is `label, description, x, y`.
+- ✅ **ALL Ch2 figure hotspots re-verified at full resolution** (commit `f976c07`). Fixes: fig-7 Gandhi was on the wrong marcher; fig-10 Gandhi/Nehru/Azad all shifted (Gandhi's dot was on Nehru); fig-12 Bharat Mata symbols moved onto the actual hands/objects; fig-14a lion was on her dress; fig-13 onto the held image; fig-11 unity symbols → temple roundel; fig-3 soldier onto the soldier. (Ch2 field order: `label, description, x, y`.)
+- **fig-6 (Allahabad Congress leaders) FLAGGED `NEEDS NEHA`** in code: grainy group photo, individual identities (Patel/Nehru/Bose) can't be verified from the image and current coords contradict the "extreme left/right" caption. Left unchanged pending Neha's authoritative key (don't guess — risk of mislabelling leaders).
 - Neha has **not** reviewed S2–S6 (Ch1) or any Ch2 content card-by-card yet.
 - The `FigureHotspotOverlay.tsx` tooltip flips **above** the dot when `spot.y >= 58` and clamps horizontally (so dots up to ~92 are fine).
 
