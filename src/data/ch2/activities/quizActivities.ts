@@ -5,14 +5,14 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-001', type: 'mcq', sectionId: 's1', difficulty: 'easy', examRelevance: 'high', tags: ['satyagraha', 'gandhi'],
     question: 'What does the term "Satyagraha" literally mean?',
-    options: ['Passive resistance', 'Insistence on truth', 'Soul of India', 'Non-violent protest'],
-    correctIndex: 1, explanation: 'Satyagraha = Satya (truth) + Agraha (insistence). Gandhi was clear that it was NOT passive resistance — it was an active force that "can be used only by the strong."', hints: ['Break the word into its two Sanskrit roots'],
+    options: ['Insistence on truth', 'Passive resistance', 'Soul of India', 'Non-violent protest'],
+    correctIndex: 0, explanation: 'Satyagraha = Satya (truth) + Agraha (insistence). Gandhi was clear that it was NOT passive resistance — it was an active force that "can be used only by the strong."', hints: ['Break the word into its two Sanskrit roots'],
   },
   {
     id: 'ch2-mcq-002', type: 'mcq', sectionId: 's1', difficulty: 'easy', examRelevance: 'high', tags: ['champaran', 'gandhi'],
     question: 'Gandhi\'s first satyagraha in India (1917) was on behalf of:',
-    options: ['Cotton mill workers in Ahmedabad', 'Indigo planters in Champaran', 'Peasants hit by crop failure in Kheda', 'Tea plantation workers in Assam'],
-    correctIndex: 1, explanation: 'In 1917, Gandhi organised his first Indian satyagraha in Champaran, Bihar, where indigo farmers were forced to grow indigo under conditions that destroyed soil fertility.', hints: ['It happened in Bihar and involved a crop used for blue dye'],
+    options: ['Cotton mill workers in Ahmedabad', 'Peasants hit by crop failure in Kheda', 'Indigo planters in Champaran', 'Tea plantation workers in Assam'],
+    correctIndex: 2, explanation: 'In 1917, Gandhi organised his first Indian satyagraha in Champaran, Bihar, where indigo farmers were forced to grow indigo under conditions that destroyed soil fertility.', hints: ['It happened in Bihar and involved a crop used for blue dye'],
   },
   {
     id: 'ch2-mcq-003', type: 'mcq', sectionId: 's1', difficulty: 'medium', examRelevance: 'high', tags: ['rowlatt-act'],
@@ -23,8 +23,8 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-004', type: 'mcq', sectionId: 's1', difficulty: 'medium', examRelevance: 'high', tags: ['jallianwala-bagh'],
     question: 'Many people at Jallianwala Bagh on 13 April 1919 were unaware of martial law because they:',
-    options: ['Were from a neighbouring city and had just arrived', 'Were villagers who had come for the annual Baisakhi fair', 'Had deliberately come to defy the British orders', 'Were soldiers on leave from the war'],
-    correctIndex: 1, explanation: 'Many in the crowd were villagers who had come to Amritsar for the annual Baisakhi fair and were unaware of the martial law that had been imposed. General Dyer opened fire without warning.', hints: ['April is a significant time for a Punjabi festival'],
+    options: ['Were villagers who had come for the annual Baisakhi fair', 'Were from a neighbouring city and had just arrived', 'Had deliberately come to defy the British orders', 'Were soldiers on leave from the war'],
+    correctIndex: 0, explanation: 'Many in the crowd were villagers who had come to Amritsar for the annual Baisakhi fair and were unaware of the martial law that had been imposed. General Dyer opened fire without warning.', hints: ['April is a significant time for a Punjabi festival'],
   },
   {
     id: 'ch2-mcq-005', type: 'mcq', sectionId: 's1', difficulty: 'hard', examRelevance: 'high', tags: ['khilafat', 'hindu-muslim-unity'],
@@ -35,28 +35,28 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-006', type: 'mcq', sectionId: 's1', difficulty: 'easy', examRelevance: 'high', tags: ['non-cooperation'],
     question: 'Which of the following was NOT part of the Non-Cooperation programme?',
-    options: ['Boycott of foreign goods', 'Surrender of government titles', 'Armed revolt against British officials', 'Boycott of legislative councils and courts'],
-    correctIndex: 2, explanation: 'The Non-Cooperation programme was strictly non-violent: surrender titles, boycott institutions (schools, courts, councils), boycott foreign goods. Armed revolt was never part of Gandhi\'s programme.', hints: ['Gandhi\'s method was always based on non-violence'],
+    options: ['Boycott of foreign goods', 'Surrender of government titles', 'Boycott of legislative councils and courts', 'Armed revolt against British officials'],
+    correctIndex: 3, explanation: 'The Non-Cooperation programme was strictly non-violent: surrender titles, boycott institutions (schools, courts, councils), boycott foreign goods. Armed revolt was never part of Gandhi\'s programme.', hints: ['Gandhi\'s method was always based on non-violence'],
   },
 
   // === SECTION 2: Differing Strands Within the Movement ===
   {
     id: 'ch2-mcq-007', type: 'mcq', sectionId: 's2', difficulty: 'medium', examRelevance: 'high', tags: ['non-cooperation', 'towns'],
     question: 'Why did the Non-Cooperation Movement gradually slow down in the cities?',
-    options: ['The British made too many concessions', 'Khadi was expensive and alternative Indian institutions were slow to develop', 'Gandhi personally asked city people to stop participating', 'The Muslim League opposed the movement in cities'],
-    correctIndex: 1, explanation: 'The movement lost steam in towns because khadi was more expensive than mill cloth (poor people couldn\'t afford it) and alternative Indian schools and courts took time to set up. Without replacements for British institutions, the boycott couldn\'t sustain.', hints: ['Think about the practical problems of boycotting without alternatives'],
+    options: ['The British made too many concessions', 'Gandhi personally asked city people to stop participating', 'Khadi was expensive and alternative Indian institutions were slow to develop', 'The Muslim League opposed the movement in cities'],
+    correctIndex: 2, explanation: 'The movement lost steam in towns because khadi was more expensive than mill cloth (poor people couldn\'t afford it) and alternative Indian schools and courts took time to set up. Without replacements for British institutions, the boycott couldn\'t sustain.', hints: ['Think about the practical problems of boycotting without alternatives'],
   },
   {
     id: 'ch2-mcq-008', type: 'mcq', sectionId: 's2', difficulty: 'medium', examRelevance: 'high', tags: ['awadh', 'peasants'],
     question: 'What did "Swaraj" mean for the peasants of Awadh?',
-    options: ['A constitution based on British parliamentary democracy', 'An end to exorbitant rents, begar, and exploitation by talukdars', 'Reserved seats in legislative councils', 'Freedom to trade directly with Britain'],
-    correctIndex: 1, explanation: 'For Awadh peasants, Swaraj had nothing to do with constitutions — it meant freedom from talukdars who charged exorbitant rents, demanded begar (unpaid forced labour), and offered no security of tenure.', hints: ['Peasants cared about their daily survival, not political structures'],
+    options: ['A constitution based on British parliamentary democracy', 'Reserved seats in legislative councils', 'An end to exorbitant rents, begar, and exploitation by talukdars', 'Freedom to trade directly with Britain'],
+    correctIndex: 2, explanation: 'For Awadh peasants, Swaraj had nothing to do with constitutions — it meant freedom from talukdars who charged exorbitant rents, demanded begar (unpaid forced labour), and offered no security of tenure.', hints: ['Peasants cared about their daily survival, not political structures'],
   },
   {
     id: 'ch2-mcq-009', type: 'mcq', sectionId: 's2', difficulty: 'easy', examRelevance: 'high', tags: ['baba-ramchandra', 'awadh'],
     question: 'Baba Ramchandra, who led the peasant movement in Awadh, had earlier been:',
-    options: ['A wealthy landlord in Bengal', 'An indentured labourer in Fiji', 'A British-trained lawyer', 'A professor at Aligarh University'],
-    correctIndex: 1, explanation: 'Baba Ramchandra was a sanyasi who had earlier been an indentured labourer in Fiji. He understood the exploitation of labourers firsthand, which gave him credibility among the Awadh peasants.', hints: ['He had personal experience of forced labour in a faraway country'],
+    options: ['An indentured labourer in Fiji', 'A wealthy landlord in Bengal', 'A British-trained lawyer', 'A professor at Aligarh University'],
+    correctIndex: 0, explanation: 'Baba Ramchandra was a sanyasi who had earlier been an indentured labourer in Fiji. He understood the exploitation of labourers firsthand, which gave him credibility among the Awadh peasants.', hints: ['He had personal experience of forced labour in a faraway country'],
   },
   {
     id: 'ch2-mcq-010', type: 'mcq', sectionId: 's2', difficulty: 'hard', examRelevance: 'high', tags: ['alluri-sitaram-raju', 'tribals'],
@@ -67,28 +67,28 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-011', type: 'mcq', sectionId: 's2', difficulty: 'medium', examRelevance: 'high', tags: ['plantation-workers', 'assam'],
     question: 'For Assam plantation workers, "Swaraj" essentially meant:',
-    options: ['Higher wages and shorter working hours', 'The right to move freely — to leave the plantations', 'Ownership of the tea gardens', 'The right to vote in provincial elections'],
-    correctIndex: 1, explanation: 'Under the Inland Emigration Act of 1859, plantation workers were not allowed to leave tea gardens without permission. For them, swaraj was the simplest dream — just the freedom to go home.', hints: ['Think about what basic right was denied to them by law'],
+    options: ['Higher wages and shorter working hours', 'The right to vote in provincial elections', 'Ownership of the tea gardens', 'The right to move freely — to leave the plantations'],
+    correctIndex: 3, explanation: 'Under the Inland Emigration Act of 1859, plantation workers were not allowed to leave tea gardens without permission. For them, swaraj was the simplest dream — just the freedom to go home.', hints: ['Think about what basic right was denied to them by law'],
   },
   {
     id: 'ch2-mcq-012', type: 'mcq', sectionId: 's2', difficulty: 'easy', examRelevance: 'high', tags: ['chauri-chaura'],
     question: 'Gandhi called off the entire Non-Cooperation Movement in February 1922 because:',
-    options: ['The British agreed to grant Swaraj', 'A violent mob at Chauri Chaura killed 22 policemen', 'Hindu-Muslim unity had completely broken down', 'He was arrested and could not lead the movement'],
-    correctIndex: 1, explanation: 'At Chauri Chaura, Gorakhpur, a peaceful demonstration turned violent and a mob set fire to the police station, killing 22 policemen. Gandhi was devastated and called off the entire movement — non-violence was not a tactic but the soul of the struggle.', hints: ['It involved a violent incident in a small town in UP'],
+    options: ['A violent mob at Chauri Chaura killed 22 policemen', 'The British agreed to grant Swaraj', 'Hindu-Muslim unity had completely broken down', 'He was arrested and could not lead the movement'],
+    correctIndex: 0, explanation: 'At Chauri Chaura, Gorakhpur, a peaceful demonstration turned violent and a mob set fire to the police station, killing 22 policemen. Gandhi was devastated and called off the entire movement — non-violence was not a tactic but the soul of the struggle.', hints: ['It involved a violent incident in a small town in UP'],
   },
   {
     id: 'ch2-mcq-013', type: 'mcq', sectionId: 's2', difficulty: 'hard', examRelevance: 'high', tags: ['non-cooperation', 'different-groups'],
     question: 'Why did different social groups interpret Gandhi\'s message in their own ways during Non-Cooperation?',
-    options: ['Gandhi deliberately gave different messages to different groups', 'The British spread misinformation about Gandhi\'s goals', 'Each group filtered the idea of Swaraj through their own experiences and needs', 'Congress leaders in each region changed the message'],
-    correctIndex: 2, explanation: 'Peasants thought Gandhi had declared no more taxes, workers believed "Gandhi Raj" meant land for all, tribals used his name for armed resistance. Each group understood Swaraj through the lens of their own suffering and aspirations — the movement grew, but grew out of Gandhi\'s control.', hints: ['Think about how the same word can mean different things to people in different situations'],
+    options: ['Gandhi deliberately gave different messages to different groups', 'Each group filtered the idea of Swaraj through their own experiences and needs', 'The British spread misinformation about Gandhi\'s goals', 'Congress leaders in each region changed the message'],
+    correctIndex: 1, explanation: 'Peasants thought Gandhi had declared no more taxes, workers believed "Gandhi Raj" meant land for all, tribals used his name for armed resistance. Each group understood Swaraj through the lens of their own suffering and aspirations — the movement grew, but grew out of Gandhi\'s control.', hints: ['Think about how the same word can mean different things to people in different situations'],
   },
 
   // === SECTION 3: Towards Civil Disobedience ===
   {
     id: 'ch2-mcq-014', type: 'mcq', sectionId: 's3', difficulty: 'easy', examRelevance: 'high', tags: ['simon-commission'],
     question: 'Indians opposed the Simon Commission (1928) primarily because:',
-    options: ['It recommended Partition of India', 'It had no Indian members — all members were British', 'It wanted to extend the Rowlatt Act', 'It proposed abolishing the Congress party'],
-    correctIndex: 1, explanation: 'The Simon Commission was set up to review India\'s constitutional progress but had no Indian member — all its members were British. This united Congress and the Muslim League in the "Go Back Simon!" protests.', hints: ['The issue was about representation'],
+    options: ['It recommended Partition of India', 'It proposed abolishing the Congress party', 'It wanted to extend the Rowlatt Act', 'It had no Indian members — all members were British'],
+    correctIndex: 3, explanation: 'The Simon Commission was set up to review India\'s constitutional progress but had no Indian member — all its members were British. This united Congress and the Muslim League in the "Go Back Simon!" protests.', hints: ['The issue was about representation'],
   },
   {
     id: 'ch2-mcq-015', type: 'mcq', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['lahore-congress', 'purna-swaraj'],
@@ -99,8 +99,8 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-016', type: 'mcq', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['salt-march', 'dandi'],
     question: 'Why did Gandhi choose salt as the symbol for the Civil Disobedience Movement?',
-    options: ['Salt was India\'s largest export to Britain', 'Salt was consumed by rich and poor alike — it united all Indians regardless of caste or religion', 'The salt tax was the highest tax imposed by the British', 'Salt production was controlled by Indian industrialists'],
-    correctIndex: 1, explanation: 'Salt was the perfect unifying symbol: rich and poor, Hindu and Muslim, Brahmin and Dalit — everyone needed salt daily. By taxing it, the British had turned every kitchen in India into a site of potential resistance.', hints: ['Think about what makes salt different from other goods — who uses it?'],
+    options: ['Salt was India\'s largest export to Britain', 'The salt tax was the highest tax imposed by the British', 'Salt was consumed by rich and poor alike — it united all Indians regardless of caste or religion', 'Salt production was controlled by Indian industrialists'],
+    correctIndex: 2, explanation: 'Salt was the perfect unifying symbol: rich and poor, Hindu and Muslim, Brahmin and Dalit — everyone needed salt daily. By taxing it, the British had turned every kitchen in India into a site of potential resistance.', hints: ['Think about what makes salt different from other goods — who uses it?'],
   },
   {
     id: 'ch2-mcq-017', type: 'mcq', sectionId: 's3', difficulty: 'easy', examRelevance: 'high', tags: ['salt-march', 'dandi'],
@@ -111,34 +111,34 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-018', type: 'mcq', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['cdm', 'non-cooperation'],
     question: 'How was Civil Disobedience fundamentally different from Non-Cooperation?',
-    options: ['CDM was led by Nehru, not Gandhi', 'In Non-Cooperation, people refused to cooperate; in CDM, people actively broke the law', 'CDM was limited to cities while Non-Cooperation was rural', 'CDM demanded dominion status while Non-Cooperation demanded full independence'],
-    correctIndex: 1, explanation: 'The key distinction: Non-Cooperation meant refusing to participate (boycotting institutions). Civil Disobedience meant actively BREAKING the law — manufacturing salt illegally, refusing to pay revenue, violating forest laws. It was a direct challenge to British authority.', hints: ['The clue is in the name — "disobedience" means something different from "non-cooperation"'],
+    options: ['CDM was led by Nehru, not Gandhi', 'CDM demanded dominion status while Non-Cooperation demanded full independence', 'CDM was limited to cities while Non-Cooperation was rural', 'In Non-Cooperation, people refused to cooperate; in CDM, people actively broke the law'],
+    correctIndex: 3, explanation: 'The key distinction: Non-Cooperation meant refusing to participate (boycotting institutions). Civil Disobedience meant actively BREAKING the law — manufacturing salt illegally, refusing to pay revenue, violating forest laws. It was a direct challenge to British authority.', hints: ['The clue is in the name — "disobedience" means something different from "non-cooperation"'],
   },
   {
     id: 'ch2-mcq-019', type: 'mcq', sectionId: 's3', difficulty: 'hard', examRelevance: 'high', tags: ['cdm', 'rich-peasants'],
     question: 'Why were rich peasants (Patidars, Jats) disappointed when Gandhi called off CDM in 1931?',
-    options: ['Gandhi had promised them reserved seats in councils', 'The Gandhi-Irwin Pact did not guarantee any reduction in revenue rates', 'The British had already agreed to lower land taxes', 'Gandhi refused to acknowledge their contribution to the movement'],
-    correctIndex: 1, explanation: 'Rich peasants like Patidars of Gujarat and Jats of UP had enthusiastically joined CDM because the Depression made it impossible to pay high revenue. When Gandhi signed the Gandhi-Irwin Pact without securing a reduction in revenue, many refused to rejoin the movement in 1932.', hints: ['Think about their main economic demand and whether it was met'],
+    options: ['The Gandhi-Irwin Pact did not guarantee any reduction in revenue rates', 'Gandhi had promised them reserved seats in councils', 'The British had already agreed to lower land taxes', 'Gandhi refused to acknowledge their contribution to the movement'],
+    correctIndex: 0, explanation: 'Rich peasants like Patidars of Gujarat and Jats of UP had enthusiastically joined CDM because the Depression made it impossible to pay high revenue. When Gandhi signed the Gandhi-Irwin Pact without securing a reduction in revenue, many refused to rejoin the movement in 1932.', hints: ['Think about their main economic demand and whether it was met'],
   },
   {
     id: 'ch2-mcq-020', type: 'mcq', sectionId: 's3', difficulty: 'medium', examRelevance: 'high', tags: ['ambedkar', 'dalits', 'poona-pact'],
     question: 'The Poona Pact (1932) between Gandhi and Ambedkar resulted in:',
-    options: ['Separate electorates for Dalits as Ambedkar originally demanded', 'Reserved seats for Dalits within joint electorates', 'Complete abolition of the caste system', 'Dalits joining the Congress party unconditionally'],
-    correctIndex: 1, explanation: 'Ambedkar originally demanded separate electorates, but Gandhi opposed this and went on a fast unto death. The compromise — the Poona Pact — gave Dalits reserved seats but within joint electorates, not separate ones.', hints: ['It was a compromise — neither fully got what they wanted'],
+    options: ['Separate electorates for Dalits as Ambedkar originally demanded', 'Dalits joining the Congress party unconditionally', 'Complete abolition of the caste system', 'Reserved seats for Dalits within joint electorates'],
+    correctIndex: 3, explanation: 'Ambedkar originally demanded separate electorates, but Gandhi opposed this and went on a fast unto death. The compromise — the Poona Pact — gave Dalits reserved seats but within joint electorates, not separate ones.', hints: ['It was a compromise — neither fully got what they wanted'],
   },
   {
     id: 'ch2-mcq-021', type: 'mcq', sectionId: 's3', difficulty: 'hard', examRelevance: 'high', tags: ['muslims', 'cdm'],
     question: 'Why were many Muslim organisations lukewarm towards the Civil Disobedience Movement?',
-    options: ['Muslims had already gained independence through the Khilafat movement', 'After the decline of Khilafat, Congress became associated with Hindu groups and communal riots deepened distrust', 'The British promised Muslims a separate nation if they stayed out', 'Gandhi explicitly asked Muslims not to participate'],
-    correctIndex: 1, explanation: 'After the Khilafat movement collapsed, Muslims felt alienated from Congress, which became increasingly associated with Hindu groups like the Hindu Mahasabha. Communal riots further deepened the divide, and Jinnah\'s demand for reserved Muslim seats was rejected at the 1928 All Parties Conference.', hints: ['Think about what happened AFTER the brief Hindu-Muslim unity of Khilafat'],
+    options: ['Muslims had already gained independence through the Khilafat movement', 'The British promised Muslims a separate nation if they stayed out', 'After the decline of Khilafat, Congress became associated with Hindu groups and communal riots deepened distrust', 'Gandhi explicitly asked Muslims not to participate'],
+    correctIndex: 2, explanation: 'After the Khilafat movement collapsed, Muslims felt alienated from Congress, which became increasingly associated with Hindu groups like the Hindu Mahasabha. Communal riots further deepened the divide, and Jinnah\'s demand for reserved Muslim seats was rejected at the 1928 All Parties Conference.', hints: ['Think about what happened AFTER the brief Hindu-Muslim unity of Khilafat'],
   },
 
   // === SECTION 4: The Sense of Collective Belonging ===
   {
     id: 'ch2-mcq-022', type: 'mcq', sectionId: 's4', difficulty: 'easy', examRelevance: 'high', tags: ['bharat-mata', 'allegory'],
     question: 'The image of "Bharat Mata" was first created by:',
-    options: ['Rabindranath Tagore', 'Abanindranath Tagore', 'Bankim Chandra Chattopadhyay', 'Mahatma Gandhi'],
-    correctIndex: 1, explanation: 'Abanindranath Tagore painted the famous image of Bharat Mata in 1905, portraying her as a calm, ascetic, divine figure holding learning, food, and clothing — a spiritual mother of the nation.', hints: ['He was a famous painter, not a writer or leader'],
+    options: ['Abanindranath Tagore', 'Rabindranath Tagore', 'Bankim Chandra Chattopadhyay', 'Mahatma Gandhi'],
+    correctIndex: 0, explanation: 'Abanindranath Tagore painted the famous image of Bharat Mata in 1905, portraying her as a calm, ascetic, divine figure holding learning, food, and clothing — a spiritual mother of the nation.', hints: ['He was a famous painter, not a writer or leader'],
   },
   {
     id: 'ch2-mcq-023', type: 'mcq', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['bharat-mata', 'limits'],
@@ -149,14 +149,14 @@ export const ch2McqActivities: MCQActivity[] = [
   {
     id: 'ch2-mcq-024', type: 'mcq', sectionId: 's4', difficulty: 'easy', examRelevance: 'high', tags: ['flag', 'symbols'],
     question: 'The spinning wheel (charkha) on Gandhi\'s Swaraj flag represented:',
-    options: ['India\'s industrial power', 'Self-reliance', 'Hindu religious tradition', 'British textile trade'],
-    correctIndex: 1, explanation: 'The charkha on the Swaraj flag (designed by Gandhiji in 1921 — red, green, white stripes) symbolised self-reliance. Spinning your own cloth meant rejecting dependence on British mill-made goods.', hints: ['Think about what the act of spinning cloth at home represents'],
+    options: ['Self-reliance', 'India\'s industrial power', 'Hindu religious tradition', 'British textile trade'],
+    correctIndex: 0, explanation: 'The charkha on the Swaraj flag (designed by Gandhiji in 1921 — red, green, white stripes) symbolised self-reliance. Spinning your own cloth meant rejecting dependence on British mill-made goods.', hints: ['Think about what the act of spinning cloth at home represents'],
   },
   {
     id: 'ch2-mcq-025', type: 'mcq', sectionId: 's4', difficulty: 'medium', examRelevance: 'high', tags: ['folklore', 'nationalism'],
     question: 'Nationalists collected folk tales and songs to build national identity — similar to the role played in Europe by:',
-    options: ['Napoleon Bonaparte and the French army', 'The Grimm Brothers in Germany', 'Duke Metternich and the Congress of Vienna', 'Giuseppe Mazzini and Young Europe'],
-    correctIndex: 1, explanation: 'Just as the Grimm Brothers collected German folk tales to promote German cultural nationalism, Indian nationalists like Rabindranath Tagore in Bengal and Natesa Sastri in Madras collected folk stories to build a sense of shared Indian identity.', hints: ['Think about Chapter 1 — who collected folk tales in Germany?'],
+    options: ['Napoleon Bonaparte and the French army', 'Giuseppe Mazzini and Young Europe', 'Duke Metternich and the Congress of Vienna', 'The Grimm Brothers in Germany'],
+    correctIndex: 3, explanation: 'Just as the Grimm Brothers collected German folk tales to promote German cultural nationalism, Indian nationalists like Rabindranath Tagore in Bengal and Natesa Sastri in Madras collected folk stories to build a sense of shared Indian identity.', hints: ['Think about Chapter 1 — who collected folk tales in Germany?'],
   },
 ]
 

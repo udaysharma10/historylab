@@ -43,12 +43,12 @@ export const section3Subsections: Subsection[] = [
         inlineQuiz: {
           question: 'Why was the Simon Commission opposed by Indians across political lines?',
           options: [
-            'It recommended the partition of India',
             'It had no Indian members — Indians had no say in their own future',
+            'It recommended the partition of India',
             'It proposed abolishing the Indian National Congress',
             'It increased taxes on Indian goods',
           ],
-          correctIndex: 1,
+          correctIndex: 0,
           explanation: 'The Simon Commission was an all-British body with no Indian representation. Indians across the political spectrum — Congress, Muslim League, and others — united in opposing it because it denied Indians any voice in deciding their own constitutional future.',
         },
       },
@@ -330,12 +330,12 @@ Tip: For 5-mark version: add how CDM was different from NCM (active law-breaking
         inlineQuiz: {
           question: 'Why did many Dalits remain distant from the Congress-led Civil Disobedience Movement?',
           options: [
-            'They supported the British government against Congress',
             'They feared swaraj would mean upper-caste Hindu rule, and Congress had long ignored Dalit concerns',
+            'They supported the British government against Congress',
             'They were not allowed to participate in any political movements',
             'They wanted to join the Muslim League instead',
           ],
-          correctIndex: 1,
+          correctIndex: 0,
           explanation: 'Dalits feared that swaraj under Congress would simply replace British rule with upper-caste Hindu rule. Congress had long ignored Dalit demands to avoid offending its upper-caste base. Under Ambedkar, Dalits demanded their own political representation — separate electorates — to protect their interests.',
         },
       },
