@@ -52,6 +52,7 @@ export function SectionModule() {
     const subsection = section.subsections[activeSubsection]
     return (
       <NarrativeMode
+        key={subsection.id}
         subsection={subsection}
         sectionColor={color}
         subsectionIndex={activeSubsection}
