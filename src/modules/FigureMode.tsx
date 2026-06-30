@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FigureGallery, FigureDetail, ImageAnalysisCard } from '../components/figure'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { figures } from '../data/figures'
+import { getFigures, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { imageAnalysisActivities } from '../data/activities/imageAnalysis'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
@@ -12,11 +12,6 @@ import { logActivity } from '../lib/activityLog'
 import type { SectionId } from '../types/progress'
 
 type FigurePhase = 'home' | 'gallery' | 'detail' | 'practice' | 'results'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
-  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
-}
 
 function shuffle<T>(arr: T[]): T[] {
   const result = [...arr]
@@ -30,11 +25,17 @@ function shuffle<T>(arr: T[]): T[] {
 export function FigureMode() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
+  const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
+
+  const figures = useMemo(() => getFigures(cid), [cid])
+  const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
+  // Image-analysis practice activities are only authored for Ch1 so far.
+  const figureActivities = useMemo(() => (cid === 'ch2' ? [] : imageAnalysisActivities), [cid])
 
   const [phase, setPhase] = useState<FigurePhase>('home')
   const [selectedFigureId, setSelectedFigureId] = useState<string | null>(null)
-  const [activities, setActivities] = useState(imageAnalysisActivities)
+  const [activities, setActivities] = useState(figureActivities)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [questionResults, setQuestionResults] = useState<('correct' | 'wrong' | 'unanswered')[]>([])
   const [totalCorrect, setTotalCorrect] = useState(0)
@@ -62,14 +63,14 @@ export function FigureMode() {
   }, [selectedFigureIndex])
 
   const handleStartPractice = useCallback(() => {
-    const shuffled = shuffle(imageAnalysisActivities)
+    const shuffled = shuffle(figureActivities)
     setActivities(shuffled)
     setCurrentIndex(0)
     setQuestionResults(shuffled.map(() => 'unanswered'))
     setTotalCorrect(0)
     setTotalQuestions(0)
     setPhase('practice')
-  }, [])
+  }, [figureActivities])
 
   const handleActivityComplete = useCallback((correct: number, total: number) => {
     const newResults = [...questionResults]
@@ -106,17 +107,20 @@ export function FigureMode() {
   const xp = useMemo(() => calculateXP(stars, 'medium'), [stars])
 
   // Count exam-important figures
-  const examImportantCount = useMemo(() => figures.filter(f => f.examRelevance === 'high').length, [])
+  const examImportantCount = useMemo(() => figures.filter(f => f.examRelevance === 'high').length, [figures])
 
   // Total sub-questions across all activities
   const totalSubQuestions = useMemo(
-    () => imageAnalysisActivities.reduce((sum, a) => sum + a.questions.length, 0),
-    []
+    () => figureActivities.reduce((sum, a) => sum + a.questions.length, 0),
+    [figureActivities]
   )
+
+  // Image-analysis practice is only available where activities exist (Ch1).
+  const hasPractice = figureActivities.length > 0
 
   // === GALLERY ===
   if (phase === 'gallery') {
-    return <FigureGallery onSelectFigure={handleSelectFigure} onBack={() => setPhase('home')} />
+    return <FigureGallery onSelectFigure={handleSelectFigure} onBack={() => setPhase('home')} chapterId={cid} />
   }
 
   // === DETAIL ===
@@ -218,7 +222,7 @@ export function FigureMode() {
           <div>
             <h1 className="font-display text-2xl font-bold text-hist-dark">Figures</h1>
             <p className="font-body text-sm text-gray-400">
-              {figures.length} NCERT figures with {totalSubQuestions} practice questions
+              {figures.length} NCERT figures{hasPractice ? ` with ${totalSubQuestions} practice questions` : ''}
             </p>
           </div>
         </div>
@@ -255,6 +259,7 @@ export function FigureMode() {
         </motion.button>
 
         {/* Practice: Image Analysis */}
+        {hasPractice && (
         <motion.button
           className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
           initial={{ opacity: 0, y: 20 }}
@@ -271,10 +276,10 @@ export function FigureMode() {
             <div>
               <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Practice: Image Analysis</h2>
               <p className="font-body text-sm text-gray-500 leading-relaxed">
-                Answer questions about <strong>{imageAnalysisActivities.length} figures</strong> ({totalSubQuestions} questions). MCQ + descriptive — just like CBSE board exams.
+                Answer questions about <strong>{figureActivities.length} figures</strong> ({totalSubQuestions} questions). MCQ + descriptive — just like CBSE board exams.
               </p>
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {imageAnalysisActivities.map(a => (
+                {figureActivities.map(a => (
                   <span
                     key={a.id}
                     className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
@@ -287,6 +292,7 @@ export function FigureMode() {
             </div>
           </div>
         </motion.button>
+        )}
 
         {/* Exam-Important Figures */}
         <motion.button

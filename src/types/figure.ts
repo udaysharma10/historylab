@@ -1,6 +1,6 @@
 // Figure and infographic types
 
-export type FigureType = 'painting' | 'caricature' | 'map' | 'photograph' | 'stamp' | 'banner' | 'almanac' | 'illustration'
+export type FigureType = 'painting' | 'caricature' | 'map' | 'photograph' | 'stamp' | 'banner' | 'almanac' | 'illustration' | 'print'
 
 export interface Figure {
   id: string
@@ -10,7 +10,7 @@ export interface Figure {
   year?: string
   type: FigureType
   imagePath: string
-  caption: string
+  caption?: string
   sectionId: string
   examRelevance: 'high' | 'medium' | 'low'
   hotspots: Hotspot[]

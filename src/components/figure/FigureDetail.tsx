@@ -105,7 +105,9 @@ export function FigureDetail({
           <h2 className="font-display text-xl sm:text-2xl font-bold text-hist-dark leading-snug mb-2">
             "{figure.title}"
           </h2>
-          <p className="font-body text-sm text-gray-500 leading-relaxed mb-5">{figure.caption}</p>
+          {figure.caption && (
+            <p className="font-body text-sm text-gray-500 leading-relaxed mb-5">{figure.caption}</p>
+          )}
 
           {/* Interactive figure with hotspots */}
           <div className="mb-5">

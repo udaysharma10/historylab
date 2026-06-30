@@ -216,3 +216,17 @@ Neha reviewed **Ch1 S1 only** and flagged: (a) the Sorrieu intro was still 13 sl
 **Process miss owned:** of Neha's 3 structural calls, the one action ("tighten Sorrieu") was verbally acknowledged but never entered the todo list, and a "fix dots first" detour buried it. Fixed by recording outstanding content items in memory + this log + `HANDOFF.md`.
 
 **OPEN for next session:** (1) proactively re-verify ALL remaining figure hotspots **at full resolution** (thumbnail checks were too coarse and missed these); (2) Neha to confirm/replace the fig-4 "German inscription" best-guess dot; (3) Neha has not yet reviewed Ch1 S2–S6 or any Ch2 content card-by-card. **See `HANDOFF.md` (repo root) — the canonical read-first state for the next session.**
+
+### Round 7 — Ch2 figures invisible (Neha, 2026-06-30)
+
+Neha approved Ch2 *content* but flagged: **"not a single NCERT picture is shown, and there is no map work — and this chapter has a 2-mark map question in the board exam."**
+
+**Root cause (integration, not content):** Ch2's 17 figures + hotspots were authored and correct in `src/data/ch2/figures.ts`, but the rendering components (`NarrativeCard`, `FigureMode`, `FigureGallery`) were never migrated off the **ch1-only** static `data/figures` array onto the chapter-aware `getChapter.ts` accessors — so every Ch2 figure card resolved to `undefined` and rendered text only. The Figures Study-Tools tile was also gated to ch1. Maps were never built for ch2 at all.
+
+| Piece | Scope | Status |
+|-------|-------|--------|
+| A — Ch2 figures render | Chapter-aware `getFigures(chapterId)` in `NarrativeCard`/`FigureMode`/`FigureGallery`; `'print'` added to `FigureType`; `caption` optional; `CHAPTER_SECTION_LABELS`; Figures tile un-gated for ch2; Practice card hidden for ch2 (no activities yet). **Verified in running app** (Ch2 figures + gallery thumbnails render). | DONE (on `dev`, pending Uday review) |
+| A2 — Ch2 study-tools parity | After Uday flagged Ch2 had only Flashcards: made `TimelineMode`/`TimelineExplorer` and `ExamPractice` chapter-aware (same `getChapter` accessor pattern), un-gated **Timeline** + **Exam Prep** tiles for ch2. Ch2 Timeline browses 20 key dates (1915–1942); Exam Prep = 5 primary sources + 8 NCERT board Qs. Sub-features lacking ch2 activities hidden gracefully (timeline ordering, source-comprehension quiz). **Verified in running app.** | DONE (on `dev`, pending Uday review) |
+| B — Ch2 map work | India map image + `ch2/maps.ts` + chapter-aware `MapMode` + Maps tile un-gate + identify/label practice for the 2-mark board question. The only remaining Study-Tools tile for ch2. | OPEN — next |
+
+**Process lesson:** Ch2 figure QA was done at the data/coordinate layer (PIL grid overlays on the *image files*), never in the *rendered chapter*. A correct-coordinate image that never renders looks identical to a working one when you only inspect the data. **Verify each chapter in the running app, per chapter.**

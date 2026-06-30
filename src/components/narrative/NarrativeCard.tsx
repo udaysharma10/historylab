@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { NarrativeCard as NarrativeCardType } from '../../types/chapter'
-import { figures } from '../../data/figures'
+import { getFigures } from '../../data/getChapter'
 import { FigureHotspotOverlay } from '../figure/FigureHotspotOverlay'
 
 interface NarrativeCardProps {
   card: NarrativeCardType
   sectionColor: string
+  chapterId: string
 }
 
 // Parse **bold** markers in text and return React elements
@@ -39,8 +40,8 @@ const FIGURE_TYPE_ICONS: Record<string, string> = {
   illustration: '🖌️',
 }
 
-function FigurePanel({ figureId, sectionColor }: { figureId: string; sectionColor: string }) {
-  const figure = figures.find((f) => f.id === figureId)
+function FigurePanel({ figureId, sectionColor, chapterId }: { figureId: string; sectionColor: string; chapterId: string }) {
+  const figure = getFigures(chapterId).find((f) => f.id === figureId)
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null)
   if (!figure) return null
 
@@ -168,7 +169,7 @@ function FigurePanel({ figureId, sectionColor }: { figureId: string; sectionColo
   )
 }
 
-export function NarrativeCard({ card, sectionColor }: NarrativeCardProps) {
+export function NarrativeCard({ card, sectionColor, chapterId }: NarrativeCardProps) {
   const type = card.type || 'text'
 
   // ── Vocabulary Card ──
@@ -289,7 +290,7 @@ export function NarrativeCard({ card, sectionColor }: NarrativeCardProps) {
 
           {/* Figure panel */}
           {card.imageId && (
-            <FigurePanel figureId={card.imageId} sectionColor={sectionColor} />
+            <FigurePanel figureId={card.imageId} sectionColor={sectionColor} chapterId={chapterId} />
           )}
 
           {/* Narrative text */}
@@ -502,7 +503,7 @@ export function NarrativeCard({ card, sectionColor }: NarrativeCardProps) {
 
           {/* Map image if provided */}
           {card.imageId && (
-            <FigurePanel figureId={card.imageId} sectionColor={sectionColor} />
+            <FigurePanel figureId={card.imageId} sectionColor={sectionColor} chapterId={chapterId} />
           )}
 
           {/* Description text */}

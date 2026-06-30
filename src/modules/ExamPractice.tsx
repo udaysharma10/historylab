@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { SourceReader, SourceQuizCard } from '../components/source'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { sources } from '../data/sources'
-import { sourceAnalysisActivities } from '../data/activities/sourceAnalysis'
-import { ncertQuestions } from '../data/activities/ncertQuestions'
+import { getSources, getNcertQuestions, CHAPTER_SECTION_COLORS } from '../data/getChapter'
+import { sourceAnalysisActivities as ch1SourceAnalysisActivities } from '../data/activities/sourceAnalysis'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
@@ -14,11 +13,6 @@ import type { SectionId } from '../types/progress'
 import type { NCERTQuestion } from '../types/chapter'
 
 type ExamPhase = 'home' | 'source-read' | 'source-practice' | 'ncert' | 'results'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
-  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
-}
 
 function shuffle<T>(arr: T[]): T[] {
   const result = [...arr]
@@ -32,7 +26,16 @@ function shuffle<T>(arr: T[]): T[] {
 export function ExamPractice() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
+  const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
+
+  const sources = useMemo(() => getSources(cid), [cid])
+  const ncertQuestions = useMemo(() => getNcertQuestions(cid), [cid])
+  const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
+  // Source-comprehension quiz activities are only authored for Ch1 so far.
+  const sourceAnalysisActivities = useMemo(() => (cid === 'ch2' ? [] : ch1SourceAnalysisActivities), [cid])
+  const hasSourcePractice = sourceAnalysisActivities.length > 0
+  const hasSources = sources.length > 0
 
   const [phase, setPhase] = useState<ExamPhase>('home')
   const [selectedSourceId, setSelectedSourceId] = useState<string | null>(null)
@@ -48,18 +51,18 @@ export function ExamPractice() {
 
   const selectedSource = useMemo(
     () => sources.find(s => s.id === selectedSourceId),
-    [selectedSourceId]
+    [selectedSourceId, sources]
   )
 
   const totalSubQuestions = useMemo(
     () => sourceAnalysisActivities.reduce((sum, a) => sum + a.questions.length, 0),
-    []
+    [sourceAnalysisActivities]
   )
 
   const filteredNcert = useMemo(() => {
     if (ncertFilter === 'all') return ncertQuestions
     return ncertQuestions.filter(q => q.type === ncertFilter)
-  }, [ncertFilter])
+  }, [ncertFilter, ncertQuestions])
 
   const handleStartSourcePractice = useCallback(() => {
     const shuffled = shuffle(sourceAnalysisActivities)
@@ -69,7 +72,7 @@ export function ExamPractice() {
     setTotalCorrect(0)
     setTotalQuestions(0)
     setPhase('source-practice')
-  }, [])
+  }, [sourceAnalysisActivities])
 
   const handleActivityComplete = useCallback((correct: number, total: number) => {
     const newResults = [...questionResults]
@@ -266,6 +269,7 @@ export function ExamPractice() {
       {/* Mode cards */}
       <div className="grid grid-cols-1 gap-4 mb-6">
         {/* Read Sources */}
+        {hasSources && (
         <motion.div
           className="bg-white rounded-2xl p-6 shadow-card"
           initial={{ opacity: 0, y: 20 }}
@@ -315,8 +319,10 @@ export function ExamPractice() {
             })}
           </div>
         </motion.div>
+        )}
 
         {/* Source Comprehension Practice */}
+        {hasSourcePractice && (
         <motion.button
           className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
           initial={{ opacity: 0, y: 20 }}
@@ -341,6 +347,7 @@ export function ExamPractice() {
             </div>
           </div>
         </motion.button>
+        )}
 
         {/* NCERT Exercise Questions */}
         <motion.button
@@ -364,10 +371,10 @@ export function ExamPractice() {
               </p>
               <div className="flex gap-2 mt-2">
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">
-                  5 Write in Brief
+                  {ncertQuestions.filter(q => q.type === 'write-in-brief').length} Write in Brief
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-500">
-                  5 Discuss
+                  {ncertQuestions.filter(q => q.type === 'discuss').length} Discuss
                 </span>
               </div>
             </div>

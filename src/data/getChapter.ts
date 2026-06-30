@@ -1,4 +1,5 @@
 import type { Chapter, KeyDate, VocabWord, SourceBox, KeyPerson } from '../types/chapter'
+import type { Figure } from '../types/figure'
 import { chapter1 } from './ch1/chapter1'
 import { chapter2 } from './ch2/chapter2'
 
@@ -63,7 +64,7 @@ export function getFlashcards(chapterId: string) {
   return ch1Flashcards
 }
 
-export function getFigures(chapterId: string) {
+export function getFigures(chapterId: string): Figure[] {
   if (chapterId === 'ch2') return ch2Figures
   return ch1Figures
 }
@@ -117,4 +118,22 @@ export const CHAPTER_SECTION_COLORS: Record<string, Record<string, string>> = {
 export const CHAPTER_SECTION_ICONS: Record<string, Record<string, string>> = {
   ch1: { s1: '🇫🇷', s2: '🏛️', s3: '🔥', s4: '🗺️', s5: '🎨', s6: '🌍' },
   ch2: { s1: '🔥', s2: '🤝', s3: '🧂', s4: '🎨' },
+}
+
+// Short section labels (used by the Figures gallery filters)
+export const CHAPTER_SECTION_LABELS: Record<string, Record<string, string>> = {
+  ch1: {
+    s1: 'French Revolution',
+    s2: 'Making of Nationalism',
+    s3: 'Age of Revolutions',
+    s4: 'Germany & Italy',
+    s5: 'Visualising the Nation',
+    s6: 'Nationalism & Imperialism',
+  },
+  ch2: {
+    s1: 'WWI, Khilafat & Non-Cooperation',
+    s2: 'Differing Strands',
+    s3: 'Civil Disobedience',
+    s4: 'Collective Belonging',
+  },
 }

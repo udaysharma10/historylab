@@ -1,25 +1,12 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { figures } from '../../data/figures'
+import { getFigures, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_LABELS } from '../../data/getChapter'
 import type { FigureType } from '../../types/figure'
 
 interface FigureGalleryProps {
   onSelectFigure: (figureId: string) => void
   onBack: () => void
-}
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
-  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
-}
-
-const SECTION_LABELS: Record<string, string> = {
-  s1: 'French Revolution',
-  s2: 'Making of Nationalism',
-  s3: 'Age of Revolutions',
-  s4: 'Germany & Italy',
-  s5: 'Visualising the Nation',
-  s6: 'Nationalism & Imperialism',
+  chapterId: string
 }
 
 const FIGURE_TYPE_ICONS: Record<string, string> = {
@@ -31,21 +18,26 @@ const FIGURE_TYPE_ICONS: Record<string, string> = {
   banner: '🏴',
   almanac: '📰',
   illustration: '🖌️',
+  print: '🖼️',
 }
 
-const TYPE_FILTERS: { value: FigureType | 'all'; label: string }[] = [
-  { value: 'all', label: 'All Types' },
-  { value: 'painting', label: 'Paintings' },
-  { value: 'caricature', label: 'Caricatures' },
-  { value: 'map', label: 'Maps' },
-  { value: 'stamp', label: 'Stamps' },
-  { value: 'banner', label: 'Banners' },
-  { value: 'almanac', label: 'Almanacs' },
-]
-
-export function FigureGallery({ onSelectFigure, onBack }: FigureGalleryProps) {
+export function FigureGallery({ onSelectFigure, onBack, chapterId }: FigureGalleryProps) {
   const [sectionFilter, setSectionFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<FigureType | 'all'>('all')
+
+  const figures = useMemo(() => getFigures(chapterId), [chapterId])
+  const SECTION_COLORS = CHAPTER_SECTION_COLORS[chapterId] || CHAPTER_SECTION_COLORS.ch1
+  const SECTION_LABELS = CHAPTER_SECTION_LABELS[chapterId] || CHAPTER_SECTION_LABELS.ch1
+
+  // Type filters derived from the figures actually present in this chapter
+  const TYPE_FILTERS = useMemo<{ value: FigureType | 'all'; label: string }[]>(() => {
+    const typeLabels: Record<string, string> = {
+      painting: 'Paintings', caricature: 'Caricatures', map: 'Maps', stamp: 'Stamps',
+      banner: 'Banners', almanac: 'Almanacs', photograph: 'Photographs', illustration: 'Illustrations', print: 'Prints',
+    }
+    const present = Array.from(new Set(figures.map(f => f.type)))
+    return [{ value: 'all' as const, label: 'All Types' }, ...present.map(t => ({ value: t, label: typeLabels[t] || t }))]
+  }, [figures])
 
   const filteredFigures = useMemo(() => {
     return figures.filter(f => {
@@ -53,7 +45,7 @@ export function FigureGallery({ onSelectFigure, onBack }: FigureGalleryProps) {
       if (typeFilter !== 'all' && f.type !== typeFilter) return false
       return true
     })
-  }, [sectionFilter, typeFilter])
+  }, [figures, sectionFilter, typeFilter])
 
   return (
     <div className="max-w-3xl mx-auto">

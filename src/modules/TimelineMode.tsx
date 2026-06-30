@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { TimelineExplorer, TimelineOrderCard } from '../components/timeline'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { timelineActivities } from '../data/activities/timelineActivities'
+import { getTimelineActivities, getKeyDates, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { calculateStars } from '../engine/quizEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
@@ -12,11 +12,6 @@ import { logActivity } from '../lib/activityLog'
 import type { SectionId } from '../types/progress'
 
 type TimelinePhase = 'home' | 'explore' | 'pick-activity' | 'playing' | 'results'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
-  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
-}
 
 const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
   easy: { label: 'Easy', color: '#5C9368' },
@@ -36,7 +31,15 @@ function shuffle<T>(arr: T[]): T[] {
 export function TimelineMode() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
+  const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
+
+  const timelineActivities = useMemo(() => getTimelineActivities(cid), [cid])
+  const keyDates = useMemo(() => getKeyDates(cid), [cid])
+  const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
+  // Chronological-ordering practice is only authored for Ch1 so far.
+  const hasPractice = timelineActivities.length > 0
+  const yearRange = keyDates.length ? `${Math.min(...keyDates.map(d => d.year))} – ${Math.max(...keyDates.map(d => d.year))}` : ''
 
   const [phase, setPhase] = useState<TimelinePhase>('home')
   const [activities, setActivities] = useState(timelineActivities)
@@ -51,7 +54,7 @@ export function TimelineMode() {
     setQuestionResults(shuffled.map(() => 'unanswered'))
     setTotalMistakes(0)
     setPhase('playing')
-  }, [])
+  }, [timelineActivities])
 
   const handleAnswer = useCallback((correct: boolean, _hintsUsed: number) => {
     const newResults = [...questionResults]
@@ -86,7 +89,7 @@ export function TimelineMode() {
 
   // === EXPLORE MODE ===
   if (phase === 'explore') {
-    return <TimelineExplorer onBack={() => setPhase('home')} />
+    return <TimelineExplorer onBack={() => setPhase('home')} chapterId={cid} />
   }
 
   // === PLAYING PHASE ===
@@ -167,7 +170,7 @@ export function TimelineMode() {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-hist-dark">Timeline</h1>
-            <p className="font-body text-sm text-gray-400">1688 – 1905: Key events of European nationalism</p>
+            <p className="font-body text-sm text-gray-400">{yearRange ? `${yearRange}: ` : ''}{keyDates.length} key events to revise</p>
           </div>
         </div>
       </motion.div>
@@ -191,7 +194,7 @@ export function TimelineMode() {
             <div>
               <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Explore Timeline</h2>
               <p className="font-body text-sm text-gray-500 leading-relaxed">
-                Browse all <strong>34 key events</strong> from 1688 to 1905 on an interactive timeline. Filter by section and learn the details.
+                Browse all <strong>{keyDates.length} key events</strong>{yearRange ? ` from ${yearRange}` : ''} on an interactive timeline. Filter by section and learn the details.
               </p>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {Object.entries(SECTION_COLORS).map(([id, color]) => (
@@ -203,6 +206,7 @@ export function TimelineMode() {
         </motion.button>
 
         {/* Practice card */}
+        {hasPractice && (
         <motion.button
           className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
           initial={{ opacity: 0, y: 20 }}
@@ -238,9 +242,11 @@ export function TimelineMode() {
             </div>
           </div>
         </motion.button>
+        )}
       </div>
 
       {/* Activity preview list */}
+      {hasPractice && (
       <div>
         <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Timeline Activities</h3>
         <div className="space-y-2">
@@ -285,6 +291,7 @@ export function TimelineMode() {
           })}
         </div>
       </div>
+      )}
     </div>
   )
 }

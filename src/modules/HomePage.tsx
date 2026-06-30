@@ -37,11 +37,11 @@ export function HomePage() {
   // Chapter-level study tools — whole-chapter revision modalities (the in-section
   // timeline/maps cover one topic; these span all sections). Only show what has data.
   const allModes = [
-    { id: 'timeline', label: 'Timeline', icon: '📅', route: `${basePath}/timeline`, color: '#5571B5', chapters: ['ch1'] },
+    { id: 'timeline', label: 'Timeline', icon: '📅', route: `${basePath}/timeline`, color: '#5571B5', chapters: ['ch1', 'ch2'] },
     { id: 'maps', label: 'Maps', icon: '🗺️', route: `${basePath}/maps`, color: '#3F8E84', chapters: ['ch1'] },
     { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#9B5C9A', chapters: ['ch1', 'ch2'] },
-    { id: 'figures', label: 'Figures', icon: '🖼️', route: `${basePath}/figures`, color: '#C2893E', chapters: ['ch1'] },
-    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C36B53', chapters: ['ch1'] },
+    { id: 'figures', label: 'Figures', icon: '🖼️', route: `${basePath}/figures`, color: '#C2893E', chapters: ['ch1', 'ch2'] },
+    { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C36B53', chapters: ['ch1', 'ch2'] },
   ]
   const MODES = allModes.filter(m => m.chapters.includes(cid))
 

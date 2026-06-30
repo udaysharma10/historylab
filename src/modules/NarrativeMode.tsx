@@ -212,7 +212,7 @@ export function NarrativeMode({
                 // (steps/table/image/highlight) AND the quiz beneath it. Previously the quiz
                 // replaced the body entirely, hiding the tappable steps/table.
                 <div className="space-y-4">
-                  <NarrativeCard card={currentCard} sectionColor={sectionColor} />
+                  <NarrativeCard card={currentCard} sectionColor={sectionColor} chapterId={chapterId || 'ch1'} />
                   <InlineQuizCard
                     quiz={currentCard.inlineQuiz!}
                     cardText=""
@@ -222,7 +222,7 @@ export function NarrativeMode({
                 </div>
               )
             ) : (
-              <NarrativeCard card={currentCard} sectionColor={sectionColor} />
+              <NarrativeCard card={currentCard} sectionColor={sectionColor} chapterId={chapterId || 'ch1'} />
             )}
           </motion.div>
         </AnimatePresence>

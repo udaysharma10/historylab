@@ -1,31 +1,36 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { keyDates } from '../../data/keyDates'
+import { getKeyDates, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_LABELS, CHAPTER_SECTION_ICONS } from '../../data/getChapter'
 import type { KeyDate } from '../../types/chapter'
-
-const SECTION_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
-  s1: { label: 'French Revolution', color: '#C36B53', icon: '🇫🇷' },
-  s2: { label: 'Making of Nationalism', color: '#5571B5', icon: '🏛️' },
-  s3: { label: 'Age of Revolutions', color: '#C2893E', icon: '🔥' },
-  s4: { label: 'Germany & Italy', color: '#5C9368', icon: '🗺️' },
-  s5: { label: 'Visualising the Nation', color: '#9B5C9A', icon: '🎨' },
-  s6: { label: 'Nationalism & Imperialism', color: '#3F8E84', icon: '🌍' },
-}
-
-const ALL_SECTIONS = ['all', 's1', 's2', 's3', 's4', 's5', 's6'] as const
 
 interface TimelineExplorerProps {
   onBack: () => void
+  chapterId: string
 }
 
-export function TimelineExplorer({ onBack }: TimelineExplorerProps) {
+export function TimelineExplorer({ onBack, chapterId }: TimelineExplorerProps) {
   const [filter, setFilter] = useState<string>('all')
   const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  const keyDates = useMemo(() => getKeyDates(chapterId), [chapterId])
+
+  const SECTION_CONFIG = useMemo(() => {
+    const colors = CHAPTER_SECTION_COLORS[chapterId] || CHAPTER_SECTION_COLORS.ch1
+    const labels = CHAPTER_SECTION_LABELS[chapterId] || CHAPTER_SECTION_LABELS.ch1
+    const icons = CHAPTER_SECTION_ICONS[chapterId] || CHAPTER_SECTION_ICONS.ch1
+    const config: Record<string, { label: string; color: string; icon: string }> = {}
+    for (const sid of Object.keys(labels)) {
+      config[sid] = { label: labels[sid], color: colors[sid], icon: icons[sid] }
+    }
+    return config
+  }, [chapterId])
+
+  const ALL_SECTIONS = useMemo(() => ['all', ...Object.keys(SECTION_CONFIG)], [SECTION_CONFIG])
 
   const filtered = useMemo(() => {
     const dates = filter === 'all' ? keyDates : keyDates.filter(d => d.sectionId === filter)
     return [...dates].sort((a, b) => a.year - b.year || a.id.localeCompare(b.id))
-  }, [filter])
+  }, [filter, keyDates])
 
   // Group by decade for visual structure
   const decades = useMemo(() => {
@@ -39,6 +44,12 @@ export function TimelineExplorer({ onBack }: TimelineExplorerProps) {
   }, [filtered])
 
   const activeColor = filter === 'all' ? '#5571B5' : SECTION_CONFIG[filter]?.color || '#5571B5'
+
+  const yearRange = useMemo(() => {
+    if (keyDates.length === 0) return ''
+    const years = keyDates.map(d => d.year)
+    return `${Math.min(...years)} to ${Math.max(...years)}`
+  }, [keyDates])
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -59,7 +70,7 @@ export function TimelineExplorer({ onBack }: TimelineExplorerProps) {
           </div>
           <div>
             <h1 className="font-display text-xl font-bold text-hist-dark">Timeline Explorer</h1>
-            <p className="font-body text-sm text-gray-400">{filtered.length} events from 1688 to 1905</p>
+            <p className="font-body text-sm text-gray-400">{filtered.length} events{yearRange ? ` from ${yearRange}` : ''}</p>
           </div>
         </div>
       </div>
