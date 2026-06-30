@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MapExplorer, MapIdentifyCard, MapLabelCard } from '../components/map'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { mapIdentifyActivities, mapLabelActivities } from '../data/activities/mapActivities'
-import { mapDefinitions } from '../data/maps'
+import { getMapDefinitions, getMapIdentifyActivities, getMapLabelActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { calculateStars } from '../engine/scoringEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
@@ -14,11 +13,6 @@ import type { SectionId } from '../types/progress'
 import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
 
 type MapPhase = 'home' | 'explore' | 'playing-identify' | 'playing-label' | 'results'
-
-const SECTION_COLORS: Record<string, string> = {
-  s1: '#C36B53', s2: '#5571B5', s3: '#C2893E',
-  s4: '#5C9368', s5: '#9B5C9A', s6: '#3F8E84',
-}
 
 const DIFFICULTY_LABELS: Record<string, { label: string; color: string }> = {
   easy: { label: 'Easy', color: '#5C9368' },
@@ -38,11 +32,19 @@ function shuffle<T>(arr: T[]): T[] {
 export function MapMode() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
+  const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
 
+  const mapDefinitions = useMemo(() => getMapDefinitions(cid), [cid])
+  const baseIdentify = useMemo(() => getMapIdentifyActivities(cid), [cid])
+  const baseLabel = useMemo(() => getMapLabelActivities(cid), [cid])
+  const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
+  const hasIdentify = baseIdentify.length > 0
+  const hasLabel = baseLabel.length > 0
+
   const [phase, setPhase] = useState<MapPhase>('home')
-  const [identifyActivities, setIdentifyActivities] = useState(mapIdentifyActivities)
-  const [labelActivities, setLabelActivities] = useState(mapLabelActivities)
+  const [identifyActivities, setIdentifyActivities] = useState(baseIdentify)
+  const [labelActivities, setLabelActivities] = useState(baseLabel)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [questionResults, setQuestionResults] = useState<('correct' | 'wrong' | 'unanswered')[]>([])
   const [totalMistakes, setTotalMistakes] = useState(0)
@@ -53,18 +55,18 @@ export function MapMode() {
   const handleStartPractice = useCallback((type: 'identify' | 'label') => {
     setActiveType(type)
     if (type === 'identify') {
-      const shuffled = shuffle(mapIdentifyActivities)
+      const shuffled = shuffle(baseIdentify)
       setIdentifyActivities(shuffled)
       setQuestionResults(shuffled.map(() => 'unanswered'))
     } else {
-      const shuffled = shuffle(mapLabelActivities)
+      const shuffled = shuffle(baseLabel)
       setLabelActivities(shuffled)
       setQuestionResults(shuffled.map(() => 'unanswered'))
     }
     setCurrentIndex(0)
     setTotalMistakes(0)
     setPhase(type === 'identify' ? 'playing-identify' : 'playing-label')
-  }, [])
+  }, [baseIdentify, baseLabel])
 
   const handleAnswer = useCallback((correct: boolean, _hintsUsed: number) => {
     const newResults = [...questionResults]
@@ -103,7 +105,7 @@ export function MapMode() {
 
   // === EXPLORE MODE ===
   if (phase === 'explore') {
-    return <MapExplorer onBack={() => setPhase('home')} />
+    return <MapExplorer onBack={() => setPhase('home')} chapterId={cid} />
   }
 
   // === PLAYING IDENTIFY ===
@@ -223,7 +225,7 @@ export function MapMode() {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-hist-dark">Maps</h1>
-            <p className="font-body text-sm text-gray-400">{mapDefinitions.length} historical maps with {mapIdentifyActivities.length + mapLabelActivities.length} activities</p>
+            <p className="font-body text-sm text-gray-400">{mapDefinitions.length} {mapDefinitions.length === 1 ? 'map' : 'historical maps'} with {baseIdentify.length + baseLabel.length} activities</p>
           </div>
         </div>
       </motion.div>
@@ -247,7 +249,7 @@ export function MapMode() {
             <div>
               <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Explore Maps</h2>
               <p className="font-body text-sm text-gray-500 leading-relaxed">
-                Browse <strong>{mapDefinitions.length} historical maps</strong> — Europe 1815, German unification, Italian states. Tap regions to learn about each territory.
+                Browse <strong>{mapDefinitions.length} {mapDefinitions.length === 1 ? 'interactive map' : 'historical maps'}</strong>. Tap each marked place to learn why it matters.
               </p>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {mapDefinitions.map(m => (
@@ -259,6 +261,7 @@ export function MapMode() {
         </motion.button>
 
         {/* Identify practice card */}
+        {hasIdentify && (
         <motion.button
           className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
           initial={{ opacity: 0, y: 20 }}
@@ -275,10 +278,10 @@ export function MapMode() {
             <div>
               <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Practice: Identify Regions</h2>
               <p className="font-body text-sm text-gray-500 leading-relaxed">
-                Read the description and tap the correct region on the map. <strong>{mapIdentifyActivities.length} questions</strong> across all maps.
+                Read the description and tap the correct region on the map. <strong>{baseIdentify.length} questions</strong> across all maps.
               </p>
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {mapIdentifyActivities.map(a => {
+                {baseIdentify.map(a => {
                   const d = DIFFICULTY_LABELS[a.difficulty]
                   return (
                     <span
@@ -294,8 +297,10 @@ export function MapMode() {
             </div>
           </div>
         </motion.button>
+        )}
 
         {/* Label practice card */}
+        {hasLabel && (
         <motion.button
           className="bg-white rounded-2xl p-6 shadow-card text-left hover:shadow-card-hover transition-shadow"
           initial={{ opacity: 0, y: 20 }}
@@ -312,10 +317,10 @@ export function MapMode() {
             <div>
               <h2 className="font-display text-lg font-bold text-hist-dark mb-1">Practice: Label Maps</h2>
               <p className="font-body text-sm text-gray-500 leading-relaxed">
-                Place labels on the correct regions. <strong>{mapLabelActivities.length} activities</strong> — label empires, kingdoms, and states.
+                Match each name to its marker on the map. <strong>{baseLabel.length} activities</strong> covering the key places.
               </p>
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {mapLabelActivities.map(a => {
+                {baseLabel.map(a => {
                   const d = DIFFICULTY_LABELS[a.difficulty]
                   return (
                     <span
@@ -331,13 +336,15 @@ export function MapMode() {
             </div>
           </div>
         </motion.button>
+        )}
       </div>
 
       {/* All activities list */}
+      {(hasIdentify || hasLabel) && (
       <div>
         <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Map Activities</h3>
         <div className="space-y-2">
-          {[...mapIdentifyActivities, ...mapLabelActivities].map((activity, i) => {
+          {[...baseIdentify, ...baseLabel].map((activity, i) => {
             const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
             const diff = DIFFICULTY_LABELS[activity.difficulty]
             const isLabel = activity.type === 'map-label'
@@ -381,6 +388,7 @@ export function MapMode() {
           })}
         </div>
       </div>
+      )}
     </div>
   )
 }

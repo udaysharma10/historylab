@@ -1,34 +1,21 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { mapDefinitions } from '../../data/maps'
+import { getMapDefinitions, CHAPTER_SECTION_LABELS } from '../../data/getChapter'
 import { InteractiveMap } from './InteractiveMap'
 
 interface MapExplorerProps {
   onBack: () => void
+  chapterId: string
 }
 
-const SECTION_LABELS: Record<string, string> = {
-  s1: 'Section 1 — French Revolution',
-  s2: 'Section 2 — Making of Nationalism',
-  s3: 'Section 3 — Age of Revolutions',
-  s4: 'Section 4 — Germany & Italy',
-  s5: 'Section 5 — Visualising the Nation',
-  s6: 'Section 6 — Nationalism & Imperialism',
-}
-
-export function MapExplorer({ onBack }: MapExplorerProps) {
+export function MapExplorer({ onBack, chapterId }: MapExplorerProps) {
   const [selectedMapId, setSelectedMapId] = useState<string | null>(null)
   const [revealedRegion, setRevealedRegion] = useState<string | null>(null)
 
-  const selectedMap = mapDefinitions.find(m => m.id === selectedMapId)
+  const mapDefinitions = useMemo(() => getMapDefinitions(chapterId), [chapterId])
+  const SECTION_LABELS = CHAPTER_SECTION_LABELS[chapterId] || CHAPTER_SECTION_LABELS.ch1
 
-  // Build highlighted regions for explore mode — show all as 'label' when revealed
-  const highlightedRegions = new Map<string, 'correct' | 'wrong' | 'selected' | 'label'>()
-  if (selectedMap) {
-    selectedMap.regions.forEach(r => {
-      highlightedRegions.set(r.id, 'label')
-    })
-  }
+  const selectedMap = mapDefinitions.find(m => m.id === selectedMapId)
 
   if (selectedMap) {
     return (
@@ -53,7 +40,7 @@ export function MapExplorer({ onBack }: MapExplorerProps) {
           <InteractiveMap
             imagePath={selectedMap.imagePath}
             regions={selectedMap.regions}
-            highlightedRegions={highlightedRegions}
+            highlightedRegions={revealedRegion ? new Map([[revealedRegion, 'label']]) : undefined}
             showLabels={true}
             onRegionClick={(id) => setRevealedRegion(id === revealedRegion ? null : id)}
             sectionColor={selectedMap.sectionColor}
@@ -144,7 +131,7 @@ export function MapExplorer({ onBack }: MapExplorerProps) {
 
       <h2 className="font-display text-xl font-bold text-hist-dark mb-1">Explore Maps</h2>
       <p className="font-body text-sm text-gray-500 mb-6">
-        Browse <strong>{mapDefinitions.length} historical maps</strong> from the chapter. Tap regions to learn about each territory.
+        Browse <strong>{mapDefinitions.length} {mapDefinitions.length === 1 ? 'interactive map' : 'historical maps'}</strong> from the chapter. Tap each marked place to learn why it matters.
       </p>
 
       <div className="space-y-4">
@@ -172,7 +159,7 @@ export function MapExplorer({ onBack }: MapExplorerProps) {
                   className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
                   style={{ backgroundColor: map.sectionColor }}
                 >
-                  {SECTION_LABELS[map.sectionId]?.split('—')[0]?.trim() || map.sectionId}
+                  {SECTION_LABELS[map.sectionId] || map.sectionId}
                 </span>
               </div>
             </div>

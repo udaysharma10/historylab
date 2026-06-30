@@ -17,6 +17,7 @@ import { ch2Flashcards } from './ch2/flashcards'
 import { figures as ch1Figures } from './ch1/figures'
 import { ch2Figures } from './ch2/figures'
 import { mapDefinitions as ch1Maps, getMapsBySection as ch1GetMapsBySection } from './ch1/maps'
+import { ch2MapDefinitions, getCh2MapsBySection } from './ch2/maps'
 
 // Ch1 activities
 import { mcqActivities as ch1Mcq, fillBlankActivities as ch1Fb, trueFalseActivities as ch1Tf } from './ch1/activities/quizActivities'
@@ -28,6 +29,10 @@ import { ncertQuestions as ch1Ncert } from './ch1/activities/ncertQuestions'
 import { ch2McqActivities, ch2FillBlankActivities, ch2TrueFalseActivities } from './ch2/activities/quizActivities'
 import { ch2MatchActivities } from './ch2/activities/matchActivities'
 import { ch2NcertQuestions } from './ch2/activities/ncertQuestions'
+import { ch2MapIdentifyActivities, ch2MapLabelActivities } from './ch2/activities/mapActivities'
+
+// Ch1 map activities
+import { mapIdentifyActivities as ch1MapIdentify, mapLabelActivities as ch1MapLabel } from './ch1/activities/mapActivities'
 
 const chapters: Record<string, Chapter> = {
   ch1: chapter1,
@@ -70,12 +75,12 @@ export function getFigures(chapterId: string): Figure[] {
 }
 
 export function getMapDefinitions(chapterId: string) {
-  if (chapterId === 'ch2') return [] // Ch2 has no interactive maps yet
+  if (chapterId === 'ch2') return ch2MapDefinitions
   return ch1Maps
 }
 
 export function getMapsBySection(chapterId: string, sectionId: string) {
-  if (chapterId === 'ch2') return [] // Ch2 has no interactive maps yet
+  if (chapterId === 'ch2') return getCh2MapsBySection(sectionId)
   return ch1GetMapsBySection(sectionId)
 }
 
@@ -107,6 +112,16 @@ export function getTimelineActivities(chapterId: string) {
 export function getNcertQuestions(chapterId: string) {
   if (chapterId === 'ch2') return ch2NcertQuestions
   return ch1Ncert
+}
+
+export function getMapIdentifyActivities(chapterId: string) {
+  if (chapterId === 'ch2') return ch2MapIdentifyActivities
+  return ch1MapIdentify
+}
+
+export function getMapLabelActivities(chapterId: string) {
+  if (chapterId === 'ch2') return ch2MapLabelActivities
+  return ch1MapLabel
 }
 
 // Section color configs per chapter
