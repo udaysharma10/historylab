@@ -230,3 +230,16 @@ Neha approved Ch2 *content* but flagged: **"not a single NCERT picture is shown,
 | B — Ch2 map work | India map image + `ch2/maps.ts` + chapter-aware `MapMode` + Maps tile un-gate + identify/label practice for the 2-mark board question. The only remaining Study-Tools tile for ch2. | OPEN — next |
 
 **Process lesson:** Ch2 figure QA was done at the data/coordinate layer (PIL grid overlays on the *image files*), never in the *rendered chapter*. A correct-coordinate image that never renders looks identical to a working one when you only inspect the data. **Verify each chapter in the running app, per chapter.**
+
+### Round 7 — Ch2 teacher review (Claude, history-teacher hat, 2026-06-30)
+
+At Uday's request, read all 4 Ch2 sections end-to-end as a history teacher. **Verdict: content is genuinely strong** — NCERT-faithful, no factual errors found, excellent pedagogy (WHY cards, satyagraha/three-satyagrahas flowcharts, the differing-strands table, exam-prep cards with model answers + mark splits, timelines, cross-chapter synthesis with Ch1). The weakness is **visual integration, not the writing.**
+
+| Finding | Detail | Status |
+|---------|--------|--------|
+| **S2 has no inline figures** | "Differing Strands" — the most exam-heavy section — teaches via text + one table only. `ch2-fig-4` (Boycott of Foreign Cloth) and `ch2-fig-5` (Chauri Chaura), both tagged s2, sit **unused in the gallery**. | OPEN — wire fig-4/fig-5 into S2 |
+| **Simon Commission figure mismatch** | Simon card (1928) shows `ch2-fig-6` "Congress Leaders at Allahabad, **1931**" — unrelated, later photo (fig-6 also flagged `NEEDS NEHA`). | OPEN — swap/drop |
+| **`ch2-fig-2` (South Africa march) unused** | Gallery-only; fits the satyagraha-origins cards in S1. | OPEN — fold into S1 |
+| **figureIds metadata drift** | `chapter2.ts` S1 `figureIds` lists fig-2/fig-4 but omits fig-15/fig-16 (used inline). Cosmetic — rendering uses card `imageId`. | OPEN — tidy |
+
+Integration density: **Ch1 19/21 figures inline vs Ch2 13/17** (S1:4, S2:0, S3:4, S4:5). Items above are pedagogical improvements (add/swap existing `imageId`s) — **not yet implemented; pending Uday/Neha go-ahead** so Neha reviews a fixed version. Also fixed this round: the **"Next Topic" navigation bug** (SubsectionComplete didn't advance — `<NarrativeMode>` needed a `key` to remount per topic; commit `8694462`).
