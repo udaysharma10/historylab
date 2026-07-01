@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../components/auth'
 import { isAdminTeacher } from '../lib/adminEmails'
+import { canAccessChapter } from '../lib/chapterAccess'
 import { historyBook } from '../data/books'
 
 function getGreeting(): string {
@@ -51,7 +52,10 @@ export function BookHome() {
         <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Chapters</h2>
         <div className="space-y-3">
           {historyBook.chapters.map((chapter, i) => {
-            const isLive = chapter.status === 'live'
+            // A chapter is open only if it's built AND this user is allowed in.
+            // Gated chapters the user can't open are shown exactly like the
+            // not-yet-built ones ("Coming Soon") so a trial student just sees Ch1.
+            const isLive = canAccessChapter(chapter.id, profile.email)
             return (
               <motion.button
                 key={chapter.id}

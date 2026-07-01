@@ -1,5 +1,7 @@
-import { createBrowserRouter, Navigate, useParams } from 'react-router-dom'
+import { createBrowserRouter, Navigate, Outlet, useParams } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
+import { useAuthContext } from './components/auth'
+import { canAccessChapter } from './lib/chapterAccess'
 import { BookHome } from './modules/BookHome'
 import { HomePage } from './modules/HomePage'
 import { SectionModule } from './modules/SectionModule'
@@ -10,6 +12,17 @@ import { FigureMode } from './modules/FigureMode'
 import { FlashcardMode } from './modules/FlashcardMode'
 import { ExamPractice } from './modules/ExamPractice'
 import { TeacherDashboard } from './modules/TeacherDashboard'
+
+// Blocks direct URLs to chapters this user isn't allowed into (content ships in
+// the bundle, so the BookHome card gate alone isn't enough for deep links).
+function RequireChapterAccess() {
+  const { chapterId } = useParams<{ chapterId: string }>()
+  const { profile } = useAuthContext()
+  if (!canAccessChapter(chapterId || '', profile.email)) {
+    return <Navigate to="/" replace />
+  }
+  return <Outlet />
+}
 
 // Backward compat redirects for old /section/:sectionId routes
 function RedirectToChapter() {
@@ -29,15 +42,20 @@ export const router = createBrowserRouter([
       // Book home — chapter selector
       { index: true, element: <BookHome /> },
 
-      // Chapter-scoped routes
-      { path: 'chapter/:chapterId', element: <HomePage /> },
-      { path: 'chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
-      { path: 'chapter/:chapterId/section/:sectionId/quiz', element: <QuizMode /> },
-      { path: 'chapter/:chapterId/timeline', element: <TimelineMode /> },
-      { path: 'chapter/:chapterId/maps', element: <MapMode /> },
-      { path: 'chapter/:chapterId/flashcards', element: <FlashcardMode /> },
-      { path: 'chapter/:chapterId/figures', element: <FigureMode /> },
-      { path: 'chapter/:chapterId/exam', element: <ExamPractice /> },
+      // Chapter-scoped routes (guarded by chapter access)
+      {
+        element: <RequireChapterAccess />,
+        children: [
+          { path: 'chapter/:chapterId', element: <HomePage /> },
+          { path: 'chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
+          { path: 'chapter/:chapterId/section/:sectionId/quiz', element: <QuizMode /> },
+          { path: 'chapter/:chapterId/timeline', element: <TimelineMode /> },
+          { path: 'chapter/:chapterId/maps', element: <MapMode /> },
+          { path: 'chapter/:chapterId/flashcards', element: <FlashcardMode /> },
+          { path: 'chapter/:chapterId/figures', element: <FigureMode /> },
+          { path: 'chapter/:chapterId/exam', element: <ExamPractice /> },
+        ],
+      },
 
       // Backward compat — old routes redirect to ch1
       { path: 'section/:sectionId', element: <RedirectToChapter /> },
