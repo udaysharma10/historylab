@@ -29,15 +29,23 @@ export function ImageAnalysisCard({
   const question = activity.questions[currentQ]
   const isMCQ = !!question.options && question.options.length > 0
 
+  // Resolve the correct option. Prefer the authored correctIndex; only fall
+  // back to substring-matching the model answer when it isn't provided (older
+  // data). The pure substring match returns -1 whenever the answer text doesn't
+  // contain an option verbatim, which made every option render as wrong.
+  const resolveCorrectIdx = (): number => {
+    if (typeof question.correctIndex === 'number') return question.correctIndex
+    return question.options!.findIndex(
+      opt => question.answer.toLowerCase().includes(opt.toLowerCase())
+    )
+  }
+
   const handleSelectOption = (index: number) => {
     if (answered) return
     setSelectedOption(index)
     setAnswered(true)
 
-    // For MCQ, the correct option contains the answer text
-    const correctIdx = question.options!.findIndex(
-      opt => question.answer.toLowerCase().includes(opt.toLowerCase())
-    )
+    const correctIdx = resolveCorrectIdx()
     const wasCorrect = index === correctIdx
 
     if (wasCorrect) {
@@ -67,9 +75,7 @@ export function ImageAnalysisCard({
   }
 
   // Find correct option index for MCQ
-  const correctOptionIdx = isMCQ
-    ? question.options!.findIndex(opt => question.answer.toLowerCase().includes(opt.toLowerCase()))
-    : -1
+  const correctOptionIdx = isMCQ ? resolveCorrectIdx() : -1
 
   return (
     <motion.div

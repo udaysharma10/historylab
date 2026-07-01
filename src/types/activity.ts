@@ -67,13 +67,17 @@ export interface MapLabelActivity extends BaseActivity {
 export interface ImageAnalysisActivity extends BaseActivity {
   type: 'image-analysis'
   figureId: string
-  questions: { question: string; answer: string; options?: string[] }[]
+  // For MCQ sub-questions, correctIndex is the authoritative correct option.
+  // (Do NOT infer the answer by substring-matching the model answer text.)
+  questions: { question: string; answer: string; options?: string[]; correctIndex?: number }[]
 }
 
 export interface SourceComprehensionActivity extends BaseActivity {
   type: 'source-comprehension'
   sourceId: string
-  questions: { question: string; answer: string; options?: string[] }[]
+  // For MCQ sub-questions, correctIndex is the authoritative correct option.
+  // (Do NOT infer the answer by substring-matching the model answer text.)
+  questions: { question: string; answer: string; options?: string[]; correctIndex?: number }[]
 }
 
 export interface ShortAnswerActivity extends BaseActivity {
