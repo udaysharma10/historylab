@@ -243,3 +243,19 @@ At Uday's request, read all 4 Ch2 sections end-to-end as a history teacher. **Ve
 | **figureIds metadata drift** | `chapter2.ts` S1 `figureIds` lists fig-2/fig-4 but omits fig-15/fig-16 (used inline). Cosmetic — rendering uses card `imageId`. | OPEN — tidy |
 
 Integration density: **Ch1 19/21 figures inline vs Ch2 13/17** (S1:4, S2:0, S3:4, S4:5). Items above are pedagogical improvements (add/swap existing `imageId`s) — **not yet implemented; pending Uday/Neha go-ahead** so Neha reviews a fixed version. Also fixed this round: the **"Next Topic" navigation bug** (SubsectionComplete didn't advance — `<NarrativeMode>` needed a `key` to remount per topic; commit `8694462`).
+
+### Round 8 — Ch2 figure hotspot plotting (Neha, 2026-07-01)
+
+Neha reviewed the *rendered* Ch2 figures and found the interactive hotspot dots "not in place." Re-verified all 16 figures at full resolution (grid + current dots overlay). Fixes in `src/data/ch2/figures.ts`:
+
+| Figure | Problem | Fix |
+|--------|---------|-----|
+| fig-6 (Allahabad group) | Named Gandhi/Patel/Nehru/Bose at dots in gaps between unidentifiable seated figures | **De-identified** → one "Congress leaders in discussion" hotspot; analysis softened |
+| fig-2 (S. Africa march) | "Gandhi leading" pinned an indistinct speck | Reframed → "Head of the march" |
+| fig-14a | Trishul dot floating in the sky | Moved onto the trident tip; lion/elephant onto their heads |
+| fig-10 | Gandhi/Nehru/Azad dots on chests | Raised to faces |
+| fig-12 (Bharat Mata) | Vague "four arms"/"learning-food-clothing" bundle | **5 precise dots**: face + white cloth, book, mala, paddy |
+| fig-11 | Tilak on torso | Moved to face; corner-symbols description completed (temple/masjid/church/agyari) |
+| fig-7, fig-13, fig-9, fig-1 | Dots off-target | Nudged onto Gandhi / the Bharat Mata plaque / the women's crowd / the Hindi signage |
+
+Correct already (unchanged): fig-3, fig-15, fig-4, fig-5, fig-8, fig-14b, fig-16. **Verified in the running app.** Teacher principle recorded: **on grainy photos, prefer a general, defensible hotspot over a precise-but-wrong "this is X"** — a confidently mislabelled leader misteaches.

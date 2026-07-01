@@ -30,7 +30,7 @@ export const ch2Figures: Ch2Figure[] = [
     examRelevance: 'medium',
     hotspots: [
       { id: 'h1', label: 'Dense crowd', description: 'Thousands of people filling the entire street — showing the massive scale of the hartal', x: 50, y: 60 },
-      { id: 'h2', label: 'Banners in Hindi', description: 'Protest banners in the local language — the movement was reaching ordinary people, not just English-speaking elites', x: 45, y: 30 },
+      { id: 'h2', label: 'Signs in the local script', description: 'Shop-signs and banners in the local Hindi/Devanagari script (on the buildings) — a sign the movement was reaching ordinary people, not just English-speaking elites', x: 18, y: 25 },
       { id: 'h3', label: 'White clothing', description: 'Most participants wearing white — many would later adopt khadi as a symbol of the national movement', x: 62, y: 62 },
     ],
     analysis: {
@@ -59,8 +59,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's1',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Workers marching', description: 'Indian workers from Newcastle marching to Transvaal — defying racist laws that denied rights to non-whites', x: 55, y: 55 },
-      { id: 'h2', label: 'Gandhi leading', description: 'Mahatma Gandhi was leading this march — his South African experience shaped satyagraha before he brought it to India', x: 22, y: 52 },
+      { id: 'h1', label: 'The marching column', description: 'The long column of Indian workers marching from Newcastle towards Transvaal (Nov 1913), defying racist laws that denied rights to non-whites', x: 55, y: 60 },
+      { id: 'h2', label: 'Head of the march', description: 'Gandhi led this march from the front — the individual figures are too indistinct to pick out, but this is where the procession was headed. His South African struggle shaped satyagraha before he brought it to India.', x: 20, y: 55 },
     ],
     analysis: {
       whatYouSee: [
@@ -169,28 +169,25 @@ export const ch2Figures: Ch2Figure[] = [
     imagePath: '/images/ch2/fig-06-congress-leaders.png',
     sectionId: 's3',
     examRelevance: 'medium',
-    // NEEDS NEHA: this is a grainy group photo — individual identities (Patel/Nehru/Bose)
-    // cannot be reliably verified from the image, and the current coords don't match the
-    // caption's "extreme left / extreme right / fifth from right" cues. Left as-is pending
-    // an authoritative key from Neha before repositioning, to avoid mislabelling leaders.
+    // Individual identities can't be reliably verified in this grainy group photo (the
+    // leaders are seated, several turned away), so we DON'T pin specific names to specific
+    // figures — a confidently-wrong "this is Nehru" dot would misteach. One general hotspot
+    // on the seated group instead. (Analysis text still names who was present.)
     hotspots: [
-      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi — the central figure of the Congress and the independence movement', x: 38, y: 50 },
-      { id: 'h2', label: 'Sardar Patel', description: 'Vallabhbhai Patel (extreme left) — led the Bardoli Satyagraha, known as "Sardar"', x: 52, y: 48 },
-      { id: 'h3', label: 'Jawaharlal Nehru', description: 'Jawaharlal Nehru (extreme right) — presided over the Lahore Congress demanding Purna Swaraj', x: 66, y: 48 },
-      { id: 'h4', label: 'Subhas Chandra Bose', description: 'Subhas Chandra Bose (fifth from right) — represented the radical wing demanding mass agitation', x: 25, y: 55 },
+      { id: 'h1', label: 'Congress leaders in discussion', description: 'Senior Congress leaders seated together at Allahabad in 1931 — a moment of the leadership working side by side between the Salt March (1930) and the Round Table Conference (1931).', x: 40, y: 52 },
     ],
     analysis: {
       whatYouSee: [
         'Congress leaders gathered for a meeting at Allahabad in 1931',
-        'Identifiable figures include Gandhi, Sardar Patel, Jawaharlal Nehru, and Subhas Chandra Bose',
-        'The leaders are seated in a garden setting — informal but purposeful',
+        'A group of the period\'s senior leaders — figures such as Gandhi, Patel, Nehru and Bose were part of this circle (the grainy photo makes pinning each face uncertain)',
+        'The leaders are seated together — informal but purposeful',
       ],
       whatItMeans: [
         'This photograph captures the Congress leadership during a critical period — between the Salt March (1930) and the Round Table Conference (1931)',
         'The different leaders represent different approaches: Gandhi (non-violence), Nehru (socialism), Bose (radical mass agitation)',
         'Despite internal differences, they are working together — unity within diversity',
       ],
-      examTip: 'Identify the key leaders in this image: Gandhi (centre), Patel (left), Nehru (right), Bose (fifth from right). Know each leader\'s approach and contribution.',
+      examTip: 'Know the key Congress leaders of this period and their different approaches: Gandhi (non-violence), Nehru (socialism, full independence), Patel (organisation, the Bardoli Satyagraha), Bose (radical mass agitation). The exam tests who they were and what they stood for — not spotting each face in this photo.',
     },
   },
   {
@@ -203,8 +200,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Gandhi leading', description: 'Gandhi walking with his famous staff — leading 78 volunteers on the 240-mile march from Sabarmati to Dandi', x: 42, y: 45 },
-      { id: 'h2', label: '78 volunteers', description: 'The trusted volunteers who started the march — by the time they reached Dandi, thousands had joined', x: 62, y: 50 },
+      { id: 'h1', label: 'Gandhi leading', description: 'Gandhi (the bald figure walking with his staff) leading the march — 78 volunteers set out on the 240-mile walk from Sabarmati to Dandi', x: 38, y: 31 },
+      { id: 'h2', label: 'The marchers', description: 'The volunteers walking with Gandhi — by the time they reached Dandi, thousands more had joined the column', x: 66, y: 34 },
     ],
     analysis: {
       whatYouSee: [
@@ -257,8 +254,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Women marchers', description: 'Women participating in nationalist processions — many left their homes for the first time to join the movement', x: 50, y: 50 },
-      { id: 'h2', label: 'Old women and mothers', description: 'Notice old women and mothers with children — showing that women of all ages joined', x: 30, y: 55 },
+      { id: 'h1', label: 'Women marchers', description: 'The procession of women — many left their homes for the first time to join the movement', x: 50, y: 60 },
+      { id: 'h2', label: 'Women of all ages', description: 'Women of all ages joined — including older women and mothers with children — a revolutionary change in Indian public life', x: 25, y: 61 },
     ],
     analysis: {
       whatYouSee: [
@@ -286,9 +283,9 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's3',
     examRelevance: 'low',
     hotspots: [
-      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi at his ashram — the spiritual centre of the national movement', x: 26, y: 26 },
-      { id: 'h2', label: 'Nehru', description: 'Jawaharlal Nehru — by 1935, he was one of the most prominent Congress leaders', x: 48, y: 26 },
-      { id: 'h3', label: 'Maulana Azad', description: 'Maulana Abul Kalam Azad — a Muslim leader who remained committed to Hindu-Muslim unity and the Congress', x: 76, y: 26 },
+      { id: 'h1', label: 'Gandhi', description: 'Mahatma Gandhi (left, bald with round glasses) at his ashram — the spiritual centre of the national movement', x: 18, y: 17 },
+      { id: 'h2', label: 'Nehru', description: 'Jawaharlal Nehru (centre, in the white Gandhi cap) — by 1935, one of the most prominent Congress leaders', x: 46, y: 18 },
+      { id: 'h3', label: 'Maulana Azad', description: 'Maulana Abul Kalam Azad (right, with cap and beard) — a Muslim leader who remained committed to Hindu-Muslim unity and the Congress', x: 78, y: 17 },
     ],
     analysis: {
       whatYouSee: [
@@ -312,8 +309,8 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Tilak', description: 'Bal Gangadhar Tilak — an early nationalist leader who popularised the idea of swaraj', x: 50, y: 42 },
-      { id: 'h2', label: 'Symbols of unity', description: 'Notice the temple (top-left), masjid (top-right) and church framing the image — symbols of different faiths united around the national leader', x: 11, y: 8 },
+      { id: 'h1', label: 'Tilak', description: 'Bal Gangadhar Tilak — an early nationalist leader who popularised the idea of swaraj ("Swaraj is my birthright")', x: 45, y: 27 },
+      { id: 'h2', label: 'Symbols of unity', description: 'The four corners frame the figure with a temple (top-left), masjid (top-right), church (bottom-left) and agyari/fire-temple (bottom-right) — symbols of different faiths united around the national leader', x: 11, y: 8 },
     ],
     analysis: {
       whatYouSee: [
@@ -341,10 +338,11 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Ascetic figure', description: 'Bharat Mata is portrayed as calm, composed, divine, and spiritual — an ascetic, not a warrior', x: 50, y: 13 },
-      { id: 'h2', label: 'Mala (prayer beads)', description: 'The mala in one hand emphasises her spiritual, ascetic quality — connected to dharma, not power', x: 11, y: 45 },
-      { id: 'h3', label: 'Learning, food, clothing', description: 'She holds items representing what a mother provides — knowledge, nourishment, protection', x: 83, y: 36 },
-      { id: 'h4', label: 'Four arms', description: 'Four arms like a Hindu goddess — dispensing learning, food, clothing, and spiritual guidance', x: 50, y: 25 },
+      { id: 'h1', label: 'Ascetic, spiritual face', description: 'Bharat Mata is calm, composed and ascetic — a spiritual mother, not a warrior queen. Her four arms, like a Hindu goddess, dispense a mother\'s gifts.', x: 48, y: 11 },
+      { id: 'h2', label: 'White cloth — clothing', description: 'An upper hand holds a piece of white cloth — clothing, one of the gifts the motherland provides her children.', x: 15, y: 21 },
+      { id: 'h3', label: 'Book — learning', description: 'An upper hand holds a book (manuscript) — representing knowledge and learning.', x: 82, y: 22 },
+      { id: 'h4', label: 'Mala — spirituality', description: 'A lower hand holds a mala (prayer beads) — emphasising her spiritual, ascetic quality, connected to dharma rather than power.', x: 12, y: 40 },
+      { id: 'h5', label: 'Sheaves of paddy — food', description: 'A lower hand holds sheaves of paddy — food and nourishment for her children.', x: 82, y: 41 },
     ],
     analysis: {
       whatYouSee: [
@@ -373,7 +371,7 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'medium',
     hotspots: [
-      { id: 'h1', label: 'Nehru with Bharat Mata', description: 'Nehru is shown holding the image of Bharat Mata and the map of India close to his heart', x: 62, y: 68 },
+      { id: 'h1', label: 'Nehru with Bharat Mata', description: 'Nehru is shown holding an image of Bharat Mata (the red figure on the map of India, titled "भारत माता") close to his heart', x: 55, y: 62 },
     ],
     analysis: {
       whatYouSee: [
@@ -397,9 +395,9 @@ export const ch2Figures: Ch2Figure[] = [
     sectionId: 's4',
     examRelevance: 'high',
     hotspots: [
-      { id: 'h1', label: 'Trishul', description: 'The trident (trishul) — a weapon associated with Hindu deity Shiva. Unlike Tagore\'s version, this Bharat Mata is about POWER, not spirituality.', x: 43, y: 17 },
-      { id: 'h2', label: 'Lion', description: 'Symbol of power and authority — a departure from Tagore\'s calm, ascetic mother figure', x: 30, y: 81 },
-      { id: 'h3', label: 'Elephant', description: 'Another symbol of power, strength, and royalty — reinforcing the martial, powerful image', x: 70, y: 50 },
+      { id: 'h1', label: 'Trishul', description: 'The trident (trishul) at the top of the staff — a weapon associated with the Hindu deity Shiva. Unlike Tagore\'s version, this Bharat Mata is about POWER, not spirituality.', x: 30, y: 15 },
+      { id: 'h2', label: 'Lion', description: 'Symbol of power and authority — a departure from Tagore\'s calm, ascetic mother figure', x: 27, y: 78 },
+      { id: 'h3', label: 'Elephant', description: 'Another symbol of power, strength, and royalty — reinforcing the martial, powerful image', x: 62, y: 60 },
     ],
     analysis: {
       whatYouSee: [
