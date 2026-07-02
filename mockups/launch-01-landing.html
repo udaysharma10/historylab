@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch 01 · Public Landing + Waitlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8;
+    --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s2:#5571B5; --s2-bg:#E9ECF8; --s3:#C2893E; --s3-bg:#F7EFDD;
+    --s4:#5C9368; --s4-bg:#E8F1E9; --s5:#9B5C9A; --s5-bg:#F4E9F3; --s6:#3F8E84; --s6-bg:#E4F1EE;
+    --gold:#C99A3A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:18px 22px 64px}
+  .serif{font-family:'Fraunces',serif}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 26px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink);letter-spacing:-.3px}
+  .brand .lab{color:var(--accent)}
+  .top-actions{display:flex;align-items:center;gap:11px}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;
+    font-weight:700;font-size:14px;padding:12px 22px;border-radius:12px;transition:transform .12s,box-shadow .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(220,131,95,.35)}
+  .btn-ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+  .btn-sm{padding:9px 16px;font-size:13px}
+
+  .eyebrow{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:12px}
+  .founding{display:inline-flex;align-items:center;gap:7px;background:var(--lav-soft);color:var(--lav);
+    font-weight:700;font-size:12px;padding:6px 13px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase}
+
+  /* HERO */
+  .hero{background:var(--paper);border-radius:24px;box-shadow:var(--shadow);padding:46px 48px;margin-bottom:22px;
+    position:relative;overflow:hidden;border:1px solid var(--line);text-align:center}
+  .hero::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--accent),var(--lav))}
+  .hero h1{font-family:'Fraunces',serif;font-size:42px;font-weight:600;line-height:1.1;color:var(--ink);margin:14px auto 14px;max-width:19ch}
+  .hero .sub{font-size:16px;color:var(--body);font-weight:500;max-width:52ch;margin:0 auto 26px;line-height:1.6}
+  .cta-row{display:flex;gap:12px;justify-content:center;margin-bottom:22px}
+  .trust{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:7px;background:var(--bg-1);border:1px solid var(--line);
+    padding:8px 14px;border-radius:11px;font-weight:600;font-size:12.5px;color:var(--body)}
+  .chip b{color:var(--ink)}
+
+  /* PREVIEW STRIP */
+  .preview{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px}
+  .shot{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .shot .art{height:150px;display:grid;place-items:center;font-size:44px}
+  .shot .cap{padding:14px 16px;border-top:1px solid var(--line)}
+  .shot .cap b{display:block;font-family:'Fraunces',serif;color:var(--ink);font-size:15px;font-weight:600;margin-bottom:2px}
+  .shot .cap span{font-size:12.5px;color:var(--muted);font-weight:500}
+
+  /* FEATURES */
+  .panel{background:var(--paper);border-radius:22px;box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:30px 32px;margin-bottom:22px}
+  .panel h2{font-family:'Fraunces',serif;font-size:23px;font-weight:600;color:var(--ink);margin-bottom:4px}
+  .panel .lead{font-size:13.5px;color:var(--muted);font-weight:600;margin-bottom:20px}
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .feat{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .feat .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:19px;flex-shrink:0}
+  .feat b{display:block;color:var(--ink);font-size:13.5px;font-weight:700;margin-bottom:2px}
+  .feat span{font-size:12px;color:var(--body);font-weight:500;line-height:1.45}
+
+  /* HOW IT WORKS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .step{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:16px;padding:20px 18px 18px;text-align:center}
+  .step .num{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:14px;
+    display:grid;place-items:center;margin:0 auto 10px;font-family:'Fraunces',serif}
+  .step b{display:block;font-family:'Fraunces',serif;color:var(--ink);font-size:15.5px;font-weight:600;margin-bottom:4px}
+  .step span{font-size:12.5px;color:var(--body);font-weight:500;line-height:1.5}
+
+  /* PRICING */
+  .price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .price{background:var(--bg-1);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:center;position:relative}
+  .price.hot{background:var(--paper);border:2px solid var(--accent);box-shadow:var(--shadow)}
+  .price .tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;
+    font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 12px;border-radius:999px}
+  .price h3{font-family:'Fraunces',serif;color:var(--ink);font-size:17px;font-weight:600;margin-bottom:6px}
+  .price .amt{font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:var(--ink)}
+  .price .amt small{font-size:13px;color:var(--muted);font-weight:600}
+  .price ul{list-style:none;margin-top:12px;text-align:left}
+  .price li{font-size:12.5px;font-weight:500;color:var(--body);padding:5px 0 5px 22px;position:relative}
+  .price li::before{content:"✓";position:absolute;left:2px;color:var(--accent);font-weight:800}
+  .price.soon{opacity:.62}
+  .price .soonpill{display:inline-block;background:var(--lav-soft);color:var(--lav);font-size:10.5px;font-weight:800;
+    letter-spacing:.5px;text-transform:uppercase;padding:4px 12px;border-radius:999px;margin-top:8px}
+
+  /* WAITLIST */
+  .wait{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;align-items:start}
+  .input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;font-family:'Inter',sans-serif;
+    font-size:14px;font-weight:500;color:var(--ink);background:var(--paper);outline:none;margin-bottom:10px}
+  .input::placeholder{color:var(--muted)}
+  .input:focus{border-color:var(--accent)}
+  label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:0 2px 6px}
+  .success{background:var(--s4-bg);border:1px solid #CFE3D3;border-radius:16px;padding:20px;text-align:center}
+  .success .big{font-size:34px;margin-bottom:8px}
+  .success b{display:block;font-family:'Fraunces',serif;color:var(--s4);font-size:17px;font-weight:600;margin-bottom:4px}
+  .success span{font-size:12.5px;color:var(--body);font-weight:500;line-height:1.5}
+
+  /* FOOTER */
+  footer{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  footer .links{display:flex;gap:18px}
+  footer a{color:var(--body);font-size:12.5px;font-weight:600;text-decoration:none}
+  footer a:hover{color:var(--accent)}
+  footer .fine{font-size:11.5px;color:var(--muted);font-weight:500}
+
+  /* SPEC NOTES (annotations, not UI) */
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:8px 0 22px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">History<span class="lab">Lab</span></div>
+    <div class="top-actions">
+      <span class="founding">✦ Founding Cohort</span>
+      <button class="btn btn-ghost btn-sm">Sign in</button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="eyebrow">CBSE Class 10 · History · Invite-only</span>
+    <h1>History, learned the way toppers learn it.</h1>
+    <p class="sub">Every NCERT chapter rebuilt as an interactive story — figures you can explore, maps you can touch,
+      flashcards that schedule your revision, and board-pattern exam prep. Built with a CBSE History teacher.</p>
+    <div class="cta-row">
+      <button class="btn btn-primary">Request an invite</button>
+      <button class="btn btn-ghost">I have an invite code →</button>
+    </div>
+    <div class="trust">
+      <div class="chip">🏫 <b>Trialled with students at a top Gurugram school</b></div>
+      <div class="chip">📖 <b>NCERT-faithful, teacher-reviewed</b></div>
+      <div class="chip">✦ <b>Access by invitation only</b></div>
+    </div>
+  </div>
+  <div class="spec"><b>Spec:</b> "Request an invite" scrolls to the waitlist form below. "I have an invite code" → the signup flow (page 02).
+    Copy note: do <b>not</b> name the school publicly without permission — kept generic. "Sign in" is for existing accounts only (no open signup).</div>
+
+  <!-- PREVIEW -->
+  <div class="preview">
+    <div class="shot"><div class="art" style="background:linear-gradient(150deg,var(--s1-bg),var(--accent-soft))">📜</div>
+      <div class="cap"><b>Story-mode chapters</b><span>Narrative cards with inline quiz gates — not walls of text.</span></div></div>
+    <div class="shot"><div class="art" style="background:linear-gradient(150deg,var(--s2-bg),var(--lav-soft))">🗺️</div>
+      <div class="cap"><b>Interactive maps &amp; figures</b><span>Every NCERT figure and board-map location, explorable.</span></div></div>
+    <div class="shot"><div class="art" style="background:linear-gradient(150deg,var(--s3-bg),var(--s6-bg))">📝</div>
+      <div class="cap"><b>Board-pattern exam prep</b><span>Past-question drills, sources, marking-scheme answers.</span></div></div>
+  </div>
+  <div class="spec"><b>Spec:</b> in the real page these three tiles are actual product screenshots (narrative card, Ch2 India map, exam prep) — emoji are placeholders.</div>
+
+  <!-- FEATURES -->
+  <div class="panel">
+    <h2>What's inside every chapter</h2>
+    <div class="lead">The full NCERT chapter — rebuilt, not summarised.</div>
+    <div class="feats">
+      <div class="feat"><div class="ic" style="background:var(--s1-bg)">📜</div><div><b>Storytelling narrative</b><span>~110 cards per chapter with WHY-cards, flowcharts and tables.</span></div></div>
+      <div class="feat"><div class="ic" style="background:var(--s2-bg)">🖼️</div><div><b>NCERT figures, explorable</b><span>Every figure with tap-hotspots and exam-tip analysis.</span></div></div>
+      <div class="feat"><div class="ic" style="background:var(--s6-bg)">🗺️</div><div><b>Board map work</b><span>The exact locations CBSE asks, on real interactive maps.</span></div></div>
+      <div class="feat"><div class="ic" style="background:var(--s4-bg)">🃏</div><div><b>Smart flashcards</b><span>Spaced repetition that schedules your personal revision.</span></div></div>
+      <div class="feat"><div class="ic" style="background:var(--s3-bg)">📅</div><div><b>Timelines</b><span>Every key date, in order, with expandable events.</span></div></div>
+      <div class="feat"><div class="ic" style="background:var(--s5-bg)">📝</div><div><b>Exam prep</b><span>MCQ, source-based, assertion-reason &amp; NCERT questions with model answers.</span></div></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="panel">
+    <h2>How it works</h2>
+    <div class="lead">Invitation-only while we build the founding cohort.</div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><b>Get invited</b><span>By a classmate who's already in, or request an invite below.</span></div>
+      <div class="step"><div class="num">2</div><b>Learn Chapter 1 free</b><span>The full chapter, every feature — experience it properly before paying anything.</span></div>
+      <div class="step"><div class="num">3</div><b>Unlock the rest</b><span>Parents unlock further chapters for ₹499 each — yours for good, no subscription.</span></div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="panel">
+    <h2>Simple, honest pricing</h2>
+    <div class="lead">No subscriptions. No auto-renewals. Pay once per chapter, keep it forever.</div>
+    <div class="price-grid">
+      <div class="price">
+        <h3>Chapter 1</h3><div class="amt">Free</div>
+        <ul><li>The complete chapter</li><li>All study tools included</li><li>For every invited student</li></ul>
+      </div>
+      <div class="price hot">
+        <span class="tag">Per chapter</span>
+        <h3>Any chapter</h3><div class="amt">₹499 <small>one-time</small></div>
+        <ul><li>Lifetime access</li><li>All modes: story, maps, figures, flashcards, exam prep</li><li>GST invoice to parent's email</li></ul>
+      </div>
+      <div class="price soon">
+        <h3>Full book</h3><div class="amt">—</div>
+        <ul><li>All 5 History chapters</li><li>Best value</li></ul>
+        <div class="soonpill">Coming later</div>
+      </div>
+    </div>
+  </div>
+  <div class="spec"><b>Spec:</b> bundle card intentionally shows no price (decision deferred until uptake data — plan §10). Payment is made by a parent; the checkout says so explicitly (page 03).</div>
+
+  <!-- WAITLIST -->
+  <div class="panel">
+    <h2>Request an invite</h2>
+    <div class="lead">No invite from a classmate? Join the waitlist — we open seats in small batches.</div>
+    <div class="wait">
+      <div>
+        <label>Parent's email</label>
+        <input class="input" placeholder="parent@example.com" />
+        <label>Student's class &amp; school (optional)</label>
+        <input class="input" placeholder="Class 10, TEST High School, Gurugram" />
+        <button class="btn btn-primary">Join the waitlist</button>
+      </div>
+      <div class="success">
+        <div class="big">✦</div>
+        <b>You're on the list!</b>
+        <span>We'll email an invite code when the next batch of seats opens. Founding-cohort seats are limited.</span>
+      </div>
+    </div>
+  </div>
+  <div class="spec"><b>Spec:</b> right panel = the post-submit state (shown side-by-side here for review; in the real page it replaces the form).
+    Writes to the <b>waitlist</b> table; admin converts waitlist → invite from the admin panel (page 05). Parent email only — DPDPA-clean (no child data collected pre-signup).</div>
+
+  <footer>
+    <div class="brand" style="font-size:18px">History<span class="lab">Lab</span></div>
+    <div class="links"><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Refunds &amp; Cancellation</a><a href="#">Contact</a></div>
+    <div class="fine">© 2026 Teknomatics · historylab.in</div>
+  </footer>
+
+</div>
+</body>
+</html>

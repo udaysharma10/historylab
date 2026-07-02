@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch Mockups · Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 22px 64px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:28px;color:var(--ink);margin-bottom:4px}
+  .brand .lab{color:var(--accent)}
+  .sub{font-size:13.5px;font-weight:600;color:var(--muted);margin-bottom:28px}
+  a.card{display:flex;align-items:center;gap:16px;background:var(--paper);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow-sm);padding:20px 22px;margin-bottom:14px;text-decoration:none;transition:transform .15s,box-shadow .15s}
+  a.card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .num{width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);
+    display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;font-size:18px;flex-shrink:0}
+  .card b{display:block;font-family:'Fraunces',serif;color:var(--ink);font-size:17px;font-weight:600;margin-bottom:2px}
+  .card span{font-size:12.5px;font-weight:500;color:var(--body);line-height:1.45}
+  .note{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin-top:20px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">History<span class="lab">Lab</span> — launch mockups</div>
+  <div class="sub">Premium invite-only model · plan §10 (2026-07-02) · C2 design language · review page by page</div>
+
+  <a class="card" href="launch-01-landing.html"><div class="num">01</div>
+    <div><b>Public landing + waitlist</b><span>Hero, product preview, features, how-it-works, pricing (₹499/chapter), request-an-invite waitlist, legal footer.</span></div></a>
+
+  <a class="card" href="launch-02-invite-signup.html"><div class="num">02</div>
+    <div><b>Invite redemption &amp; signup</b><span>Invite code (+ error state) → Google sign-in with inviter attribution → student/parent + DPDPA consent → welcome with 3 invites.</span></div></a>
+
+  <a class="card" href="launch-03-purchase.html"><div class="num">03</div>
+    <div><b>Locked chapter → purchase → success</b><span>Book home with premium-locked Ch2, purchase sheet (parent confirmation, Razorpay), success + payment-pending states.</span></div></a>
+
+  <a class="card" href="launch-04-account-invites.html"><div class="num">04</div>
+    <div><b>Account, purchases &amp; invites</b><span>My chapters (free/owned + invoice), 3 shareable invite codes with WhatsApp share, streak-earned-invite teaser.</span></div></a>
+
+  <a class="card" href="launch-05-admin.html"><div class="num">05</div>
+    <div><b>Admin panel</b><span>Stats, users &amp; access (grant/revoke modal, admin-created accounts), invite batches, waitlist → invite, purchases &amp; refunds.</span></div></a>
+
+  <div class="note"><b>How to read these:</b> dashed boxes inside each page are spec annotations, not UI. All copy uses synthetic names/emails.
+    Behaviour notes map 1:1 to PLAN_SUBSCRIPTION_LAUNCH.md (entitlements, webhooks, invite provenance).</div>
+</div>
+</body>
+</html>
