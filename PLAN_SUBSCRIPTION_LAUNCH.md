@@ -188,6 +188,10 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 8. **Domain:** `historylab.in` already purchased (by Neha). Vercel/Supabase/OAuth wiring per HANDOFF.
 9. **Execution gate: mockups first.** Page-by-page HTML mockups of the entire new front end (landing, waitlist, invite flow, payment flow, admin panel) in the exact C2 design language, visually validated by Uday **before** actual development. Mockups live in `mockups/launch-*.html`.
 
+**Closed 2026-07-02 (round 3):**
+10. **Launch scope: public launch happens only WITH the CBSE test engine.** S1 (payments/paywall) is built and verified in test mode but does NOT go public on its own. Sprint sequence unchanged (S0 → S1 → test engine → **launch** → trust/ops). The test engine is the launch differentiator, not a fast-follow.
+11. **Mockup gate extended to ALL sprints:** every screen through Sprint 6 (test centre, paper player, AI-marked results, parent weekly email, email/password auth, devices/session limits) must be mocked and validated by Uday before development starts. Mockups: `mockups/launch-00..10`.
+
 **Still open / assumptions to confirm:**
 - Parent weekly progress email: scoped to S2 (assumed, not explicitly decided).
 - Ch1 free *behind* the invite gate; public sees only the preview (assumed).

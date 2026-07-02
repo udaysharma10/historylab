@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch 10 · Email Auth, Devices &amp; Sync</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s4:#5C9368; --s4-bg:#E8F1E9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:18px 22px 64px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--ink);margin-bottom:6px}
+  .brand .lab{color:var(--accent)}
+
+  .screen-label{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--lav);
+    margin:30px 2px 12px;display:flex;align-items:center;gap:10px}
+  .screen-label::after{content:"";flex:1;height:1px;background:#DCD3E8}
+
+  .card{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);border:1px solid var(--line);
+    max-width:480px;margin:0 auto;padding:32px 36px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--accent),var(--lav))}
+  .card h1{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .card .sub{font-size:13px;font-weight:500;color:var(--body);line-height:1.5;margin-bottom:18px}
+
+  label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:0 2px 6px}
+  .input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 15px;font-family:'Inter',sans-serif;
+    font-size:14px;font-weight:500;color:var(--ink);outline:none;margin-bottom:13px}
+  .input:focus{border-color:var(--accent)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:none;cursor:pointer;width:100%;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:14px;padding:12px 20px;border-radius:12px;transition:transform .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(220,131,95,.35)}
+  .btn-google{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);box-shadow:var(--shadow-sm)}
+  .gicon{width:18px;height:18px;border-radius:3px;background:conic-gradient(#4285F4 0 90deg,#34A853 90deg 180deg,#FBBC05 180deg 270deg,#EA4335 270deg 360deg)}
+  .divider{display:flex;align-items:center;gap:12px;margin:16px 0;font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1px}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+  .forgot{display:block;text-align:center;font-size:12.5px;font-weight:700;color:var(--lav);margin-top:14px;text-decoration:none}
+
+  .panel{background:var(--paper);border-radius:20px;box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:24px 28px;max-width:640px;margin:0 auto}
+  .panel h2{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:3px}
+  .panel .lead{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:14px}
+  .dev{display:flex;align-items:center;gap:14px;padding:14px 2px;border-top:1px solid var(--line)}
+  .dev:first-of-type{border-top:none}
+  .dico{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:var(--bg-1);border:1px solid var(--line);flex-shrink:0}
+  .dev .tt{flex:1}
+  .dev b{display:block;font-size:14px;font-weight:700;color:var(--ink)}
+  .dev span{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .tag{font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px}
+  .t-this{background:var(--s4-bg);color:var(--s4)}
+  .sbtn{background:var(--paper);color:var(--s1);border:1.5px solid var(--line);font-size:12px;font-weight:700;
+    padding:8px 14px;border-radius:10px;cursor:pointer}
+  .limitnote{display:flex;gap:11px;align-items:flex-start;background:var(--lav-soft);border:1px solid #DED7F0;border-radius:13px;padding:12px 15px;margin-top:14px}
+  .limitnote p{font-size:12px;font-weight:500;color:var(--body);line-height:1.5}
+  .limitnote b{color:var(--lav)}
+
+  .toasts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .toast{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:13px;
+    box-shadow:var(--shadow);padding:11px 18px;font-size:12.5px;font-weight:700;color:var(--ink)}
+  .dot{width:9px;height:9px;border-radius:50%}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:14px auto 0;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55;max-width:640px}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">History<span class="lab">Lab</span> <span style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:600">/ auth, devices &amp; sync</span></div>
+
+  <!-- EMAIL/PASSWORD SIGN-IN -->
+  <div class="screen-label">Screen A · Sign-in with email option (Sprint 6 — replaces "coming soon")</div>
+  <div class="card">
+    <h1>Welcome back</h1>
+    <p class="sub">Sign in to pick up exactly where you left off — your progress follows you on any device.</p>
+    <button class="btn btn-google"><span class="gicon"></span> Continue with Google</button>
+    <div class="divider">OR</div>
+    <label>Email</label>
+    <input class="input" value="vedansh@example.com" />
+    <label>Password</label>
+    <input class="input" type="password" value="············" />
+    <button class="btn btn-primary">Sign in</button>
+    <a class="forgot" href="#">Forgot password?</a>
+  </div>
+  <div class="spec"><b>Spec:</b> Supabase email/password alongside the existing Google OAuth; reset link via email. New signups still require an invite code first (page 02) — this only adds a credential method, not an open door.</div>
+
+  <!-- DEVICES -->
+  <div class="screen-label">Screen B · My devices (in Account) — session limits</div>
+  <div class="panel">
+    <h2>My devices</h2>
+    <div class="lead">Your account works on up to 2 devices at a time.</div>
+    <div class="dev">
+      <div class="dico">💻</div>
+      <div class="tt"><b>MacBook Air · Chrome</b><span>Gurugram, IN · active now</span></div>
+      <span class="tag t-this">This device</span>
+    </div>
+    <div class="dev">
+      <div class="dico">📱</div>
+      <div class="tt"><b>iPad · Safari</b><span>Gurugram, IN · last used 2h ago</span></div>
+      <button class="sbtn">Sign out</button>
+    </div>
+    <div class="limitnote">🔒 <p><b>Device limit reached.</b> Signing in on a new device will sign out the least-recently-used one. We'll email you whenever a new device signs in.</p></div>
+  </div>
+  <div class="spec"><b>Spec:</b> sessions tracked server-side (device fingerprint + last-seen); 3rd sign-in evicts the LRU session and triggers a new-device email to the parent. Deliberately gentle — a paying family with a phone, an iPad and a school laptop must never feel punished; the limit exists to make mass credential-sharing annoying, not to fight the household.</div>
+
+  <!-- SYNC STATES -->
+  <div class="screen-label">Screen C · Sync states (S0 — quiet, ambient UI)</div>
+  <div class="toasts">
+    <div class="toast"><span class="dot" style="background:var(--s4)"></span> All progress synced</div>
+    <div class="toast"><span class="dot" style="background:var(--s3, #C2893E)"></span> Offline — saving on this device, will sync when back</div>
+    <div class="toast"><span class="dot" style="background:var(--lav)"></span> Welcome back — progress restored from your account</div>
+  </div>
+  <div class="spec"><b>Spec:</b> S0 sync is offline-first (localStorage stays the write buffer; Supabase is truth). These states appear as a small dot + tooltip in the top bar, not toasts in your face — sync should be boring. Third state shows once on a fresh device after restore. Existing pilot students' local progress migrates up on their first sign-in after S0 ships (one-time merge, keep-highest rules).</div>
+
+</div>
+</body>
+</html>
