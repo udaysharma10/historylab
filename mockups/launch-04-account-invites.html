@@ -86,9 +86,9 @@
       <h1>Vedansh</h1>
       <div class="mail">vedansh@example.com · Class 10 · CBSE</div>
       <div class="chips">
-        <div class="chip">✦ <b>Founding cohort</b></div>
         <div class="chip">⭐ <b>18 stars</b></div>
         <div class="chip">🔥 <b>4-day streak</b></div>
+        <div class="chip">👨‍👩‍👧 <b>Parent: parent@example.com</b></div>
       </div>
     </div>
   </div>
@@ -104,37 +104,31 @@
     </div>
     <div class="rowitem">
       <div class="badge" style="background:var(--s2-bg);color:var(--s2)">🇮🇳</div>
-      <div class="tt"><b>Nationalism in India</b><span>Chapter 2 · purchased 02 Jul 2026 · ₹499</span></div>
+      <div class="tt"><b>Nationalism in India</b><span>Chapter 2 · purchased 02 Jul 2026 · ₹199 (launch price)</span></div>
       <span class="tagpill" style="background:var(--accent-soft);color:var(--accent)">Owned</span>
       <button class="btn btn-ghost">🧾 Invoice</button>
     </div>
   </div>
   <div class="spec"><b>Spec:</b> rows come from <b>entitlements</b>. An admin-granted chapter shows the same "Owned" treatment (source is not exposed to the student — a comp should feel identical to a purchase). Invoice = Razorpay-generated PDF link.</div>
 
-  <!-- INVITES -->
+  <!-- EXAMINER MARKING ORDERS -->
   <div class="panel">
-    <h2>My invites</h2>
-    <div class="lead">3 seats to share — invite classmates into the founding cohort.</div>
-    <div class="invgrid">
-      <div class="invite used">
-        <div class="code">HL-K4M2-9QTV</div>
-        <div class="st">✓ Used by Aarav S.</div>
-      </div>
-      <div class="invite">
-        <div class="code">HL-P7XW-2RFD</div>
-        <div class="st">Available</div>
-        <button class="btn btn-wa">Share on WhatsApp</button>
-      </div>
-      <div class="invite">
-        <div class="code">HL-M3QA-8VKN</div>
-        <div class="st">Available</div>
-        <button class="btn btn-wa">Share on WhatsApp</button>
-      </div>
+    <h2>My examiner reviews</h2>
+    <div class="lead">Papers you've sent to a CBSE examiner for personal marking.</div>
+    <div class="rowitem">
+      <div class="badge" style="background:var(--s4-bg);color:var(--s4)">✅</div>
+      <div class="tt"><b>Full Chapter Paper · attempt 2</b><span>Returned 04 Jul · examiner score 30/40 (AI gave 29)</span></div>
+      <span class="tagpill" style="background:var(--s4-bg);color:var(--s4)">Returned</span>
+      <button class="btn btn-ghost">View</button>
     </div>
-    <div class="earn">✦ <p><b>Want more invites?</b> Keep a 7-day study streak and earn an extra seat to share. <i>(coming soon)</i></p></div>
+    <div class="rowitem">
+      <div class="badge" style="background:var(--accent-soft);color:var(--accent)">⏳</div>
+      <div class="tt"><b>S1 Sectional · attempt 1</b><span>Sent 06 Jul · ₹149 · promised by 09 Jul</span></div>
+      <span class="tagpill" style="background:var(--accent-soft);color:var(--accent)">In review</span>
+    </div>
+    <div class="earn">✦ <p><b>Any marked paper can be sent to a real CBSE examiner</b> for personal feedback — ₹149, back within 48–72h. Order from the paper's results page.</p></div>
   </div>
-  <div class="spec"><b>Spec:</b> WhatsApp share = prefilled message with the code + historylab.in link ("Vedansh invited you to HistoryLab…").
-    Used invites show who redeemed them — the provenance is visible to the inviter too (social accountability). Streak-earned invites = S3, shown as teaser only.</div>
+  <div class="spec"><b>Spec (v2, 2026-07-07):</b> invites section DELETED (decision #12 — invites killed entirely). Replaced by <b>examiner_reviews</b> lifecycle (queued → in_review → returned, with SLA date). Parent email shown in header chips = the guardian channel (fix #1). Share/WhatsApp mechanics return later as score cards (S3), not invites.</div>
 
 </div>
 </body>

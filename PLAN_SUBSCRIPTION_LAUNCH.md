@@ -1,23 +1,24 @@
-# HistoryLab → Premium Invite-Only CBSE Portal — Launch Plan
+# HistoryLab → Open-Access CBSE Prep Portal — Launch Plan
 
-**Created:** 2026-06-28 · **Revised:** 2026-07-02 after brainstorm with Uday — **model changed from freemium subscriptions to premium one-time purchases, invite-only.**
+**Created:** 2026-06-28 · **Revised:** 2026-07-02 (freemium subscriptions → premium one-time, invite-only) · **Revised again 2026-07-07 after Neha's review — INVITE-ONLY AND ₹499 ARE DEAD: open access for all CBSE students, ₹199 launch price (₹499 list), test engine paid-only, human examiner marking as an add-on.**
 **Builds on (do not duplicate):**
 - `BIGGER_PICTURE.md` — content roadmap (chapters/books/classes). Its original freemium/subscription pricing is **superseded** by this doc.
 - `PLAN_AUTH_AND_ANALYTICS.md` — Supabase auth (DONE) + server-side progress sync (its Phase D, *planned, NOT yet implemented*).
 
 ---
 
-## 0. The model (decided 2026-07-02)
+## 0. The model (decided 2026-07-02; revised 2026-07-07 per Neha)
 
 | Dimension | Decision |
 |---|---|
-| **Positioning** | **Premium CBSE preparation portal** — not a cheap tuition alternative. Anchor against a tutoring hour (₹800–1,500), not app subscriptions. Validated qualitatively by the Heritage Xperiential pilot cohort (tier-1 school; WTP still unproven until first sales). |
-| **Access** | **Invite-only "founding cohort"** while catalogue = Class 10 only. Signup requires an invite code. Each student account holds **3 invites**; admin can mint batches. Public landing page = rich preview + **"Request an invite" waitlist**. **Review trigger:** open access once more classes are covered. |
-| **Pricing** | **₹499 one-time per chapter** (lifetime access, no expiry). No subscriptions, no recurring billing. Whole-book bundle **later, depending on uptake** — not at launch. |
-| **Free tier** | Ch1 free — but *behind the invite gate* (invited accounts experience Ch1 fully before buying). Publicly, only the landing-page preview is visible. |
-| **Teachers** | **No "teacher" role/label anywhere.** Admin creates accounts and can **grant/revoke chapter access from the backend for any account** (FOC comps for selected students/parents/teachers/consortiums). Verification is manual, by the founder. |
-| **Anti-sharing** | Make the account a **personalised study state, not a content vault**: per-user progress/mastery, SM-2 flashcard scheduling, and (the moat) **CBSE-pattern practice tests with real marking schemes, marked with feedback and marks per student**. Shared credentials scramble all of it. Light session/device limits only — no heavy DRM. |
-| **Payer** | Parent always assumed to pay (payment event doubles as DPDPA parental consent). Signup roles: student/parent only. |
+| **Positioning** | **India's CBSE prep portal — premium quality at a mass-market price.** Target = all-India CBSE Class 10 (~2M+ board candidates/yr), not just tier-1 metro schools. Neha's ruling: scale over exclusivity. Teacher credibility fronts the brand. |
+| **Access** | **OPEN TO ALL. No invite gate, no waitlist, no invite codes at all** (killed 2026-07-07). Landing page → "Start Chapter 1 free" → open signup. |
+| **Pricing** | **₹199 launch/early price per chapter, against a ₹499 list price** (shown struck through). One-time, lifetime access, no subscriptions. Whole-book bundle later, depending on uptake. |
+| **Free tier** | Ch1 **learning modes** free for every signed-up student (narrative, figures, maps, timeline, flashcards). **Practice tests are NOT in the free tier** — the test engine comes only with chapter purchase. Landing page shows a static sample of a marked answer instead (zero marking cost). |
+| **Test marking** | **Two tiers per paper:** (1) **AI marking included** with the chapter — instant, per-point against the CBSE scheme, unlimited attempts. (2) **Human "CBSE Examiner" marking as a paid add-on per paper** (Neha reviews with AI pre-marking in her queue; 48–72h turnaround; price TBD, mocked at ₹149). Every human-marked paper feeds AI calibration. |
+| **Teachers** | Unchanged — no teacher role; admin grants/revokes chapter access FOC for any account. |
+| **Anti-sharing** | Unchanged — personalised study state (progress, SM-2, attempts, marks, percentiles) + light 2-device session limits. |
+| **Payer** | Unchanged — parent pays (DPDPA consent); signup captures **guardian email** as a first-class field (product-review fix #1). Student→parent purchase handoff ("Ask your parent to unlock") is a core conversion mechanic (fix #2). |
 
 ### ⚠️ The architectural truth (unchanged)
 All chapter content currently ships in the client JS bundle — anyone can read "premium" chapters from DevTools. **The paywall is not a UI toggle:** premium content must be served on demand from the backend, gated by a server-checked entitlement. This remains the backbone of the plan. (The Round-8 client-side email allowlist `src/lib/chapterAccess.ts` is a stopgap for the student trial; it is **retired** once server entitlements land.)
@@ -31,7 +32,7 @@ React/Vite (Vercel)  ← landing page w/ preview + waitlist
    │  anon key, RLS-scoped reads
    ▼
 Supabase
-   ├── Auth (Google now; email/password in S2) — signup gated by invite code
+   ├── Auth (Google now; email/password in S2) — open signup, guardian email captured
    ├── Postgres + RLS      ← entitlements, purchases, invites, progress, test attempts
    └── Edge Functions      ← create-order, Razorpay webhook, get-chapter, mark-answer (S2)
    ▲
@@ -81,20 +82,20 @@ create table entitlements (
 );
 
 -- Invite-only gate + provenance graph (every account traces to an inviter)
-create table invites (
-  code text primary key,
-  inviter_id uuid references profiles(id),   -- null for admin-minted batches
-  used_by uuid references profiles(id),
-  created_at timestamptz default now(),
-  used_at timestamptz
-);
+-- (2026-07-07) invites + waitlist tables DELETED — access is open, no gate.
 
-create table waitlist (
+-- Human examiner marking add-on (one row per purchased review of one attempt)
+create table examiner_reviews (
   id uuid primary key default gen_random_uuid(),
-  email text unique not null,
-  note text,
+  attempt_id uuid not null,                  -- references the test attempt
+  user_id uuid references profiles(id),
+  purchase_id uuid references purchases(id), -- the add-on payment
+  status text not null,                      -- 'queued' | 'in_review' | 'returned'
+  examiner_id uuid references profiles(id),  -- Neha (admin)
+  returned_at timestamptz,
   created_at timestamptz default now()
 );
+-- products now includes marking add-on SKUs (e.g. 'examiner-review') alongside chapter SKUs.
 
 -- Immutable audit log of every payment event (idempotent on event id) — unchanged
 create table payment_events (
@@ -129,27 +130,29 @@ create table payment_events (
 3. Never trust client-reported payment state — entitlement derives only from webhook-written rows.
 4. GST invoice per charge (Razorpay-generated); admin can trigger refunds from Razorpay dashboard.
 
-## 5. Invites & access flow
+## 5. Access flow (open — revised 2026-07-07)
 
-- Signup requires a valid unused invite code (checked server-side at profile creation; code marked used atomically).
-- New student accounts are seeded **3 invite codes**; earning more via streaks = S3 gamification hook.
-- Admin mints invite **batches** (for a teacher's class, a pilot school, a consortium).
-- Landing page: content preview (screenshots/sample cards, no gated content) + waitlist email capture.
-- **DPDPA:** parental-consent capture at signup (parent-pays model); no behavioural ads/tracking of minors; privacy-friendly analytics only.
+- **Open signup:** landing page → "Start Chapter 1 free" → Google sign-in → profile (student name, class) + **guardian email (required)** + DPDPA parental-consent → straight into Ch1. No codes, no waitlist, no gate.
+- Guardian email is the channel for: GST invoices, purchase links from the student→parent handoff, weekly reports (S2/6), new-device alerts.
+- **Student→parent purchase handoff:** at any paywall the student can tap **"Ask your parent"** → WhatsApp/email to the guardian with the student's progress + a one-tap checkout link. This is the primary conversion mechanic.
+- **DPDPA:** parental-consent capture at signup (guardian email + consent checkbox, timestamped); no behavioural ads/tracking of minors; privacy-friendly analytics only.
 
 ## 6. Admin panel (backend flexibility — Uday's requirement)
 
-- Create accounts directly (bypasses invite gate).
+- Create accounts directly.
 - **Grant / revoke chapter entitlements for any account** (`admin_grant` rows with a `note`) — this is how teachers, pilot cohorts, and FOC consortiums get access. No teacher role exists.
-- Mint invite batches; view/convert waitlist; view purchases + payment events; trigger refund flow.
+- View purchases + payment events; trigger refund flow.
+- **Examiner queue (new):** list of purchased `examiner_reviews` with the AI pre-marking shown; Neha adjusts per-point marks/comments and returns the paper. Queue depth + turnaround SLA visible.
 
-## 7. CBSE practice-test engine (S2 — the moat)
+## 7. CBSE practice-test engine (the launch differentiator — PAID tier only)
 
-Per-chapter **CBSE-pattern papers**: same question typology and marking scheme as the board (objective/MCQ 1-mark, 2/3-mark short answers, 5-mark long answers, source-based and competency/case-based questions), timed attempts, typed answers.
+Per-chapter **CBSE-pattern papers**: same question typology and marking scheme as the board (objective/MCQ 1-mark, 2/3-mark short answers, 5-mark long answers, source-based and competency/case-based questions), timed attempts, typed answers. **Included with chapter purchase — not available on the free tier.** The landing page shows a static sample marked answer instead.
 
-- **Objective questions:** auto-marked.
-- **Subjective (2/3/5-mark):** marked **by AI against the official CBSE marking scheme** — per-point feedback, marks awarded, model answer shown. Neha calibrates with a spot-check set before launch of this feature. (Assumption to confirm: AI-marked with teacher calibration, vs. human-marked.)
-- Attempt history, per-section mastery, percentile within cohort (once N allows).
+**Two marking tiers per paper (decided 2026-07-07):**
+1. **AI marking — included.** Instant, per-point against the CBSE marking scheme, marker's notes, model answers, unlimited attempts. Calibrated by Neha's spot-check set; "request re-check" queues to admin.
+2. **CBSE Examiner marking — paid add-on per paper** (price TBD; mocked ₹149). Neha reviews the submitted paper *starting from the AI pre-marking* (≈5 min/paper, not 20), adjusts marks, adds examiner feedback; returned in 48–72h. Capacity ceiling ≈ 25–40 papers/week — scarcity is part of the premium. Every human-marked paper becomes AI calibration data.
+
+- Attempt history, per-section mastery, percentile within cohort (once N ≥ 20).
 - **Why it kills credential sharing:** marks, feedback, attempt history, SM-2 scheduling, and mastery stats are meaningful only per-individual. A shared account produces garbage state for everyone using it.
 
 ## 8. Compliance (launch blockers, not afterthoughts)
@@ -165,11 +168,11 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 | Phase | Goal | Key work | Outcome |
 |---|---|---|---|
 | **S0 — Foundation** | Personalised state survives devices | PLAN_AUTH Phase D: server-side progress + flashcard(SM-2) sync, activity logging | Prereq for both the moat and paid UX |
-| **S1 — Founding-cohort launch** | First rupee | Schema (§2) + RLS · invite-gated signup + waitlist landing page · **Ch2 content server-side + `get-chapter`** · Razorpay one-time orders + webhook · purchase screen · **admin panel (accounts, grants, invite batches)** · ToS/Privacy/Refund · DPDPA consent at signup | **Launch: Ch2 @ ₹499 to the Heritage pilot cohort** — the real WTP test |
-| **S2 — The moat** | CBSE prep portal, not content app | **CBSE test engine w/ AI marking (§7)** · parent progress email (weekly) · email/password auth · session/device limits (2 devices) · analytics funnel (visit→waitlist→invite→signup→purchase) | Sharing-proof personal value; premium justified |
-| **S3 — Growth** | Catalogue + loops | Ch3–5 content (BIGGER_PICTURE Phase D) · book-bundle SKU **if uptake supports it** · streak-earned invites + gamification · CMS for Neha · open access when ≥2 classes covered | Scale path |
+| **S1 — Payments & paywall (private)** | Money works end-to-end | Schema (§2) + RLS · **open signup + guardian email + consent** · **Ch2 content server-side + `get-chapter`** · Razorpay one-time orders + webhook (₹199 launch / ₹499 list) · purchase screen + **ask-your-parent handoff** · admin panel (accounts, grants) · ToS/Privacy/Refund · landing page (open funnel) | Verified in test mode; NOT public yet (launch gated on test engine) |
+| **S2 — Test engine → LAUNCH** | CBSE prep portal goes live | **Test engine (§7): paper player, AI marking, results/feedback** · **examiner-review add-on (purchase + Neha's queue)** · then **PUBLIC LAUNCH** · parent progress email (weekly) · email/password auth · session/device limits (2 devices) · analytics funnel (visit→signup→purchase) | Launch: open access, Ch1 free learning, ₹199 chapters w/ tests |
+| **S3 — Growth** | Catalogue + loops | Ch3–5 content (BIGGER_PICTURE Phase D) · book-bundle SKU **if uptake supports it** · shareable score cards + gamification · CMS for Neha · more classes | Scale path |
 
-**Effort:** S0+S1 ≈ a few focused weeks (heavy infra exists; the work is entitlements + content-server move + one-time payment flow + admin panel). The test engine (S2) is the biggest net-new build — content authoring (papers + marking schemes) is the long pole, not code.
+**Effort:** S0+S1 ≈ a few focused weeks (heavy infra exists; the work is entitlements + content-server move + one-time payment flow + admin panel). The test engine (S2) is the biggest net-new build — content authoring (papers + marking schemes) is the long pole, not code. **Launch = end of S2's test-engine work** (~sprint 5–6 of the 7-sprint pipeline).
 
 ---
 
@@ -192,24 +195,32 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 10. **Launch scope: public launch happens only WITH the CBSE test engine.** S1 (payments/paywall) is built and verified in test mode but does NOT go public on its own. Sprint sequence unchanged (S0 → S1 → test engine → **launch** → trust/ops). The test engine is the launch differentiator, not a fast-follow.
 11. **Mockup gate extended to ALL sprints:** every screen through Sprint 6 (test centre, paper player, AI-marked results, parent weekly email, email/password auth, devices/session limits) must be mocked and validated by Uday before development starts. Mockups: `mockups/launch-00..10`.
 
+**Closed 2026-07-07 (round 4 — Neha's review; SUPERSEDES rounds 1–3 where they conflict):**
+12. **OPEN ACCESS — invite-only is dead.** No gate, no waitlist, no invite codes at all. Rationale: all-India CBSE TAM (~2M+ Class 10/yr) over metro exclusivity; obscurity is already the gate at launch; the test engine's flywheels (percentiles, score sharing) need an open door. Accepted trade-off: this is a one-way door (can't gracefully re-gate).
+13. **₹199 launch/early price, ₹499 list** (struck through). Neha's scale argument accepted: elasticity across mass CBSE ≫ the 2.5× buyers needed to match ₹499 revenue; the moat is the cohort, not the margin.
+14. **Test engine is paid-only** — no practice tests in the free tier. Free Ch1 = learning modes. Landing shows a static sample marked answer (zero marking cost).
+15. **Two-tier marking:** AI marking included with the chapter; **human "CBSE Examiner" marking = paid add-on per paper** (Uday's concept). Neha marks from the AI pre-marking in an admin queue; 48–72h SLA.
+16. Product-review fixes #1 (guardian email at signup) and #2 (ask-your-parent handoff) are launch requirements.
+
 **Still open / assumptions to confirm:**
-- Parent weekly progress email: scoped to S2 (assumed, not explicitly decided).
-- Ch1 free *behind* the invite gate; public sees only the preview (assumed).
-- Subjective-answer marking: AI vs CBSE marking scheme with Neha calibration (assumed AI-first).
-- Exact chapter price ₹499 flat for all chapters (vs varying by chapter size).
+- Examiner-marking add-on price (mocked ₹149/paper) + weekly capacity cap.
+- Parent weekly progress email: scoped to S2 post-launch (assumed).
+- ₹199 flat for all chapters (vs varying by chapter size).
+- When/whether shareable score cards ship (S3 assumed).
 
 ---
 
 ## 11. Risks
 
-- **Invite-only throttles the funnel** — intentional while catalogue is thin; guarded by the explicit review trigger (more classes ⇒ open up). Don't let exclusivity become an unexamined growth ceiling.
-- **WTP untested** — ₹499 is a hypothesis until the Heritage cohort launch (S1) proves it. Pilot feedback was on a free product.
-- **AI marking quality** — mis-marked board answers destroy trust fastest; requires Neha's calibration set + a "dispute/re-check" affordance.
-- **Content leakage** — mitigated (not eliminated) by server-side gating; invite provenance makes abuse attributable.
+- **WTP untested** — ₹199 is still a hypothesis until real sales. Pilot feedback was on a free product.
+- **Free-tier cost exposure is now bounded** (no AI marking on free tier), but open access + free Ch1 means hosting/support scale with signups — watch Supabase tier limits.
+- **AI marking quality** — mis-marked board answers destroy trust fastest; requires Neha's calibration set + the re-check affordance. Examiner add-on partially self-corrects this (human review of the worst cases).
+- **Examiner capacity** — Neha is a single human with a ceiling (~25–40 papers/week even AI-assisted); queue depth needs a visible SLA and a "sold out this week" state, else the premium add-on becomes a broken promise.
+- **Content leakage** — mitigated (not eliminated) by server-side gating.
 - **Webhook reliability** — idempotent handler + periodic reconcile against Razorpay.
 - **Minor-data compliance (DPDPA)** — launch blocker, not an afterthought.
 
 ---
 
 ### TL;DR
-Premium, invite-only CBSE prep portal. One-time ₹499/chapter via Razorpay Orders (no subscriptions — massively simpler). Access = `entitlements` rows written only by the payment webhook or the admin panel (which replaces any teacher tier). Premium content moves server-side behind `has_access`. The durable anti-sharing moat = per-student progress + CBSE-pattern tests marked with real marking schemes. Sequence: S0 progress-sync → S1 founding-cohort launch (Ch2 @ ₹499 to the Heritage pilot) → S2 test engine + parent reports → S3 catalogue/bundles/open access.
+Open-access CBSE prep portal for all of India. Free Ch1 learning modes for everyone; **₹199 launch price (₹499 list) one-time per chapter** unlocks content + the board-pattern test engine with **AI marking included**; **human CBSE-Examiner marking is a paid add-on per paper** (Neha, AI-assisted, 48–72h). No subscriptions, no invite gate. Entitlements written only by the payment webhook or admin panel; premium content + papers live server-side behind `has_access`. Sequence: S0 progress-sync → S1 payments/paywall (private) → S2 test engine → **public launch** → parent reports/auth/limits → S3 catalogue/bundles/score cards.

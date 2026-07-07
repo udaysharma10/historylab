@@ -121,7 +121,7 @@
       <div class="row"><div class="badge" style="background:var(--s2-bg);color:var(--s2)">🇮🇳</div>
         <div><h3>Nationalism in India</h3><div class="meta">4 sections · 17 figures · board map work</div></div></div>
       <div class="unlockrow">
-        <div class="price-inline">₹499 <small>one-time · yours forever</small></div>
+        <div class="price-inline"><span style="font-size:13px;color:var(--muted);text-decoration:line-through;font-weight:600">₹499</span> ₹199 <small>launch price · yours forever</small></div>
         <button class="btn btn-primary">Unlock</button>
       </div>
     </div>
@@ -151,20 +151,21 @@
           <li>4 story-mode sections</li><li>110+ narrative cards</li>
           <li>17 NCERT figures, explorable</li><li>Board map work (9 locations)</li>
           <li>100 smart flashcards</li><li>Timeline · 20 key dates</li>
-          <li>Exam prep · 8 board questions</li><li>All future updates to Ch2</li>
+          <li><b>Board-pattern test papers</b></li><li><b>AI marking on every answer</b></li>
         </ul>
       </div>
-      <div class="totals"><span class="lbl">One-time payment · no subscription</span><span class="amt">₹499 <small>incl. GST</small></span></div>
+      <div class="totals"><span class="lbl">One-time payment · no subscription</span>
+        <span class="amt"><span style="font-size:15px;color:var(--muted);text-decoration:line-through;font-weight:600">₹499</span> ₹199 <small>launch price · incl. GST</small></span></div>
       <div class="parent">
         <div class="box">✓</div>
         <p><b>I am the parent/guardian completing this payment.</b> The GST invoice will be emailed to me.</p>
       </div>
-      <button class="btn btn-primary btn-block">Pay ₹499 with Razorpay</button>
-      <div class="paymeta"><span>UPI</span>·<span>Cards</span>·<span>Netbanking</span>·<span>🔒 Secured by Razorpay</span></div>
+      <button class="btn btn-primary btn-block">Pay ₹199 with Razorpay</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:9px">💬 Ask your parent to unlock</button>
+      <div class="paymeta"><span>UPI</span>·<span>Cards</span>·<span>Netbanking</span>·<span>🔒 Razorpay</span>·<span>7-day full refund</span></div>
     </div>
   </div>
-  <div class="spec"><b>Spec:</b> button calls Edge Function <b>create-order</b> → opens Razorpay Checkout (their hosted widget — UPI/card UI is theirs, not ours).
-    Entitlement is written only by the <b>payment.captured webhook</b>, never by the client. Parent checkbox is required (DPDPA re-confirmation at the money moment).</div>
+  <div class="spec"><b>Spec (v2):</b> ₹199 launch / ₹499 struck (decision #13). "Pay" calls Edge Function <b>create-order</b> → Razorpay Checkout; entitlement written only by the <b>payment.captured webhook</b>. <b>"Ask your parent to unlock"</b> (product-review fix #2) sends WhatsApp/email to the guardian email with the student's Ch1 progress + a one-tap checkout link — the primary student→parent conversion mechanic. Refund line = risk reversal (policy already required by Razorpay).</div>
 
   <!-- SCREEN C: success -->
   <div class="screen-label">Screen C · Payment success</div>
