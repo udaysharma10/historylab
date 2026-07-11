@@ -78,9 +78,8 @@
   /* problem cards */
   .probs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:44px}
   .prob{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);text-align:center}
-  .illo{height:150px;display:grid;place-items:center;font-size:52px;position:relative}
-  .illo .slot{position:absolute;bottom:8px;right:10px;font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
-    color:#B9AFC4;border:1px dashed #D5CBE0;border-radius:6px;padding:3px 7px;background:rgba(255,255,255,.7)}
+  .illo{height:190px;position:relative;overflow:hidden}
+  .illo img{width:100%;height:100%;object-fit:cover;display:block}
   .prob .tt{padding:16px 20px 20px}
   .prob b{display:block;font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--ink);margin-bottom:6px}
   .prob p{font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:var(--body);line-height:1.5}
@@ -309,15 +308,15 @@
     </div>
     <div class="probs">
       <div class="prob">
-        <div class="illo" style="background:linear-gradient(150deg,var(--s2-bg),var(--lav-soft))">😵‍💫<span class="slot">Illustration slot</span></div>
+        <div class="illo"><img src="assets/illo-memorise.png" alt="A student overwhelmed by dates and books" /></div>
         <div class="tt"><b>Too much to memorise</b><p>"He reads the chapter twice and remembers nothing."</p></div>
       </div>
       <div class="prob">
-        <div class="illo" style="background:linear-gradient(150deg,var(--s3-bg),var(--s1-bg))">🧩<span class="slot">Illustration slot</span></div>
+        <div class="illo"><img src="assets/illo-connect.png" alt="A student unable to connect historical events" /></div>
         <div class="tt"><b>Hard to connect</b><p>"She memorises everything — and forgets it in the exam."</p></div>
       </div>
       <div class="prob">
-        <div class="illo" style="background:linear-gradient(150deg,var(--s1-bg),var(--accent-soft))">😰<span class="slot">Illustration slot</span></div>
+        <div class="illo"><img src="assets/illo-panic.png" alt="A student panicking before exams" /></div>
         <div class="tt"><b>Panic before exams</b><p>"Boards are coming, and History is the subject we fight about."</p></div>
       </div>
     </div>
