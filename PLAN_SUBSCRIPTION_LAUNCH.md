@@ -150,7 +150,7 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 
 **Two marking tiers per paper (decided 2026-07-07):**
 1. **AI marking — included.** Instant, per-point against the CBSE marking scheme, marker's notes, model answers, unlimited attempts. Calibrated by Neha's spot-check set; "request re-check" queues to admin.
-2. **CBSE Examiner marking — paid add-on per paper** (price TBD; mocked ₹149). Neha reviews the submitted paper *starting from the AI pre-marking* (≈5 min/paper, not 20), adjusts marks, adds examiner feedback; returned in 48–72h. Capacity ceiling ≈ 25–40 papers/week — scarcity is part of the premium. Every human-marked paper becomes AI calibration data.
+2. **CBSE Examiner marking — paid add-on per paper** (price TBD; mocked ₹149). Neha reviews the submitted paper *starting from the AI pre-marking* (≈5 min/paper, not 20), adjusts marks, adds examiner feedback; returned in 48–72h. Every human-marked paper becomes AI calibration data. **Public positioning (2026-07-11): "the portal has onboarded a Senior CBSE Examiner (20 yrs)" — Neha is NOT named or shown; NO public capacity/slot messaging** (internal queue management only; pivot if volume grows — "a good problem to have").
 
 - Attempt history, per-section mastery, percentile within cohort (once N ≥ 20).
 - **Why it kills credential sharing:** marks, feedback, attempt history, SM-2 scheduling, and mastery stats are meaningful only per-individual. A shared account produces garbage state for everyone using it.
@@ -207,8 +207,14 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 18. **Expansion is level-first, not subject-first:** next catalogue steps after Ch3–5 are other classes' History (9, then 6–8) — supersedes BIGGER_PICTURE Phase E's subject expansion while the brand is historylab.in. Multi-subject remains a someday-option under a different brand.
 19. Inner-page mockups approved "for now" by Neha; her final validation happens on the real built pages (Vercel preview during S1/S2).
 
+**Closed 2026-07-11 (round 6 — landing/positioning, Uday + Neha):**
+20. **The human examiner is THE differentiator and is positioned prominently page-wide** (hero credential, dedicated band, third pricing card) — reversing the earlier "demote to a strip" call. Framing: one marking story, two speeds — instant marking *calibrated by* the examiner; personal review *by* the examiner (₹149/paper).
+21. **Anonymity:** Neha is not named/shown anywhere (she is a serving head history teacher). Public identity = **"Senior CBSE Examiner, 20 years' experience, onboarded by the portal."**
+22. **No public capacity/slot messaging** — no counters, no "sold out" states. Internal queue management; pivot if volumes grow.
+23. Landing layout = **v5/v6 band grammar** (Uday: "layout looks better"). Header/theme temperature clash flagged → v6 ships three header variants (white / all-warm / adaptive) for Uday+Neha to pick.
+
 **Still open / assumptions to confirm:**
-- Examiner-marking add-on price (mocked ₹149/paper) + weekly capacity cap.
+- Examiner-marking add-on price (mocked ₹149/paper).
 - Parent weekly progress email: scoped to S2 post-launch (assumed).
 - ₹199 flat for all chapters (vs varying by chapter size).
 - When/whether shareable score cards ship (S3 assumed).
@@ -220,7 +226,7 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 - **WTP untested** — ₹199 is still a hypothesis until real sales. Pilot feedback was on a free product.
 - **Free-tier cost exposure is now bounded** (no AI marking on free tier), but open access + free Ch1 means hosting/support scale with signups — watch Supabase tier limits.
 - **AI marking quality** — mis-marked board answers destroy trust fastest; requires Neha's calibration set + the re-check affordance. Examiner add-on partially self-corrects this (human review of the worst cases).
-- **Examiner capacity** — Neha is a single human with a ceiling (~25–40 papers/week even AI-assisted); queue depth needs a visible SLA and a "sold out this week" state, else the premium add-on becomes a broken promise.
+- **Examiner capacity** — Neha is a single human with a ceiling (~25–40 papers/week even AI-assisted). Per her call (2026-07-11) there is NO public slot/capacity messaging — so the queue must be watched internally and the 48–72h SLA protected by throttling marketing pushes, extending SLA comms, or onboarding a second examiner if volume grows.
 - **Content leakage** — mitigated (not eliminated) by server-side gating.
 - **Webhook reliability** — idempotent handler + periodic reconcile against Razorpay.
 - **Minor-data compliance (DPDPA)** — launch blocker, not an afterthought.
