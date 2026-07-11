@@ -202,6 +202,11 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 15. **Two-tier marking:** AI marking included with the chapter; **human "CBSE Examiner" marking = paid add-on per paper** (Uday's concept). Neha marks from the AI pre-marking in an admin queue; 48–72h SLA.
 16. Product-review fixes #1 (guardian email at signup) and #2 (ask-your-parent handoff) are launch requirements.
 
+**Closed 2026-07-11 (round 5 — Neha's positioning review):**
+17. **Brand positions at the SUBJECT level, offer at the class level.** historylab.in = "the home of school History" (all levels, Neha's vision); the concrete offer stays "Live now: CBSE Class 10." No class number in the hero H1. Landing gets a **classes roadmap section** (Class 10 live → Class 9 next → Classes 6–8 coming) with per-class **"notify me" email capture** (`class_interest` table — demand list, not a gate).
+18. **Expansion is level-first, not subject-first:** next catalogue steps after Ch3–5 are other classes' History (9, then 6–8) — supersedes BIGGER_PICTURE Phase E's subject expansion while the brand is historylab.in. Multi-subject remains a someday-option under a different brand.
+19. Inner-page mockups approved "for now" by Neha; her final validation happens on the real built pages (Vercel preview during S1/S2).
+
 **Still open / assumptions to confirm:**
 - Examiner-marking add-on price (mocked ₹149/paper) + weekly capacity cap.
 - Parent weekly progress email: scoped to S2 post-launch (assumed).
