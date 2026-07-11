@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — History, finally understood</title>
+<meta name="description" content="Learn every NCERT History chapter as an interactive story. Practice like the boards. Get every answer marked in seconds — calibrated by a Senior CBSE Examiner. Chapter 1 free." />
+<meta property="og:title" content="HistoryLab — History, finally understood." />
+<meta property="og:description" content="Learn every chapter as a story. Practice like the boards. Every answer marked in seconds. Chapter 1 free." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://historylab.in" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#5F5569; --muted:#857B8F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-strong:#C05F35; --accent-soft:#FAE4D8;
+    --lav:#7E72C2; --lav-soft:#ECE8F8; --pen:#B04430; --pen-soft:#F7E3DD;
+    --shadow:0 10px 30px rgba(70,60,100,.10); --shadow-lg:0 24px 60px rgba(70,60,100,.16);
+    --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s2:#5571B5; --s2-bg:#E9ECF8; --s3:#C2893E; --s3-bg:#F7EFDD;
+    --s4:#5C9368; --s4-bg:#E8F1E9; --s5:#9B5C9A; --s5-bg:#F4E9F3; --s6:#3F8E84; --s6-bg:#E4F1EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);background:var(--paper);-webkit-font-smoothing:antialiased}
+  .in{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* topbar */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar .in{display:flex;align-items:center;justify-content:space-between;padding-top:11px;padding-bottom:11px;gap:18px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--ink);letter-spacing:-.3px}
+  .brand .lab{color:var(--accent)}
+  nav{display:flex;gap:22px;flex:1;justify-content:center}
+  nav a{font-size:13.5px;font-weight:700;color:var(--body);text-decoration:none}
+  nav a:hover{color:var(--accent-strong)}
+  .topact{display:flex;gap:9px;align-items:center}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;
+    font-weight:800;font-size:14px;padding:13px 24px;border-radius:12px;transition:transform .12s;text-decoration:none}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent-strong);color:#fff;box-shadow:0 6px 16px rgba(192,95,53,.35)}
+  .btn-ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+  .btn-sm{padding:9px 16px;font-size:13px}
+  .btn-big{padding:16px 32px;font-size:15.5px}
+
+  .band{padding:84px 0}
+  .band-hero{background:linear-gradient(160deg,var(--bg-1) 30%,var(--bg-2));padding:64px 0 80px}
+  .band-tint{background:linear-gradient(180deg,#FDF6F1,var(--bg-1))}
+  .band-lav{background:var(--bg-2)}
+  .band-ink{background:var(--ink)}
+  .band-cta{background:linear-gradient(120deg,var(--accent-soft),var(--lav-soft))}
+  .bhead{text-align:center;max-width:62ch;margin:0 auto 48px}
+  .bhead h2{font-family:'Fraunces',serif;font-size:33px;font-weight:600;color:var(--ink);line-height:1.15;margin-bottom:10px;text-wrap:balance}
+  .bhead p{font-size:14.5px;font-weight:500;color:var(--muted)}
+  .kicker{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.6px;color:var(--accent-strong);margin-bottom:12px}
+
+  /* hero */
+  .hero-grid{display:grid;grid-template-columns:1fr .96fr;gap:56px;align-items:center}
+  .hero-copy h1{font-family:'Fraunces',serif;font-size:60px;font-weight:600;line-height:1.05;color:var(--ink);margin-bottom:20px}
+  .hero-copy h1 em{font-style:normal;color:var(--accent-strong)}
+  .hero-copy .sub{font-size:17px;font-weight:500;line-height:1.7;margin-bottom:26px;color:var(--body)}
+  .hero-copy .sub b{color:var(--ink)}
+  .cta-row{display:flex;gap:14px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .micro{font-size:12px;font-weight:600;color:var(--muted)}
+  .creds{display:flex;gap:0;border-top:1px solid var(--line);padding-top:18px}
+  .cred{flex:1;padding-right:18px}
+  .cred b{display:block;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:2px}
+  .cred span{font-size:11.5px;font-weight:500;color:var(--muted);line-height:1.4}
+
+  /* ipad */
+  .ipad{background:#241f2b;border-radius:28px;padding:15px;box-shadow:var(--shadow-lg)}
+  .ipad .screen{border-radius:16px;overflow:hidden;background:#fff;display:block}
+  .ipad img{width:100%;display:block}
+
+  /* problem cards */
+  .probs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:44px}
+  .prob{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);text-align:center}
+  .illo{height:150px;display:grid;place-items:center;font-size:52px;position:relative}
+  .illo .slot{position:absolute;bottom:8px;right:10px;font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+    color:#B9AFC4;border:1px dashed #D5CBE0;border-radius:6px;padding:3px 7px;background:rgba(255,255,255,.7)}
+  .prob .tt{padding:16px 20px 20px}
+  .prob b{display:block;font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .prob p{font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:var(--body);line-height:1.5}
+  .founder{max-width:56ch;margin:0 auto;text-align:center}
+  .founder p{font-family:'Fraunces',serif;font-size:23px;font-weight:500;color:var(--ink);line-height:1.45}
+  .founder p em{font-style:normal;color:var(--accent-strong)}
+
+  /* journey */
+  .jgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+  .jstep{position:relative}
+  .jstep:not(:last-child)::after{content:"→";position:absolute;right:-21px;top:6px;font-size:19px;font-weight:800;color:var(--accent)}
+  .jhead{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;min-height:64px}
+  .jnum{width:28px;height:28px;border-radius:50%;background:var(--accent-strong);color:#fff;font-weight:800;font-size:13px;
+    display:grid;place-items:center;font-family:'Fraunces',serif;flex-shrink:0;margin-top:2px}
+  .jhead b{display:block;font-size:14.5px;font-weight:800;color:var(--ink);margin-bottom:2px}
+  .jhead span{font-size:11.5px;font-weight:500;color:var(--muted);line-height:1.4}
+  .mini{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .mini .pad{padding:13px 15px}
+  .mini img{width:100%;display:block}
+  .mlbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--accent-strong);margin-bottom:7px;display:block}
+  .mini .q{font-family:'Fraunces',serif;font-size:12px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:8px}
+  .mans{background:var(--bg-1);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:10.5px;color:var(--ink);line-height:1.5;margin-bottom:9px}
+  .mbtn{display:block;text-align:center;background:var(--accent-strong);color:#fff;font-size:11px;font-weight:800;border-radius:8px;padding:8px}
+  .mscore{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .mpt{display:flex;gap:7px;align-items:flex-start;font-size:10.5px;font-weight:500;color:var(--body);line-height:1.45;padding:3px 0}
+  .mpt .m{width:15px;height:15px;border-radius:5px;display:grid;place-items:center;font-size:9px;font-weight:800;flex-shrink:0;margin-top:1px}
+  .m-ok{background:var(--s4-bg);color:var(--s4)} .m-miss{background:var(--s1-bg);color:var(--s1)}
+  .mnote{background:var(--lav-soft);border-radius:8px;padding:7px 9px;font-size:10px;color:var(--body);line-height:1.45;margin-top:8px}
+  .mnote b{color:var(--ink)}
+  /* mini graph */
+  .graph{display:flex;align-items:flex-end;gap:9px;height:86px;padding:4px 2px 0}
+  .gbar{flex:1;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--accent),var(--accent-strong));position:relative}
+  .gbar span{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:800;color:var(--accent-strong)}
+  .gcap{display:flex;gap:9px;margin-top:6px}
+  .gcap i{flex:1;text-align:center;font-size:9px;font-weight:700;color:var(--muted);font-style:normal}
+
+  /* tools */
+  .tools{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+  .tool{display:flex;gap:11px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:14px 15px;box-shadow:var(--shadow-sm)}
+  .tool .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+  .tool b{display:block;font-size:13px;font-weight:700;color:var(--ink)}
+  .tool span{font-size:11px;font-weight:600;color:var(--muted)}
+
+  /* examiner */
+  .ex-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .ex-copy h2{font-family:'Fraunces',serif;font-size:32px;font-weight:600;color:var(--ink);line-height:1.15;margin-bottom:14px;text-wrap:balance}
+  .ex-copy h2 em{font-style:normal;color:var(--pen)}
+  .ex-copy p{font-size:15px;font-weight:500;line-height:1.65;margin-bottom:16px;max-width:52ch}
+  .ex-copy p b{color:var(--ink)}
+  .ex-copy ul{list-style:none}
+  .ex-copy li{font-size:13.5px;font-weight:600;color:var(--body);padding:6px 0 6px 26px;position:relative}
+  .ex-copy li::before{content:"🖊️";position:absolute;left:0;font-size:13px}
+  .redcard{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-lg);padding:24px 26px;position:relative}
+  .redcard .stamp{position:absolute;top:-13px;right:18px;background:var(--pen);color:#fff;font-size:10px;font-weight:800;
+    letter-spacing:.8px;text-transform:uppercase;padding:6px 13px;border-radius:999px;box-shadow:0 5px 14px rgba(176,68,48,.35)}
+  .redcard .q{font-family:'Fraunces',serif;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:12px}
+  .rline{display:flex;gap:11px;align-items:flex-start;padding:7px 0;font-size:13px;font-weight:500;color:var(--body);line-height:1.5;border-bottom:1px dashed var(--line)}
+  .rline:last-of-type{border-bottom:none}
+  .rline .rm{font-family:'Fraunces',serif;font-weight:700;font-size:15px;color:var(--pen);flex-shrink:0;width:34px}
+  .rnote{background:var(--pen-soft);border:1px solid #EACDC4;border-radius:12px;padding:12px 15px;margin-top:12px}
+  .rnote p{font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:var(--pen);line-height:1.55}
+  .rnote span{display:block;font-family:'Inter',sans-serif;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.8px;
+    text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+  /* comparison */
+  .cmp{max-width:720px;margin:0 auto;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);background:var(--paper)}
+  .cmp .row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+  .cmp .row:first-child{border-top:none}
+  .cmp .cell{padding:14px 22px;font-size:13.5px;font-weight:500;color:var(--body);line-height:1.5}
+  .cmp .cell.hl{background:var(--accent-soft);color:var(--ink);font-weight:600;border-left:1px solid var(--line)}
+  .cmp .head .cell{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--muted);padding:15px 22px}
+  .cmp .head .cell.hl{color:var(--accent-strong)}
+  .cmp .cell::before{content:"✗";color:#C99A93;font-weight:800;margin-right:9px}
+  .cmp .cell.hl::before{content:"✓";color:var(--accent-strong)}
+  .cmp .head .cell::before,.cmp .head .cell.hl::before{content:""}
+
+  /* testimonials */
+  .band-ink .bhead h2{color:#F6EFEA}
+  .band-ink .bhead p{color:#B7AEC2}
+  .quotes{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:860px;margin:0 auto}
+  .quote{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:26px 28px}
+  .quote p{font-family:'Fraunces',serif;font-size:17px;color:#F6EFEA;line-height:1.55;font-weight:500;margin-bottom:18px}
+  .quote .who{display:flex;align-items:center;gap:12px}
+  .quote .av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;font-family:'Fraunces',serif;font-size:15px}
+  .quote .who b{display:block;font-size:13px;color:#F6EFEA;font-weight:700}
+  .quote .who span{font-size:11.5px;color:#B7AEC2;font-weight:600}
+  .samplenote{text-align:center;font-size:11px;font-weight:600;color:rgba(246,239,234,.45);font-style:italic;margin-top:22px}
+
+  /* roadmap */
+  .classes{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .cls{display:flex;gap:13px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:15px;padding:17px}
+  .cls.live{background:var(--paper);border:2px solid var(--accent);box-shadow:var(--shadow-sm)}
+  .cls .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .cls b{display:block;color:var(--ink);font-size:14px;font-weight:700;margin-bottom:3px}
+  .cls span{font-size:12.5px;color:var(--body);font-weight:500;line-height:1.5}
+  .notify{display:flex;gap:10px;align-items:flex-end;justify-content:center;margin-top:26px;flex-wrap:wrap}
+  .notify .f label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:0 2px 6px}
+  .notify input{border:1.5px solid var(--line);border-radius:11px;padding:12px 15px;font-family:'Inter',sans-serif;
+    font-size:13.5px;font-weight:500;color:var(--ink);outline:none;min-width:250px;background:var(--paper)}
+
+  /* pricing */
+  .price-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:1010px;margin:0 auto}
+  .price{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:26px;text-align:center;position:relative;box-shadow:var(--shadow-sm)}
+  .price.hot{border:2px solid var(--accent);box-shadow:var(--shadow)}
+  .price .tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent-strong);color:#fff;
+    font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:5px 13px;border-radius:999px;white-space:nowrap}
+  .price.addon{border:1.5px solid #E3BFB4}
+  .price.addon .tag{background:var(--pen)}
+  .price.addon li::before{color:var(--pen)}
+  .price h3{font-family:'Fraunces',serif;color:var(--ink);font-size:17px;font-weight:600;margin-bottom:6px}
+  .price .amt{font-family:'Fraunces',serif;font-size:34px;font-weight:700;color:var(--ink)}
+  .price .amt .strike{font-size:17px;color:var(--muted);text-decoration:line-through;font-weight:600;margin-right:7px}
+  .price .amt small{font-size:13px;color:var(--muted);font-weight:600}
+  .price ul{list-style:none;margin-top:14px;text-align:left}
+  .price li{font-size:12.5px;font-weight:500;color:var(--body);padding:5px 0 5px 22px;position:relative}
+  .price li::before{content:"✓";position:absolute;left:2px;color:var(--accent-strong);font-weight:800}
+  .safety{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:var(--paper);border:1px solid var(--line);
+    padding:8px 14px;border-radius:11px;font-weight:600;font-size:12.5px;color:var(--body)}
+  .chip b{color:var(--ink)}
+
+  /* FAQ */
+  .faq{max-width:760px;margin:0 auto}
+  .faq details{border:1px solid var(--line);border-radius:14px;background:var(--paper);margin-bottom:10px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .faq summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px;cursor:pointer;
+    padding:17px 20px;font-size:14px;font-weight:700;color:var(--ink)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--accent-strong);line-height:1;flex-shrink:0}
+  .faq details[open] summary::after{content:"–"}
+  .faq details p{font-size:13.5px;font-weight:500;color:var(--body);line-height:1.65;padding:0 20px 18px}
+
+  .band-cta{text-align:center}
+  .band-cta h2{font-family:'Fraunces',serif;font-size:32px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .band-cta p{font-size:14.5px;font-weight:500;color:var(--body);margin-bottom:22px}
+
+  /* footer */
+  footer{background:var(--bg-1);border-top:1px solid var(--line);padding:44px 0 30px}
+  .fgrid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.4fr;gap:30px;margin-bottom:26px}
+  .fgrid h4{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px}
+  .fgrid a{display:block;font-size:13px;font-weight:600;color:var(--body);text-decoration:none;padding:4px 0}
+  .fgrid a:hover{color:var(--accent-strong)}
+  .tagline{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px;max-width:24ch;line-height:1.5}
+  .fnews p{font-size:12.5px;font-weight:600;color:var(--body);margin-bottom:10px;line-height:1.5}
+  .fnews .row{display:flex;gap:8px}
+  .fnews input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;font-family:'Inter',sans-serif;
+    font-size:12.5px;font-weight:500;color:var(--ink);outline:none;background:var(--paper)}
+  .fnews small{display:block;font-size:10.5px;color:var(--muted);font-weight:500;margin-top:8px;line-height:1.45}
+  .fbase{border-top:1px solid var(--line);padding-top:18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    font-size:11.5px;color:var(--muted);font-weight:500}
+
+  /* mobile */
+  @media (max-width:800px){
+    nav{display:none}
+    .band{padding:54px 0}
+    .band-hero{padding:34px 0 54px}
+    .bhead{margin-bottom:32px}
+    .bhead h2{font-size:24px}
+    .hero-grid{grid-template-columns:1fr;gap:34px}
+    .hero-copy h1{font-size:37px}
+    .hero-copy .sub{font-size:15px}
+    .cta-row .btn-big{width:100%}
+    .creds{flex-direction:column;gap:12px}
+    .probs{grid-template-columns:1fr}
+    .founder p{font-size:18px}
+    .jgrid{grid-template-columns:1fr;gap:30px}
+    .jstep:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-26px}
+    .jhead{min-height:0}
+    .tools{grid-template-columns:1fr 1fr}
+    .ex-grid{grid-template-columns:1fr;gap:30px}
+    .ex-copy h2{font-size:24px}
+    .quotes,.classes,.price-grid{grid-template-columns:1fr}
+    .cmp .cell{padding:12px 14px;font-size:12.5px}
+    .notify{flex-direction:column;align-items:stretch}
+    .notify input{min-width:0;width:100%}
+    .notify .btn{width:100%}
+    .fgrid{grid-template-columns:1fr 1fr}
+    .band-cta h2{font-size:24px}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar"><div class="in">
+    <div class="brand">History<span class="lab">Lab</span></div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#inside">Features</a>
+      <a href="#examiner">Examiner</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="topact">
+      <a class="btn btn-ghost btn-sm" href="#">Sign in</a>
+      <a class="btn btn-primary btn-sm" href="#">Start free</a>
+    </div>
+  </div></div>
+
+  <!-- HERO -->
+  <section class="band band-hero"><div class="in">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="kicker">The home of school History · Live now: CBSE Class 10</span>
+        <h1>History, <em>finally understood.</em></h1>
+        <p class="sub">Learn every chapter as an interactive story.<br>
+          Practice like the boards.<br>
+          Get every answer <b>marked in seconds</b>.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-big" href="#">Start Chapter 1 free →</a>
+          <span class="micro">No card needed · Chapter 1 is really free</span>
+        </div>
+        <div class="creds">
+          <div class="cred"><b>👩‍🏫 Built with a CBSE History teacher</b><span>Every chapter, NCERT-faithful</span></div>
+          <div class="cred"><b>🖊️ Senior CBSE Examiner on board</b><span>20 years of board marking behind every scheme</span></div>
+          <div class="cred"><b>🎯 Board-pattern everything</b><span>Papers, sources &amp; maps the way CBSE asks</span></div>
+        </div>
+      </div>
+      <div class="ipad"><span class="screen"><img src="assets/shot-story.png" alt="A HistoryLab chapter as a guided story" /></span></div>
+    </div>
+  </div></section>
+
+  <!-- PROBLEM -->
+  <section class="band band-tint"><div class="in">
+    <div class="bhead">
+      <span class="kicker">The problem</span>
+      <h2>History feels hard. Because it's taught the wrong way.</h2>
+    </div>
+    <div class="probs">
+      <div class="prob">
+        <div class="illo" style="background:linear-gradient(150deg,var(--s2-bg),var(--lav-soft))">😵‍💫<span class="slot">Illustration slot</span></div>
+        <div class="tt"><b>Too much to memorise</b><p>"He reads the chapter twice and remembers nothing."</p></div>
+      </div>
+      <div class="prob">
+        <div class="illo" style="background:linear-gradient(150deg,var(--s3-bg),var(--s1-bg))">🧩<span class="slot">Illustration slot</span></div>
+        <div class="tt"><b>Hard to connect</b><p>"She memorises everything — and forgets it in the exam."</p></div>
+      </div>
+      <div class="prob">
+        <div class="illo" style="background:linear-gradient(150deg,var(--s1-bg),var(--accent-soft))">😰<span class="slot">Illustration slot</span></div>
+        <div class="tt"><b>Panic before exams</b><p>"Boards are coming, and History is the subject we fight about."</p></div>
+      </div>
+    </div>
+    <div class="founder">
+      <p>We built HistoryLab to make history <em>easy to understand, easy to remember, and easy to score.</em></p>
+    </div>
+  </div></section>
+
+  <!-- JOURNEY -->
+  <section class="band" id="how"><div class="in">
+    <div class="bhead">
+      <span class="kicker">The HistoryLab way</span>
+      <h2>From story to score, in four steps</h2>
+    </div>
+    <div class="jgrid">
+      <div class="jstep">
+        <div class="jhead"><div class="jnum">1</div><div><b>Read the story</b><span>Story cards that make every concept clear.</span></div></div>
+        <div class="mini"><img src="assets/shot-timeline.png" alt="Story and revision cards" /></div>
+      </div>
+      <div class="jstep">
+        <div class="jhead"><div class="jnum">2</div><div><b>Answer like the boards</b><span>Write real answers to board-style questions.</span></div></div>
+        <div class="mini"><div class="pad">
+          <span class="mlbl">2-mark question</span>
+          <div class="q">Why did Gandhiji withdraw the Non-Cooperation Movement?</div>
+          <div class="mans">Because the movement turned violent at Chauri Chaura, and Gandhiji felt satyagrahis needed training…</div>
+          <span class="mbtn">Submit answer</span>
+        </div></div>
+      </div>
+      <div class="jstep">
+        <div class="jhead"><div class="jnum">3</div><div><b>Get marked in seconds</b><span>Point-by-point, against the marking scheme.</span></div></div>
+        <div class="mini"><div class="pad">
+          <span class="mlbl">Your score</span>
+          <div class="mscore">2 / 2</div>
+          <div class="mpt"><span class="m m-ok">✓</span><span><b>+1</b> Chauri Chaura violence named</span></div>
+          <div class="mpt"><span class="m m-ok">✓</span><span><b>+1</b> Gandhiji's reasoning explained</span></div>
+          <div class="mnote"><b>Marker's note:</b> Full marks — cause and reasoning both covered.</div>
+        </div></div>
+      </div>
+      <div class="jstep">
+        <div class="jhead"><div class="jnum">4</div><div><b>Improve and ace</b><span>Feedback shows exactly how to write better.</span></div></div>
+        <div class="mini"><div class="pad">
+          <span class="mlbl">Your progress</span>
+          <div class="graph">
+            <div class="gbar" style="height:44%"><span>52%</span></div>
+            <div class="gbar" style="height:62%"><span>65%</span></div>
+            <div class="gbar" style="height:78%"><span>74%</span></div>
+            <div class="gbar" style="height:96%"><span>85%</span></div>
+          </div>
+          <div class="gcap"><i>Paper 1</i><i>Paper 2</i><i>Paper 3</i><i>Paper 4</i></div>
+        </div></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- TOOLS -->
+  <section class="band band-tint" id="inside"><div class="in">
+    <div class="bhead">
+      <h2>Everything you need to master History</h2>
+      <p>All of it inside every chapter. Nothing extra to buy, nothing to print.</p>
+    </div>
+    <div class="tools">
+      <div class="tool"><div class="ic" style="background:var(--s4-bg)">🃏</div><div><b>Smart flashcards</b><span>Spaced-repetition revision</span></div></div>
+      <div class="tool"><div class="ic" style="background:var(--s3-bg)">📅</div><div><b>Timelines</b><span>Every key date, in order</span></div></div>
+      <div class="tool"><div class="ic" style="background:var(--s6-bg)">🗺️</div><div><b>Interactive maps</b><span>Tap. Explore. Label.</span></div></div>
+      <div class="tool"><div class="ic" style="background:var(--s5-bg)">🖼️</div><div><b>NCERT figures</b><span>Tap-hotspots &amp; exam tips</span></div></div>
+      <div class="tool"><div class="ic" style="background:var(--s2-bg)">📜</div><div><b>Primary sources</b><span>Analysed, exam-ready</span></div></div>
+      <div class="tool"><div class="ic" style="background:var(--s1-bg)">🧠</div><div><b>Practice quizzes</b><span>MCQ, match, fill-in, T/F</span></div></div>
+    </div>
+  </div></section>
+
+  <!-- EXAMINER -->
+  <section class="band" id="examiner"><div class="in">
+    <div class="ex-grid">
+      <div class="ex-copy">
+        <span class="kicker" style="color:var(--pen)">The red pen behind HistoryLab</span>
+        <h2>A <em>Senior CBSE Examiner</em> stands behind every mark.</h2>
+        <p>Anyone can build a portal with AI. We built ours around a person: HistoryLab has onboarded a
+          <b>Senior CBSE Examiner with 20 years of teaching and board-marking experience</b> — and the whole
+          marking engine works in their image.</p>
+        <ul>
+          <li>Every paper and marking scheme is authored by the examiner</li>
+          <li>Instant marking is calibrated against the examiner's own marking</li>
+          <li>Send any paper for the examiner's personal review — ₹149, back in 48–72h</li>
+        </ul>
+      </div>
+      <div class="redcard">
+        <span class="stamp">Reviewed by a Senior CBSE Examiner</span>
+        <div class="q">Q7 · Rich peasants in the Civil Disobedience Movement (3 marks)</div>
+        <div class="rline"><span class="rm">✓ +1</span><span>Trade depression &amp; falling prices — communities named, well attributed.</span></div>
+        <div class="rline"><span class="rm">✓ +1</span><span>Revenue demand impossible to pay — correct and crisp.</span></div>
+        <div class="rline"><span class="rm">✗ 0</span><span>Third point answers a different question — direction slip.</span></div>
+        <div class="rnote">
+          <p>"Your points are exam-ready; your reading of the stem isn't yet. Underline the verb in the question before
+            you write — this exact slip costs thousands of students a mark every board year."</p>
+          <span>Examiner's remark · returned in 51 hours</span>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- COMPARISON -->
+  <section class="band band-lav"><div class="in">
+    <div class="bhead">
+      <h2>Active learning. Real understanding. Better results.</h2>
+      <p>"But there are free videos on YouTube…" — there are. Here's the difference.</p>
+    </div>
+    <div class="cmp">
+      <div class="row head"><div class="cell">Videos &amp; notes</div><div class="cell hl">HistoryLab</div></div>
+      <div class="row"><div class="cell">Passive watching</div><div class="cell hl">Interactive stories</div></div>
+      <div class="row"><div class="cell">One explanation, then you're alone</div><div class="cell hl">Practice on every concept</div></div>
+      <div class="row"><div class="cell">No feedback on written answers</div><div class="cell hl">Every answer marked, in seconds</div></div>
+      <div class="row"><div class="cell">Hard to remember</div><div class="cell hl">Built to revise — flashcards &amp; spaced repetition</div></div>
+      <div class="row"><div class="cell">Generic content</div><div class="cell hl">NCERT-exact · board-pattern · examiner-calibrated</div></div>
+    </div>
+  </div></section>
+
+  <!-- TESTIMONIALS -->
+  <section class="band band-ink"><div class="in">
+    <div class="bhead">
+      <h2>From the pilot classroom</h2>
+      <p>Class 10 students in Gurugram used HistoryLab before anyone else.</p>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p>"I actually understand WHY things happened now, instead of memorising dates. The story mode doesn't feel like studying."</p>
+        <div class="who"><div class="av" style="background:var(--s2)">A</div><div><b>Ananya</b><span>Class 10 student</span></div></div>
+      </div>
+      <div class="quote">
+        <p>"The figures section saved me — I could never remember what each painting meant. Now I can explain Sorrieu in the exam."</p>
+        <div class="who"><div class="av" style="background:var(--s4)">R</div><div><b>Rohan</b><span>Class 10 student</span></div></div>
+      </div>
+    </div>
+    <div class="samplenote">Sample quotes for layout — to be replaced with real pilot-student quotes before ship.</div>
+  </div></section>
+
+  <!-- ROADMAP -->
+  <section class="band"><div class="in">
+    <div class="bhead">
+      <h2>One home for school History</h2>
+      <p>We're building every class, one brilliant chapter at a time.</p>
+    </div>
+    <div class="classes">
+      <div class="cls live"><div class="ic" style="background:var(--accent-soft)">🏛️</div>
+        <div><b>Class 10 — LIVE</b><span>India and the Contemporary World-II · 2 chapters live, 3 in the works.</span></div></div>
+      <div class="cls"><div class="ic" style="background:var(--lav-soft)">🗿</div>
+        <div><b>Class 9 — next</b><span>Same story-mode, same marking engine.</span></div></div>
+      <div class="cls"><div class="ic" style="background:var(--s6-bg)">🌏</div>
+        <div><b>Classes 6–8 — coming</b><span>The full NCERT History journey.</span></div></div>
+    </div>
+    <div class="notify">
+      <div class="f"><label>Not in Class 10 yet? Parent's email</label><input placeholder="parent@example.com" /></div>
+      <a class="btn btn-ghost" href="#">Tell me when my class arrives</a>
+    </div>
+  </div></section>
+
+  <!-- PRICING -->
+  <section class="band band-tint" id="pricing"><div class="in">
+    <div class="bhead">
+      <h2>Simple pricing. No subscriptions.</h2>
+      <p>Pay once per chapter, keep it forever.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price">
+        <h3>Chapter 1</h3><div class="amt">Free</div>
+        <ul><li>The complete chapter, story mode</li><li>Figures, maps &amp; timeline</li><li>Smart flashcards</li><li>Practice quizzes</li></ul>
+      </div>
+      <div class="price hot">
+        <span class="tag">Launch price · Best value</span>
+        <h3>Chapters 2 onwards</h3>
+        <div class="amt"><span class="strike">₹499</span>₹199 <small>one-time</small></div>
+        <ul><li>Everything in free, plus:</li><li><b>Board-pattern test papers</b></li><li><b>Examiner-calibrated marking on every answer</b></li><li>Lifetime access · GST invoice</li></ul>
+      </div>
+      <div class="price addon">
+        <span class="tag">Add-on · per paper</span>
+        <h3>Examiner's personal review</h3>
+        <div class="amt">₹149 <small>per paper</small></div>
+        <ul><li><b>A Senior CBSE Examiner reviews your written paper</b></li><li>Personal remarks on every answer</li><li>Returned in 48–72 hours</li><li>Buy only when you want it</li></ul>
+      </div>
+    </div>
+    <div class="safety">
+      <div class="chip">🚫 <b>No ads, ever</b></div>
+      <div class="chip">🔒 <b>No data sharing</b></div>
+      <div class="chip">🧾 <b>Every invoice to the parent</b></div>
+      <div class="chip">↩️ <b>7-day full refund</b></div>
+    </div>
+  </div></section>
+
+  <!-- FAQ -->
+  <section class="band" id="faq"><div class="in">
+    <div class="bhead">
+      <h2>Questions parents ask us</h2>
+      <p>The honest answers.</p>
+    </div>
+    <div class="faq">
+      <details open><summary>Is Chapter 1 really free?</summary>
+        <p>Yes — the complete chapter with story mode, figures, maps, timeline and flashcards. No card details, no trial timer. Judge the quality before paying a rupee.</p></details>
+      <details><summary>Which board and classes does this cover?</summary>
+        <p>CBSE Class 10 History is live today (NCERT "India and the Contemporary World-II"). Class 9 is next, then Classes 6–8. Leave your email above and we'll tell you the day your class arrives.</p></details>
+      <details id="faq-marking"><summary>How does the answer marking work?</summary>
+        <p>Your child writes answers to board-pattern questions. Objective questions are checked instantly; written answers are marked point-by-point against the CBSE marking scheme in under a minute — by an engine built and calibrated by the <b>Senior CBSE Examiner</b> we've onboarded (20 years of board experience). For any paper, the examiner can also review it personally and return detailed remarks within 48–72 hours (₹149 per paper).</p></details>
+      <details><summary>How is this different from tuition or YouTube?</summary>
+        <p>Videos and tuition explain the chapter. HistoryLab makes your child <i>do</i> the chapter — read actively, practise maps and figures, write real answers and see exactly where marks are lost. At ₹199 per chapter, it costs less than a single tuition class.</p></details>
+      <details><summary>Does it work on phone, tablet and laptop?</summary>
+        <p>Yes — HistoryLab runs in the browser on all three. Progress syncs to the account, so your child can read on a phone and practise papers on a laptop.</p></details>
+      <details><summary>Is my child's data safe?</summary>
+        <p>We store only a first name, emails and study progress. No ads, no tracking for advertising, no selling of data — and every account has a parent's email on it, which receives all invoices and alerts.</p></details>
+      <details><summary>What if it doesn't work for my child?</summary>
+        <p>Full refund within 7 days of any chapter purchase, no questions asked. Write to help@historylab.in.</p></details>
+    </div>
+  </div></section>
+
+  <!-- CTA -->
+  <section class="band band-cta"><div class="in">
+    <h2>Chapter 1 is free. Start tonight.</h2>
+    <p>The Rise of Nationalism in Europe — the full chapter, every study tool. The textbook, finally brought to life.</p>
+    <a class="btn btn-primary btn-big" href="#">Start Chapter 1 free →</a>
+  </div></section>
+
+  <footer><div class="in">
+    <div class="fgrid">
+      <div>
+        <div class="brand" style="font-size:20px">History<span class="lab">Lab</span></div>
+        <div class="tagline">The home of school History. Easy to understand, easy to remember, easy to score.</div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="#how">How it works</a><a href="#inside">Features</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">Contact</a><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Refunds &amp; Cancellation</a>
+      </div>
+      <div class="fnews">
+        <h4>For parents</h4>
+        <p>One short email a month — study tips and new chapters. No spam, ever.</p>
+        <div class="row"><input placeholder="parent@example.com" /><a class="btn btn-primary btn-sm" href="#">Subscribe</a></div>
+        <small>Parent emails only. Unsubscribe anytime.</small>
+      </div>
+    </div>
+    <div class="fbase">
+      <span>© 2026 Teknomatics · historylab.in</span>
+      <span>Made with ❤️ for students</span>
+    </div>
+  </div></footer>
+
+</body>
+</html>
