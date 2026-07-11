@@ -1,6 +1,14 @@
 # HistoryLab — Session Handover (read this first)
 
-**Last updated:** 2026-07-02 (Round 9 deployed) · **Branch:** `dev` · **Live:** https://historylab-kappa.vercel.app/ · **Latest main commit:** `b160636` (Round 9 deployed — dev/main/origin in sync)
+**Last updated:** 2026-07-11 (landing v6 + examiner positioning) · **Branch:** `dev` (LOCAL commits up to `21c35ec`, NOT pushed) · **Live:** https://historylab-kappa.vercel.app/ (untouched — `origin/main` still `b160636`, Round 9)
+
+> **⏭ NEXT SESSION (Uday: "we will come to this tomorrow") — the monetisation/landing track is waiting on:**
+> 1. **Uday + Neha pick a header/theme variant:** `mockups/landing-v6.html` (white header) vs `landing-v6-warm.html` (all-warm) vs `landing-v6-adaptive.html` (transparent→white on scroll). Same content, only header/band temperature differs.
+> 2. **Their scrolled content feedback on the landing page** (they collected it, not yet shared).
+> 3. **2 real pilot-student quotes** from Neha → replace the marked "sample quotes" in the ink testimonial band.
+> 4. After landing sign-off → **mockup gate closes → start Sprint 0** (server-side progress + SM-2 sync; sprint pipeline in PLAN_SUBSCRIPTION_LAUNCH.md §9).
+> 5. Parallel (Uday, calendar-critical): **Teknomatics Razorpay onboarding + GST**; domain historylab.in wiring (owned, not wired).
+> Read `PLAN_SUBSCRIPTION_LAUNCH.md` §0 + §10 (decision log rounds 1–6) before touching anything — pricing/access/examiner decisions are all there.
 **Repo:** `github.com/udaysharma10/historylab` · **Local:** `/Users/udaysharma/Documents/Blostem/Claude_Projects/vedansh-history`
 
 > **Round 9 (2026-07-01) — MCQ "all options showing wrong" bug FIXED (commit `5fae261`, on `dev`).** Neha's student: *"in few MCQs all the options are showing wrong"* — in the **Exam Prep** section. Root cause: `SourceQuizCard` (Source Comprehension quiz) and `ImageAnalysisCard` (figure practice) had **no stored correct answer** — they inferred it by substring-matching the model-answer text against each option (`options.findIndex(opt => answer.toLowerCase().includes(opt.toLowerCase()))`). Whenever the answer didn't contain an option *verbatim*, `findIndex` returned **-1**, so no option was ever green and every pick showed red. Measured impact: **all 3/3** source-comprehension MCQs and **7/10** figure MCQs were broken. **Fix:** added an optional authoritative `correctIndex` to the `SourceComprehensionActivity` + `ImageAnalysisActivity` question types; both cards now prefer `correctIndex` and only fall back to substring-matching for legacy data; populated `correctIndex` on every affected MCQ (`data/ch1/activities/sourceAnalysis.ts`, `imageAnalysis.ts`). Verified via typecheck, Node-20 `npm run build`, and a resolver simulation (`/tmp/verify_mcq.mjs` — recreate; confirms old method returned -1 where new resolver returns the right option). **Lesson: never infer a quiz's correct answer from prose — store it explicitly.** Note: the graded `MCQCard`/`InlineQuizCard` (section quizzes) were always fine — they use a real `correctIndex`. **DEPLOYED 2026-07-02 (`b160636` on main).**
