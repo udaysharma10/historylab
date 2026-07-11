@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch 09 · Parent Weekly Email</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s2:#5571B5; --s2-bg:#E9ECF8;
+    --s3:#C2893E; --s3-bg:#F7EFDD; --s4:#5C9368; --s4-bg:#E8F1E9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:60px}
+  .wrap{max-width:720px;margin:0 auto;padding:18px 22px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--ink);margin-bottom:16px}
+  .brand .lab{color:var(--accent)}
+
+  /* email client chrome */
+  .client{background:#F6F3F0;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+  .chrome{background:var(--paper);border-bottom:1px solid var(--line);padding:16px 24px}
+  .chrome .subj{font-size:15.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .chrome .fromline{font-size:12px;font-weight:600;color:var(--muted)}
+  .chrome .fromline b{color:var(--ink)}
+
+  /* the email itself (600px, table-style simplicity) */
+  .email{max-width:600px;margin:26px auto;background:var(--paper);border-radius:16px;border:1px solid var(--line);overflow:hidden}
+  .ehead{padding:26px 32px 0;text-align:center}
+  .ehead .logo{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--ink)}
+  .ehead .logo span{color:var(--accent)}
+  .ehead .weekof{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-top:6px}
+  .ebody{padding:22px 32px 28px}
+  .ebody h1{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);margin-bottom:10px}
+  .ebody p{font-size:13.5px;font-weight:500;line-height:1.6;color:var(--body);margin-bottom:16px}
+  .ebody p b{color:var(--ink)}
+
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+  .kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:13px;padding:13px 10px;text-align:center}
+  .kpi b{display:block;font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--ink);line-height:1.1}
+  .kpi span{font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+  .highlight{background:linear-gradient(150deg,var(--accent-soft),var(--lav-soft));border-radius:14px;padding:16px 20px;margin-bottom:16px}
+  .highlight .t{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px}
+  .highlight p{margin:0;font-size:13.5px;color:var(--ink);font-weight:600;line-height:1.55}
+
+  .secline{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+  .secline:first-of-type{border-top:none}
+  .secline .nm{font-size:12.5px;font-weight:700;color:var(--ink);width:150px;flex-shrink:0}
+  .secline .bar{flex:1;height:7px;border-radius:99px;background:#F1EADD;overflow:hidden}
+  .secline .bar i{display:block;height:100%;border-radius:99px}
+  .secline .v{font-size:11.5px;font-weight:700;color:var(--muted);width:104px;text-align:right;flex-shrink:0}
+
+  .focus{background:var(--s2-bg);border:1px solid #D8DEF0;border-radius:13px;padding:13px 17px;margin:16px 0}
+  .focus p{margin:0;font-size:12.5px;font-weight:500;color:var(--body);line-height:1.55}
+  .focus b{color:var(--s2)}
+
+  .ctawrap{text-align:center;margin:20px 0 6px}
+  .cta{display:inline-block;background:var(--accent);color:#fff;font-weight:700;font-size:13.5px;padding:12px 28px;
+    border-radius:12px;text-decoration:none;box-shadow:0 6px 16px rgba(220,131,95,.35)}
+  .efoot{border-top:1px solid var(--line);padding:16px 32px 20px;text-align:center}
+  .efoot p{font-size:10.5px;font-weight:500;color:var(--muted);line-height:1.6}
+  .efoot a{color:var(--muted)}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:16px 0 8px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">History<span class="lab">Lab</span> <span style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:600">/ parent weekly email</span></div>
+
+  <div class="client">
+    <div class="chrome">
+      <div class="subj">Vedansh's week in History — best test score yet 📈</div>
+      <div class="fromline">From <b>HistoryLab &lt;reports@historylab.in&gt;</b> · To <b>parent@example.com</b> · Sun 05 Jul, 6:00 pm</div>
+    </div>
+
+    <div class="email">
+      <div class="ehead">
+        <div class="logo">History<span>Lab</span></div>
+        <div class="weekof">Weekly report · 29 Jun – 05 Jul</div>
+      </div>
+      <div class="ebody">
+        <h1>Namaste! Here's how Vedansh studied this week.</h1>
+
+        <div class="kpis">
+          <div class="kpi"><b>3h 40m</b><span>Study time</span></div>
+          <div class="kpi"><b>5 days</b><span>Streak</span></div>
+          <div class="kpi"><b>31/40</b><span>Best test score</span></div>
+        </div>
+
+        <div class="highlight">
+          <div class="t">✦ This week's highlight</div>
+          <p>Vedansh scored <b>31/40 (87th percentile)</b> on the full board-pattern paper for <b>Nationalism in India</b> — up from 29 last week. His long-answer technique earned full 5/5.</p>
+        </div>
+
+        <div class="secline"><span class="nm">S1 · WWI &amp; NCM</span><div class="bar"><i style="width:85%;background:var(--s1)"></i></div><span class="v">strong</span></div>
+        <div class="secline"><span class="nm">S2 · Differing Strands</span><div class="bar"><i style="width:50%;background:var(--s2)"></i></div><span class="v">needs revision</span></div>
+        <div class="secline"><span class="nm">S3 · Civil Disobedience</span><div class="bar"><i style="width:80%;background:var(--s3)"></i></div><span class="v">good</span></div>
+        <div class="secline"><span class="nm">S4 · Collective Belonging</span><div class="bar"><i style="width:95%;background:var(--s4)"></i></div><span class="v">excellent</span></div>
+
+        <div class="focus"><p><b>Suggested focus for next week:</b> Section 2 (Differing Strands) — the movement in towns and the boycott of foreign cloth. 34 flashcards are due for revision; the marker also flagged one "direction-of-question" slip worth practising.</p></div>
+
+        <div class="ctawrap"><a class="cta" href="#">View the full report →</a></div>
+      </div>
+      <div class="efoot">
+        <p>You receive this because you're the parent account for Vedansh on HistoryLab.<br>
+        <a href="#">Change frequency</a> · <a href="#">Unsubscribe</a> · HistoryLab by Teknomatics · historylab.in</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

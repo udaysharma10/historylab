@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch 07 · Paper Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s3:#C2893E; --s3-bg:#F7EFDD; --s4:#5C9368; --s4-bg:#E8F1E9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:18px 22px 64px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--ink)}
+  .brand .lab{color:var(--accent)}
+
+  /* sticky exam bar */
+  .exambar{display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--line);
+    border-radius:16px;box-shadow:var(--shadow-sm);padding:12px 18px;margin-bottom:18px}
+  .exambar .title b{display:block;font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink)}
+  .exambar .title span{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .timer{display:flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);
+    font-family:'Fraunces',serif;font-weight:700;font-size:18px;padding:8px 16px;border-radius:12px}
+  .palette{display:flex;gap:6px}
+  .pd{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:11px;font-weight:800;
+    border:1.5px solid var(--line);color:var(--muted);background:var(--paper)}
+  .pd.done{background:var(--s4-bg);border-color:#CFE3D3;color:var(--s4)}
+  .pd.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  .screen-label{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--lav);
+    margin:30px 2px 12px;display:flex;align-items:center;gap:10px}
+  .screen-label::after{content:"";flex:1;height:1px;background:#DCD3E8}
+
+  .q{background:var(--paper);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:28px 32px;position:relative;overflow:hidden}
+  .q::before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),var(--lav))}
+  .qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .qnum{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+  .marks{font-size:11px;font-weight:800;background:var(--lav-soft);color:var(--lav);padding:5px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px}
+  .q h2{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:16px}
+
+  .opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:13px;padding:13px 16px;margin-bottom:9px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink)}
+  .opt .k{width:26px;height:26px;border-radius:8px;background:var(--bg-1);border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--muted);flex-shrink:0}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt.sel .k{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  textarea{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;font-family:'Inter',sans-serif;
+    font-size:14px;font-weight:500;color:var(--ink);line-height:1.6;outline:none;resize:vertical;background:var(--paper)}
+  textarea:focus{border-color:var(--accent)}
+  .hint{display:flex;gap:10px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;margin:12px 0;font-size:12px;font-weight:600;color:var(--body)}
+  .wordcount{text-align:right;font-size:11.5px;font-weight:700;color:var(--muted);margin-top:6px}
+
+  .source{background:var(--s3-bg);border:1px solid #EBDCBE;border-radius:14px;padding:16px 20px;margin-bottom:16px}
+  .source .stitle{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--s3);margin-bottom:8px}
+  .source p{font-family:'Fraunces',serif;font-size:14.5px;color:var(--ink);line-height:1.65;font-style:italic}
+  .subq{border-top:1px solid var(--line);padding:14px 2px 4px;margin-top:12px}
+  .subq .sq{display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .subq .sq span{color:var(--muted);font-size:11px;font-weight:800}
+
+  .qnav{display:flex;justify-content:space-between;margin-top:20px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:12px;transition:transform .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 5px 14px rgba(220,131,95,.3)}
+  .btn-ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+  .btn-lav{background:var(--lav);color:#fff}
+  .saved{font-size:11.5px;font-weight:700;color:var(--s4);display:flex;align-items:center;gap:6px}
+
+  .submitcard{background:var(--paper);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:30px 34px;text-align:center;max-width:520px;margin:0 auto}
+  .submitcard h2{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .submitcard p{font-size:13px;font-weight:500;color:var(--body);margin-bottom:16px;line-height:1.5}
+  .sumrow{display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:7px;background:var(--bg-1);border:1px solid var(--line);padding:8px 14px;border-radius:11px;font-weight:600;font-size:12.5px;color:var(--body)}
+  .chip b{color:var(--ink)}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:14px 0 8px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="exambar">
+    <div class="title"><b>Full Chapter Paper · Nationalism in India</b><span>Attempt 3 · 40 marks</span></div>
+    <div class="palette">
+      <div class="pd done">1</div><div class="pd done">2</div><div class="pd done">3</div><div class="pd cur">4</div>
+      <div class="pd">5</div><div class="pd">6</div><div class="pd">7</div><div class="pd">8</div>
+      <div class="pd">9</div><div class="pd">10</div><div class="pd">11</div><div class="pd">12</div>
+    </div>
+    <div class="timer">⏱ 47:12</div>
+  </div>
+
+  <!-- MCQ -->
+  <div class="q">
+    <div class="qhead"><span class="qnum">Question 4 · Section A</span><span class="marks">1 mark</span></div>
+    <h2>Why did Gandhiji decide to withdraw the Non-Cooperation Movement in February 1922?</h2>
+    <div class="opt"><span class="k">A</span> The British agreed to grant swaraj within a year</div>
+    <div class="opt sel"><span class="k">B</span> The movement turned violent at Chauri Chaura</div>
+    <div class="opt"><span class="k">C</span> Congress leaders were released from jail</div>
+    <div class="opt"><span class="k">D</span> The Khilafat issue was resolved</div>
+    <div class="qnav"><button class="btn btn-ghost">← Previous</button><span class="saved">✓ Saved</span><button class="btn btn-primary">Next →</button></div>
+  </div>
+
+  <!-- SHORT ANSWER -->
+  <div class="q">
+    <div class="qhead"><span class="qnum">Question 7 · Section B</span><span class="marks">3 marks</span></div>
+    <h2>Explain any three reasons why rich peasant communities took part in the Civil Disobedience Movement.</h2>
+    <div class="hint">💡 <span><b>Board technique:</b> 3 marks = 3 distinct points. Write each on its own line — CBSE marks point-wise, not by paragraph beauty.</span></div>
+    <textarea rows="6">1. Rich peasants like Patidars and Jats were hard hit by the trade depression and falling prices.
+2. As their cash income disappeared, they found it impossible to pay the government's revenue demand.
+3. For them the fight for swaraj was a struggle against high revenues...</textarea>
+    <div class="wordcount">62 words · point-wise ✓</div>
+    <div class="qnav"><button class="btn btn-ghost">← Previous</button><span class="saved">✓ Saved · 12s ago</span><button class="btn btn-primary">Next →</button></div>
+  </div>
+
+  <!-- SOURCE BASED -->
+  <div class="q">
+    <div class="qhead"><span class="qnum">Question 10 · Section C</span><span class="marks">1+1+2 = 4 marks</span></div>
+    <div class="source">
+      <div class="stitle">Source · Read the extract and answer the questions that follow</div>
+      <p>"We hold it to be a crime against man and God to submit any longer to a rule that has caused this fourfold
+        disaster to our country…" — Declaration of Purna Swaraj, Lahore Congress, 1929.</p>
+    </div>
+    <div class="subq">
+      <div class="sq">(a) Who presided over the Lahore Session of the Congress in 1929? <span>1 MARK</span></div>
+      <textarea rows="1">Jawaharlal Nehru</textarea>
+    </div>
+    <div class="subq">
+      <div class="sq">(b) What was declared at this session? <span>1 MARK</span></div>
+      <textarea rows="1">Purna Swaraj — complete independence for India</textarea>
+    </div>
+    <div class="subq">
+      <div class="sq">(c) Explain the significance of 26 January 1930 in this context. <span>2 MARKS</span></div>
+      <textarea rows="3">It was celebrated as the first Independence Day, when people took a pledge...</textarea>
+    </div>
+    <div class="qnav"><button class="btn btn-ghost">← Previous</button><span class="saved">✓ Saved</span><button class="btn btn-primary">Next →</button></div>
+  </div>
+
+  <!-- LONG ANSWER -->
+  <div class="q">
+    <div class="qhead"><span class="qnum">Question 12 · Section D</span><span class="marks">5 marks</span></div>
+    <h2>"The Civil Disobedience Movement was different from the Non-Cooperation Movement." Justify this statement with examples.</h2>
+    <div class="hint">💡 <span><b>Board technique:</b> 5 marks = 5 points (or 4 well-developed + example). A compare question wants BOTH movements in each point — "NCM did X, whereas CDM did Y."</span></div>
+    <textarea rows="9" placeholder="Write your answer point-wise…">1. In NCM people were asked to refuse cooperation with the British; in CDM people were asked to break colonial laws — like the salt law at Dandi…</textarea>
+    <div class="wordcount">118 words</div>
+    <div class="qnav"><button class="btn btn-ghost">← Previous</button><span class="saved">✓ Saved</span><button class="btn btn-lav">Review &amp; submit →</button></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submitcard">
+    <h2>Submit paper?</h2>
+    <p>Your answers go for marking — objective questions instantly, written answers against the CBSE marking scheme (usually under a minute).</p>
+    <div class="sumrow">
+      <div class="chip">✅ <b>11 of 12 answered</b></div>
+      <div class="chip">⚠️ <b>Q9 blank</b></div>
+      <div class="chip">⏱ <b>41:07 left</b></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-ghost">Go to Q9</button>
+      <button class="btn btn-primary" style="min-width:200px">Submit for marking</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
