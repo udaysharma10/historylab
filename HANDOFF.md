@@ -3,7 +3,7 @@
 **Last updated:** 2026-07-11 (landing v6 + examiner positioning) · **Branch:** `dev` (LOCAL commits up to `21c35ec`, NOT pushed) · **Live:** https://historylab-kappa.vercel.app/ (untouched — `origin/main` still `b160636`, Round 9)
 
 > **⏭ NEXT SESSION (Uday: "we will come to this tomorrow") — the monetisation/landing track is waiting on:**
-> 1. **Uday + Neha pick a header/theme variant:** `mockups/landing-v6.html` (white header) vs `landing-v6-warm.html` (all-warm) vs `landing-v6-adaptive.html` (transparent→white on scroll). Same content, only header/band temperature differs.
+> 1. **Review `mockups/landing-v7.html` (CURRENT)** — v6 restructured per external marketing feedback (2026-07-12): pain→pivot band ("Sound familiar?" / "History isn't difficult, it's taught the wrong way"), "Three reasons families choose" band, all walkthrough copy cut ~40%, "But there are free videos on YouTube…" comparison table, 6-tool strip. Examiner band + roadmap PRESERVED (locked decisions). **Header/theme variant pick still open:** v6 white vs `landing-v6-warm` vs `landing-v6-adaptive` — v7 is on the white base; the winning treatment applies to v7 in minutes.
 > 2. **Their scrolled content feedback on the landing page** (they collected it, not yet shared).
 > 3. **2 real pilot-student quotes** from Neha → replace the marked "sample quotes" in the ink testimonial band.
 > 4. After landing sign-off → **mockup gate closes → start Sprint 0** (server-side progress + SM-2 sync; sprint pipeline in PLAN_SUBSCRIPTION_LAUNCH.md §9).
