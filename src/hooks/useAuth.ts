@@ -10,6 +10,8 @@ export interface Profile {
   role: 'student' | 'teacher' | 'parent'
   school: string | null
   class: string | null
+  guardian_email: string | null
+  guardian_consent_at: string | null
   profile_completed: boolean
   created_at: string
 }

@@ -3,13 +3,14 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useProgressStore } from '../../store/useProgressStore'
 import { useAuthContext } from '../auth'
-import { isAdminTeacher } from '../../lib/adminEmails'
+import { useAccess } from '../auth/AccessProvider'
 
 export function AppShell() {
   const location = useLocation()
   const navigate = useNavigate()
   const totalStars = useProgressStore((s) => s.totalStars)
   const { profile, signOut } = useAuthContext()
+  const { isAdmin } = useAccess()
   const isHome = location.pathname === '/'
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -64,19 +65,31 @@ export function AppShell() {
               <span className="font-display font-bold text-hist-dark text-sm">{totalStars}</span>
             </div>
 
-            {/* Admin Dashboard button — only for admin teachers */}
-            {isAdminTeacher(profile.email) && (
-              <motion.button
-                className="flex items-center gap-1.5 bg-hist-blue/10 hover:bg-hist-blue/20 px-3 py-1.5 rounded-full transition-colors"
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/dashboard')}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5571B5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-                  <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
-                </svg>
-                <span className="font-display font-bold text-hist-blue text-xs hidden sm:inline">Dashboard</span>
-              </motion.button>
+            {/* Admin buttons — server-driven admin identity (Sprint 1) */}
+            {isAdmin && (
+              <>
+                <motion.button
+                  className="flex items-center gap-1.5 bg-hist-blue/10 hover:bg-hist-blue/20 px-3 py-1.5 rounded-full transition-colors"
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/dashboard')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5571B5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+                  </svg>
+                  <span className="font-display font-bold text-hist-blue text-xs hidden sm:inline">Dashboard</span>
+                </motion.button>
+                <motion.button
+                  className="flex items-center gap-1.5 bg-hist-gold/10 hover:bg-hist-gold/20 px-3 py-1.5 rounded-full transition-colors"
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/admin')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C99A3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-4z" />
+                  </svg>
+                  <span className="font-display font-bold text-hist-gold text-xs hidden sm:inline">Admin</span>
+                </motion.button>
+              </>
             )}
 
             {/* Avatar with dropdown */}

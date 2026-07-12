@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { useAuthContext } from '../components/auth'
-import { isAdminTeacher } from '../lib/adminEmails'
+import { useAccess } from '../components/auth/AccessProvider'
 
 interface SectionActivity {
   sectionId: string
@@ -91,14 +91,14 @@ export function TeacherDashboard() {
   const [tab, setTab] = useState<'users' | 'logins' | 'activity'>('users')
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null)
 
-  const isAdmin = isAdminTeacher(profile.email)
+  const { isAdmin, loading: accessLoading } = useAccess()
 
-  // Redirect non-admin users — only admin teachers can see the dashboard
+  // Redirect non-admin users — only admins can see the dashboard
   useEffect(() => {
-    if (!isAdmin) {
+    if (!accessLoading && !isAdmin) {
       navigate('/')
     }
-  }, [isAdmin, navigate])
+  }, [accessLoading, isAdmin, navigate])
 
   useEffect(() => {
     if (!isAdmin) return

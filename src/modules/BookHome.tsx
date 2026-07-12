@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../components/auth'
-import { isAdminTeacher } from '../lib/adminEmails'
-import { canAccessChapter } from '../lib/chapterAccess'
+import { useAccess } from '../components/auth/AccessProvider'
 import { historyBook } from '../data/books'
 
 function getGreeting(): string {
@@ -16,14 +14,11 @@ function getGreeting(): string {
 export function BookHome() {
   const navigate = useNavigate()
   const { profile } = useAuthContext()
+  const { canAccessChapter } = useAccess()
   const firstName = profile.name.split(' ')[0]
-
-  // Auto-redirect admin teachers to dashboard
-  useEffect(() => {
-    if (isAdminTeacher(profile.email)) {
-      navigate('/dashboard', { replace: true })
-    }
-  }, [profile.email, navigate])
+  // Note (Sprint 1): the old auto-redirect of admin emails to /dashboard is
+  // removed — admins (incl. Neha) use the app itself; Dashboard/Admin are
+  // header buttons now.
 
   return (
     <div className="space-y-8 pb-8">
@@ -55,7 +50,7 @@ export function BookHome() {
             // A chapter is open only if it's built AND this user is allowed in.
             // Gated chapters the user can't open are shown exactly like the
             // not-yet-built ones ("Coming Soon") so a trial student just sees Ch1.
-            const isLive = canAccessChapter(chapter.id, profile.email)
+            const isLive = canAccessChapter(chapter.id)
             return (
               <motion.button
                 key={chapter.id}

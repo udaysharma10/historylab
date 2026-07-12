@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate, Outlet, useParams } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
-import { useAuthContext } from './components/auth'
-import { canAccessChapter } from './lib/chapterAccess'
+import { useAccess } from './components/auth/AccessProvider'
 import { BookHome } from './modules/BookHome'
 import { HomePage } from './modules/HomePage'
 import { SectionModule } from './modules/SectionModule'
@@ -12,13 +11,17 @@ import { FigureMode } from './modules/FigureMode'
 import { FlashcardMode } from './modules/FlashcardMode'
 import { ExamPractice } from './modules/ExamPractice'
 import { TeacherDashboard } from './modules/TeacherDashboard'
+import { AdminPanel } from './modules/AdminPanel'
 
 // Blocks direct URLs to chapters this user isn't allowed into (content ships in
 // the bundle, so the BookHome card gate alone isn't enough for deep links).
+// Server-driven (entitlements) since Sprint 1 — cosmetic until Sprint 2 moves
+// premium content behind the get-chapter Edge Function.
 function RequireChapterAccess() {
   const { chapterId } = useParams<{ chapterId: string }>()
-  const { profile } = useAuthContext()
-  if (!canAccessChapter(chapterId || '', profile.email)) {
+  const { loading, canAccessChapter } = useAccess()
+  if (loading) return null // don't bounce deep links before entitlements load
+  if (!canAccessChapter(chapterId || '')) {
     return <Navigate to="/" replace />
   }
   return <Outlet />
@@ -66,8 +69,9 @@ export const router = createBrowserRouter([
       { path: 'figures', element: <Navigate to="/chapter/ch1/figures" replace /> },
       { path: 'exam', element: <Navigate to="/chapter/ch1/exam" replace /> },
 
-      // Dashboard
+      // Dashboard + admin
       { path: 'dashboard', element: <TeacherDashboard /> },
+      { path: 'admin', element: <AdminPanel /> },
     ],
   },
 ])

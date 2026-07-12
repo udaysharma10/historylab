@@ -6,6 +6,7 @@ import { ProfileSetup } from './ProfileSetup'
 import type { ProfileFormData } from './ProfileSetup'
 import { isAdminTeacher } from '../../lib/adminEmails'
 import { startSync, stopSync } from '../../lib/progressSync'
+import { AccessProvider } from './AccessProvider'
 
 interface AuthContextValue {
   profile: Profile
@@ -109,6 +110,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
           school: data.school,
           role: data.role,
           class: data.class || null,
+          guardian_email: data.guardianEmail,
+          guardian_consent_at: data.consentAt,
           profile_completed: true,
         })
       } catch (err) {
@@ -134,7 +137,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   // Fully authenticated
   return (
     <AuthContext.Provider value={{ profile, signOut }}>
-      {children}
+      <AccessProvider>{children}</AccessProvider>
     </AuthContext.Provider>
   )
 }

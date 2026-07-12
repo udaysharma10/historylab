@@ -1,11 +1,17 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
+// Sprint 1 (plan §5): open signup captures a required guardian email and a
+// timestamped DPDPA parental-consent confirmation. Roles are student/parent
+// only (teacher role retired — admins are a server-side concept now). For a
+// parent account the guardian email is their own sign-in email.
 export interface ProfileFormData {
   name: string
   school: string
-  role: 'student' | 'teacher' | 'parent'
+  role: 'student' | 'parent'
   class: string
+  guardianEmail: string
+  consentAt: string
 }
 
 interface ProfileSetupProps {
@@ -26,17 +32,29 @@ const CLASSES = [
 
 const ROLES = [
   { value: 'student' as const, label: 'Student', icon: '🎓', desc: 'I\'m here to learn' },
-  { value: 'teacher' as const, label: 'Teacher', icon: '👩‍🏫', desc: 'I teach history' },
-  { value: 'parent' as const, label: 'Parent', icon: '👨‍👩‍👧', desc: 'I\'m tracking my child\'s progress' },
+  { value: 'parent' as const, label: 'Parent', icon: '👨‍👩‍👧', desc: 'I\'m here for my child' },
 ]
 
-export function ProfileSetup({ initialName, avatarUrl, onComplete, onSignOut, saving, error }: ProfileSetupProps) {
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export function ProfileSetup({ initialName, initialEmail, avatarUrl, onComplete, onSignOut, saving, error }: ProfileSetupProps) {
   const [name, setName] = useState(initialName)
   const [school, setSchool] = useState('')
-  const [role, setRole] = useState<'student' | 'teacher' | 'parent' | ''>('')
+  const [role, setRole] = useState<'student' | 'parent' | ''>('')
   const [studentClass, setStudentClass] = useState('')
+  const [guardianEmail, setGuardianEmail] = useState('')
+  const [consent, setConsent] = useState(false)
 
-  const canSubmit = name.trim() && school.trim() && role && (role !== 'student' || studentClass)
+  const effectiveGuardianEmail = role === 'parent' ? initialEmail : guardianEmail.trim()
+  const guardianEmailValid = EMAIL_RE.test(effectiveGuardianEmail)
+
+  const canSubmit =
+    name.trim() &&
+    school.trim() &&
+    role &&
+    (role !== 'student' || studentClass) &&
+    guardianEmailValid &&
+    consent
 
   const handleSubmit = () => {
     if (!canSubmit || !role) return
@@ -45,6 +63,8 @@ export function ProfileSetup({ initialName, avatarUrl, onComplete, onSignOut, sa
       school: school.trim(),
       role,
       class: role === 'student' ? studentClass : '',
+      guardianEmail: effectiveGuardianEmail.toLowerCase(),
+      consentAt: new Date().toISOString(),
     })
   }
 
@@ -53,7 +73,7 @@ export function ProfileSetup({ initialName, avatarUrl, onComplete, onSignOut, sa
       style={{ background: 'linear-gradient(135deg, #FBEFE7, #F1ECFA)' }}
     >
       <motion.div
-        className="bg-white rounded-3xl p-8 shadow-card max-w-lg w-full"
+        className="bg-white rounded-3xl p-8 shadow-card max-w-lg w-full my-6"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', damping: 20 }}
@@ -100,7 +120,7 @@ export function ProfileSetup({ initialName, avatarUrl, onComplete, onSignOut, sa
           {/* Role */}
           <div>
             <label className="block text-sm font-semibold text-hist-dark mb-2">I am a...</label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               {ROLES.map((r) => (
                 <motion.button
                   key={r.value}
@@ -145,6 +165,50 @@ export function ProfileSetup({ initialName, avatarUrl, onComplete, onSignOut, sa
                 ))}
               </div>
             </motion.div>
+          )}
+
+          {/* Guardian email (students enter it; parents ARE the guardian) */}
+          {role === 'student' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              transition={{ duration: 0.2 }}
+            >
+              <label className="block text-sm font-semibold text-hist-dark mb-1.5">
+                Parent / Guardian Email <span className="text-hist-red">*</span>
+              </label>
+              <input
+                type="email"
+                value={guardianEmail}
+                onChange={(e) => setGuardianEmail(e.target.value)}
+                placeholder="parent@example.com"
+                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-hist-blue focus:outline-none font-body text-base"
+              />
+              <p className="text-xs text-gray-400 font-body mt-1.5">
+                Used for progress updates, purchase receipts and account safety. Never shared.
+              </p>
+            </motion.div>
+          )}
+
+          {/* DPDPA consent */}
+          {role && (
+            <motion.label
+              className="flex items-start gap-3 p-3.5 rounded-xl border-2 border-gray-200 cursor-pointer hover:border-gray-300"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-[#DC835F]"
+              />
+              <span className="text-xs text-gray-500 font-body leading-relaxed">
+                {role === 'student'
+                  ? 'I confirm that my parent/guardian (at the email above) consents to my use of HistoryLab and to receiving account and progress emails.'
+                  : 'I consent to my child\'s use of HistoryLab and to receiving account and progress emails at my email address.'}
+              </span>
+            </motion.label>
           )}
 
           {/* Error message */}
