@@ -210,6 +210,19 @@
 .landing .fnews small { display: block; font-size: 10.5px; color: var(--muted); font-weight: 500; margin-top: 8px; line-height: 1.45; }
 .landing .fbase { border-top: 1px solid var(--line); padding-top: 18px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); font-weight: 500; }
 
+/* sign-in modal (CTAs open this — no surprise redirect to Google) */
+.landing .modal-veil { position: fixed; inset: 0; z-index: 100; background: rgba(62, 53, 72, .45); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.landing .modal-card { background: var(--paper); border-radius: 22px; box-shadow: var(--shadow-lg); padding: 34px 30px 24px; width: 100%; max-width: 380px; text-align: center; animation: landing-pop .18s ease-out; }
+@keyframes landing-pop { from { transform: translateY(14px) scale(.97); opacity: 0; } to { transform: none; opacity: 1; } }
+.landing .modal-sub { font-size: 13.5px; font-weight: 500; color: var(--body); line-height: 1.6; margin: 10px 0 20px; }
+.landing .gbtn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: var(--paper); border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 18px; font-family: var(--font-body); font-size: 14.5px; font-weight: 700; color: var(--ink); cursor: pointer; transition: border-color .12s, box-shadow .12s; }
+.landing .gbtn:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+.landing .gbtn:disabled { opacity: .6; cursor: default; }
+.landing .modal-fine { font-size: 11px; font-weight: 500; color: var(--muted); line-height: 1.5; margin-top: 14px; }
+.landing .modal-fine a { color: var(--accent-strong); }
+.landing .modal-close { background: none; border: none; cursor: pointer; font-family: var(--font-body); font-size: 12.5px; font-weight: 600; color: var(--muted); margin-top: 12px; padding: 6px; }
+.landing .modal-close:hover { color: var(--ink); }
+
 /* mobile */
 @media (max-width: 800px) {
   .landing nav { display: none; }
