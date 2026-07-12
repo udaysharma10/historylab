@@ -9,7 +9,6 @@ import { calculateStars } from '../engine/quizEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 
 type TimelinePhase = 'home' | 'explore' | 'pick-activity' | 'playing' | 'results'
 
@@ -68,10 +67,10 @@ export function TimelineMode() {
       // Complete — save progress for primary section
       const mistakes = newResults.filter(r => r === 'wrong').length
       const stars = calculateStars(mistakes, 0)
-      completeProblem('s1' as SectionId, stars)
+      completeProblem(cid, 's1', stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
-        chapter_id: chapterId || 'ch1',
+        chapter_id: cid,
         mode: 'timeline',
         activity_type: 'timeline-order',
         stars_earned: stars,
@@ -81,7 +80,7 @@ export function TimelineMode() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activities.length, completeProblem])
+  }, [questionResults, currentIndex, activities.length, completeProblem, cid])
 
   const correctCount = useMemo(() => questionResults.filter(r => r === 'correct').length, [questionResults])
   const stars = useMemo(() => calculateStars(totalMistakes, 0), [totalMistakes])

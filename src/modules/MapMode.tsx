@@ -9,7 +9,6 @@ import { calculateStars } from '../engine/scoringEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
 
 type MapPhase = 'home' | 'explore' | 'playing-identify' | 'playing-label' | 'results'
@@ -83,10 +82,10 @@ export function MapMode() {
       const stars = calculateStars(mistakes, 0)
       // Save progress for primary section of the activities
       const primarySection = (activeType === 'identify' ? identifyActivities : labelActivities)[0]?.sectionId || 's1'
-      completeProblem(primarySection as SectionId, stars)
+      completeProblem(cid, primarySection, stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
-        chapter_id: chapterId || 'ch1',
+        chapter_id: cid,
         mode: 'maps',
         section_id: primarySection,
         activity_type: activeType === 'identify' ? 'map-identify' : 'map-label',
@@ -97,7 +96,7 @@ export function MapMode() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activeType, identifyActivities, labelActivities, completeProblem])
+  }, [questionResults, currentIndex, activeType, identifyActivities, labelActivities, completeProblem, cid])
 
   const correctCount = useMemo(() => questionResults.filter(r => r === 'correct').length, [questionResults])
   const stars = useMemo(() => calculateStars(totalMistakes, 0), [totalMistakes])

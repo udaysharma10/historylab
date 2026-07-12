@@ -1,23 +1,30 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { SectionId, SectionProgress, Achievement } from '../types/progress'
-import { saveProgressToSupabase } from '../lib/syncProgress'
+import type { SectionProgress, Achievement } from '../types/progress'
+import { markDirty } from '../lib/syncBus'
+import { legacyToSnapshot, inferChapterSlug, type LegacyBlob } from '../lib/progressMerge'
 
+// Sprint 0: progress is chapter-keyed (ch1 and ch2 both use section ids
+// s1..s4/6, so a flat map conflated them) and every mutation marks a dirty key
+// for the sync engine (lib/progressSync.ts). Subsection/quiz ids carry their
+// chapter (ch2-* prefix; unprefixed = ch1), so those actions stay flat.
 interface ProgressState {
   playerName: string
   totalStars: number
   currentStreak: number
-  sections: Record<SectionId, SectionProgress>
+  /** chapter slug → section id → stats */
+  chapters: Record<string, Record<string, SectionProgress>>
   achievements: Achievement[]
   completedSubsections: Record<string, boolean>
   narrativeQuizStars: Record<string, number>
   setPlayerName: (name: string) => void
-  completeProblem: (sectionId: SectionId, stars: number) => void
-  resetSection: (sectionId: SectionId) => void
+  completeProblem: (chapterId: string, sectionId: string, stars: number) => void
+  resetSection: (chapterId: string, sectionId: string) => void
   addAchievement: (achievement: Achievement) => void
-  setSectionTotal: (sectionId: SectionId, total: number) => void
+  setSectionTotal: (chapterId: string, sectionId: string, total: number) => void
   completeSubsection: (subsectionId: string) => void
   setNarrativeQuizStars: (quizId: string, stars: number) => void
+  resetForNewUser: () => void
 }
 
 const defaultSection = (): SectionProgress => ({
@@ -28,40 +35,26 @@ const defaultSection = (): SectionProgress => ({
   bestStreak: 0,
 })
 
-function syncToSupabase(state: ProgressState) {
-  const data = {
-    totalStars: state.totalStars,
-    currentStreak: state.currentStreak,
-    sections: state.sections,
-    completedSubsections: state.completedSubsections,
-    narrativeQuizStars: state.narrativeQuizStars,
-  }
-  saveProgressToSupabase('global', data)
-}
+const initialData = () => ({
+  playerName: '',
+  totalStars: 0,
+  currentStreak: 0,
+  chapters: {} as Record<string, Record<string, SectionProgress>>,
+  achievements: [] as Achievement[],
+  completedSubsections: {} as Record<string, boolean>,
+  narrativeQuizStars: {} as Record<string, number>,
+})
 
 export const useProgressStore = create<ProgressState>()(
   persist(
-    (set, get) => ({
-      playerName: '',
-      totalStars: 0,
-      currentStreak: 0,
-      sections: {
-        s1: defaultSection(),
-        s2: defaultSection(),
-        s3: defaultSection(),
-        s4: defaultSection(),
-        s5: defaultSection(),
-        s6: defaultSection(),
-      },
-      achievements: [],
-      completedSubsections: {},
-      narrativeQuizStars: {},
+    (set) => ({
+      ...initialData(),
 
       setPlayerName: (name) => set({ playerName: name }),
 
-      completeProblem: (sectionId, stars) => {
+      completeProblem: (chapterId, sectionId, stars) => {
         set((state) => {
-          const section = { ...state.sections[sectionId] }
+          const section = { ...(state.chapters[chapterId]?.[sectionId] ?? defaultSection()) }
           section.completed += 1
           section.stars += stars
           section.maxStars += 3
@@ -71,24 +64,33 @@ export const useProgressStore = create<ProgressState>()(
             section.bestStreak = newStreak
           }
           return {
-            sections: { ...state.sections, [sectionId]: section },
+            chapters: {
+              ...state.chapters,
+              [chapterId]: { ...state.chapters[chapterId], [sectionId]: section },
+            },
             totalStars: state.totalStars + stars,
             currentStreak: newStreak,
           }
         })
-        syncToSupabase(get())
+        markDirty(`sec:${chapterId}:${sectionId}`, 'meta')
       },
 
-      resetSection: (sectionId) => {
+      resetSection: (chapterId, sectionId) => {
         set((state) => {
-          const section = state.sections[sectionId]
-          const starsLost = section.stars
+          const section = state.chapters[chapterId]?.[sectionId]
+          if (!section) return state
           return {
-            sections: { ...state.sections, [sectionId]: { ...defaultSection(), total: section.total } },
-            totalStars: Math.max(0, state.totalStars - starsLost),
+            chapters: {
+              ...state.chapters,
+              [chapterId]: {
+                ...state.chapters[chapterId],
+                [sectionId]: { ...defaultSection(), total: section.total },
+              },
+            },
+            totalStars: Math.max(0, state.totalStars - section.stars),
           }
         })
-        syncToSupabase(get())
+        markDirty(`sec:${chapterId}:${sectionId}`, 'meta')
       },
 
       addAchievement: (achievement) =>
@@ -96,16 +98,24 @@ export const useProgressStore = create<ProgressState>()(
           achievements: [...state.achievements, { ...achievement, unlockedAt: new Date().toISOString() }],
         })),
 
-      setSectionTotal: (sectionId, total) =>
+      setSectionTotal: (chapterId, sectionId, total) => {
         set((state) => ({
-          sections: { ...state.sections, [sectionId]: { ...state.sections[sectionId], total } },
-        })),
+          chapters: {
+            ...state.chapters,
+            [chapterId]: {
+              ...state.chapters[chapterId],
+              [sectionId]: { ...(state.chapters[chapterId]?.[sectionId] ?? defaultSection()), total },
+            },
+          },
+        }))
+        markDirty(`sec:${chapterId}:${sectionId}`)
+      },
 
       completeSubsection: (subsectionId) => {
         set((state) => ({
           completedSubsections: { ...state.completedSubsections, [subsectionId]: true },
         }))
-        syncToSupabase(get())
+        markDirty(`sub:${inferChapterSlug(subsectionId)}:${subsectionId}`)
       },
 
       setNarrativeQuizStars: (quizId, stars) => {
@@ -113,9 +123,31 @@ export const useProgressStore = create<ProgressState>()(
           narrativeQuizStars: { ...state.narrativeQuizStars, [quizId]: stars },
           totalStars: state.totalStars + stars - (state.narrativeQuizStars[quizId] || 0),
         }))
-        syncToSupabase(get())
+        markDirty(`quiz:${inferChapterSlug(quizId)}:${quizId}`, 'meta')
       },
+
+      resetForNewUser: () => set(initialData()),
     }),
-    { name: 'vedansh-history-progress' }
+    {
+      name: 'vedansh-history-progress',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version >= 1) return persisted as ProgressState
+        // v0 had a flat `sections` map shared by both chapters — attribute it
+        // to ch1 (pilot students only had ch1; see progressMerge.legacyToSnapshot).
+        const old = (persisted ?? {}) as LegacyBlob & { playerName?: string; achievements?: Achievement[] }
+        const snap = legacyToSnapshot(old)
+        return {
+          ...initialData(),
+          playerName: old.playerName ?? '',
+          achievements: old.achievements ?? [],
+          totalStars: snap.totalStars,
+          currentStreak: snap.currentStreak,
+          chapters: snap.chapters,
+          completedSubsections: snap.completedSubsections,
+          narrativeQuizStars: snap.narrativeQuizStars,
+        } as ProgressState
+      },
+    }
   )
 )

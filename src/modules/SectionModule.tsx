@@ -7,17 +7,16 @@ import { NarrativeMode } from './NarrativeMode'
 import { useProgressStore } from '../store/useProgressStore'
 import { SectionTimeline } from '../components/section/SectionTimeline'
 import { SectionMaps } from '../components/section/SectionMaps'
-import type { SectionId } from '../types/progress'
 
 export function SectionModule() {
   const { sectionId, chapterId } = useParams<{ sectionId: string; chapterId: string }>()
   const navigate = useNavigate()
   const basePath = `/chapter/${chapterId || 'ch1'}`
+  const cid = chapterId || 'ch1'
   const [activeSubsection, setActiveSubsection] = useState<number | null>(null)
   const completedSubsections = useProgressStore((s) => s.completedSubsections)
-  const sectionProgress = useProgressStore((s) => s.sections[sectionId as SectionId])
+  const sectionProgress = useProgressStore((s) => s.chapters[cid]?.[sectionId ?? ''])
 
-  const cid = chapterId || 'ch1'
   const chapter = getChapter(cid)
   const section = chapter?.sections.find((s) => s.id === sectionId)
 

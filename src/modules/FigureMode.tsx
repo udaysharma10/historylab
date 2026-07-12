@@ -9,7 +9,6 @@ import { imageAnalysisActivities } from '../data/activities/imageAnalysis'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 
 type FigurePhase = 'home' | 'gallery' | 'detail' | 'practice' | 'results'
 
@@ -87,9 +86,9 @@ export function FigureMode() {
       const mistakes = finalTotal - finalCorrect
       const stars = calculateStars(mistakes, 0)
       const primarySection = activities[0]?.sectionId || 's1'
-      completeProblem(primarySection as SectionId, stars)
+      completeProblem(cid, primarySection, stars)
       logActivity({
-        chapter_id: chapterId || 'ch1',
+        chapter_id: cid,
         mode: 'figures',
         section_id: primarySection,
         activity_type: 'image-analysis',
@@ -100,7 +99,7 @@ export function FigureMode() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activities, totalCorrect, totalQuestions, completeProblem])
+  }, [questionResults, currentIndex, activities, totalCorrect, totalQuestions, completeProblem, cid])
 
   const finalMistakes = totalQuestions - totalCorrect
   const stars = useMemo(() => calculateStars(finalMistakes, 0), [finalMistakes])

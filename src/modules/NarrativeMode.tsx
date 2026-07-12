@@ -30,6 +30,7 @@ export function NarrativeMode({
   onBackToSection,
 }: NarrativeModeProps) {
   const { chapterId } = useParams<{ chapterId: string }>()
+  const cid = chapterId || 'ch1'
   const cards = subsection.narrativeCards
   const [cardIndex, setCardIndex] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -52,7 +53,7 @@ export function NarrativeMode({
       completeSubsection(subsection.id)
       logActivity({
         mode: 'narrative',
-        chapter_id: chapterId || 'ch1',
+        chapter_id: cid,
         section_id: subsection.id.split('-')[0],
         activity_type: 'subsection-read',
         total_questions: totalQuizzes,
@@ -65,7 +66,7 @@ export function NarrativeMode({
     setDirection(1)
     setCardIndex((i) => Math.min(i + 1, cards.length - 1))
     playPageTurn()
-  }, [quizBlocking, isLastCard, cards.length, playPageTurn, completeSubsection, subsection.id, onComplete])
+  }, [quizBlocking, isLastCard, cards.length, playPageTurn, completeSubsection, subsection.id, onComplete, cid, totalQuizzes, quizzesCorrect])
 
   const goPrev = useCallback(() => {
     if (cardIndex === 0) return

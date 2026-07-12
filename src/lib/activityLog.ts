@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { chapterKey } from './contentIds'
 
 interface ActivityLogEntry {
   mode: string
@@ -19,7 +20,7 @@ export async function logActivity(entry: ActivityLogEntry) {
 
   await supabase.from('activity_logs').insert({
     user_id: user.id,
-    chapter_id: entry.chapter_id || 'ch1',
     ...entry,
+    chapter_id: chapterKey(entry.chapter_id || 'ch1'),
   })
 }

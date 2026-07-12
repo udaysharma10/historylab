@@ -7,7 +7,6 @@ import { calculateStars } from '../engine/quizEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 import type { MCQActivity, FillBlankActivity, TrueFalseActivity, MatchActivity } from '../types/activity'
 
 type ActivityType = 'mcq' | 'fill-blank' | 'true-false' | 'match-following'
@@ -96,7 +95,7 @@ export function QuizMode() {
       // Quiz complete — save progress
       const mistakes = newResults.filter(r => r === 'wrong').length
       const stars = calculateStars(mistakes, hintsUsed)
-      completeProblem(sectionId as SectionId, stars)
+      completeProblem(cid, sectionId ?? 's1', stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
         mode: 'quiz',
@@ -111,7 +110,7 @@ export function QuizMode() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activities.length, completeProblem, sectionId, activityType])
+  }, [questionResults, currentIndex, activities.length, completeProblem, sectionId, activityType, cid])
 
   const handleRetry = () => {
     if (activityType) handleSelectType(activityType)

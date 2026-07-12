@@ -3,16 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useProgressStore } from '../store/useProgressStore'
 import { useAuthContext } from '../components/auth'
 import { getChapter, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_ICONS } from '../data/getChapter'
-import type { SectionId } from '../types/progress'
 
 export function HomePage() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
   const { profile } = useAuthContext()
-  const totalStars = useProgressStore((s) => s.totalStars)
-  const progressSections = useProgressStore((s) => s.sections)
-
   const cid = chapterId || 'ch1'
+  const totalStars = useProgressStore((s) => s.totalStars)
+  const progressSections = useProgressStore((s) => s.chapters[cid]) ?? {}
+
   const chapter = getChapter(cid)
   const basePath = `/chapter/${cid}`
   const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
@@ -119,7 +118,7 @@ export function HomePage() {
           {chapter.sections.map((section, i) => {
             const color = sectionColors[section.id] || '#3E3548'
             const icon = sectionIcons[section.id] || section.icon || '📖'
-            const progress = progressSections[section.id as SectionId]
+            const progress = progressSections[section.id]
             const pct = progress?.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
             const started = pct > 0
             const topicCount = section.subsections.length

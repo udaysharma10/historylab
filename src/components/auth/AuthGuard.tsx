@@ -5,6 +5,7 @@ import { LoginPage } from './LoginPage'
 import { ProfileSetup } from './ProfileSetup'
 import type { ProfileFormData } from './ProfileSetup'
 import { isAdminTeacher } from '../../lib/adminEmails'
+import { startSync, stopSync } from '../../lib/progressSync'
 
 interface AuthContextValue {
   profile: Profile
@@ -29,6 +30,14 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const [savingProfile, setSavingProfile] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const autoSetupDone = useRef(false)
+
+  // Cross-device progress sync: hydrate + keep-highest merge on sign-in,
+  // debounced flush of local changes (lib/progressSync.ts).
+  useEffect(() => {
+    if (!user?.id) return
+    startSync(user.id)
+    return stopSync
+  }, [user?.id])
 
   // Auto-complete profile for admin teacher emails
   useEffect(() => {

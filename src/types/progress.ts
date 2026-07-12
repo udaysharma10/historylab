@@ -27,4 +27,6 @@ export interface FlashcardReviewState {
   repetition: number
   easeFactor: number
   nextReview: string
+  /** ISO timestamp of the rating that produced this state — LWW key for sync */
+  lastReviewedAt?: string
 }
