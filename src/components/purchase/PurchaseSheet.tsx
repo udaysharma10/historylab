@@ -1,11 +1,12 @@
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthContext } from '../auth'
 import { useProgressStore } from '../../store/useProgressStore'
+import { startCheckout } from '../../lib/razorpay'
 import type { Product } from '../auth/AccessProvider'
 
-// Sprint 2 purchase sheet (plan §5): the student→parent handoff is the primary
-// conversion mechanic. Direct checkout arrives with Razorpay in Sprint 3 —
-// until then the sheet is honest about it.
+// Purchase sheet (plan §5): Razorpay checkout (Sprint 3) + the student→parent
+// handoff as the alternate conversion path.
 interface PurchaseSheetProps {
   product: Product
   chapterTitle: string
@@ -13,10 +14,27 @@ interface PurchaseSheetProps {
   onClose: () => void
 }
 
+type PayState = 'idle' | 'starting' | 'success' | 'error'
+
 export function PurchaseSheet({ product, chapterTitle, open, onClose }: PurchaseSheetProps) {
   const { profile } = useAuthContext()
   const totalStars = useProgressStore((s) => s.totalStars)
   const completedTopics = useProgressStore((s) => Object.keys(s.completedSubsections).length)
+  const [payState, setPayState] = useState<PayState>('idle')
+  const [payError, setPayError] = useState('')
+
+  const pay = () => {
+    setPayState('starting')
+    setPayError('')
+    startCheckout(product.id, {
+      onSuccess: () => setPayState('success'),
+      onFailure: (message) => {
+        setPayState('error')
+        setPayError(message)
+      },
+      onDismiss: () => setPayState('idle'),
+    })
+  }
 
   const price = `₹${(product.price_paise / 100).toFixed(0)}`
   const listPrice = product.list_price_paise
@@ -72,32 +90,70 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
               </div>
             </div>
 
-            <div className="space-y-2.5">
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full text-center font-display font-bold text-white bg-[#25D366] rounded-xl px-6 py-3.5 shadow-button btn-press"
-              >
-                Ask your parent on WhatsApp
-              </a>
-              <a
-                href={mailHref}
-                className="block w-full text-center font-display font-bold text-hist-dark bg-hist-gold/10 border-2 border-hist-gold/30 rounded-xl px-6 py-3 btn-press"
-              >
-                Email {profile.guardian_email ? 'your parent' : 'instead'}
-              </a>
-              <p className="text-center text-xs text-gray-400 font-body pt-1">
-                Online payment opens soon — your parent will be able to pay directly here.
-              </p>
-            </div>
+            {payState === 'success' ? (
+              <div className="text-center space-y-3">
+                <div className="text-5xl">🎉</div>
+                <p className="font-display font-bold text-hist-dark text-lg">
+                  Chapter unlocked — it's yours for life!
+                </p>
+                <p className="font-body text-xs text-gray-400">
+                  A receipt has been emailed{profile.guardian_email ? ' to your parent' : ''}.
+                </p>
+                <button
+                  className="w-full font-display font-bold text-white bg-hist-gold rounded-xl px-6 py-3.5 shadow-button btn-press"
+                  onClick={() => window.location.reload()}
+                >
+                  Start reading →
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                <button
+                  className="w-full font-display font-bold text-white rounded-xl px-6 py-3.5 shadow-button btn-press disabled:opacity-60"
+                  style={{ backgroundColor: '#C05F35' }}
+                  disabled={payState === 'starting'}
+                  onClick={pay}
+                >
+                  {payState === 'starting' ? 'Opening secure checkout…' : `Pay ${price} now`}
+                </button>
+                {payState === 'error' && (
+                  <p className="text-center text-xs font-body text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                    {payError}
+                  </p>
+                )}
+                <div className="flex items-center gap-3 py-1">
+                  <span className="flex-1 border-t border-hist-line" />
+                  <span className="text-[11px] font-bold text-gray-400 uppercase">or</span>
+                  <span className="flex-1 border-t border-hist-line" />
+                </div>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-center font-display font-bold text-white bg-[#25D366] rounded-xl px-6 py-3 shadow-button btn-press"
+                >
+                  Ask your parent on WhatsApp
+                </a>
+                <a
+                  href={mailHref}
+                  className="block w-full text-center font-display font-bold text-hist-dark bg-hist-gold/10 border-2 border-hist-gold/30 rounded-xl px-6 py-3 btn-press"
+                >
+                  Email {profile.guardian_email ? 'your parent' : 'instead'}
+                </a>
+                <p className="text-center text-xs text-gray-400 font-body pt-1">
+                  Secure payment via Razorpay · 7-day full refund · GST invoice by email
+                </p>
+              </div>
+            )}
 
-            <button
-              className="w-full text-center text-sm text-gray-400 hover:text-gray-600 font-body mt-4"
-              onClick={onClose}
-            >
-              Maybe later
-            </button>
+            {payState !== 'success' && (
+              <button
+                className="w-full text-center text-sm text-gray-400 hover:text-gray-600 font-body mt-4"
+                onClick={onClose}
+              >
+                Maybe later
+              </button>
+            )}
           </motion.div>
         </motion.div>
       )}
