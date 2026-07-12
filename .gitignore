@@ -34,3 +34,8 @@ dist-ssr
 credentials.json
 serviceAccountKey.json
 *secret*
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
