@@ -1,0 +1,752 @@
+import { useState, useEffect } from 'react'
+import { supabase } from '../../lib/supabase'
+import './landing.css'
+
+// Public landing page — faithful port of the FROZEN mockups/landing-v8.html,
+// with copy updated for decision #26 (free tier = Ch1 Section 1, not the
+// whole chapter) and live wiring: prices come from the products table, the
+// class-interest + parent-newsletter forms write to their capture tables, and
+// every CTA starts Google sign-in.
+interface LandingPageProps {
+  onSignIn: () => void
+  signingIn?: boolean
+}
+
+interface PriceInfo {
+  chapter: string
+  chapterList: string | null
+  examiner: string
+}
+
+const FALLBACK_PRICES: PriceInfo = { chapter: '₹199', chapterList: '₹499', examiner: '₹149' }
+
+function rupees(paise: number): string {
+  return `₹${(paise / 100).toFixed(0)}`
+}
+
+function EmailCapture({
+  table,
+  classLabel,
+  placeholder,
+  buttonLabel,
+  small,
+}: {
+  table: 'class_interest' | 'parent_updates'
+  classLabel?: string
+  placeholder: string
+  buttonLabel: string
+  small?: boolean
+}) {
+  const [email, setEmail] = useState('')
+  const [state, setState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle')
+
+  const submit = async () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return
+    setState('busy')
+    const row =
+      table === 'class_interest'
+        ? { class_label: classLabel ?? 'unspecified', email: email.trim().toLowerCase() }
+        : { email: email.trim().toLowerCase() }
+    const { error } = await supabase.from(table).insert(row)
+    // Duplicate signup (unique constraint) is a success from the user's side.
+    setState(error && error.code !== '23505' ? 'error' : 'done')
+  }
+
+  if (state === 'done') {
+    return <div className="formok">✓ You're on the list — we'll email you.</div>
+  }
+  return (
+    <>
+      <input
+        type="email"
+        placeholder={placeholder}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && submit()}
+      />
+      <button
+        className={`btn ${small ? 'btn-primary btn-sm' : 'btn-ghost'}`}
+        onClick={submit}
+        disabled={state === 'busy'}
+      >
+        {state === 'error' ? 'Try again' : buttonLabel}
+      </button>
+    </>
+  )
+}
+
+export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
+  const [prices, setPrices] = useState<PriceInfo>(FALLBACK_PRICES)
+  const [interestClass, setInterestClass] = useState('class-9')
+
+  useEffect(() => {
+    supabase
+      .from('products')
+      .select('id, kind, price_paise, list_price_paise, is_free')
+      .eq('active', true)
+      .then(({ data }) => {
+        if (!data) return
+        const chapter = data.find((p) => p.kind === 'chapter' && !p.is_free)
+        const examiner = data.find((p) => p.kind === 'addon')
+        setPrices({
+          chapter: chapter ? rupees(chapter.price_paise) : FALLBACK_PRICES.chapter,
+          chapterList: chapter?.list_price_paise ? rupees(chapter.list_price_paise) : null,
+          examiner: examiner ? rupees(examiner.price_paise) : FALLBACK_PRICES.examiner,
+        })
+      })
+  }, [])
+
+  const start = (
+    <button className="btn btn-primary btn-big" onClick={onSignIn} disabled={signingIn}>
+      {signingIn ? 'Opening Google…' : 'Start learning free →'}
+    </button>
+  )
+
+  return (
+    <div className="landing">
+      <div className="topbar">
+        <div className="in">
+          <div className="brand">
+            History<span className="lab">Lab</span>
+          </div>
+          <nav>
+            <a href="#how">How it works</a>
+            <a href="#inside">Features</a>
+            <a href="#examiner">Examiner</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+          <div className="topact">
+            <button className="btn btn-ghost btn-sm" onClick={onSignIn} disabled={signingIn}>
+              Sign in
+            </button>
+            <button className="btn btn-primary btn-sm" onClick={onSignIn} disabled={signingIn}>
+              Start free
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* HERO */}
+      <section className="band band-hero">
+        <div className="in">
+          <div className="hero-grid">
+            <div className="hero-copy">
+              <span className="kicker">The home of school History · Live now: CBSE Class 10</span>
+              <h1>
+                History, <em>finally understood.</em>
+              </h1>
+              <p className="sub">
+                Learn every chapter as an interactive story.
+                <br />
+                Practice like the boards.
+                <br />
+                Get every answer <b>marked in seconds</b>.
+              </p>
+              <div className="cta-row">
+                {start}
+                <span className="micro">No card needed · The first section is really free</span>
+              </div>
+              <div className="creds">
+                <div className="cred">
+                  <b>👩‍🏫 Built with a CBSE History teacher</b>
+                  <span>Every chapter, NCERT-faithful</span>
+                </div>
+                <div className="cred">
+                  <b>🖊️ Senior CBSE Examiner on board</b>
+                  <span>20 years of board marking behind every scheme</span>
+                </div>
+                <div className="cred">
+                  <b>🎯 Board-pattern everything</b>
+                  <span>Papers, sources &amp; maps the way CBSE asks</span>
+                </div>
+              </div>
+            </div>
+            <img
+              className="heroipad"
+              src="/landing/hero-ipad.png"
+              alt="HistoryLab on an iPad — a chapter as an illustrated, interactive story"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* PROBLEM */}
+      <section className="band band-tint">
+        <div className="in">
+          <div className="bhead">
+            <span className="kicker">The problem</span>
+            <h2>History feels hard. Because it's taught the wrong way.</h2>
+          </div>
+          <div className="probs">
+            <div className="prob">
+              <div className="illo">
+                <img src="/landing/illo-memorise.png" alt="A student overwhelmed by dates and books" />
+              </div>
+              <div className="tt">
+                <b>Too much to memorise</b>
+                <p>"He reads the chapter twice and remembers nothing."</p>
+              </div>
+            </div>
+            <div className="prob">
+              <div className="illo">
+                <img src="/landing/illo-connect.png" alt="A student unable to connect historical events" />
+              </div>
+              <div className="tt">
+                <b>Hard to connect</b>
+                <p>"She memorises everything — and forgets it in the exam."</p>
+              </div>
+            </div>
+            <div className="prob">
+              <div className="illo">
+                <img src="/landing/illo-panic.png" alt="A student panicking before exams" />
+              </div>
+              <div className="tt">
+                <b>Panic before exams</b>
+                <p>"Boards are coming, and History is the subject we fight about."</p>
+              </div>
+            </div>
+          </div>
+          <div className="founder">
+            <p>
+              We built HistoryLab to make history{' '}
+              <em>easy to understand, easy to remember, and easy to score.</em>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* JOURNEY */}
+      <section className="band" id="how">
+        <div className="in">
+          <div className="bhead">
+            <span className="kicker">The HistoryLab way</span>
+            <h2>From story to score, in four steps</h2>
+          </div>
+          <div className="jgrid">
+            <div className="jstep">
+              <div className="jhead">
+                <div className="jnum">1</div>
+                <div>
+                  <b>Read the story</b>
+                  <span>Story cards that make every concept clear.</span>
+                </div>
+              </div>
+              <div className="mini">
+                <img src="/landing/shot-timeline.png" alt="Story and revision cards" />
+              </div>
+            </div>
+            <div className="jstep">
+              <div className="jhead">
+                <div className="jnum">2</div>
+                <div>
+                  <b>Answer like the boards</b>
+                  <span>Write real answers to board-style questions.</span>
+                </div>
+              </div>
+              <div className="mini">
+                <div className="pad">
+                  <span className="mlbl">2-mark question</span>
+                  <div className="q">Why did Gandhiji withdraw the Non-Cooperation Movement?</div>
+                  <div className="mans">
+                    Because the movement turned violent at Chauri Chaura, and Gandhiji felt
+                    satyagrahis needed training…
+                  </div>
+                  <span className="mbtn">Submit answer</span>
+                </div>
+              </div>
+            </div>
+            <div className="jstep">
+              <div className="jhead">
+                <div className="jnum">3</div>
+                <div>
+                  <b>Get marked in seconds</b>
+                  <span>Point-by-point, against the marking scheme.</span>
+                </div>
+              </div>
+              <div className="mini">
+                <div className="pad">
+                  <span className="mlbl">Your score</span>
+                  <div className="mscore">2 / 2</div>
+                  <div className="mpt">
+                    <span className="m m-ok">✓</span>
+                    <span>
+                      <b>+1</b> Chauri Chaura violence named
+                    </span>
+                  </div>
+                  <div className="mpt">
+                    <span className="m m-ok">✓</span>
+                    <span>
+                      <b>+1</b> Gandhiji's reasoning explained
+                    </span>
+                  </div>
+                  <div className="mnote">
+                    <b>Marker's note:</b> Full marks — cause and reasoning both covered.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="jstep">
+              <div className="jhead">
+                <div className="jnum">4</div>
+                <div>
+                  <b>Improve and ace</b>
+                  <span>Feedback shows exactly how to write better.</span>
+                </div>
+              </div>
+              <div className="mini">
+                <div className="pad">
+                  <span className="mlbl">Your progress</span>
+                  <div className="graph">
+                    <div className="gbar" style={{ height: '44%' }}>
+                      <span>52%</span>
+                    </div>
+                    <div className="gbar" style={{ height: '62%' }}>
+                      <span>65%</span>
+                    </div>
+                    <div className="gbar" style={{ height: '78%' }}>
+                      <span>74%</span>
+                    </div>
+                    <div className="gbar" style={{ height: '96%' }}>
+                      <span>85%</span>
+                    </div>
+                  </div>
+                  <div className="gcap">
+                    <i>Paper 1</i>
+                    <i>Paper 2</i>
+                    <i>Paper 3</i>
+                    <i>Paper 4</i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TOOLS */}
+      <section className="band band-tint" id="inside">
+        <div className="in">
+          <div className="bhead">
+            <h2>Everything you need to master History</h2>
+            <p>All of it inside every chapter. Nothing extra to buy, nothing to print.</p>
+          </div>
+          <div className="tools">
+            <div className="tool">
+              <div className="ic" style={{ background: 'var(--ls4-bg)' }}>🃏</div>
+              <div>
+                <b>Smart flashcards</b>
+                <span>Spaced-repetition revision</span>
+              </div>
+            </div>
+            <div className="tool">
+              <div className="ic" style={{ background: 'var(--ls3-bg)' }}>📅</div>
+              <div>
+                <b>Timelines</b>
+                <span>Every key date, in order</span>
+              </div>
+            </div>
+            <div className="tool">
+              <div className="ic" style={{ background: 'var(--ls6-bg)' }}>🗺️</div>
+              <div>
+                <b>Interactive maps</b>
+                <span>Tap. Explore. Label.</span>
+              </div>
+            </div>
+            <div className="tool">
+              <div className="ic" style={{ background: 'var(--ls5-bg)' }}>🖼️</div>
+              <div>
+                <b>NCERT figures</b>
+                <span>Tap-hotspots &amp; exam tips</span>
+              </div>
+            </div>
+            <div className="tool">
+              <div className="ic" style={{ background: 'var(--ls2-bg)' }}>📜</div>
+              <div>
+                <b>Primary sources</b>
+                <span>Analysed, exam-ready</span>
+              </div>
+            </div>
+            <div className="tool">
+              <div className="ic" style={{ background: 'var(--ls1-bg)' }}>🧠</div>
+              <div>
+                <b>Practice quizzes</b>
+                <span>MCQ, match, fill-in, T/F</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* EXAMINER */}
+      <section className="band" id="examiner">
+        <div className="in">
+          <div className="ex-grid">
+            <div className="ex-copy">
+              <span className="kicker" style={{ color: 'var(--pen)' }}>
+                The red pen behind HistoryLab
+              </span>
+              <h2>
+                A <em>Senior CBSE Examiner</em> stands behind every mark.
+              </h2>
+              <p>
+                Anyone can build a portal with AI. We built ours around a person: HistoryLab has
+                onboarded a <b>Senior CBSE Examiner with 20 years of teaching and board-marking
+                experience</b> — and the whole marking engine works in their image.
+              </p>
+              <ul>
+                <li>Every paper and marking scheme is authored by the examiner</li>
+                <li>Instant marking is calibrated against the examiner's own marking</li>
+                <li>
+                  Send any paper for the examiner's personal review — {prices.examiner}, back in
+                  48–72h
+                </li>
+              </ul>
+            </div>
+            <div className="redcard">
+              <span className="stamp">Reviewed by a Senior CBSE Examiner</span>
+              <div className="q">Q7 · Rich peasants in the Civil Disobedience Movement (3 marks)</div>
+              <div className="rline">
+                <span className="rm">✓ +1</span>
+                <span>Trade depression &amp; falling prices — communities named, well attributed.</span>
+              </div>
+              <div className="rline">
+                <span className="rm">✓ +1</span>
+                <span>Revenue demand impossible to pay — correct and crisp.</span>
+              </div>
+              <div className="rline">
+                <span className="rm">✗ 0</span>
+                <span>Third point answers a different question — direction slip.</span>
+              </div>
+              <div className="rnote">
+                <p>
+                  "Your points are exam-ready; your reading of the stem isn't yet. Underline the
+                  verb in the question before you write — this exact slip costs thousands of
+                  students a mark every board year."
+                </p>
+                <span>Examiner's remark · returned in 51 hours</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* COMPARISON */}
+      <section className="band band-lav">
+        <div className="in">
+          <div className="bhead">
+            <h2>Active learning. Real understanding. Better results.</h2>
+            <p>"But there are free videos on YouTube…" — there are. Here's the difference.</p>
+          </div>
+          <div className="cmp">
+            <div className="row head">
+              <div className="cell">Videos &amp; notes</div>
+              <div className="cell hl">HistoryLab</div>
+            </div>
+            <div className="row">
+              <div className="cell">Passive watching</div>
+              <div className="cell hl">Interactive stories</div>
+            </div>
+            <div className="row">
+              <div className="cell">One explanation, then you're alone</div>
+              <div className="cell hl">Practice on every concept</div>
+            </div>
+            <div className="row">
+              <div className="cell">No feedback on written answers</div>
+              <div className="cell hl">Every answer marked, in seconds</div>
+            </div>
+            <div className="row">
+              <div className="cell">Hard to remember</div>
+              <div className="cell hl">Built to revise — flashcards &amp; spaced repetition</div>
+            </div>
+            <div className="row">
+              <div className="cell">Generic content</div>
+              <div className="cell hl">NCERT-exact · board-pattern · examiner-calibrated</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="band band-ink">
+        <div className="in">
+          <div className="bhead">
+            <h2>From the pilot classroom</h2>
+            <p>Class 10 students in Gurugram used HistoryLab before anyone else.</p>
+          </div>
+          <div className="quotes">
+            <div className="quote">
+              <p>
+                "I actually understand WHY things happened now, instead of memorising dates. The
+                story mode doesn't feel like studying."
+              </p>
+              <div className="who">
+                <div className="av" style={{ background: 'var(--ls2)' }}>A</div>
+                <div>
+                  <b>Ananya</b>
+                  <span>Class 10 student</span>
+                </div>
+              </div>
+            </div>
+            <div className="quote">
+              <p>
+                "The figures section saved me — I could never remember what each painting meant.
+                Now I can explain Sorrieu in the exam."
+              </p>
+              <div className="who">
+                <div className="av" style={{ background: 'var(--ls4)' }}>R</div>
+                <div>
+                  <b>Rohan</b>
+                  <span>Class 10 student</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="samplenote">
+            Sample quotes for layout — to be replaced with real pilot-student quotes before ship.
+          </div>
+        </div>
+      </section>
+
+      {/* ROADMAP */}
+      <section className="band">
+        <div className="in">
+          <div className="bhead">
+            <h2>One home for school History</h2>
+            <p>We're building every class, one brilliant chapter at a time.</p>
+          </div>
+          <div className="classes">
+            <div className="cls live">
+              <div className="ic" style={{ background: 'var(--accent-soft)' }}>🏛️</div>
+              <div>
+                <b>Class 10 — LIVE</b>
+                <span>India and the Contemporary World-II · 2 chapters live, 3 in the works.</span>
+              </div>
+            </div>
+            <div className="cls">
+              <div className="ic" style={{ background: 'var(--lav-soft)' }}>🗿</div>
+              <div>
+                <b>Class 9 — next</b>
+                <span>Same story-mode, same marking engine.</span>
+              </div>
+            </div>
+            <div className="cls">
+              <div className="ic" style={{ background: 'var(--ls6-bg)' }}>🌏</div>
+              <div>
+                <b>Classes 6–8 — coming</b>
+                <span>The full NCERT History journey.</span>
+              </div>
+            </div>
+          </div>
+          <div className="notify">
+            <div className="f">
+              <label>Not in Class 10 yet? Your class + parent's email</label>
+              <select value={interestClass} onChange={(e) => setInterestClass(e.target.value)}>
+                <option value="class-9">Class 9</option>
+                <option value="class-8">Class 8</option>
+                <option value="class-7">Class 7</option>
+                <option value="class-6">Class 6</option>
+              </select>
+            </div>
+            <EmailCapture
+              table="class_interest"
+              classLabel={interestClass}
+              placeholder="parent@example.com"
+              buttonLabel="Tell me when my class arrives"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section className="band band-tint" id="pricing">
+        <div className="in">
+          <div className="bhead">
+            <h2>Simple pricing. No subscriptions.</h2>
+            <p>Pay once per chapter, keep it forever.</p>
+          </div>
+          <div className="price-grid">
+            <div className="price">
+              <h3>Start free</h3>
+              <div className="amt">₹0</div>
+              <ul>
+                <li>The first section of Chapter 1, full story mode</li>
+                <li>Figures, maps &amp; timeline for the section</li>
+                <li>Smart flashcards</li>
+                <li>No card, no trial timer — judge us first</li>
+              </ul>
+            </div>
+            <div className="price hot">
+              <span className="tag">Launch price · Best value</span>
+              <h3>Any chapter</h3>
+              <div className="amt">
+                {prices.chapterList && <span className="strike">{prices.chapterList}</span>}
+                {prices.chapter} <small>one-time</small>
+              </div>
+              <ul>
+                <li>The complete chapter + every study tool</li>
+                <li>
+                  <b>Board-pattern test papers</b>
+                </li>
+                <li>
+                  <b>Examiner-calibrated marking on every answer</b>
+                </li>
+                <li>Lifetime access · GST invoice</li>
+              </ul>
+            </div>
+            <div className="price addon">
+              <span className="tag">Add-on · per paper</span>
+              <h3>Examiner's personal review</h3>
+              <div className="amt">
+                {prices.examiner} <small>per paper</small>
+              </div>
+              <ul>
+                <li>
+                  <b>A Senior CBSE Examiner reviews your written paper</b>
+                </li>
+                <li>Personal remarks on every answer</li>
+                <li>Returned in 48–72 hours</li>
+                <li>Buy only when you want it</li>
+              </ul>
+            </div>
+          </div>
+          <div className="safety">
+            <div className="chip">🚫 <b>No ads, ever</b></div>
+            <div className="chip">🔒 <b>No data sharing</b></div>
+            <div className="chip">🧾 <b>Every invoice to the parent</b></div>
+            <div className="chip">↩️ <b>7-day full refund</b></div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="band" id="faq">
+        <div className="in">
+          <div className="bhead">
+            <h2>Questions parents ask us</h2>
+            <p>The honest answers.</p>
+          </div>
+          <div className="faq">
+            <details open>
+              <summary>Is HistoryLab really free to start?</summary>
+              <p>
+                Yes — the first section of Chapter 1 is completely free: the full story mode plus
+                its figures, maps, timeline and flashcards. No card details, no trial timer. Judge
+                the quality before paying a rupee; unlock the rest of the chapter only if it earns
+                it.
+              </p>
+            </details>
+            <details>
+              <summary>Which board and classes does this cover?</summary>
+              <p>
+                CBSE Class 10 History is live today (NCERT "India and the Contemporary World-II").
+                Class 9 is next, then Classes 6–8. Leave your email above and we'll tell you the
+                day your class arrives.
+              </p>
+            </details>
+            <details>
+              <summary>How does the answer marking work?</summary>
+              <p>
+                Your child writes answers to board-pattern questions. Objective questions are
+                checked instantly; written answers are marked point-by-point against the CBSE
+                marking scheme in under a minute — by an engine built and calibrated by the{' '}
+                <b>Senior CBSE Examiner</b> we've onboarded (20 years of board experience). For any
+                paper, the examiner can also review it personally and return detailed remarks
+                within 48–72 hours ({prices.examiner} per paper).
+              </p>
+            </details>
+            <details>
+              <summary>How is this different from tuition or YouTube?</summary>
+              <p>
+                Videos and tuition explain the chapter. HistoryLab makes your child <i>do</i> the
+                chapter — read actively, practise maps and figures, write real answers and see
+                exactly where marks are lost. At {prices.chapter} per chapter, it costs less than a
+                single tuition class.
+              </p>
+            </details>
+            <details>
+              <summary>Does it work on phone, tablet and laptop?</summary>
+              <p>
+                Yes — HistoryLab runs in the browser on all three. Progress syncs to the account,
+                so your child can read on a phone and practise papers on a laptop.
+              </p>
+            </details>
+            <details>
+              <summary>Is my child's data safe?</summary>
+              <p>
+                We store only a first name, emails and study progress. No ads, no tracking for
+                advertising, no selling of data — and every account has a parent's email on it,
+                which receives all invoices and alerts.
+              </p>
+            </details>
+            <details>
+              <summary>What if it doesn't work for my child?</summary>
+              <p>
+                Full refund within 7 days of any chapter purchase, no questions asked. Write to
+                help@historylab.in.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="band band-cta">
+        <div className="in">
+          <h2>The first section is free. Start tonight.</h2>
+          <p>
+            The Rise of Nationalism in Europe — story mode, figures, maps and flashcards. The
+            textbook, finally brought to life.
+          </p>
+          {start}
+        </div>
+      </section>
+
+      <footer>
+        <div className="in">
+          <div className="fgrid">
+            <div>
+              <div className="brand" style={{ fontSize: 20 }}>
+                History<span className="lab">Lab</span>
+              </div>
+              <div className="tagline">
+                The home of school History. Easy to understand, easy to remember, easy to score.
+              </div>
+            </div>
+            <div>
+              <h4>Explore</h4>
+              <a href="#how">How it works</a>
+              <a href="#inside">Features</a>
+              <a href="#pricing">Pricing</a>
+              <a href="#faq">FAQ</a>
+            </div>
+            <div>
+              <h4>Company</h4>
+              <a href="mailto:help@historylab.in">Contact</a>
+              <a href="/terms">Terms of Service</a>
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/refunds">Refunds &amp; Cancellation</a>
+            </div>
+            <div className="fnews">
+              <h4>For parents</h4>
+              <p>One short email a month — study tips and new chapters. No spam, ever.</p>
+              <div className="row">
+                <EmailCapture
+                  table="parent_updates"
+                  placeholder="parent@example.com"
+                  buttonLabel="Subscribe"
+                  small
+                />
+              </div>
+              <small>Parent emails only. Unsubscribe anytime.</small>
+            </div>
+          </div>
+          <div className="fbase">
+            <span>© 2026 Teknomatics · historylab.in</span>
+            <span>Made with ❤️ for students</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

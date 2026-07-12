@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import type { Profile } from '../../hooks/useAuth'
-import { LoginPage } from './LoginPage'
 import { ProfileSetup } from './ProfileSetup'
+import { LandingPage } from '../../modules/landing/LandingPage'
+import { TermsPage, PrivacyPage, RefundPage } from '../../modules/legal/LegalPages'
 import type { ProfileFormData } from './ProfileSetup'
 import { isAdminTeacher } from '../../lib/adminEmails'
 import { startSync, stopSync } from '../../lib/progressSync'
@@ -71,7 +72,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
     )
   }
 
-  // Not signed in
+  // Not signed in → public site (Sprint 2): landing page + legal pages.
+  // AuthGuard sits above the router, so plain pathname routing here.
   if (!user) {
     const handleSignIn = async () => {
       setSigningIn(true)
@@ -82,7 +84,11 @@ export function AuthGuard({ children }: AuthGuardProps) {
       }
     }
 
-    return <LoginPage onSignIn={handleSignIn} loading={signingIn} />
+    const path = window.location.pathname
+    if (path === '/terms') return <TermsPage />
+    if (path === '/privacy') return <PrivacyPage />
+    if (path === '/refunds') return <RefundPage />
+    return <LandingPage onSignIn={handleSignIn} signingIn={signingIn} />
   }
 
   // Signed in but profile not completed

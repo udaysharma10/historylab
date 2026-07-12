@@ -14,6 +14,7 @@ import { FlashcardMode } from './modules/FlashcardMode'
 import { ExamPractice } from './modules/ExamPractice'
 import { TeacherDashboard } from './modules/TeacherDashboard'
 import { AdminPanel } from './modules/AdminPanel'
+import { TermsPage, PrivacyPage, RefundPage } from './modules/legal/LegalPages'
 
 // Blocks direct URLs to chapters this user isn't allowed into (content ships in
 // the bundle, so the BookHome card gate alone isn't enough for deep links).
@@ -70,6 +71,10 @@ function RedirectToChapterQuiz() {
 }
 
 export const router = createBrowserRouter([
+  // Legal pages (also reachable signed-out via AuthGuard's public branch)
+  { path: '/terms', element: <TermsPage /> },
+  { path: '/privacy', element: <PrivacyPage /> },
+  { path: '/refunds', element: <RefundPage /> },
   {
     path: '/',
     element: <AppShell />,
