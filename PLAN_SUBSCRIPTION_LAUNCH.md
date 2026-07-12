@@ -215,6 +215,7 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 
 **Still open / assumptions to confirm:**
 - Examiner-marking add-on price (mocked ₹149/paper).
+- **Hero-image debt (Uday's call, 2026-07-12):** landing v8 hero uses the ChatGPT-generated iPad image showing an *aspirational* story-card UI (illustrated header, "Try a question" hook, story-progress bar) that the app does not have yet. Treat that image as a **design brief**: the narrative view should gain illustrated section-header images + an inline "try a question" hook so the product matches its own landing page (candidate for Sprint 2 polish or S3).
 - Parent weekly progress email: scoped to S2 post-launch (assumed).
 - ₹199 flat for all chapters (vs varying by chapter size).
 - When/whether shareable score cards ship (S3 assumed).
