@@ -1,0 +1,12 @@
+// Cloudflare Workers deployment config — static assets only (the SPA).
+// Presence of this file stops `wrangler deploy` from running its auto-setup
+// wizard (which tries to convert the project to @cloudflare/vite-plugin and
+// breaks the build). Edge Functions live in Supabase, not here.
+{
+  "name": "historylab",
+  "compatibility_date": "2026-07-12",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
