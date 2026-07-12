@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { SourceReader, SourceQuizCard } from '../components/source'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { getSources, getNcertQuestions, CHAPTER_SECTION_COLORS } from '../data/getChapter'
-import { sourceAnalysisActivities as ch1SourceAnalysisActivities } from '../data/activities/sourceAnalysis'
+import { getSources, getNcertQuestions, getSourceAnalysisActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
@@ -31,8 +30,7 @@ export function ExamPractice() {
   const sources = useMemo(() => getSources(cid), [cid])
   const ncertQuestions = useMemo(() => getNcertQuestions(cid), [cid])
   const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
-  // Source-comprehension quiz activities are only authored for Ch1 so far.
-  const sourceAnalysisActivities = useMemo(() => (cid === 'ch2' ? [] : ch1SourceAnalysisActivities), [cid])
+  const sourceAnalysisActivities = useMemo(() => getSourceAnalysisActivities(cid), [cid])
   const hasSourcePractice = sourceAnalysisActivities.length > 0
   const hasSources = sources.length > 0
 

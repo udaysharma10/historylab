@@ -21,17 +21,18 @@ import { AdminPanel } from './modules/AdminPanel'
 // premium content behind the get-chapter Edge Function.
 function RequireChapterAccess() {
   const { chapterId } = useParams<{ chapterId: string }>()
-  const { loading, canAccessChapter } = useAccess()
+  const { loading, canOpenChapter } = useAccess()
   const slug = chapterId || ''
-  const bundled = slug === 'ch1' || !!getCachedBundle(slug)
+  const bundled = !!getCachedBundle(slug)
   const [bundleState, setBundleState] = useState<'loading' | 'ready' | 'error'>(
     bundled ? 'ready' : 'loading'
   )
 
-  // Premium chapter content is fetched from the get-chapter Edge Function
-  // (the real paywall) and cached for the session before the route renders.
+  // ALL chapter content is fetched from the get-chapter Edge Function (the
+  // real paywall — full chapter when entitled, free-preview section when not)
+  // and cached for the session before the route renders.
   useEffect(() => {
-    if (loading || bundled || !canAccessChapter(slug)) return
+    if (loading || bundled || !canOpenChapter(slug)) return
     let cancelled = false
     loadChapterBundle(slug)
       .then(() => !cancelled && setBundleState('ready'))
@@ -39,10 +40,10 @@ function RequireChapterAccess() {
     return () => {
       cancelled = true
     }
-  }, [slug, loading, bundled, canAccessChapter])
+  }, [slug, loading, bundled, canOpenChapter])
 
   if (loading) return null // don't bounce deep links before entitlements load
-  if (!canAccessChapter(slug) || bundleState === 'error') {
+  if (!canOpenChapter(slug) || bundleState === 'error') {
     return <Navigate to="/" replace />
   }
   if (bundleState !== 'ready') {

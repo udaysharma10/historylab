@@ -17,7 +17,7 @@ function getGreeting(): string {
 export function BookHome() {
   const navigate = useNavigate()
   const { profile } = useAuthContext()
-  const { canAccessChapter, products } = useAccess()
+  const { canAccessChapter, canOpenChapter, products } = useAccess()
   const [sheetChapter, setSheetChapter] = useState<string | null>(null)
   const firstName = profile.name.split(' ')[0]
   // Note (Sprint 1): the old auto-redirect of admin emails to /dashboard is
@@ -51,10 +51,12 @@ export function BookHome() {
         <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Chapters</h2>
         <div className="space-y-3">
           {historyBook.chapters.map((chapter, i) => {
-            // Three states: open (free or entitled), locked (built + purchasable
-            // — shown warm and desirable, not greyed), coming soon (not built).
-            const isOpen = canAccessChapter(chapter.id)
+            // States: full access · open-as-preview (free section, rest locked)
+            // · locked (purchasable, warm not greyed) · coming soon (not built).
+            const full = canAccessChapter(chapter.id)
+            const isOpen = canOpenChapter(chapter.id)
             const product = products.find((p) => p.id === chapterKey(chapter.id))
+            const isPreview = isOpen && !full && !!product?.preview_section
             const isLocked =
               !isOpen && chapter.status === 'live' && !!product && !product.is_free
             const clickable = isOpen || isLocked
@@ -95,9 +97,14 @@ export function BookHome() {
                       >
                         Chapter {chapter.number}
                       </span>
-                      {isOpen && chapter.isFree && (
+                      {full && product && !product.is_free && (
                         <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
-                          Free
+                          Unlocked
+                        </span>
+                      )}
+                      {isPreview && (
+                        <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                          First section free
                         </span>
                       )}
                       {isLocked && (

@@ -51,7 +51,20 @@ Deno.serve(async (req) => {
     p_chapter: chapter,
   });
   if (accessErr) return json({ error: "access check failed" }, 500);
-  if (allowed !== true) return json({ error: "forbidden" }, 403);
+
+  // No entitlement: serve the free preview section if the product has one
+  // (free-tier decision 2026-07-12: Ch1 S1), otherwise 403.
+  let previewSection: string | null = null;
+  if (allowed !== true) {
+    const { data: product } = await service
+      .from("products")
+      .select("preview_section")
+      .eq("id", chapter)
+      .eq("active", true)
+      .maybeSingle();
+    previewSection = product?.preview_section ?? null;
+    if (!previewSection) return json({ error: "forbidden" }, 403);
+  }
 
   const { data, error } = await service
     .from("chapter_content")
@@ -60,5 +73,37 @@ Deno.serve(async (req) => {
     .single();
   if (error || !data) return json({ error: "not found" }, 404);
 
-  return json(data.content);
+  if (!previewSection) return json(data.content);
+  return json(trimToPreview(data.content, previewSection));
 });
+
+// Keep only the preview section's material. Collections are filtered by
+// sectionId; anything without one is dropped (conservative — never leaks paid
+// content). Locked sections keep their metadata but lose all cards.
+// deno-lint-ignore no-explicit-any
+function trimToPreview(bundle: any, section: string) {
+  const bySection = (arr: unknown) =>
+    Array.isArray(arr)
+      ? arr.filter((x) => (x as { sectionId?: string })?.sectionId === section)
+      : [];
+  return {
+    ...bundle,
+    chapter: {
+      ...bundle.chapter,
+      sections: (bundle.chapter?.sections ?? []).map((sec: { id: string }) =>
+        sec.id === section ? sec : { ...sec, subsections: [] }
+      ),
+    },
+    keyDates: bySection(bundle.keyDates),
+    vocabulary: bySection(bundle.vocabulary),
+    sources: bySection(bundle.sources),
+    keyPeople: bySection(bundle.keyPeople),
+    flashcards: bySection(bundle.flashcards),
+    figures: bySection(bundle.figures),
+    mapDefinitions: bySection(bundle.mapDefinitions),
+    activities: Object.fromEntries(
+      Object.entries(bundle.activities ?? {}).map(([k, v]) => [k, bySection(v)]),
+    ),
+    preview: { section },
+  };
+}

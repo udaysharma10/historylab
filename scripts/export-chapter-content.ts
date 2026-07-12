@@ -1,13 +1,40 @@
-// Sprint 2 — serialize a chapter's full data surface into a SQL migration that
-// upserts chapter_content (the server-side store behind the get-chapter Edge
-// Function). Run from the repo root with:
-//   npx tsx scripts/export-chapter-content.ts
+// Serialize each chapter's full data surface into SQL migrations that upsert
+// chapter_content (the server-side store behind the get-chapter Edge
+// Function). Since the free-tier revision (2026-07-12) BOTH chapters live
+// server-side — the bundle ships no chapter content at all.
 //
-// Regenerate + `supabase db push` whenever ch2 content changes (until the
+// Run from the repo root:
+//   npx tsx scripts/export-chapter-content.ts
+// then `supabase db push`. Regenerate whenever chapter data changes (until the
 // Sprint 4 admin upload flow replaces this).
-import { writeFileSync } from 'node:fs'
+import { writeFileSync, readdirSync } from 'node:fs'
 import { deepStrictEqual } from 'node:assert'
 
+// ---- ch1 ----
+import { chapter1 } from '../src/data/ch1/chapter1'
+import { keyDates as ch1KeyDates } from '../src/data/ch1/keyDates'
+import { vocabulary as ch1Vocabulary } from '../src/data/ch1/vocabulary'
+import { sources as ch1Sources } from '../src/data/ch1/sources'
+import { keyPeople as ch1KeyPeople } from '../src/data/ch1/keyPeople'
+import { flashcards as ch1Flashcards } from '../src/data/ch1/flashcards'
+import { figures as ch1Figures } from '../src/data/ch1/figures'
+import { mapDefinitions as ch1Maps } from '../src/data/ch1/maps'
+import {
+  mcqActivities as ch1Mcq,
+  fillBlankActivities as ch1Fb,
+  trueFalseActivities as ch1Tf,
+} from '../src/data/ch1/activities/quizActivities'
+import { matchActivities as ch1Match } from '../src/data/ch1/activities/matchActivities'
+import { timelineActivities as ch1Timeline } from '../src/data/ch1/activities/timelineActivities'
+import { ncertQuestions as ch1Ncert } from '../src/data/ch1/activities/ncertQuestions'
+import {
+  mapIdentifyActivities as ch1MapIdentify,
+  mapLabelActivities as ch1MapLabel,
+} from '../src/data/ch1/activities/mapActivities'
+import { sourceAnalysisActivities as ch1SourceAnalysis } from '../src/data/ch1/activities/sourceAnalysis'
+import { imageAnalysisActivities as ch1ImageAnalysis } from '../src/data/ch1/activities/imageAnalysis'
+
+// ---- ch2 ----
 import { chapter2 } from '../src/data/ch2/chapter2'
 import { ch2KeyDates } from '../src/data/ch2/keyDates'
 import { ch2Vocabulary } from '../src/data/ch2/vocabulary'
@@ -28,49 +55,86 @@ import {
   ch2MapLabelActivities,
 } from '../src/data/ch2/activities/mapActivities'
 
-const CHAPTER_KEY = 'c10-hist-ch2'
-
-const bundle = {
-  chapter: chapter2,
-  keyDates: ch2KeyDates,
-  vocabulary: ch2Vocabulary,
-  sources: ch2Sources,
-  keyPeople: ch2KeyPeople,
-  flashcards: ch2Flashcards,
-  figures: ch2Figures,
-  mapDefinitions: ch2MapDefinitions,
-  activities: {
-    mcq: ch2McqActivities,
-    fillBlank: ch2FillBlankActivities,
-    trueFalse: ch2TrueFalseActivities,
-    match: ch2MatchActivities,
-    timeline: [],
-    ncert: ch2NcertQuestions,
-    mapIdentify: ch2MapIdentifyActivities,
-    mapLabel: ch2MapLabelActivities,
+const bundles: Record<string, unknown> = {
+  'c10-hist-ch1': {
+    chapter: chapter1,
+    keyDates: ch1KeyDates,
+    vocabulary: ch1Vocabulary,
+    sources: ch1Sources,
+    keyPeople: ch1KeyPeople,
+    flashcards: ch1Flashcards,
+    figures: ch1Figures,
+    mapDefinitions: ch1Maps,
+    activities: {
+      mcq: ch1Mcq,
+      fillBlank: ch1Fb,
+      trueFalse: ch1Tf,
+      match: ch1Match,
+      timeline: ch1Timeline,
+      ncert: ch1Ncert,
+      mapIdentify: ch1MapIdentify,
+      mapLabel: ch1MapLabel,
+      sourceAnalysis: ch1SourceAnalysis,
+      imageAnalysis: ch1ImageAnalysis,
+    },
+  },
+  'c10-hist-ch2': {
+    chapter: chapter2,
+    keyDates: ch2KeyDates,
+    vocabulary: ch2Vocabulary,
+    sources: ch2Sources,
+    keyPeople: ch2KeyPeople,
+    flashcards: ch2Flashcards,
+    figures: ch2Figures,
+    mapDefinitions: ch2MapDefinitions,
+    activities: {
+      mcq: ch2McqActivities,
+      fillBlank: ch2FillBlankActivities,
+      trueFalse: ch2TrueFalseActivities,
+      match: ch2MatchActivities,
+      timeline: [],
+      ncert: ch2NcertQuestions,
+      mapIdentify: ch2MapIdentifyActivities,
+      mapLabel: ch2MapLabelActivities,
+      sourceAnalysis: [],
+      imageAnalysis: [],
+    },
   },
 }
 
-// Guard: the bundle must survive JSON round-tripping unchanged (functions,
-// Dates or undefined values in the data would silently corrupt it).
-const json = JSON.stringify(bundle)
-deepStrictEqual(JSON.parse(json), bundle, 'chapter bundle is not JSON-pure')
+// Migrations apply in filename order — new stamps must sort after every
+// existing migration, not just after "now".
+const latest = readdirSync('supabase/migrations')
+  .map((f) => f.slice(0, 14))
+  .filter((s) => /^\d{14}$/.test(s))
+  .sort()
+  .pop()
+const latestMs = latest
+  ? Date.UTC(
+      +latest.slice(0, 4), +latest.slice(4, 6) - 1, +latest.slice(6, 8),
+      +latest.slice(8, 10), +latest.slice(10, 12), +latest.slice(12, 14)
+    )
+  : 0
+let stampBase = Math.max(Date.now(), latestMs + 60_000)
+for (const [chapterKey, bundle] of Object.entries(bundles)) {
+  // Guard: the bundle must survive JSON round-tripping unchanged (functions,
+  // Dates or undefined values in the data would silently corrupt it).
+  const json = JSON.stringify(bundle)
+  deepStrictEqual(JSON.parse(json), bundle, `${chapterKey} bundle is not JSON-pure`)
 
-const escaped = json.replace(/'/g, "''")
-const sql = `-- GENERATED by scripts/export-chapter-content.ts — do not edit by hand.
--- Upserts the Chapter 2 content bundle into chapter_content.
+  const escaped = json.replace(/'/g, "''")
+  const sql = `-- GENERATED by scripts/export-chapter-content.ts — do not edit by hand.
 insert into chapter_content (chapter_id, content, updated_at)
-values ('${CHAPTER_KEY}', '${escaped}'::jsonb, now())
+values ('${chapterKey}', '${escaped}'::jsonb, now())
 on conflict (chapter_id)
 do update set content = excluded.content, updated_at = now();
 `
-
-const stamp = new Date()
-  .toISOString()
-  .replace(/[-:T]/g, '')
-  .slice(0, 14)
-const path = `supabase/migrations/${stamp}_ch2_content_data.sql`
-writeFileSync(path, sql)
-console.log(`Wrote ${path} (${(sql.length / 1024).toFixed(0)} KB, ` +
-  `${bundle.chapter.sections.length} sections, ${bundle.figures.length} figures, ` +
-  `${bundle.flashcards.length} flashcards)`)
+  const stamp = new Date((stampBase += 1000))
+    .toISOString()
+    .replace(/[-:T]/g, '')
+    .slice(0, 14)
+  const path = `supabase/migrations/${stamp}_${chapterKey.replace(/-/g, '_')}_content.sql`
+  writeFileSync(path, sql)
+  console.log(`Wrote ${path} (${(sql.length / 1024).toFixed(0)} KB)`)
+}
+console.log('Now run: supabase db push')

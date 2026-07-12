@@ -17,6 +17,8 @@ import type {
   TimelinePlaceActivity,
   MapIdentifyActivity,
   MapLabelActivity,
+  SourceComprehensionActivity,
+  ImageAnalysisActivity,
 } from '../types/activity'
 
 export interface ChapterBundle {
@@ -37,7 +39,11 @@ export interface ChapterBundle {
     ncert: NCERTQuestion[]
     mapIdentify: MapIdentifyActivity[]
     mapLabel: MapLabelActivity[]
+    sourceAnalysis: SourceComprehensionActivity[]
+    imageAnalysis: ImageAnalysisActivity[]
   }
+  /** present when the server served the free preview instead of the full chapter */
+  preview?: { section: string }
 }
 
 export class ChapterAccessError extends Error {
@@ -53,6 +59,16 @@ const pending: Record<string, Promise<ChapterBundle>> = {}
 
 export function getCachedBundle(chapterSlug: string): ChapterBundle | undefined {
   return cache[chapterSlug]
+}
+
+/**
+ * Drop cached preview bundles so the next route entry refetches — used after
+ * an entitlement change (purchase/grant) upgrades a preview to full access.
+ */
+export function evictPreviewBundles() {
+  for (const slug of Object.keys(cache)) {
+    if (cache[slug].preview) delete cache[slug]
+  }
 }
 
 export function loadChapterBundle(chapterSlug: string): Promise<ChapterBundle> {

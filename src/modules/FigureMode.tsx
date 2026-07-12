@@ -4,8 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FigureGallery, FigureDetail, ImageAnalysisCard } from '../components/figure'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { getFigures, CHAPTER_SECTION_COLORS } from '../data/getChapter'
-import { imageAnalysisActivities } from '../data/activities/imageAnalysis'
+import { getFigures, getImageAnalysisActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
@@ -29,8 +28,7 @@ export function FigureMode() {
 
   const figures = useMemo(() => getFigures(cid), [cid])
   const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
-  // Image-analysis practice activities are only authored for Ch1 so far.
-  const figureActivities = useMemo(() => (cid === 'ch2' ? [] : imageAnalysisActivities), [cid])
+  const figureActivities = useMemo(() => getImageAnalysisActivities(cid), [cid])
 
   const [phase, setPhase] = useState<FigurePhase>('home')
   const [selectedFigureId, setSelectedFigureId] = useState<string | null>(null)

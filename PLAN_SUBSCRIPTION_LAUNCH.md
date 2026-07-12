@@ -7,14 +7,14 @@
 
 ---
 
-## 0. The model (decided 2026-07-02; revised 2026-07-07 per Neha)
+## 0. The model (decided 2026-07-02; revised 2026-07-07 per Neha; free tier revised 2026-07-12 per Neha — see decision #26)
 
 | Dimension | Decision |
 |---|---|
 | **Positioning** | **India's CBSE prep portal — premium quality at a mass-market price.** Target = all-India CBSE Class 10 (~2M+ board candidates/yr), not just tier-1 metro schools. Neha's ruling: scale over exclusivity. Teacher credibility fronts the brand. |
 | **Access** | **OPEN TO ALL. No invite gate, no waitlist, no invite codes at all** (killed 2026-07-07). Landing page → "Start Chapter 1 free" → open signup. |
 | **Pricing** | **₹199 launch/early price per chapter, against a ₹499 list price** (shown struck through). One-time, lifetime access, no subscriptions. Whole-book bundle later, depending on uptake. |
-| **Free tier** | Ch1 **learning modes** free for every signed-up student (narrative, figures, maps, timeline, flashcards). **Practice tests are NOT in the free tier** — the test engine comes only with chapter purchase. Landing page shows a static sample of a marked answer instead (zero marking cost). |
+| **Free tier** | **REVISED 2026-07-12 (decision #26): only Ch1 SECTION 1 is free**, served as an in-chapter preview (S1 narrative + study tools filtered to S1; S2–S6 visible but locked, tap → purchase sheet). **Ch1 is a paid product like Ch2 (₹199 launch / ₹499 list).** Practice tests remain paid-only. Landing shows a static sample marked answer (zero marking cost). ~~Ch1 learning modes free for every signed-up student~~ |
 | **Test marking** | **Two tiers per paper:** (1) **AI marking included** with the chapter — instant, per-point against the CBSE scheme, unlimited attempts. (2) **Human "CBSE Examiner" marking as a paid add-on per paper** (Neha reviews with AI pre-marking in her queue; 48–72h turnaround; price TBD, mocked at ₹149). Every human-marked paper feeds AI calibration. |
 | **Teachers** | Unchanged — no teacher role; admin grants/revokes chapter access FOC for any account. |
 | **Anti-sharing** | Unchanged — personalised study state (progress, SM-2, attempts, marks, percentiles) + light 2-device session limits. |
@@ -235,6 +235,9 @@ One sprint ≈ one focused build week + Uday's review. Everything on `dev`; Verc
 **Closed 2026-07-12 (round 7 — FREEZE, Uday):**
 24. **Mockup gate CLOSED.** Landing = **v8 as-is** (white header; illustrated problem trio; ChatGPT iPad hero; examiner band; roadmap; 3-card pricing). All inner-page mockups (launch-01..10) frozen as the build reference. **Neha has further landing feedback — parked deliberately; the landing iterates again post-build** (it's a React page then; copy/layout changes are cheap). Theme variants (warm/adaptive) also parked.
 25. **Development starts.** Sprint plan v2 in §9.1 below is the execution order.
+
+**Round 8 (2026-07-12, mid-Sprint-2 — Neha via Uday):**
+26. **Free tier shrinks to Ch1 Section 1 only** (Neha: a full free chapter + tools is a complete free meal; students consume and never hit a paywall). Implemented as an **in-chapter preview**: unentitled users get S1 in full (narrative + S1-scoped study tools) and see S2–S6 locked inside the chapter — a stronger conversion surface than a locked shelf card. Ch1 becomes a ₹199/₹499 product (`products.preview_section='s1'` drives it; `get-chapter` trims server-side, so nothing paid ever reaches the client). **NO grandfathering** of pilot accounts (Uday: clean conversion data). Landing copy must say "first section free", not "Chapter 1 free".
 
 **Still open / assumptions to confirm:**
 - Examiner-marking add-on price (mocked ₹149/paper).

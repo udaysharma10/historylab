@@ -1,18 +1,28 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useProgressStore } from '../store/useProgressStore'
 import { useAuthContext } from '../components/auth'
-import { getChapter, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_ICONS } from '../data/getChapter'
+import { useAccess } from '../components/auth/AccessProvider'
+import { PurchaseSheet } from '../components/purchase/PurchaseSheet'
+import { chapterKey } from '../lib/contentIds'
+import { getChapter, getChapterPreview, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_ICONS } from '../data/getChapter'
 
 export function HomePage() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
   const { profile } = useAuthContext()
+  const { products } = useAccess()
+  const [sheetOpen, setSheetOpen] = useState(false)
   const cid = chapterId || 'ch1'
   const totalStars = useProgressStore((s) => s.totalStars)
   const progressSections = useProgressStore((s) => s.chapters[cid]) ?? {}
 
   const chapter = getChapter(cid)
+  // Free-preview mode: the server served only this section; the rest render
+  // locked and open the purchase sheet.
+  const previewSection = getChapterPreview(cid)
+  const product = products.find((p) => p.id === chapterKey(cid))
   const basePath = `/chapter/${cid}`
   const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
   const sectionIcons = CHAPTER_SECTION_ICONS[cid] || {}
@@ -122,6 +132,7 @@ export function HomePage() {
             const pct = progress?.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
             const started = pct > 0
             const topicCount = section.subsections.length
+            const locked = !!previewSection && section.id !== previewSection
 
             return (
               <motion.button
@@ -132,13 +143,17 @@ export function HomePage() {
                 transition={{ delay: i * 0.07 }}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.99 }}
-                onClick={() => navigate(`${basePath}/section/${section.id}`)}
+                onClick={() => (locked ? setSheetOpen(true) : navigate(`${basePath}/section/${section.id}`))}
               >
                 <span
                   className="absolute right-3.5 top-3.5 text-[10.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide"
-                  style={{ backgroundColor: color + '1A', color }}
+                  style={
+                    locked
+                      ? { backgroundColor: '#C99A3A1A', color: '#B5841F' }
+                      : { backgroundColor: color + '1A', color }
+                  }
                 >
-                  {started ? 'Continue' : 'Start'}
+                  {locked ? '🔒 Unlock' : started ? 'Continue' : 'Start'}
                 </span>
                 <div className="flex items-center gap-3 mt-1">
                   <div
@@ -149,7 +164,9 @@ export function HomePage() {
                   </div>
                   <div className="min-w-0 pr-12">
                     <h3 className="font-display text-base font-semibold leading-[1.18] text-hist-navy mb-0.5">{section.title}</h3>
-                    <div className="text-xs font-semibold text-hist-muted">{topicCount} topics · 1 quiz</div>
+                    <div className="text-xs font-semibold text-hist-muted">
+                      {locked ? 'Unlock the chapter to read' : `${topicCount} topics · 1 quiz`}
+                    </div>
                   </div>
                 </div>
                 <div className="h-1.5 rounded-full mt-3.5 overflow-hidden" style={{ backgroundColor: '#EDE7F0' }}>
@@ -193,6 +210,16 @@ export function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* Purchase sheet for locked (preview-mode) sections */}
+      {product && (
+        <PurchaseSheet
+          product={product}
+          chapterTitle={chapter.title}
+          open={sheetOpen}
+          onClose={() => setSheetOpen(false)}
+        />
+      )}
     </div>
   )
 }

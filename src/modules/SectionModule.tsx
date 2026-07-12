@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { getChapter, CHAPTER_SECTION_COLORS } from '../data/getChapter'
+import { getChapter, getChapterPreview, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { SectionHeader } from '../components/layout/SectionHeader'
 import { NarrativeMode } from './NarrativeMode'
 import { useProgressStore } from '../store/useProgressStore'
@@ -19,6 +19,13 @@ export function SectionModule() {
 
   const chapter = getChapter(cid)
   const section = chapter?.sections.find((s) => s.id === sectionId)
+
+  // Preview mode: deep links to locked sections bounce to the chapter home
+  // (where the locked card opens the purchase sheet).
+  const previewSection = getChapterPreview(cid)
+  if (previewSection && sectionId !== previewSection) {
+    return <Navigate to={basePath} replace />
+  }
 
   if (!section) {
     return (

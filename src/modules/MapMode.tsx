@@ -133,6 +133,7 @@ export function MapMode() {
         <AnimatePresence mode="wait">
           <motion.div key={activity.id}>
             <MapIdentifyCard
+              chapterId={cid}
               activity={activity}
               sectionColor={color}
               questionNumber={currentIndex + 1}
@@ -171,6 +172,7 @@ export function MapMode() {
         <AnimatePresence mode="wait">
           <motion.div key={activity.id}>
             <MapLabelCard
+              chapterId={cid}
               activity={activity}
               sectionColor={color}
               questionNumber={currentIndex + 1}
