@@ -45,7 +45,8 @@ export function AdminPanel() {
   const { profile } = useAuthContext()
   const { isAdmin, loading: accessLoading, products, refresh } = useAccess()
 
-  const [tab, setTab] = useState<'users' | 'purchases'>('users')
+  const [tab, setTab] = useState<'users' | 'purchases' | 'pricing'>('users')
+  const [priceEdits, setPriceEdits] = useState<Record<string, { price: string; list: string }>>({})
   const [users, setUsers] = useState<AdminUser[]>([])
   const [entitlements, setEntitlements] = useState<EntitlementRow[]>([])
   const [purchases, setPurchases] = useState<PurchaseRow[]>([])
@@ -148,7 +149,7 @@ export function AdminPanel() {
 
         {/* Tabs */}
         <div className="flex gap-2 mb-5">
-          {(['users', 'purchases'] as const).map((t) => (
+          {(['users', 'purchases', 'pricing'] as const).map((t) => (
             <button
               key={t}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -156,7 +157,11 @@ export function AdminPanel() {
               }`}
               onClick={() => setTab(t)}
             >
-              {t === 'users' ? `Users (${users.length})` : `Purchases (${purchases.length})`}
+              {t === 'users'
+                ? `Users (${users.length})`
+                : t === 'purchases'
+                  ? `Purchases (${purchases.length})`
+                  : 'Pricing'}
             </button>
           ))}
         </div>
@@ -286,6 +291,83 @@ export function AdminPanel() {
               </div>
             )}
           </>
+        )}
+
+        {tab === 'pricing' && (
+          <div className="bg-white rounded-2xl shadow-card p-4 space-y-4">
+            <p className="text-xs text-gray-400 font-body">
+              Prices update everywhere instantly (locked cards, purchase sheet, landing). Amounts
+              in rupees; “List” is the struck-through price — leave blank for none.
+            </p>
+            {products.map((p) => {
+              const edit = priceEdits[p.id] ?? {
+                price: String(p.price_paise / 100),
+                list: p.list_price_paise != null ? String(p.list_price_paise / 100) : '',
+              }
+              const dirty =
+                Number(edit.price) * 100 !== p.price_paise ||
+                (edit.list === '' ? null : Number(edit.list) * 100) !== p.list_price_paise
+              return (
+                <div key={p.id} className="flex flex-wrap items-center gap-3 border-b border-hist-line last:border-0 pb-3 last:pb-0">
+                  <div className="flex-1 min-w-[180px]">
+                    <div className="font-display font-bold text-sm text-hist-dark">{p.name}</div>
+                    <div className="font-body text-[11px] text-gray-400">
+                      {p.id} · {p.is_free ? 'free' : p.kind}
+                      {p.preview_section ? ` · preview: ${p.preview_section}` : ''}
+                    </div>
+                  </div>
+                  <label className="text-xs font-body text-gray-500">
+                    ₹{' '}
+                    <input
+                      type="number"
+                      min="0"
+                      value={edit.price}
+                      onChange={(e) => setPriceEdits((s) => ({ ...s, [p.id]: { ...edit, price: e.target.value } }))}
+                      className="w-20 px-2 py-1.5 rounded-lg border border-gray-200 focus:border-hist-blue focus:outline-none"
+                    />
+                  </label>
+                  <label className="text-xs font-body text-gray-500">
+                    List ₹{' '}
+                    <input
+                      type="number"
+                      min="0"
+                      value={edit.list}
+                      onChange={(e) => setPriceEdits((s) => ({ ...s, [p.id]: { ...edit, list: e.target.value } }))}
+                      className="w-20 px-2 py-1.5 rounded-lg border border-gray-200 focus:border-hist-blue focus:outline-none"
+                    />
+                  </label>
+                  <button
+                    className="text-xs font-semibold px-3 py-1.5 rounded-full bg-hist-gold text-white disabled:opacity-40"
+                    disabled={busy || !dirty || edit.price === '' || Number.isNaN(Number(edit.price))}
+                    onClick={async () => {
+                      setBusy(true)
+                      setError(null)
+                      const { error: err } = await supabase
+                        .from('products')
+                        .update({
+                          price_paise: Math.round(Number(edit.price) * 100),
+                          list_price_paise:
+                            edit.list === '' ? null : Math.round(Number(edit.list) * 100),
+                        })
+                        .eq('id', p.id)
+                      if (err) setError(`Price update failed: ${err.message}`)
+                      else {
+                        setPriceEdits((s) => {
+                          const next = { ...s }
+                          delete next[p.id]
+                          return next
+                        })
+                        await refresh()
+                      }
+                      setBusy(false)
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              )
+            })}
+          </div>
         )}
 
         {tab === 'purchases' && (
