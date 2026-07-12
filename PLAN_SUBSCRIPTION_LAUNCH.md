@@ -174,6 +174,25 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 
 **Effort:** S0+S1 ≈ a few focused weeks (heavy infra exists; the work is entitlements + content-server move + one-time payment flow + admin panel). The test engine (S2) is the biggest net-new build — content authoring (papers + marking schemes) is the long pole, not code. **Launch = end of S2's test-engine work** (~sprint 5–6 of the 7-sprint pipeline).
 
+### 9.1 Sprint plan v2 (LOCKED 2026-07-12 — supersedes the sprint sketch above where they differ)
+
+One sprint ≈ one focused build week + Uday's review. Everything on `dev`; Vercel preview per sprint; merge to `main` only on approval.
+
+| # | Sprint | Builds | Exit test |
+|---|---|---|---|
+| **0** | **Personalised state** | Migrations: `student_progress`, `flashcard_state` (SM-2), `activity_logs` (chapter-aware, RLS). Zustand stores → offline-first sync. One-time migration of pilot students' localStorage progress (keep-highest merge). | Sign in on a second device → progress + flashcard schedule follow. Pilot students lose nothing. |
+| **1** | **Access & admin** | Migrations: `products`, `purchases`, `entitlements`, `examiner_reviews`, `class_interest`, `parent_updates` (newsletter) + RLS + `has_access()`. Signup rework: guardian email (required) + DPDPA consent, student/parent toggle. Admin panel v1: create accounts, grant/revoke chapters, purchases view. Retire the Round-8 client allowlist (admin grants replace it). | Onboard a new cohort + grant Ch2 entirely from admin UI; a granted account sees Ch2 exactly like Ch1. |
+| **2** | **Paywall + public face** | Ch2 content → `chapter_content` (server-side) + `get-chapter` Edge Function; client lazy-load + locked-chapter UI + purchase sheet + **ask-your-parent handoff** (WhatsApp/email to guardian w/ progress + checkout link). **Landing page (v8) built as the public React route** (`/` signed-out) + class-interest + newsletter captures. ToS/Privacy/Refund pages. Domain historylab.in wired (Vercel + Supabase auth + OAuth origins). | DevTools cannot read Ch2 without entitlement; landing live on historylab.in capturing emails. |
+| **3** | **Money (test mode)** | `create-order` + `razorpay-webhook` (signature-verified, idempotent) + purchase/success/pending states + refund→revoke flow + account page (chapters, invoices, examiner orders). Full test-mode E2E. | Test-mode rupee → webhook → entitlement → content, zero manual steps; refund revokes. |
+| **4** | **Test engine core** | Server-side `papers`/`questions` + `attempts`/`answers` schema; paper player (server timer, autosave, palette, submit); objective auto-marking; Test Centre + attempts history. **Paper authoring format + admin upload so Neha starts authoring THIS sprint** (her pace is the launch long pole). | A full Ch2 paper is attemptable end-to-end with objective marks; Neha has authored ≥1 paper in the format. |
+| **5** | **Marking** | `mark-answer` Edge Function (Claude vs marking scheme, per-point), results/feedback UI (per-point ✓/✗, marker's notes, model answers, re-check queue), Neha calibration set + adjudication in admin. **Examiner add-on**: ₹149 purchase → `examiner_reviews` queue → Neha's AI-pre-marked review UI → returned paper w/ examiner badge. | AI marks match Neha's marking on the calibration set to agreed tolerance; one examiner review completes the full loop. |
+| **6** | **Hardening → LAUNCH** | Email/password auth; 2-device session limits + new-device alerts; parent weekly email (provider: Resend/Postmark); analytics funnel (privacy-friendly); SEO/OG + landing prerender; live Razorpay keys; real testimonial quotes in. **PUBLIC LAUNCH.** | A stranger can find, sign up, study free Ch1, parent pays ₹199, student sits a marked paper — unassisted. |
+
+**Post-launch immediate:** landing iteration round with Neha's parked feedback · hero-image debt (illustrated story-card headers + try-a-question hook in the app) · bundle SKU per uptake · score cards/gamification (S3).
+
+**External gates (Uday/Neha, parallel):** Teknomatics Razorpay KYC (gates Sprint 3 live keys — start NOW) · GST readiness · domain DNS access (gates Sprint 2) · Neha's paper authoring from Sprint 4 + marking-calibration sessions in Sprint 5 · 2 real student quotes (Sprint 6).
+**Access Claude needs:** Supabase project (CLI access token or Uday runs migrations), Razorpay test keys (Sprint 3), Vercel env vars, email-provider key (Sprint 6).
+
 ---
 
 ## 10. Decision log
@@ -212,6 +231,10 @@ Per-chapter **CBSE-pattern papers**: same question typology and marking scheme a
 21. **Anonymity:** Neha is not named/shown anywhere (she is a serving head history teacher). Public identity = **"Senior CBSE Examiner, 20 years' experience, onboarded by the portal."**
 22. **No public capacity/slot messaging** — no counters, no "sold out" states. Internal queue management; pivot if volumes grow.
 23. Landing layout = **v5/v6 band grammar** (Uday: "layout looks better"). Header/theme temperature clash flagged → v6 ships three header variants (white / all-warm / adaptive) for Uday+Neha to pick.
+
+**Closed 2026-07-12 (round 7 — FREEZE, Uday):**
+24. **Mockup gate CLOSED.** Landing = **v8 as-is** (white header; illustrated problem trio; ChatGPT iPad hero; examiner band; roadmap; 3-card pricing). All inner-page mockups (launch-01..10) frozen as the build reference. **Neha has further landing feedback — parked deliberately; the landing iterates again post-build** (it's a React page then; copy/layout changes are cheap). Theme variants (warm/adaptive) also parked.
+25. **Development starts.** Sprint plan v2 in §9.1 below is the execution order.
 
 **Still open / assumptions to confirm:**
 - Examiner-marking add-on price (mocked ₹149/paper).
