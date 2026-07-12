@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../components/auth'
 import { useAccess } from '../components/auth/AccessProvider'
+import { PurchaseSheet } from '../components/purchase/PurchaseSheet'
+import { chapterKey } from '../lib/contentIds'
 import { historyBook } from '../data/books'
 
 function getGreeting(): string {
@@ -14,7 +17,8 @@ function getGreeting(): string {
 export function BookHome() {
   const navigate = useNavigate()
   const { profile } = useAuthContext()
-  const { canAccessChapter } = useAccess()
+  const { canAccessChapter, products } = useAccess()
+  const [sheetChapter, setSheetChapter] = useState<string | null>(null)
   const firstName = profile.name.split(' ')[0]
   // Note (Sprint 1): the old auto-redirect of admin emails to /dashboard is
   // removed — admins (incl. Neha) use the app itself; Dashboard/Admin are
@@ -47,28 +51,38 @@ export function BookHome() {
         <h2 className="font-display text-lg font-bold text-hist-dark mb-4">Chapters</h2>
         <div className="space-y-3">
           {historyBook.chapters.map((chapter, i) => {
-            // A chapter is open only if it's built AND this user is allowed in.
-            // Gated chapters the user can't open are shown exactly like the
-            // not-yet-built ones ("Coming Soon") so a trial student just sees Ch1.
-            const isLive = canAccessChapter(chapter.id)
+            // Three states: open (free or entitled), locked (built + purchasable
+            // — shown warm and desirable, not greyed), coming soon (not built).
+            const isOpen = canAccessChapter(chapter.id)
+            const product = products.find((p) => p.id === chapterKey(chapter.id))
+            const isLocked =
+              !isOpen && chapter.status === 'live' && !!product && !product.is_free
+            const clickable = isOpen || isLocked
+            const price = product ? `₹${(product.price_paise / 100).toFixed(0)}` : ''
+            const listPrice = product?.list_price_paise
+              ? `₹${(product.list_price_paise / 100).toFixed(0)}`
+              : null
             return (
               <motion.button
                 key={chapter.id}
                 className={`w-full text-left bg-white rounded-2xl p-5 shadow-card transition-shadow ${
-                  isLive ? 'hover:shadow-card-hover' : 'opacity-70 cursor-default'
+                  clickable ? 'hover:shadow-card-hover' : 'opacity-70 cursor-default'
                 }`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}
-                whileHover={isLive ? { scale: 1.01 } : {}}
-                whileTap={isLive ? { scale: 0.99 } : {}}
-                onClick={() => isLive && navigate(`/chapter/${chapter.id}`)}
+                whileHover={clickable ? { scale: 1.01 } : {}}
+                whileTap={clickable ? { scale: 0.99 } : {}}
+                onClick={() => {
+                  if (isOpen) navigate(`/chapter/${chapter.id}`)
+                  else if (isLocked) setSheetChapter(chapter.id)
+                }}
               >
                 <div className="flex items-start gap-4">
                   {/* Chapter number badge */}
                   <div
                     className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0"
-                    style={{ backgroundColor: isLive ? `${historyBook.color}15` : '#F3F4F6' }}
+                    style={{ backgroundColor: clickable ? `${historyBook.color}15` : '#F3F4F6' }}
                   >
                     {chapter.icon}
                   </div>
@@ -77,16 +91,22 @@ export function BookHome() {
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span
                         className="text-xs font-bold px-2.5 py-0.5 rounded-full text-white"
-                        style={{ backgroundColor: isLive ? historyBook.color : '#9CA3AF' }}
+                        style={{ backgroundColor: clickable ? historyBook.color : '#9CA3AF' }}
                       >
                         Chapter {chapter.number}
                       </span>
-                      {chapter.isFree && (
+                      {isOpen && chapter.isFree && (
                         <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
                           Free
                         </span>
                       )}
-                      {!isLive && (
+                      {isLocked && (
+                        <span className="text-xs font-bold text-hist-gold bg-hist-gold/10 px-2 py-0.5 rounded-full border border-hist-gold/30">
+                          {listPrice && <s className="mr-1 opacity-60">{listPrice}</s>}
+                          {price} · Unlock
+                        </span>
+                      )}
+                      {!isOpen && !isLocked && (
                         <span className="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
                           Coming Soon
                         </span>
@@ -98,14 +118,24 @@ export function BookHome() {
                     <p className="text-xs text-gray-400 font-body mt-1">{chapter.subtitle}</p>
                   </div>
 
-                  {/* Arrow for live chapters */}
-                  {isLive && (
+                  {/* Arrow (open) or lock (purchasable) */}
+                  {isOpen && (
                     <svg
                       width="20" height="20" viewBox="0 0 24 24" fill="none"
                       stroke={historyBook.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
                       className="shrink-0 mt-4"
                     >
                       <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  )}
+                  {isLocked && (
+                    <svg
+                      width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="#C99A3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                      className="shrink-0 mt-4"
+                    >
+                      <rect x="3" y="11" width="18" height="11" rx="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                     </svg>
                   )}
                 </div>
@@ -124,6 +154,21 @@ export function BookHome() {
       >
         <p>Based on NCERT textbook — Class {historyBook.classNumber} {historyBook.subject}</p>
       </motion.div>
+
+      {/* Purchase sheet for the tapped locked chapter */}
+      {(() => {
+        const ch = historyBook.chapters.find((c) => c.id === sheetChapter)
+        const product = ch ? products.find((p) => p.id === chapterKey(ch.id)) : undefined
+        if (!ch || !product) return null
+        return (
+          <PurchaseSheet
+            product={product}
+            chapterTitle={`Chapter ${ch.number} — ${ch.title}`}
+            open={!!sheetChapter}
+            onClose={() => setSheetChapter(null)}
+          />
+        )
+      })()}
     </div>
   )
 }

@@ -1,127 +1,112 @@
 import type { Chapter, KeyDate, VocabWord, SourceBox, KeyPerson } from '../types/chapter'
 import type { Figure } from '../types/figure'
 import { chapter1 } from './ch1/chapter1'
-import { chapter2 } from './ch2/chapter2'
 
-// Chapter data
+// Ch1 data (bundled — free tier)
 import { keyDates as ch1KeyDates } from './ch1/keyDates'
-import { ch2KeyDates } from './ch2/keyDates'
 import { vocabulary as ch1Vocabulary } from './ch1/vocabulary'
-import { ch2Vocabulary } from './ch2/vocabulary'
 import { sources as ch1Sources } from './ch1/sources'
-import { ch2Sources } from './ch2/sources'
 import { keyPeople as ch1KeyPeople } from './ch1/keyPeople'
-import { ch2KeyPeople } from './ch2/keyPeople'
 import { flashcards as ch1Flashcards } from './ch1/flashcards'
-import { ch2Flashcards } from './ch2/flashcards'
 import { figures as ch1Figures } from './ch1/figures'
-import { ch2Figures } from './ch2/figures'
 import { mapDefinitions as ch1Maps, getMapsBySection as ch1GetMapsBySection } from './ch1/maps'
-import { ch2MapDefinitions, getCh2MapsBySection } from './ch2/maps'
-
-// Ch1 activities
 import { mcqActivities as ch1Mcq, fillBlankActivities as ch1Fb, trueFalseActivities as ch1Tf } from './ch1/activities/quizActivities'
 import { matchActivities as ch1Match } from './ch1/activities/matchActivities'
 import { timelineActivities as ch1Timeline } from './ch1/activities/timelineActivities'
 import { ncertQuestions as ch1Ncert } from './ch1/activities/ncertQuestions'
-
-// Ch2 activities
-import { ch2McqActivities, ch2FillBlankActivities, ch2TrueFalseActivities } from './ch2/activities/quizActivities'
-import { ch2MatchActivities } from './ch2/activities/matchActivities'
-import { ch2NcertQuestions } from './ch2/activities/ncertQuestions'
-import { ch2MapIdentifyActivities, ch2MapLabelActivities } from './ch2/activities/mapActivities'
-
-// Ch1 map activities
 import { mapIdentifyActivities as ch1MapIdentify, mapLabelActivities as ch1MapLabel } from './ch1/activities/mapActivities'
 
-const chapters: Record<string, Chapter> = {
-  ch1: chapter1,
-  ch2: chapter2,
-}
+// Premium chapters (ch2+) are NOT imported — their content lives server-side
+// (chapter_content + get-chapter Edge Function, Sprint 2) and is served from
+// the session cache below after RequireChapterAccess loads it.
+import { getCachedBundle } from './chapterBundle'
 
 export function getChapter(chapterId: string): Chapter | undefined {
-  return chapters[chapterId]
+  if (chapterId === 'ch1') return chapter1
+  return getCachedBundle(chapterId)?.chapter
 }
 
 // Chapter-specific data accessors
 export function getKeyDates(chapterId: string): KeyDate[] {
-  if (chapterId === 'ch2') return ch2KeyDates
-  return ch1KeyDates
+  if (chapterId === 'ch1') return ch1KeyDates
+  return getCachedBundle(chapterId)?.keyDates ?? []
 }
 
 export function getVocabulary(chapterId: string): VocabWord[] {
-  if (chapterId === 'ch2') return ch2Vocabulary
-  return ch1Vocabulary
+  if (chapterId === 'ch1') return ch1Vocabulary
+  return getCachedBundle(chapterId)?.vocabulary ?? []
 }
 
 export function getSources(chapterId: string): SourceBox[] {
-  if (chapterId === 'ch2') return ch2Sources
-  return ch1Sources
+  if (chapterId === 'ch1') return ch1Sources
+  return getCachedBundle(chapterId)?.sources ?? []
 }
 
 export function getKeyPeople(chapterId: string): KeyPerson[] {
-  if (chapterId === 'ch2') return ch2KeyPeople
-  return ch1KeyPeople
+  if (chapterId === 'ch1') return ch1KeyPeople
+  return getCachedBundle(chapterId)?.keyPeople ?? []
 }
 
 export function getFlashcards(chapterId: string) {
-  if (chapterId === 'ch2') return ch2Flashcards
-  return ch1Flashcards
+  if (chapterId === 'ch1') return ch1Flashcards
+  return getCachedBundle(chapterId)?.flashcards ?? []
 }
 
 export function getFigures(chapterId: string): Figure[] {
-  if (chapterId === 'ch2') return ch2Figures
-  return ch1Figures
+  if (chapterId === 'ch1') return ch1Figures
+  return getCachedBundle(chapterId)?.figures ?? []
 }
 
 export function getMapDefinitions(chapterId: string) {
-  if (chapterId === 'ch2') return ch2MapDefinitions
-  return ch1Maps
+  if (chapterId === 'ch1') return ch1Maps
+  return getCachedBundle(chapterId)?.mapDefinitions ?? []
 }
 
 export function getMapsBySection(chapterId: string, sectionId: string) {
-  if (chapterId === 'ch2') return getCh2MapsBySection(sectionId)
-  return ch1GetMapsBySection(sectionId)
+  if (chapterId === 'ch1') return ch1GetMapsBySection(sectionId)
+  return (getCachedBundle(chapterId)?.mapDefinitions ?? []).filter(
+    (m) => m.sectionId === sectionId
+  )
 }
 
 export function getMcqActivities(chapterId: string) {
-  if (chapterId === 'ch2') return ch2McqActivities
-  return ch1Mcq
+  if (chapterId === 'ch1') return ch1Mcq
+  return getCachedBundle(chapterId)?.activities.mcq ?? []
 }
 
 export function getFillBlankActivities(chapterId: string) {
-  if (chapterId === 'ch2') return ch2FillBlankActivities
-  return ch1Fb
+  if (chapterId === 'ch1') return ch1Fb
+  return getCachedBundle(chapterId)?.activities.fillBlank ?? []
 }
 
 export function getTrueFalseActivities(chapterId: string) {
-  if (chapterId === 'ch2') return ch2TrueFalseActivities
-  return ch1Tf
+  if (chapterId === 'ch1') return ch1Tf
+  return getCachedBundle(chapterId)?.activities.trueFalse ?? []
 }
 
 export function getMatchActivities(chapterId: string) {
-  if (chapterId === 'ch2') return ch2MatchActivities
-  return ch1Match
+  if (chapterId === 'ch1') return ch1Match
+  return getCachedBundle(chapterId)?.activities.match ?? []
 }
 
 export function getTimelineActivities(chapterId: string) {
-  if (chapterId === 'ch2') return [] // Ch2 has no timeline ordering activities yet
-  return ch1Timeline
+  if (chapterId === 'ch1') return ch1Timeline
+  return getCachedBundle(chapterId)?.activities.timeline ?? []
 }
 
 export function getNcertQuestions(chapterId: string) {
-  if (chapterId === 'ch2') return ch2NcertQuestions
-  return ch1Ncert
+  if (chapterId === 'ch1') return ch1Ncert
+  return getCachedBundle(chapterId)?.activities.ncert ?? []
 }
 
 export function getMapIdentifyActivities(chapterId: string) {
-  if (chapterId === 'ch2') return ch2MapIdentifyActivities
-  return ch1MapIdentify
+  if (chapterId === 'ch1') return ch1MapIdentify
+  return getCachedBundle(chapterId)?.activities.mapIdentify ?? []
 }
 
 export function getMapLabelActivities(chapterId: string) {
-  if (chapterId === 'ch2') return ch2MapLabelActivities
-  return ch1MapLabel
+  if (chapterId === 'ch1') return ch1MapLabel
+  return getCachedBundle(chapterId)?.activities.mapLabel ?? []
 }
 
 // Section color configs per chapter

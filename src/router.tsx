@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react'
 import { createBrowserRouter, Navigate, Outlet, useParams } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { useAccess } from './components/auth/AccessProvider'
+import { getCachedBundle, loadChapterBundle } from './data/chapterBundle'
 import { BookHome } from './modules/BookHome'
 import { HomePage } from './modules/HomePage'
 import { SectionModule } from './modules/SectionModule'
@@ -20,9 +22,38 @@ import { AdminPanel } from './modules/AdminPanel'
 function RequireChapterAccess() {
   const { chapterId } = useParams<{ chapterId: string }>()
   const { loading, canAccessChapter } = useAccess()
+  const slug = chapterId || ''
+  const bundled = slug === 'ch1' || !!getCachedBundle(slug)
+  const [bundleState, setBundleState] = useState<'loading' | 'ready' | 'error'>(
+    bundled ? 'ready' : 'loading'
+  )
+
+  // Premium chapter content is fetched from the get-chapter Edge Function
+  // (the real paywall) and cached for the session before the route renders.
+  useEffect(() => {
+    if (loading || bundled || !canAccessChapter(slug)) return
+    let cancelled = false
+    loadChapterBundle(slug)
+      .then(() => !cancelled && setBundleState('ready'))
+      .catch(() => !cancelled && setBundleState('error'))
+    return () => {
+      cancelled = true
+    }
+  }, [slug, loading, bundled, canAccessChapter])
+
   if (loading) return null // don't bounce deep links before entitlements load
-  if (!canAccessChapter(chapterId || '')) {
+  if (!canAccessChapter(slug) || bundleState === 'error') {
     return <Navigate to="/" replace />
+  }
+  if (bundleState !== 'ready') {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <div className="text-4xl mb-3 animate-float">📜</div>
+          <p className="text-gray-400 font-body text-sm">Opening your chapter…</p>
+        </div>
+      </div>
+    )
   }
   return <Outlet />
 }
