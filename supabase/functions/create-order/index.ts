@@ -79,7 +79,13 @@ Deno.serve(async (req) => {
     })
     .select("id")
     .single();
-  if (purchaseErr || !purchase) return json({ error: "could not start purchase" }, 500);
+  if (purchaseErr || !purchase) {
+    console.error("purchase insert failed", purchaseErr);
+    return json(
+      { error: "could not start purchase", step: "purchase-insert", detail: purchaseErr?.message },
+      500,
+    );
+  }
 
   const rzpRes = await fetch("https://api.razorpay.com/v1/orders", {
     method: "POST",
@@ -95,8 +101,12 @@ Deno.serve(async (req) => {
     }),
   });
   if (!rzpRes.ok) {
-    console.error("razorpay order failed", rzpRes.status, await rzpRes.text());
-    return json({ error: "payment gateway error" }, 502);
+    const detail = await rzpRes.text();
+    console.error("razorpay order failed", rzpRes.status, detail);
+    return json(
+      { error: "payment gateway error", step: "razorpay", status: rzpRes.status, detail: detail.slice(0, 300) },
+      502,
+    );
   }
   const order = await rzpRes.json();
 

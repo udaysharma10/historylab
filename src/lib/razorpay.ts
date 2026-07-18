@@ -47,11 +47,25 @@ export async function startCheckout(productId: string, cb: CheckoutCallbacks) {
     body: { product_id: productId },
   })
   if (error || !order?.order_id) {
-    const status = (error as { context?: { status?: number } } | null)?.context?.status
+    // Surface the server's own error body — a generic message hides the cause.
+    let status: number | undefined
+    let serverMsg = ''
+    const ctx = (error as { context?: Response } | null)?.context
+    if (ctx instanceof Response) {
+      status = ctx.status
+      try {
+        const body = await ctx.clone().json()
+        serverMsg = [body.error, body.step && `step: ${body.step}`, body.detail]
+          .filter(Boolean)
+          .join(' · ')
+      } catch {
+        serverMsg = ''
+      }
+    }
     cb.onFailure(
       status === 409
         ? 'This chapter is already unlocked on your account — reload the page.'
-        : 'Could not start the payment. Please try again in a minute.'
+        : `Could not start the payment${serverMsg ? ` (${serverMsg})` : ''}. Please try again in a minute.`
     )
     return
   }
