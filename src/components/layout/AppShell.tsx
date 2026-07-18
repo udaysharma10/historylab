@@ -13,6 +13,9 @@ export function AppShell() {
   const { isAdmin } = useAccess()
   const isHome = location.pathname === '/'
   const [menuOpen, setMenuOpen] = useState(false)
+  // Google avatar URLs fail in some contexts (incognito, referrer policy) —
+  // fall back to the initial rather than a broken-image glyph.
+  const [avatarBroken, setAvatarBroken] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Close menu on outside click
@@ -99,8 +102,14 @@ export function AppShell() {
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setMenuOpen(!menuOpen)}
               >
-                {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                {profile.avatar_url && !avatarBroken ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={() => setAvatarBroken(true)}
+                  />
                 ) : (
                   <div className="w-full h-full bg-hist-blue flex items-center justify-center text-white font-display font-bold text-sm">
                     {profile.name ? profile.name[0].toUpperCase() : '?'}
