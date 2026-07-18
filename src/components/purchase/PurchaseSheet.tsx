@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthContext } from '../auth'
+import { useAccess } from '../auth/AccessProvider'
 import { useProgressStore } from '../../store/useProgressStore'
 import { startCheckout } from '../../lib/razorpay'
 import type { Product } from '../auth/AccessProvider'
@@ -18,21 +19,34 @@ type PayState = 'idle' | 'starting' | 'success' | 'error'
 
 export function PurchaseSheet({ product, chapterTitle, open, onClose }: PurchaseSheetProps) {
   const { profile } = useAuthContext()
+  const { refresh, entitledChapters } = useAccess()
   const totalStars = useProgressStore((s) => s.totalStars)
   const completedTopics = useProgressStore((s) => Object.keys(s.completedSubsections).length)
   const [payState, setPayState] = useState<PayState>('idle')
   const [payError, setPayError] = useState('')
 
+  // Redirect-style payment methods can kill the checkout's JS callbacks; the
+  // webhook still grants server-side. Re-checking entitlements on dismiss (and
+  // rendering owned products as unlocked) makes the sheet self-heal.
+  const alreadyOwned = entitledChapters.has(product.id)
+
   const pay = () => {
     setPayState('starting')
     setPayError('')
     startCheckout(product.id, {
-      onSuccess: () => setPayState('success'),
+      onSuccess: () => {
+        setPayState('success')
+        refresh()
+      },
       onFailure: (message) => {
         setPayState('error')
         setPayError(message)
+        refresh()
       },
-      onDismiss: () => setPayState('idle'),
+      onDismiss: () => {
+        setPayState('idle')
+        refresh()
+      },
     })
   }
 
@@ -90,7 +104,7 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
               </div>
             </div>
 
-            {payState === 'success' ? (
+            {payState === 'success' || alreadyOwned ? (
               <div className="text-center space-y-3">
                 <div className="text-5xl">🎉</div>
                 <p className="font-display font-bold text-hist-dark text-lg">
@@ -146,7 +160,7 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
               </div>
             )}
 
-            {payState !== 'success' && (
+            {payState !== 'success' && !alreadyOwned && (
               <button
                 className="w-full text-center text-sm text-gray-400 hover:text-gray-600 font-body mt-4"
                 onClick={onClose}
