@@ -12,6 +12,9 @@ import { MapMode } from './modules/MapMode'
 import { FigureMode } from './modules/FigureMode'
 import { FlashcardMode } from './modules/FlashcardMode'
 import { ExamPractice } from './modules/ExamPractice'
+import { TestCentre } from './modules/testcentre/TestCentre'
+import { PaperPlayer } from './modules/testcentre/PaperPlayer'
+import { AttemptResult } from './modules/testcentre/AttemptResult'
 import { TeacherDashboard } from './modules/TeacherDashboard'
 import { AdminPanel } from './modules/AdminPanel'
 import { TermsPage, PrivacyPage, RefundPage } from './modules/legal/LegalPages'
@@ -94,6 +97,9 @@ export const router = createBrowserRouter([
           { path: 'chapter/:chapterId/flashcards', element: <FlashcardMode /> },
           { path: 'chapter/:chapterId/figures', element: <FigureMode /> },
           { path: 'chapter/:chapterId/exam', element: <ExamPractice /> },
+          { path: 'chapter/:chapterId/tests', element: <TestCentre /> },
+          { path: 'chapter/:chapterId/tests/:paperId/play', element: <PaperPlayer /> },
+          { path: 'chapter/:chapterId/tests/result/:attemptId', element: <AttemptResult /> },
         ],
       },
 

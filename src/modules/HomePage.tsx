@@ -51,6 +51,7 @@ export function HomePage() {
     { id: 'flashcards', label: 'Flashcards', icon: '🃏', route: `${basePath}/flashcards`, color: '#9B5C9A', chapters: ['ch1', 'ch2'] },
     { id: 'figures', label: 'Figures', icon: '🖼️', route: `${basePath}/figures`, color: '#C2893E', chapters: ['ch1', 'ch2'] },
     { id: 'exam', label: 'Exam Prep', icon: '📝', route: `${basePath}/exam`, color: '#C36B53', chapters: ['ch1', 'ch2'] },
+    { id: 'tests', label: 'Test Centre', icon: '🎯', route: `${basePath}/tests`, color: '#7E72C2', chapters: ['ch1', 'ch2'] },
   ]
   const MODES = allModes.filter(m => m.chapters.includes(cid))
 

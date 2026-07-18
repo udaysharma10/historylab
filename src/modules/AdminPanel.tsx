@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { useAuthContext } from '../components/auth'
 import { useAccess } from '../components/auth/AccessProvider'
 import { chapterSlug } from '../lib/contentIds'
+import { PapersAdmin } from './testcentre/PapersAdmin'
 
 // Admin panel v1 (Sprint 1, plan §6): view users, grant/revoke chapter
 // entitlements (admin_grant rows — how pilot cohorts and FOC comps get
@@ -45,7 +46,7 @@ export function AdminPanel() {
   const { profile } = useAuthContext()
   const { isAdmin, loading: accessLoading, products, refresh } = useAccess()
 
-  const [tab, setTab] = useState<'users' | 'purchases' | 'pricing'>('users')
+  const [tab, setTab] = useState<'users' | 'purchases' | 'pricing' | 'papers'>('users')
   const [priceEdits, setPriceEdits] = useState<Record<string, { price: string; list: string }>>({})
   const [users, setUsers] = useState<AdminUser[]>([])
   const [entitlements, setEntitlements] = useState<EntitlementRow[]>([])
@@ -149,7 +150,7 @@ export function AdminPanel() {
 
         {/* Tabs */}
         <div className="flex gap-2 mb-5">
-          {(['users', 'purchases', 'pricing'] as const).map((t) => (
+          {(['users', 'purchases', 'pricing', 'papers'] as const).map((t) => (
             <button
               key={t}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -161,7 +162,9 @@ export function AdminPanel() {
                 ? `Users (${users.length})`
                 : t === 'purchases'
                   ? `Purchases (${purchases.length})`
-                  : 'Pricing'}
+                  : t === 'pricing'
+                    ? 'Pricing'
+                    : 'Papers'}
             </button>
           ))}
         </div>
@@ -397,6 +400,8 @@ export function AdminPanel() {
             )}
           </div>
         )}
+
+        {tab === 'papers' && <PapersAdmin />}
       </motion.div>
     </div>
   )
