@@ -29,15 +29,17 @@
   .crumb{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 2px 14px}
   .crumb b{color:var(--ink)}
 
-  .hero{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:22px 28px;border:1px solid var(--line);
-    margin-bottom:22px;display:flex;align-items:center;gap:24px}
-  .hero h1{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px}
-  .hero p{font-size:13px;font-weight:500;color:var(--muted)}
+  .hero{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:16px 24px;border:1px solid var(--line);
+    margin-bottom:20px;display:flex;align-items:center;gap:20px}
+  .hero h1{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);margin-bottom:3px}
+  .hero p{font-size:12.5px;font-weight:500;color:var(--muted)}
   .stars{display:inline-flex;align-items:center;gap:6px;background:var(--bg-1);border:1px solid var(--line);
-    padding:7px 13px;border-radius:10px;font-weight:700;font-size:12.5px;color:var(--body);margin-top:12px}
+    padding:5px 11px;border-radius:9px;font-weight:700;font-size:12px;color:var(--body);margin-top:8px}
   .stars b{color:var(--ink)}
-  .ring{position:relative;width:96px;height:96px;flex-shrink:0;display:grid;place-items:center}
-  .ring b{position:absolute;font-family:'Fraunces',serif;font-size:19px;color:var(--ink)}
+  .ring{position:relative;width:84px;height:84px;flex-shrink:0;display:grid;place-items:center}
+  .ringtxt{position:absolute;text-align:center;line-height:1.05}
+  .ringtxt b{display:block;font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink)}
+  .ringtxt span{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
 
   .band-label{display:flex;align-items:center;gap:10px;margin:4px 2px 12px}
   .band-label .num{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;
@@ -100,20 +102,20 @@
       <div class="stars">⭐ <b>64 stars</b></div>
     </div>
     <div class="ring">
-      <svg width="96" height="96" style="transform:rotate(-90deg)">
-        <circle cx="48" cy="48" r="40" stroke="#EDE6F0" stroke-width="9" fill="none"/>
-        <circle cx="48" cy="48" r="40" stroke="url(#g)" stroke-width="9" fill="none" stroke-linecap="round"
-          stroke-dasharray="251" stroke-dashoffset="118"/>
+      <svg width="84" height="84" style="transform:rotate(-90deg)">
+        <circle cx="42" cy="42" r="34" stroke="#EDE6F0" stroke-width="8" fill="none"/>
+        <circle cx="42" cy="42" r="34" stroke="url(#g)" stroke-width="8" fill="none" stroke-linecap="round"
+          stroke-dasharray="214" stroke-dashoffset="100"/>
         <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="#DC835F"/><stop offset="1" stop-color="#7E72C2"/></linearGradient></defs>
       </svg>
-      <b>53%</b>
+      <div class="ringtxt"><b>53%</b><span>chapter<br>done</span></div>
     </div>
   </div>
-  <div class="spec"><b>v2 — progress noise fixed (deliberation, 2026-07-20):</b> rule = <b>each fact appears exactly ONCE; one
-    progress system per zoom level.</b> Hero keeps the ring (chapter progress) + stars (currency, not progress). Gone from the
-    hero: "activities done" (restated the ring) and "best test" (test facts live in the Test band only). Section bars stay —
-    same system as the ring, closer zoom.</div>
+  <div class="spec"><b>v3 (deliberation, 2026-07-20):</b> ring now says what it measures — <b>"53% · CHAPTER DONE"</b> inside the
+    ring itself (biggest usability concern: a bare % is ambiguous). Hero slimmed ~20% (orientation, not action): tighter padding,
+    smaller type, ring 96→84px — "Learn the story" rises above the fold. v2 rules retained: each fact once; ring + stars only;
+    test facts live in the Test band.</div>
 
   <!-- BAND 1: LEARN -->
   <div class="band-label"><span class="num">1</span><h2>Learn the story</h2><span class="sub">4 sections · continue where you left off</span></div>
