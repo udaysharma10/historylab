@@ -37,9 +37,9 @@
     padding:5px 11px;border-radius:9px;font-weight:700;font-size:12px;color:var(--body);margin-top:8px}
   .stars b{color:var(--ink)}
   .ring{position:relative;width:84px;height:84px;flex-shrink:0;display:grid;place-items:center}
-  .ringtxt{position:absolute;text-align:center;line-height:1.05}
-  .ringtxt b{display:block;font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink)}
-  .ringtxt span{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .ringtxt{position:absolute;text-align:center;line-height:1.15}
+  .ringtxt b{display:block;font-family:'Fraunces',serif;font-size:16px;color:var(--ink)}
+  .ringtxt span{font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
 
   .band-label{display:flex;align-items:center;gap:10px;margin:4px 2px 12px}
   .band-label .num{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;
@@ -51,7 +51,7 @@
   .scard{background:var(--paper);border-radius:16px;box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:16px;position:relative}
   .scard .pill{position:absolute;right:12px;top:12px;font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase}
   .scard.next{border:2px solid var(--accent);background:linear-gradient(150deg,#FFFDFB,var(--accent-soft))}
-  .srow{display:flex;gap:11px;align-items:center}
+  .srow{display:flex;gap:11px;align-items:center;padding-right:86px}
   .sicon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
   .scard h3{font-family:'Fraunces',serif;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.2}
   .smeta{font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
@@ -61,18 +61,18 @@
   /* THE TEST BAND — v2: one layer, one CTA */
   .testband{background:linear-gradient(140deg,#453A5E,#67589B);border-radius:22px;box-shadow:var(--shadow);
     padding:28px 32px;margin-bottom:26px;color:#EFEAFB;display:flex;align-items:center;gap:30px;position:relative;overflow:hidden}
-  .testband::after{content:"🎯";position:absolute;right:-14px;bottom:-22px;font-size:120px;opacity:.08}
+  .testband::after{content:"🎯";position:absolute;right:34%;bottom:-40px;font-size:120px;opacity:.05}
   .testband .eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.6px;color:#C9BEEC;margin-bottom:6px;display:block}
   .testband h2{font-family:'Fraunces',serif;font-size:23px;font-weight:600;color:#fff;margin-bottom:6px}
   .testband p{font-size:13px;font-weight:500;color:#CFC7E8;max-width:46ch}
   .statline{font-size:12.5px;font-weight:700;color:#C9BEEC;margin-top:13px}
   .statline b{color:#fff;font-family:'Fraunces',serif;font-size:14.5px}
   .cta{flex-shrink:0;text-align:center;position:relative;z-index:1}
-  .btn-start{display:inline-flex;flex-direction:column;align-items:center;gap:2px;border:none;cursor:pointer;
-    font-family:'Inter',sans-serif;background:var(--accent);color:#fff;border-radius:15px;padding:16px 34px;
-    box-shadow:0 8px 22px rgba(220,131,95,.45)}
+  .btn-start{display:inline-flex;flex-direction:column;align-items:center;gap:3px;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif;background:#C05F35;color:#fff;border-radius:15px;padding:16px 34px;
+    box-shadow:0 8px 22px rgba(192,95,53,.5)}
   .btn-start b{font-size:16px;font-weight:800}
-  .btn-start span{font-size:11px;font-weight:700;color:#FFE3D3}
+  .btn-start span{font-size:11.5px;font-weight:700;color:#FFF3EC}
   .allpapers{display:block;margin-top:11px;font-size:12px;font-weight:700;color:#C9BEEC;text-decoration:none}
 
   /* TOOLS — v2: alive, with identity + payload */
@@ -109,13 +109,16 @@
         <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="#DC835F"/><stop offset="1" stop-color="#7E72C2"/></linearGradient></defs>
       </svg>
-      <div class="ringtxt"><b>53%</b><span>chapter<br>done</span></div>
+      <div class="ringtxt"><b>53%</b><span>chapter done</span></div>
     </div>
   </div>
-  <div class="spec"><b>v3 (deliberation, 2026-07-20):</b> ring now says what it measures — <b>"53% · CHAPTER DONE"</b> inside the
-    ring itself (biggest usability concern: a bare % is ambiguous). Hero slimmed ~20% (orientation, not action): tighter padding,
-    smaller type, ring 96→84px — "Learn the story" rises above the fold. v2 rules retained: each fact once; ring + stars only;
-    test facts live in the Test band.</div>
+  <div class="spec"><b>v3–v4 (deliberation, 2026-07-20):</b> ring says what it measures — <b>"53% · chapter done"</b> in-ring
+    (a bare % is ambiguous). Hero slimmed ~20% (orientation, not action). <b>v4 render-review fixes:</b> section titles reserve
+    space for the status pill (no more clipping); <b>progress bars now appear ONLY on in-progress sections</b> — ✓ Done and
+    Not-started cards carry no bar (the full green bar was band 1's loudest element on its least actionable card; empty tracks
+    said nothing) — this resolves the open bars question; Start-button uses the deeper brand orange with near-white sub-label
+    (old peach-on-orange failed contrast); 🎯 watermark moved off the "All papers" link. Standing rules: each fact once; ring +
+    stars only; test facts live in the Test band.</div>
 
   <!-- BAND 1: LEARN -->
   <div class="band-label"><span class="num">1</span><h2>Learn the story</h2><span class="sub">4 sections · continue where you left off</span></div>
@@ -124,7 +127,6 @@
       <span class="pill" style="background:var(--s4-bg);color:var(--s4)">✓ Done</span>
       <div class="srow"><div class="sicon" style="background:var(--s1-bg)">⚔️</div>
         <div><h3>The First World War, Khilafat and Non-Cooperation</h3><div class="smeta">6 topics · quiz 8/8</div></div></div>
-      <div class="sprog"><i style="width:100%;background:var(--s4)"></i></div>
     </div>
     <div class="scard next">
       <span class="pill" style="background:var(--accent);color:#fff">Continue →</span>
@@ -136,13 +138,11 @@
       <span class="pill" style="background:#F3F0F5;color:var(--muted)">Not started</span>
       <div class="srow"><div class="sicon" style="background:var(--s3-bg)">🧂</div>
         <div><h3>Towards Civil Disobedience</h3><div class="smeta">6 topics · 1 quiz</div></div></div>
-      <div class="sprog"><i style="width:0%;background:var(--s3)"></i></div>
     </div>
     <div class="scard">
       <span class="pill" style="background:#F3F0F5;color:var(--muted)">Not started</span>
       <div class="srow"><div class="sicon" style="background:var(--s4-bg)">🇮🇳</div>
         <div><h3>The Sense of Collective Belonging</h3><div class="smeta">4 topics · 1 quiz</div></div></div>
-      <div class="sprog"><i style="width:0%;background:var(--s4)"></i></div>
     </div>
   </div>
 
