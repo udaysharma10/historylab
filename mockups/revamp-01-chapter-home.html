@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HistoryLab — Revamp 01 · Chapter Home (the learning loop)</title>
+<title>HistoryLab — Revamp 01 v2 · Chapter Home (the learning loop)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
     --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
     --s1:#C36B53; --s1-bg:#F9E9E3; --s2:#5571B5; --s2-bg:#E9ECF8;
     --s3:#C2893E; --s3-bg:#F7EFDD; --s4:#5C9368; --s4-bg:#E8F1E9; --gold:#C99A3A;
+    --teal:#3F8E84; --teal-bg:#E4F1EF; --purple:#9B5C9A; --purple-bg:#F3E9F3;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
@@ -32,9 +33,9 @@
     margin-bottom:22px;display:flex;align-items:center;gap:24px}
   .hero h1{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px}
   .hero p{font-size:13px;font-weight:500;color:var(--muted)}
-  .chiprow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-  .chip{display:flex;align-items:center;gap:6px;background:var(--bg-1);border:1px solid var(--line);
-    padding:7px 12px;border-radius:10px;font-weight:700;font-size:12px;color:var(--body)}
+  .stars{display:inline-flex;align-items:center;gap:6px;background:var(--bg-1);border:1px solid var(--line);
+    padding:7px 13px;border-radius:10px;font-weight:700;font-size:12.5px;color:var(--body);margin-top:12px}
+  .stars b{color:var(--ink)}
   .ring{position:relative;width:96px;height:96px;flex-shrink:0;display:grid;place-items:center}
   .ring b{position:absolute;font-family:'Fraunces',serif;font-size:19px;color:var(--ink)}
 
@@ -55,32 +56,32 @@
   .sprog{height:5px;border-radius:99px;background:#EDE7F0;margin-top:12px;overflow:hidden}
   .sprog i{display:block;height:100%;border-radius:99px}
 
-  /* THE ELEVATED TEST BAND */
+  /* THE TEST BAND — v2: one layer, one CTA */
   .testband{background:linear-gradient(140deg,#453A5E,#67589B);border-radius:22px;box-shadow:var(--shadow);
-    padding:26px 30px;margin-bottom:26px;color:#EFEAFB;display:flex;align-items:center;gap:26px;position:relative;overflow:hidden}
+    padding:28px 32px;margin-bottom:26px;color:#EFEAFB;display:flex;align-items:center;gap:30px;position:relative;overflow:hidden}
   .testband::after{content:"🎯";position:absolute;right:-14px;bottom:-22px;font-size:120px;opacity:.08}
   .testband .eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.6px;color:#C9BEEC;margin-bottom:6px;display:block}
-  .testband h2{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#fff;margin-bottom:5px}
-  .testband p{font-size:13px;font-weight:500;color:#CFC7E8;max-width:44ch}
-  .tstats{display:flex;gap:11px;margin-top:14px}
-  .tstat{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:9px 15px;text-align:center}
-  .tstat b{display:block;font-family:'Fraunces',serif;font-size:19px;color:#fff}
-  .tstat span{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#B8ADDC}
-  .nextpaper{background:#FFFFFF;border-radius:16px;padding:18px 20px;min-width:280px;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-  .nextpaper .tag{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--lav);
-    background:var(--lav-soft);padding:3px 9px;border-radius:999px}
-  .nextpaper h3{font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:var(--ink);margin:8px 0 4px}
-  .nextpaper .meta{font-size:11.5px;font-weight:600;color:var(--muted);margin-bottom:12px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
-    font-family:'Inter',sans-serif;font-weight:700;font-size:13px;padding:11px 18px;border-radius:11px;width:100%}
-  .btn-accent{background:var(--accent);color:#fff;box-shadow:0 5px 14px rgba(220,131,95,.35)}
+  .testband h2{font-family:'Fraunces',serif;font-size:23px;font-weight:600;color:#fff;margin-bottom:6px}
+  .testband p{font-size:13px;font-weight:500;color:#CFC7E8;max-width:46ch}
+  .statline{font-size:12.5px;font-weight:700;color:#C9BEEC;margin-top:13px}
+  .statline b{color:#fff;font-family:'Fraunces',serif;font-size:14.5px}
+  .cta{flex-shrink:0;text-align:center;position:relative;z-index:1}
+  .btn-start{display:inline-flex;flex-direction:column;align-items:center;gap:2px;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif;background:var(--accent);color:#fff;border-radius:15px;padding:16px 34px;
+    box-shadow:0 8px 22px rgba(220,131,95,.45)}
+  .btn-start b{font-size:16px;font-weight:800}
+  .btn-start span{font-size:11px;font-weight:700;color:#FFE3D3}
+  .allpapers{display:block;margin-top:11px;font-size:12px;font-weight:700;color:#C9BEEC;text-decoration:none}
 
-  .tools{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  /* TOOLS — v2: alive, with identity + payload */
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .tool{background:var(--paper);border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-sm);
-    padding:14px;text-align:center}
-  .tool .ticon{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);display:grid;place-items:center;
-    font-size:17px;margin:0 auto 8px;border:1px solid var(--line)}
-  .tool b{font-size:12px;font-weight:800;color:var(--ink)}
+    padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .12s, box-shadow .12s}
+  .tool:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .tool .ticon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex-shrink:0}
+  .tool b{display:block;font-size:13px;font-weight:800;color:var(--ink)}
+  .tool span{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .tool .arrow{margin-left:auto;color:var(--muted);font-weight:800}
 
   .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:10px 0 22px;
     font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
@@ -96,11 +97,7 @@
     <div style="flex:1">
       <h1>Nationalism in India</h1>
       <p>Welcome back, Aarav. Pick up the story where you left off — or test what you've learnt.</p>
-      <div class="chiprow">
-        <div class="chip">⭐ <b style="color:var(--ink)">64 stars</b></div>
-        <div class="chip">✅ <b style="color:var(--ink)">11 of 21 activities</b></div>
-        <div class="chip">📝 <b style="color:var(--ink)">Best test: 21/29</b></div>
-      </div>
+      <div class="stars">⭐ <b>64 stars</b></div>
     </div>
     <div class="ring">
       <svg width="96" height="96" style="transform:rotate(-90deg)">
@@ -113,8 +110,10 @@
       <b>53%</b>
     </div>
   </div>
-  <div class="spec"><b>Change vs today:</b> the welcome hero now carries the student's <b>best test score</b> as a first-class chip —
-    the loop's destination is visible from the first screen. "Activities" wording unchanged (topics + quizzes, decision #29).</div>
+  <div class="spec"><b>v2 — progress noise fixed (deliberation, 2026-07-20):</b> rule = <b>each fact appears exactly ONCE; one
+    progress system per zoom level.</b> Hero keeps the ring (chapter progress) + stars (currency, not progress). Gone from the
+    hero: "activities done" (restated the ring) and "best test" (test facts live in the Test band only). Section bars stay —
+    same system as the ring, closer zoom.</div>
 
   <!-- BAND 1: LEARN -->
   <div class="band-label"><span class="num">1</span><h2>Learn the story</h2><span class="sub">4 sections · continue where you left off</span></div>
@@ -145,43 +144,45 @@
     </div>
   </div>
 
-  <!-- BAND 2: TEST — THE ELEVATION -->
+  <!-- BAND 2: TEST — v2 single layer -->
   <div class="band-label"><span class="num">2</span><h2>Test yourself</h2><span class="sub">board-pattern papers, marked like CBSE marks</span></div>
   <div class="testband">
     <div style="flex:1;position:relative;z-index:1">
       <span class="eyebrow">The real exam rehearsal</span>
       <h2>Mock Test Centre</h2>
       <p>Timed papers set by a Senior CBSE Examiner — every written answer judged against the official marking scheme.</p>
-      <div class="tstats">
-        <div class="tstat"><b>2</b><span>Papers</span></div>
-        <div class="tstat"><b>21/29</b><span>Best score</span></div>
-        <div class="tstat"><b>3</b><span>Attempts</span></div>
-      </div>
+      <div class="statline">Best <b>21/29</b> &nbsp;·&nbsp; 3 attempts &nbsp;·&nbsp; 2 papers</div>
     </div>
-    <div class="nextpaper">
-      <span class="tag">Recommended next</span>
-      <h3>S1 · WWI, Khilafat &amp; Non-Cooperation — Sectional</h3>
-      <div class="meta">⏱ 30 min · 💯 20 marks · you just finished this section</div>
-      <button class="btn btn-accent">Start mock test →</button>
+    <div class="cta">
+      <button class="btn-start">
+        <b>Start mock test →</b>
+        <span>S1 Sectional · 30 min · 20 marks</span>
+      </button>
+      <a class="allpapers" href="#">All papers &amp; past attempts →</a>
     </div>
   </div>
-  <div class="spec"><b>THE core change (Neha's critique):</b> the Test Centre leaves the tools drawer and becomes a
-    <b>full-width, visually distinct band</b> — the only dark surface on the page, impossible to miss, placed as step 2 of the loop.
-    It carries live state (best score, attempts) and a <b>recommended next paper</b> chosen by a simple rule
-    (finished a section → its sectional paper; finished the chapter → the board-pattern paper). Tapping anywhere opens the merged
-    Practice &amp; Mock Tests page (revamp-02).</div>
+  <div class="spec"><b>v2 — CTA de-layered (deliberation, 2026-07-20):</b> the nested "Recommended next" card is GONE. The band
+    is now two beats: identity left, <b>one giant Start button</b> right — the button IS the recommendation (paper name + meta
+    live inside it; picked by the same rule: finished a section → its sectional; finished the chapter → board paper). The three
+    stat boxes collapsed into one quiet stat line. Secondary path = a single text link to the full Practice &amp; Mock Tests page
+    (revamp-02).</div>
 
-  <!-- BAND 3: REVISE -->
+  <!-- BAND 3: REVISE — v2 alive -->
   <div class="band-label"><span class="num">3</span><h2>Revise with tools</h2><span class="sub">quick whole-chapter revision</span></div>
   <div class="tools">
-    <div class="tool"><div class="ticon">📅</div><b>Timeline</b></div>
-    <div class="tool"><div class="ticon">🗺️</div><b>Maps</b></div>
-    <div class="tool"><div class="ticon">🃏</div><b>Flashcards</b></div>
-    <div class="tool"><div class="ticon">🖼️</div><b>Figures</b></div>
+    <div class="tool"><div class="ticon" style="background:var(--s2-bg)">📅</div>
+      <div><b>Timeline</b><span>20 key dates, 1915–1942</span></div><span class="arrow">→</span></div>
+    <div class="tool"><div class="ticon" style="background:var(--teal-bg)">🗺️</div>
+      <div><b>Maps</b><span>9 board-map places</span></div><span class="arrow">→</span></div>
+    <div class="tool"><div class="ticon" style="background:var(--purple-bg)">🃏</div>
+      <div><b>Flashcards</b><span>100 smart cards · spaced repetition</span></div><span class="arrow">→</span></div>
+    <div class="tool"><div class="ticon" style="background:var(--s3-bg)">🖼️</div>
+      <div><b>Figures</b><span>17 NCERT figures, explorable</span></div><span class="arrow">→</span></div>
   </div>
-  <div class="spec"><b>Change vs today:</b> the tools strip shrinks from 6 tiles to 4 — <b>"Exam Prep" and "Test Centre" tiles are gone</b>
-    (both merged into the Test band / revamp-02). The numbered bands (1 Learn · 2 Test · 3 Revise) teach the loop by layout alone;
-    the same three beats become the one-time first-run pointer for new students.</div>
+  <div class="spec"><b>v2 — tools brought back to life (deliberation, 2026-07-20):</b> flat squares → horizontal mini-cards with
+    per-tool identity colours, a <b>content payload</b> line that invites the click ("20 key dates", "100 smart cards"…), hover
+    lift, arrow. Payload counts come from the chapter bundle (no extra authoring). Still clearly tertiary — smaller than section
+    cards, below the Test band. The 6-tile grid of today is gone: Exam Prep + Test Centre merged into band 2 (revamp-02).</div>
 
 </div>
 </body>
