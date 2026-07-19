@@ -79,6 +79,13 @@
     font-weight:800;font-size:13.5px;padding:12px 22px;border-radius:12px;width:100%;
     background:var(--accent);color:#fff;box-shadow:0 5px 16px rgba(220,131,95,.4)}
 
+  .tools{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .tool{background:#F7F2F0;border-radius:14px;border:1px solid var(--line);padding:14px;text-align:center;position:relative;cursor:pointer}
+  .tool .ticon{width:38px;height:38px;border-radius:11px;background:#EFE7E2;display:grid;place-items:center;
+    font-size:17px;margin:0 auto 8px;border:1px solid var(--line);filter:grayscale(1);opacity:.55}
+  .tool b{font-size:12px;font-weight:800;color:#A79DA9}
+  .tool .lock{position:absolute;right:8px;top:8px;font-size:11px}
+
   .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:10px 0 22px;
     font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
   .spec b{color:#5C5470}
@@ -165,13 +172,24 @@
       <button class="btn">Unlock chapter →</button>
     </div>
   </div>
-  <div class="spec"><b>THE decision on this page (Uday, 2026-07-20):</b> preview students get <b>NO Test-yourself band and NO
-    revision-tools strip at all</b> — both are replaced by this single unlock band. Rationale: don't hand a free student doors
-    that all bounce off the paywall (today the tools tiles ARE visible to preview users and open S1-filtered tools — that
-    behaviour is removed; the page becomes exactly two beats: <b>read free → unlock everything</b>). The unlock band is warm
-    accent (never the dark lavender of the real Test band — that identity stays exclusive to paying students). Tapping it opens
-    the purchase sheet. <b>Trade-off accepted:</b> preview students lose S1 flashcards/timeline/etc. — the free tier gets
-    narrower and the upgrade gets sharper (consistent with decision #26's direction).</div>
+  <div class="spec"><b>THE decision on this page (Uday, 2026-07-20, revised same day):</b> preview students get <b>no
+    Test-yourself band</b> — it is replaced by this single unlock band, which carries the mock-test promise. The band is warm
+    accent (never the dark lavender of the real Test band — that identity stays exclusive to paying students; the page visibly
+    transforms on unlock). Tapping it opens the purchase sheet.</div>
+
+  <!-- BAND 3: TOOLS — VISIBLE BUT LOCKED -->
+  <div class="band-label"><span class="num">3</span><h2>Revise with tools</h2><span class="sub">🔒 included with the full chapter</span></div>
+  <div class="tools">
+    <div class="tool"><span class="lock">🔒</span><div class="ticon">📅</div><b>Timeline</b></div>
+    <div class="tool"><span class="lock">🔒</span><div class="ticon">🗺️</div><b>Maps</b></div>
+    <div class="tool"><span class="lock">🔒</span><div class="ticon">🃏</div><b>Flashcards</b></div>
+    <div class="tool"><span class="lock">🔒</span><div class="ticon">🖼️</div><b>Figures</b></div>
+  </div>
+  <div class="spec"><b>Uday's revision (2026-07-20):</b> tools stay <b>visible but greyed/disabled</b> with lock badges — hiding
+    them entirely would hide part of what ₹199 buys ("the student doesn't get to know he even gets revision tools"). Tapping any
+    locked tile opens the purchase sheet (not the tool). <b>Behaviour change vs today either way:</b> preview students currently
+    get working S1-filtered tools; in this design the free tier is read-S1 only, and tools are discovery surface, not utility.
+    The band label carries the 🔒 so the state is legible even at a glance.</div>
 
 </div>
 </body>
