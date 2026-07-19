@@ -5,16 +5,39 @@ import {
   testEngine,
   TestEngineError,
   type StartResult,
+  type PlayerQuestion,
   type AnswerResponse,
 } from '../../lib/testEngine'
 
-// Sprint 4: the timed paper player. The SERVER owns the clock (attempt
-// deadline) — the countdown here is a display computed against a server-time
-// offset, and every save/submit is validated server-side. Autosave runs on a
-// 15s heartbeat + on question navigation, so a dropped tab loses ≤15s of work.
+// Paper player — aligned to mockups/launch-07-paper-player.html (2026-07-19
+// mockup-alignment pass): sticky exam bar with the full palette inline,
+// source-based sub-questions grouped on one page with (a)/(b)/(c) labels,
+// per-question "Board technique" hint, live "Saved · Xs ago" indicator,
+// submit card with answered/blank/time chips. The SERVER owns the clock —
+// the countdown is display-only against a server-time offset, and every
+// save/submit is validated server-side. Autosave: 15s heartbeat + page turns.
 const AUTOSAVE_MS = 15_000
 
 type Phase = 'loading' | 'playing' | 'submitting' | 'error'
+
+/** Consecutive questions sharing a source render as one page (a/b/c). */
+interface Page {
+  sourceId: string | null
+  questions: PlayerQuestion[]
+}
+
+function buildPages(questions: PlayerQuestion[]): Page[] {
+  const pages: Page[] = []
+  for (const q of questions) {
+    const last = pages[pages.length - 1]
+    if (q.source_id && last && last.sourceId === q.source_id) {
+      last.questions.push(q)
+    } else {
+      pages.push({ sourceId: q.source_id, questions: [q] })
+    }
+  }
+  return pages
+}
 
 export function PaperPlayer() {
   const navigate = useNavigate()
@@ -25,21 +48,21 @@ export function PaperPlayer() {
   const [error, setError] = useState('')
   const [data, setData] = useState<StartResult | null>(null)
   const [answers, setAnswers] = useState<Map<string, AnswerResponse>>(new Map())
-  const [review, setReview] = useState<Set<string>>(new Set())
-  const [index, setIndex] = useState(0)
+  const [pageIndex, setPageIndex] = useState(0)
   const [remaining, setRemaining] = useState<number | null>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const [paletteOpen, setPaletteOpen] = useState(false)
+  const [savedAgo, setSavedAgo] = useState<number | null>(null)
+  const [hasDirty, setHasDirty] = useState(false)
 
-  // Dirty answers pending sync; ref so the heartbeat sees live state.
   const dirtyRef = useRef<Set<string>>(new Set())
   const answersRef = useRef(answers)
   useEffect(() => {
     answersRef.current = answers
   }, [answers])
-  const clockOffsetRef = useRef(0) // serverNow - localNow
+  const clockOffsetRef = useRef(0)
   const deadlineRef = useRef(0)
   const submittingRef = useRef(false)
+  const lastSavedRef = useRef<number | null>(null)
 
   useEffect(() => {
     if (!paperId) return
@@ -76,13 +99,13 @@ export function PaperPlayer() {
     dirtyRef.current = new Set()
     try {
       await testEngine.save(data.attempt.id, batch)
+      lastSavedRef.current = Date.now()
+      setSavedAgo(0)
+      setHasDirty(dirtyRef.current.size > 0)
     } catch (e) {
-      if (e instanceof TestEngineError && e.status === 409) {
-        // Attempt closed or time up server-side — nothing more to save.
-        return
-      }
-      // Network hiccup: re-mark as dirty so the next heartbeat retries.
+      if (e instanceof TestEngineError && e.status === 409) return
       for (const b of batch) dirtyRef.current.add(b.question_id)
+      setHasDirty(true)
     }
   }, [data])
 
@@ -101,12 +124,17 @@ export function PaperPlayer() {
     }
   }, [data, flushSave, navigate, cid])
 
-  // Server-offset countdown; auto-submit at zero.
+  // Countdown + saved-ago ticker; auto-submit at zero (server enforces anyway).
   useEffect(() => {
     if (phase !== 'playing') return
     const tick = () => {
       const left = deadlineRef.current - (Date.now() + clockOffsetRef.current)
       setRemaining(Math.max(0, left))
+      setSavedAgo(
+        lastSavedRef.current === null
+          ? null
+          : Math.round((Date.now() - lastSavedRef.current) / 1000),
+      )
       if (left <= 0 && !submittingRef.current) doSubmit()
     }
     tick()
@@ -114,7 +142,6 @@ export function PaperPlayer() {
     return () => clearInterval(id)
   }, [phase, doSubmit])
 
-  // Autosave heartbeat + flush on unmount/tab-hide.
   useEffect(() => {
     if (phase !== 'playing') return
     const id = setInterval(flushSave, AUTOSAVE_MS)
@@ -129,15 +156,9 @@ export function PaperPlayer() {
     }
   }, [phase, flushSave])
 
-  const questions = data?.questions ?? []
-  const question = questions[index]
-  const source = useMemo(
-    () =>
-      question?.source_id
-        ? data?.sources.find((s) => s.source_id === question.source_id)
-        : undefined,
-    [question, data],
-  )
+  const questions = useMemo(() => data?.questions ?? [], [data])
+  const pages = useMemo(() => buildPages(questions), [questions])
+  const page = pages[pageIndex]
 
   const setResponse = (qid: string, response: AnswerResponse) => {
     setAnswers((prev) => {
@@ -146,12 +167,13 @@ export function PaperPlayer() {
       return next
     })
     dirtyRef.current.add(qid)
+    setHasDirty(true)
   }
 
   const goTo = (i: number) => {
     flushSave()
-    setIndex(Math.max(0, Math.min(questions.length - 1, i)))
-    setPaletteOpen(false)
+    setPageIndex(Math.max(0, Math.min(pages.length - 1, i)))
+    window.scrollTo({ top: 0 })
   }
 
   if (phase === 'loading') {
@@ -165,7 +187,7 @@ export function PaperPlayer() {
     )
   }
 
-  if (phase === 'error' || !data || !question) {
+  if (phase === 'error' || !data || !page) {
     return (
       <div className="max-w-md mx-auto text-center py-16">
         <div className="text-4xl mb-3">🙈</div>
@@ -181,214 +203,217 @@ export function PaperPlayer() {
     )
   }
 
-  const answeredCount = [...answers.keys()].filter((qid) =>
-    questions.some((q) => q.id === qid),
-  ).length
+  const answeredIds = new Set(
+    [...answers.keys()].filter((qid) => questions.some((q) => q.id === qid)),
+  )
+  const blankQuestions = questions.filter((q) => !answeredIds.has(q.id))
+  const pageAnswered = (p: Page) => p.questions.every((q) => answeredIds.has(q.id))
+  const firstBlankPage = pages.findIndex((p) => p.questions.some((q) => !answeredIds.has(q.id)))
+
   const mins = remaining !== null ? Math.floor(remaining / 60_000) : 0
   const secs = remaining !== null ? Math.floor((remaining % 60_000) / 1000) : 0
   const lowTime = remaining !== null && remaining < 5 * 60_000
-  const isMcq = question.qtype === 'mcq'
-  const response = answers.get(question.id)
+  const source = page.sourceId
+    ? data.sources.find((s) => s.source_id === page.sourceId)
+    : undefined
+  const isLastPage = pageIndex === pages.length - 1
+  const subLabels = 'abcdefgh'
 
   return (
-    <div className="max-w-3xl mx-auto pb-28">
-      {/* Sticky exam bar: timer + progress + palette toggle */}
-      <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur-md border border-hist-line rounded-2xl shadow-card px-4 py-3 mb-5 flex items-center justify-between gap-3">
-        <div>
-          <div className="font-display font-bold text-hist-dark text-sm leading-tight">
+    <div className="max-w-3xl mx-auto pb-24">
+      {/* Sticky exam bar: title · palette · timer (launch-07) */}
+      <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur-md border border-hist-line rounded-2xl shadow-card px-4 py-3 mb-5 flex items-center justify-between gap-3 flex-wrap">
+        <div className="min-w-0">
+          <b className="block font-display font-bold text-hist-dark text-sm leading-tight truncate">
             {data.paper.title}
-          </div>
-          <div className="text-xs font-body text-gray-400">
-            {answeredCount}/{questions.length} answered
-          </div>
+          </b>
+          <span className="text-[11.5px] font-semibold text-hist-muted">
+            {data.paper.total_marks} marks · {answeredIds.size}/{questions.length} answered
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <div
-            className={`font-display font-bold tabular-nums rounded-xl px-3 py-1.5 text-sm ${
-              lowTime ? 'bg-red-50 text-red-600 animate-pulse' : 'bg-hist-gold-soft text-hist-dark'
-            }`}
-          >
-            ⏱ {mins}:{secs.toString().padStart(2, '0')}
-          </div>
-          <button
-            className="font-display font-bold text-hist-blue bg-hist-blue/10 rounded-xl px-3 py-1.5 text-sm btn-press"
-            onClick={() => setPaletteOpen(!paletteOpen)}
-          >
-            {index + 1}/{questions.length} ▾
-          </button>
+        <div className="flex flex-wrap gap-1.5 max-w-[46%] justify-center">
+          {pages.map((p, i) => (
+            <button
+              key={i}
+              className={`w-8 h-8 rounded-[9px] font-display font-bold text-[11.5px] border transition-colors ${
+                i === pageIndex
+                  ? 'border-hist-gold bg-hist-gold text-white'
+                  : pageAnswered(p)
+                    ? 'border-hist-green/40 bg-hist-green/15 text-hist-green'
+                    : 'border-hist-line bg-white text-hist-muted'
+              }`}
+              onClick={() => goTo(i)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+        <div
+          className={`font-display font-bold tabular-nums rounded-xl px-3 py-1.5 text-sm shrink-0 ${
+            lowTime ? 'bg-red-50 text-red-600 animate-pulse' : 'bg-hist-gold-soft text-hist-dark'
+          }`}
+        >
+          ⏱ {mins}:{secs.toString().padStart(2, '0')}
         </div>
       </div>
 
-      {/* Question palette */}
-      <AnimatePresence>
-        {paletteOpen && (
-          <motion.div
-            className="bg-white border border-hist-line rounded-2xl shadow-card p-4 mb-5"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-          >
-            <div className="flex flex-wrap gap-2">
-              {questions.map((q, i) => {
-                const answered = answers.has(q.id)
-                const flagged = review.has(q.id)
-                return (
-                  <button
-                    key={q.id}
-                    className={`w-9 h-9 rounded-lg font-display font-bold text-xs border transition-colors ${
-                      i === index
-                        ? 'border-hist-dark bg-hist-dark text-white'
-                        : flagged
-                          ? 'border-hist-purple bg-hist-purple/15 text-hist-purple'
-                          : answered
-                            ? 'border-hist-green bg-hist-green/15 text-hist-green'
-                            : 'border-hist-line bg-white text-gray-400'
-                    }`}
-                    onClick={() => goTo(i)}
-                  >
-                    {i + 1}
-                  </button>
-                )
-              })}
-            </div>
-            <div className="flex gap-4 mt-3 text-[11px] font-body text-gray-400">
-              <span>🟩 answered</span>
-              <span>🟪 marked for review</span>
-              <span>⬜ not yet</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Question card */}
+      {/* Page card */}
       <motion.div
-        key={question.id}
+        key={pageIndex}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.18 }}
-        className="bg-white border border-hist-line rounded-2xl shadow-card p-5 sm:p-6"
+        className="bg-white border border-hist-line rounded-2xl shadow-card p-5 sm:p-7"
       >
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase text-hist-blue bg-hist-blue/10 rounded-full px-2.5 py-1">
-              Section {question.section_label}
-            </span>
-            <span className="text-[11px] font-bold text-gray-400">
-              Q{question.position} · {question.marks} mark{question.marks > 1 ? 's' : ''}
-            </span>
-          </div>
-          <button
-            className={`text-[11px] font-bold rounded-full px-2.5 py-1 border transition-colors ${
-              review.has(question.id)
-                ? 'text-hist-purple border-hist-purple bg-hist-purple/10'
-                : 'text-gray-400 border-hist-line'
-            }`}
-            onClick={() =>
-              setReview((prev) => {
-                const next = new Set(prev)
-                if (next.has(question.id)) next.delete(question.id)
-                else next.add(question.id)
-                return next
-              })
-            }
-          >
-            {review.has(question.id) ? '★ Marked' : '☆ Mark for review'}
-          </button>
+          <span className="text-[11px] font-extrabold uppercase tracking-wide text-hist-gold">
+            Question {page.questions[0].position}
+            {page.questions.length > 1 &&
+              `–${page.questions[page.questions.length - 1].position}`}{' '}
+            · Section {page.questions[0].section_label}
+          </span>
+          <span className="text-[11px] font-extrabold uppercase text-hist-indigo bg-hist-indigo-soft rounded-full px-2.5 py-1">
+            {page.questions.length > 1
+              ? `${page.questions.map((q) => q.marks).join('+')} = ${page.questions.reduce((s, q) => s + q.marks, 0)} marks`
+              : `${page.questions[0].marks} mark${page.questions[0].marks > 1 ? 's' : ''}`}
+          </span>
         </div>
 
         {source && (
           <div className="bg-hist-gold-soft/50 border-l-4 border-hist-gold rounded-r-xl px-4 py-3 mb-4">
-            {source.title && (
-              <div className="font-display font-bold text-sm text-hist-dark mb-1">
-                📜 {source.title}
-              </div>
-            )}
+            <div className="text-[11px] font-extrabold uppercase tracking-wide text-hist-gold mb-1">
+              📜 Source · read the extract, then answer{source.title ? ` — ${source.title}` : ''}
+            </div>
             <p className="font-body text-sm text-hist-ink whitespace-pre-line leading-relaxed">
               {source.body}
             </p>
           </div>
         )}
 
-        <p className="font-body text-[15px] text-hist-dark leading-relaxed whitespace-pre-line mb-5">
-          {question.prompt}
-        </p>
+        <div className="space-y-6">
+          {page.questions.map((q, qi) => {
+            const response = answers.get(q.id)
+            const isMcq = q.qtype === 'mcq'
+            return (
+              <div key={q.id}>
+                <h2 className="font-display text-[17px] font-semibold text-hist-dark leading-snug whitespace-pre-line mb-1.5">
+                  {page.questions.length > 1 && (
+                    <span className="text-hist-gold mr-1.5">({subLabels[qi]})</span>
+                  )}
+                  {q.prompt}
+                  {page.questions.length > 1 && (
+                    <span className="ml-2 text-[10.5px] font-extrabold uppercase text-hist-muted align-middle">
+                      {q.marks} mark{q.marks > 1 ? 's' : ''}
+                    </span>
+                  )}
+                </h2>
 
-        {isMcq && question.options ? (
-          <div className="space-y-2.5">
-            {question.options.map((opt, i) => {
-              const selected = response && 'choice' in response && response.choice === i
-              return (
-                <button
-                  key={i}
-                  className={`w-full text-left font-body text-sm rounded-xl border-2 px-4 py-3 transition-colors ${
-                    selected
-                      ? 'border-hist-blue bg-hist-blue/10 text-hist-dark font-semibold'
-                      : 'border-hist-line hover:border-hist-blue/40 text-hist-ink'
-                  }`}
-                  onClick={() => setResponse(question.id, { choice: i })}
-                >
-                  <span className="font-display font-bold mr-2 text-hist-blue">
-                    {String.fromCharCode(97 + i)})
-                  </span>
-                  {opt}
-                </button>
-              )
-            })}
-          </div>
-        ) : (
-          <div>
-            <textarea
-              className="w-full min-h-[180px] font-body text-sm text-hist-dark border-2 border-hist-line focus:border-hist-blue rounded-xl px-4 py-3 outline-none resize-y leading-relaxed"
-              placeholder={`Write your answer here… (aim for ~${question.marks * 30} words for ${question.marks} marks)`}
-              value={response && 'text' in response ? response.text : ''}
-              onChange={(e) => setResponse(question.id, { text: e.target.value })}
-            />
-            <div className="text-right text-[11px] font-body text-gray-400 mt-1">
-              {response && 'text' in response
-                ? `${response.text.trim().split(/\s+/).filter(Boolean).length} words`
-                : 'Answers save automatically'}
-            </div>
-          </div>
-        )}
-      </motion.div>
+                {q.hint && (
+                  <div className="flex gap-2 items-start bg-hist-indigo-soft/60 border border-[#DED7F0] rounded-xl px-3.5 py-2.5 mb-3 mt-2">
+                    <span>💡</span>
+                    <p className="font-body text-[12.5px] text-hist-ink leading-relaxed">
+                      <b>Board technique:</b> {q.hint}
+                    </p>
+                  </div>
+                )}
 
-      {/* Bottom nav */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-hist-line px-4 py-3">
-        <div className="max-w-3xl mx-auto flex items-center justify-between gap-3">
+                {isMcq && q.options ? (
+                  <div className="space-y-2.5 mt-3">
+                    {q.options.map((opt, i) => {
+                      const selected = response && 'choice' in response && response.choice === i
+                      return (
+                        <button
+                          key={i}
+                          className={`w-full flex items-center gap-3 text-left font-body text-sm rounded-xl border-2 px-4 py-3 transition-colors ${
+                            selected
+                              ? 'border-hist-blue bg-hist-blue/10 text-hist-dark font-semibold'
+                              : 'border-hist-line hover:border-hist-blue/40 text-hist-ink'
+                          }`}
+                          onClick={() => setResponse(q.id, { choice: i })}
+                        >
+                          <span
+                            className={`w-7 h-7 rounded-lg grid place-items-center font-display font-bold text-xs shrink-0 ${
+                              selected ? 'bg-hist-blue text-white' : 'bg-hist-gold-soft text-hist-dark'
+                            }`}
+                          >
+                            {String.fromCharCode(65 + i)}
+                          </span>
+                          {opt}
+                        </button>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="mt-3">
+                    <textarea
+                      className="w-full font-body text-sm text-hist-dark border-2 border-hist-line focus:border-hist-blue rounded-xl px-4 py-3 outline-none resize-y leading-relaxed"
+                      style={{ minHeight: Math.min(60 + q.marks * 40, 240) }}
+                      placeholder="Write your answer point-wise…"
+                      value={response && 'text' in response ? response.text : ''}
+                      onChange={(e) => setResponse(q.id, { text: e.target.value })}
+                    />
+                    <div className="text-right text-[11px] font-semibold text-hist-muted mt-1">
+                      {response && 'text' in response && response.text.trim()
+                        ? `${response.text.trim().split(/\s+/).filter(Boolean).length} words`
+                        : `aim for ~${q.marks * 30} words`}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Page nav (launch-07: Previous · saved · Next) */}
+        <div className="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-hist-line">
           <button
-            className="font-display font-bold text-hist-dark bg-white border border-hist-line rounded-xl px-4 py-2.5 text-sm btn-press disabled:opacity-40"
-            disabled={index === 0}
-            onClick={() => goTo(index - 1)}
+            className="font-display font-bold text-hist-dark bg-white border-[1.5px] border-hist-line rounded-[11px] px-4 py-2.5 text-[13px] btn-press disabled:opacity-40"
+            disabled={pageIndex === 0}
+            onClick={() => goTo(pageIndex - 1)}
           >
             ← Previous
           </button>
-          {index < questions.length - 1 ? (
+          <span className="text-[11.5px] font-bold text-hist-green">
+            {hasDirty
+              ? 'Saving…'
+              : savedAgo === null
+                ? 'Answers save automatically'
+                : savedAgo < 3
+                  ? '✓ Saved'
+                  : `✓ Saved · ${savedAgo}s ago`}
+          </span>
+          {isLastPage ? (
             <button
-              className="font-display font-bold text-white rounded-xl px-5 py-2.5 text-sm shadow-button btn-press"
-              style={{ backgroundColor: '#5571B5' }}
-              onClick={() => goTo(index + 1)}
+              className="font-display font-bold text-white rounded-[11px] px-5 py-2.5 text-[13px] shadow-button btn-press"
+              style={{ backgroundColor: '#7E72C2' }}
+              onClick={() => setConfirmOpen(true)}
             >
-              Next →
+              Review &amp; submit →
             </button>
           ) : (
             <button
-              className="font-display font-bold text-white rounded-xl px-5 py-2.5 text-sm shadow-button btn-press"
-              style={{ backgroundColor: '#C05F35' }}
-              onClick={() => setConfirmOpen(true)}
+              className="font-display font-bold text-white rounded-[11px] px-5 py-2.5 text-[13px] shadow-button btn-press"
+              style={{ backgroundColor: '#DC835F' }}
+              onClick={() => goTo(pageIndex + 1)}
             >
-              Submit paper
+              Next →
             </button>
           )}
+        </div>
+      </motion.div>
+
+      {!isLastPage && (
+        <div className="text-center mt-4">
           <button
-            className="font-display font-bold text-hist-red bg-hist-red/10 rounded-xl px-4 py-2.5 text-sm btn-press"
+            className="text-[12.5px] font-bold text-hist-muted hover:text-hist-dark font-body"
             onClick={() => setConfirmOpen(true)}
           >
-            Finish
+            Finish early &amp; submit
           </button>
         </div>
-      </div>
+      )}
 
-      {/* Submit confirmation */}
+      {/* Submit confirmation (launch-07 submit card) */}
       <AnimatePresence>
         {confirmOpen && (
           <motion.div
@@ -399,38 +424,59 @@ export function PaperPlayer() {
             onClick={() => setConfirmOpen(false)}
           >
             <motion.div
-              className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-card text-center"
+              className="bg-white rounded-3xl p-7 w-full max-w-md shadow-card text-center"
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 40, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="text-4xl mb-2">📤</div>
-              <h3 className="font-display text-lg font-bold text-hist-dark mb-1">
-                Submit your paper?
+              <h3 className="font-display text-xl font-bold text-hist-dark mb-1.5">
+                Submit paper?
               </h3>
-              <p className="font-body text-sm text-gray-500 mb-4">
-                You've answered {answeredCount} of {questions.length} questions.
-                {answeredCount < questions.length &&
-                  ` ${questions.length - answeredCount} unanswered will score 0.`}{' '}
-                Objective questions are marked instantly.
+              <p className="font-body text-[13.5px] text-hist-muted mb-4">
+                Objective questions are marked instantly; written answers get the official CBSE
+                marking scheme to check against.
               </p>
-              <div className="space-y-2">
+              <div className="flex flex-wrap gap-2 justify-center mb-5">
+                <span className="flex items-center gap-1.5 bg-hist-gold-soft/60 border border-hist-line px-3 py-2 rounded-[11px] text-[12.5px] font-semibold text-hist-ink">
+                  ✅ <b className="text-hist-dark">{answeredIds.size} of {questions.length} answered</b>
+                </span>
+                {blankQuestions.length > 0 && (
+                  <span className="flex items-center gap-1.5 bg-hist-orange/10 border border-hist-orange/20 px-3 py-2 rounded-[11px] text-[12.5px] font-semibold text-hist-orange">
+                    ⚠️ <b>Q{blankQuestions.map((q) => q.position).join(', Q')} blank</b>
+                  </span>
+                )}
+                <span className="flex items-center gap-1.5 bg-hist-gold-soft/60 border border-hist-line px-3 py-2 rounded-[11px] text-[12.5px] font-semibold text-hist-ink">
+                  ⏱ <b className="text-hist-dark">{mins}:{secs.toString().padStart(2, '0')} left</b>
+                </span>
+              </div>
+              <div className="flex gap-2.5 justify-center">
+                {blankQuestions.length > 0 && firstBlankPage >= 0 && (
+                  <button
+                    className="font-display font-bold text-hist-dark bg-white border-[1.5px] border-hist-line rounded-[11px] px-4 py-2.5 text-[13px] btn-press"
+                    onClick={() => {
+                      setConfirmOpen(false)
+                      goTo(firstBlankPage)
+                    }}
+                  >
+                    Go to Q{blankQuestions[0].position}
+                  </button>
+                )}
                 <button
-                  className="w-full font-display font-bold text-white rounded-xl px-5 py-3 shadow-button btn-press disabled:opacity-60"
-                  style={{ backgroundColor: '#C05F35' }}
+                  className="font-display font-bold text-white rounded-[11px] px-6 py-2.5 text-[13px] shadow-button btn-press disabled:opacity-60"
+                  style={{ backgroundColor: '#DC835F' }}
                   disabled={phase === 'submitting'}
                   onClick={doSubmit}
                 >
-                  {phase === 'submitting' ? 'Submitting…' : 'Yes, submit'}
-                </button>
-                <button
-                  className="w-full font-display font-bold text-gray-500 rounded-xl px-5 py-2.5 text-sm"
-                  onClick={() => setConfirmOpen(false)}
-                >
-                  Keep writing
+                  {phase === 'submitting' ? 'Submitting…' : 'Submit for marking'}
                 </button>
               </div>
+              <button
+                className="mt-3 text-[12.5px] font-semibold text-gray-400 hover:text-gray-600 font-body"
+                onClick={() => setConfirmOpen(false)}
+              >
+                Keep writing
+              </button>
             </motion.div>
           </motion.div>
         )}

@@ -19,6 +19,8 @@ export interface ParsedQuestion {
   options?: string[]
   correct_index?: number
   scheme?: ParsedScheme
+  /** "Board technique" tip shown while answering (launch-07 mockup) */
+  hint?: string
 }
 
 export interface ParsedPaper {
@@ -65,7 +67,8 @@ export function parsePaper(text: string): ParseOutcome {
     options: { text: string; correct: boolean }[]
     schemePoints: { point: string; marks: number }[]
     modelLines: string[]
-    mode: 'prompt' | 'scheme' | 'model'
+    hintLines: string[]
+    mode: 'prompt' | 'scheme' | 'model' | 'hint'
     section: string
   }
   let draft: QDraft | null = null
@@ -102,6 +105,7 @@ export function parsePaper(text: string): ParseOutcome {
         source_id: d.source_id,
         options: d.options.map((o) => o.text),
         correct_index: correct[0],
+        hint: d.hintLines.join('\n').trim() || undefined,
       })
     } else {
       const model = d.modelLines.join('\n').trim()
@@ -127,6 +131,7 @@ export function parsePaper(text: string): ParseOutcome {
           model_answer: model,
           points: d.schemePoints.length ? d.schemePoints : undefined,
         },
+        hint: d.hintLines.join('\n').trim() || undefined,
       })
     }
   }
@@ -180,6 +185,7 @@ export function parsePaper(text: string): ParseOutcome {
         options: [],
         schemePoints: [],
         modelLines: [],
+        hintLines: [],
         mode: 'prompt',
         section,
       }
@@ -191,7 +197,11 @@ export function parsePaper(text: string): ParseOutcome {
       const d: QDraft = draft
       const schemeStart = /^SCHEME:\s*(.*)$/i.exec(line)
       const modelStart = /^MODEL:\s*(.*)$/i.exec(line)
-      if (schemeStart) {
+      const hintStart = /^HINT:\s*(.*)$/i.exec(line)
+      if (hintStart) {
+        d.mode = 'hint'
+        if (hintStart[1]) d.hintLines.push(hintStart[1])
+      } else if (schemeStart) {
         d.mode = 'scheme'
         if (schemeStart[1]) {
           const pointMatch = POINT_RE.exec(schemeStart[1])
@@ -221,6 +231,8 @@ export function parsePaper(text: string): ParseOutcome {
           }
         } else if (d.mode === 'model') {
           if (line || d.modelLines.length) d.modelLines.push(raw)
+        } else if (d.mode === 'hint') {
+          if (line) d.hintLines.push(raw)
         } else if (d.options.length === 0) {
           if (line || d.promptLines.length) d.promptLines.push(raw)
         } else if (line) {

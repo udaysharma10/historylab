@@ -62,6 +62,9 @@ incident, where an agitated crowd set fire to a police station, killing policeme
 the movement was turning violent and that satyagrahis were not yet ready for mass struggle.
 ```
 
+- **HINT:** (optional, before SCHEME) — a one-or-two-line "Board technique" tip shown to the
+  student *while answering* (e.g. `HINT: 3 marks = 3 distinct points, one per line.`). Never
+  put the answer in the hint — it's writing technique only.
 - **SCHEME:** — the point-wise marking scheme, one point per line as `- point text (marks)`.
   This is exactly what the AI marker (and you, in examiner reviews) award marks against.
   The points should add up to the question's marks.

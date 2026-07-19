@@ -35,6 +35,7 @@ export interface PlayerQuestion {
   qtype: 'mcq' | 'text'
   marks: number
   prompt: string
+  hint: string | null
   source_id: string | null
   options: string[] | null
 }

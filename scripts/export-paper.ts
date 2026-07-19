@@ -11,7 +11,9 @@ import { join } from 'node:path'
 import { parsePaper } from '../src/lib/paperFormat'
 
 const PAPERS_DIR = 'content-src/papers'
-const MIGRATION = 'supabase/migrations/20260718110000_seed_papers.sql'
+// Bump this filename (later timestamp) whenever seeds change after the
+// previous seed migration has already been pushed.
+const MIGRATION = 'supabase/migrations/20260719081000_seed_papers_v2.sql'
 const TAG = '$paper_seed$'
 
 function q(value: string): string {
@@ -78,10 +80,10 @@ values (${q(paper.id)}, ${q(s.source_id)}, ${qOrNull(s.title)}, ${q(s.body)});`,
 
   paper.questions.forEach((qn, i) => {
     parts.push(
-      `insert into questions (paper_id, position, section_label, qtype, marks, prompt, source_id, options, correct_index, scheme)
+      `insert into questions (paper_id, position, section_label, qtype, marks, prompt, source_id, options, correct_index, scheme, hint)
 values (${q(paper.id)}, ${i + 1}, ${q(qn.section_label)}, ${q(qn.qtype)}, ${qn.marks}, ${q(qn.prompt)}, ${qOrNull(qn.source_id)}, ${
         qn.options ? `${q(JSON.stringify(qn.options))}::jsonb` : 'null'
-      }, ${qn.correct_index ?? 'null'}, ${qn.scheme ? `${q(JSON.stringify(qn.scheme))}::jsonb` : 'null'});`,
+      }, ${qn.correct_index ?? 'null'}, ${qn.scheme ? `${q(JSON.stringify(qn.scheme))}::jsonb` : 'null'}, ${qOrNull(qn.hint)});`,
     )
   })
   parts.push('')

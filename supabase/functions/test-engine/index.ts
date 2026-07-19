@@ -263,7 +263,7 @@ async function start(
     // Answer keys and schemes stay server-side during the attempt.
     service
       .from("questions")
-      .select("id, position, section_label, qtype, marks, prompt, source_id, options")
+      .select("id, position, section_label, qtype, marks, prompt, hint, source_id, options")
       .eq("paper_id", paper.id)
       .order("position"),
     service.from("paper_sources").select("source_id, title, body").eq("paper_id", paper.id),
@@ -387,7 +387,7 @@ async function result(
         .eq("id", attempt.paper_id).single(),
       // Post-submit the keys and schemes are revealed — the attempt is closed.
       service.from("questions")
-        .select("id, position, section_label, qtype, marks, prompt, source_id, options, correct_index, scheme")
+        .select("id, position, section_label, qtype, marks, prompt, hint, source_id, options, correct_index, scheme")
         .eq("paper_id", attempt.paper_id)
         .order("position"),
       service.from("paper_sources").select("source_id, title, body").eq("paper_id", attempt.paper_id),
@@ -426,6 +426,7 @@ interface AuthoredQuestion {
   options?: string[];
   correct_index?: number;
   scheme?: { model_answer?: string; points?: { point: string; marks: number }[] };
+  hint?: string;
 }
 
 interface AuthoredPaper {
@@ -472,6 +473,9 @@ function validatePaper(p: unknown): { ok: true; paper: AuthoredPaper } | { ok: f
     }
     if (q.source_id && !sourceIds.has(q.source_id)) {
       return { ok: false, error: `${at}: source_id "${q.source_id}" not in sources` };
+    }
+    if (q.hint !== undefined && (typeof q.hint !== "string" || q.hint.length > 600)) {
+      return { ok: false, error: `${at}: hint must be text up to 600 characters` };
     }
     if (q.qtype === "mcq") {
       if (!Array.isArray(q.options) || q.options.length < 2 || q.options.length > 6) {
@@ -547,6 +551,7 @@ async function upsertPaper(service: ReturnType<typeof createClient>, body: Json)
       options: q.qtype === "mcq" ? q.options : null,
       correct_index: q.qtype === "mcq" ? q.correct_index : null,
       scheme: q.scheme ?? null,
+      hint: q.hint?.trim() || null,
     })),
   );
   if (qErr) return json({ error: "questions write failed", detail: qErr.message }, 500);
