@@ -47,7 +47,10 @@ export function HomePage() {
     const topicsDone = section.subsections.filter((sub) => completedSubsections[sub.id]).length
     const quiz = progressSections[section.id]
     const quizDone = !!quiz && quiz.total > 0 && quiz.completed >= quiz.total
-    return { done: topicsDone + (quizDone ? 1 : 0), total: section.subsections.length + 1 }
+    // Preview mode strips locked sections' subsections — topicCount preserves
+    // the real denominator so the ring means "% of the whole chapter".
+    const topicTotal = section.subsections.length || section.topicCount || 0
+    return { done: topicsDone + (quizDone ? 1 : 0), total: topicTotal + 1 }
   }
   const overall = chapter.sections.reduce(
     (acc, s) => {

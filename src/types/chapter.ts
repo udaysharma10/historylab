@@ -14,6 +14,8 @@ export interface Section {
   color: string
   icon: string
   subsections: Subsection[]
+  /** set by the server's preview trim on locked sections (subsections emptied) */
+  topicCount?: number
   keyPoints: string[]
   figureIds: string[]
   sourceIds: string[]

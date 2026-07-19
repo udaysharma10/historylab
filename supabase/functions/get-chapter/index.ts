@@ -90,8 +90,14 @@ function trimToPreview(bundle: any, section: string) {
     ...bundle,
     chapter: {
       ...bundle.chapter,
-      sections: (bundle.chapter?.sections ?? []).map((sec: { id: string }) =>
-        sec.id === section ? sec : { ...sec, subsections: [] }
+      // Locked sections lose their cards but keep the topic COUNT so chapter
+      // progress can use the true whole-chapter denominator (a bare number
+      // leaks nothing).
+      sections: (bundle.chapter?.sections ?? []).map(
+        (sec: { id: string; subsections?: unknown[] }) =>
+          sec.id === section
+            ? sec
+            : { ...sec, subsections: [], topicCount: sec.subsections?.length ?? 0 },
       ),
     },
     keyDates: bySection(bundle.keyDates),
