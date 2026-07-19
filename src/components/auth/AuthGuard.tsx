@@ -115,7 +115,6 @@ export function AuthGuard({ children }: AuthGuardProps) {
           name: data.name,
           school: data.school,
           role: data.role,
-          class: data.class || null,
           guardian_email: data.guardianEmail,
           guardian_consent_at: data.consentAt,
           profile_completed: true,

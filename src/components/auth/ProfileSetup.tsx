@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 // Sprint 1 (plan §5): open signup captures a required guardian email and a
-// timestamped DPDPA parental-consent confirmation. Roles are student/parent
-// only (teacher role retired — admins are a server-side concept now). For a
-// parent account the guardian email is their own sign-in email.
+// timestamped DPDPA parental-consent confirmation. Roles are student/teacher
+// (Neha's Sprint-4 review: Parent dropped — parents act through their kid's
+// account; class/section capture dropped). For a teacher the guardian email
+// is their own sign-in email; the role carries no privileges (admins are a
+// server-side concept).
 export interface ProfileFormData {
   name: string
   school: string
-  role: 'student' | 'parent'
-  class: string
+  role: 'student' | 'teacher'
   guardianEmail: string
   consentAt: string
 }
@@ -24,15 +25,9 @@ interface ProfileSetupProps {
   error?: string | null
 }
 
-const CLASSES = [
-  '10-A', '10-B', '10-C', '10-D', '10-E', '10-F',
-  '9-A', '9-B', '9-C', '9-D',
-  'Other',
-]
-
 const ROLES = [
   { value: 'student' as const, label: 'Student', icon: '🎓', desc: 'I\'m here to learn' },
-  { value: 'parent' as const, label: 'Parent', icon: '👨‍👩‍👧', desc: 'I\'m here for my child' },
+  { value: 'teacher' as const, label: 'Teacher', icon: '📖', desc: 'I teach history' },
 ]
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -40,19 +35,18 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export function ProfileSetup({ initialName, initialEmail, avatarUrl, onComplete, onSignOut, saving, error }: ProfileSetupProps) {
   const [name, setName] = useState(initialName)
   const [school, setSchool] = useState('')
-  const [role, setRole] = useState<'student' | 'parent' | ''>('')
-  const [studentClass, setStudentClass] = useState('')
+  const [role, setRole] = useState<'student' | 'teacher' | ''>('')
   const [guardianEmail, setGuardianEmail] = useState('')
   const [consent, setConsent] = useState(false)
 
-  const effectiveGuardianEmail = role === 'parent' ? initialEmail : guardianEmail.trim()
+  // Teachers are adults — their own sign-in email is the contact address.
+  const effectiveGuardianEmail = role === 'teacher' ? initialEmail : guardianEmail.trim()
   const guardianEmailValid = EMAIL_RE.test(effectiveGuardianEmail)
 
   const canSubmit =
     name.trim() &&
     school.trim() &&
     role &&
-    (role !== 'student' || studentClass) &&
     guardianEmailValid &&
     consent
 
@@ -62,7 +56,6 @@ export function ProfileSetup({ initialName, initialEmail, avatarUrl, onComplete,
       name: name.trim(),
       school: school.trim(),
       role,
-      class: role === 'student' ? studentClass : '',
       guardianEmail: effectiveGuardianEmail.toLowerCase(),
       consentAt: new Date().toISOString(),
     })
@@ -140,34 +133,7 @@ export function ProfileSetup({ initialName, initialEmail, avatarUrl, onComplete,
             </div>
           </div>
 
-          {/* Class (only for students) */}
-          {role === 'student' && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              transition={{ duration: 0.2 }}
-            >
-              <label className="block text-sm font-semibold text-hist-dark mb-1.5">Your Class</label>
-              <div className="flex flex-wrap gap-2">
-                {CLASSES.map((c) => (
-                  <motion.button
-                    key={c}
-                    className={`px-4 py-2 rounded-lg border-2 text-sm font-semibold transition-colors ${
-                      studentClass === c
-                        ? 'border-hist-blue bg-hist-blue text-white'
-                        : 'border-gray-200 text-hist-dark hover:border-gray-300'
-                    }`}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setStudentClass(c)}
-                  >
-                    {c}
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Guardian email (students enter it; parents ARE the guardian) */}
+          {/* Guardian email (students enter it; teachers use their own email) */}
           {role === 'student' && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -206,7 +172,7 @@ export function ProfileSetup({ initialName, initialEmail, avatarUrl, onComplete,
               <span className="text-xs text-gray-500 font-body leading-relaxed">
                 {role === 'student'
                   ? 'I confirm that my parent/guardian (at the email above) consents to my use of HistoryLab and to receiving account and progress emails.'
-                  : 'I consent to my child\'s use of HistoryLab and to receiving account and progress emails at my email address.'}
+                  : 'I consent to using HistoryLab and to receiving account emails at my email address.'}
               </span>
             </motion.label>
           )}

@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthContext } from '../auth'
 import { useAccess } from '../auth/AccessProvider'
-import { useProgressStore } from '../../store/useProgressStore'
 import { startCheckout } from '../../lib/razorpay'
 import type { Product } from '../auth/AccessProvider'
 
-// Purchase sheet (plan §5): Razorpay checkout (Sprint 3) + the student→parent
-// handoff as the alternate conversion path.
+// Purchase sheet (plan §5): Razorpay checkout, kept deliberately simple —
+// Neha's Sprint-4 review dropped the WhatsApp/email parent handoff and the
+// refund/GST fine print (refund policy lives on /refunds).
 interface PurchaseSheetProps {
   product: Product
   chapterTitle: string
@@ -20,8 +20,6 @@ type PayState = 'idle' | 'starting' | 'success' | 'error'
 export function PurchaseSheet({ product, chapterTitle, open, onClose }: PurchaseSheetProps) {
   const { profile } = useAuthContext()
   const { refresh, entitledChapters } = useAccess()
-  const totalStars = useProgressStore((s) => s.totalStars)
-  const completedTopics = useProgressStore((s) => Object.keys(s.completedSubsections).length)
   const [payState, setPayState] = useState<PayState>('idle')
   const [payError, setPayError] = useState('')
 
@@ -54,18 +52,6 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
   const listPrice = product.list_price_paise
     ? `₹${(product.list_price_paise / 100).toFixed(0)}`
     : null
-
-  const firstName = profile.name.split(' ')[0]
-  const message =
-    `Hi! I've been studying History on HistoryLab — I've finished ${completedTopics} topics ` +
-    `and earned ${totalStars} stars. Can you unlock "${chapterTitle}" for me? ` +
-    `It's a one-time ${price}. Link: ${window.location.origin} — ${firstName}`
-
-  const waHref = `https://wa.me/?text=${encodeURIComponent(message)}`
-  const mailHref =
-    `mailto:${profile.guardian_email ?? ''}` +
-    `?subject=${encodeURIComponent('Please unlock my HistoryLab chapter')}` +
-    `&body=${encodeURIComponent(message)}`
 
   return (
     <AnimatePresence>
@@ -135,27 +121,8 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
                     {payError}
                   </p>
                 )}
-                <div className="flex items-center gap-3 py-1">
-                  <span className="flex-1 border-t border-hist-line" />
-                  <span className="text-[11px] font-bold text-gray-400 uppercase">or</span>
-                  <span className="flex-1 border-t border-hist-line" />
-                </div>
-                <a
-                  href={waHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full text-center font-display font-bold text-white bg-[#25D366] rounded-xl px-6 py-3 shadow-button btn-press"
-                >
-                  Ask your parent on WhatsApp
-                </a>
-                <a
-                  href={mailHref}
-                  className="block w-full text-center font-display font-bold text-hist-dark bg-hist-gold/10 border-2 border-hist-gold/30 rounded-xl px-6 py-3 btn-press"
-                >
-                  Email {profile.guardian_email ? 'your parent' : 'instead'}
-                </a>
                 <p className="text-center text-xs text-gray-400 font-body pt-1">
-                  Secure payment via Razorpay · 7-day full refund · GST invoice by email
+                  Secure payment via Razorpay
                 </p>
               </div>
             )}
