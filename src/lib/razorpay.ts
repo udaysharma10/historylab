@@ -32,6 +32,8 @@ function loadCheckoutScript(): Promise<boolean> {
 export interface CheckoutCallbacks {
   /** verified server-side — safe to unlock */
   onSuccess: () => void
+  /** payment made but confirmation lagging (webhook latency) — poll, don't error */
+  onPending: () => void
   onFailure: (message: string) => void
   onDismiss: () => void
 }
@@ -88,10 +90,9 @@ export async function startCheckout(productId: string, cb: CheckoutCallbacks) {
         body: resp,
       })
       if (verifyErr || !data?.success) {
-        // Payment may still land via the webhook — tell the user the truth.
-        cb.onFailure(
-          'Payment received but confirmation is pending — if the chapter does not unlock in a few minutes, contact help@historylab.in.'
-        )
+        // Payment WAS made (this handler only fires post-payment); the grant
+        // will land via the webhook — launch-03 screen D: pending, not error.
+        cb.onPending()
         return
       }
       cb.onSuccess()

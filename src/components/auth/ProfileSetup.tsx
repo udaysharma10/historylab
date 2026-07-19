@@ -80,8 +80,8 @@ export function ProfileSetup({ initialName, initialEmail, avatarUrl, onComplete,
               {name ? name[0].toUpperCase() : '?'}
             </div>
           )}
-          <h2 className="font-display text-2xl font-bold text-hist-dark">Complete Your Profile</h2>
-          <p className="text-sm text-gray-500 mt-1">Tell us a bit about yourself</p>
+          <h2 className="font-display text-2xl font-bold text-hist-dark">Who's studying?</h2>
+          <p className="text-sm text-gray-500 mt-1">Takes 20 seconds — then straight into the chapter</p>
         </div>
 
         <div className="space-y-5">
