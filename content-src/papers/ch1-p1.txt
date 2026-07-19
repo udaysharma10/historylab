@@ -1,0 +1,139 @@
+PAPER: ch1-p1
+CHAPTER: ch1
+TITLE: The Rise of Nationalism in Europe — Practice Paper 1
+DESCRIPTION: Board-pattern paper: objective, short & long answers, and a source-based case study
+DURATION: 60
+
+SOURCE: src-frankfurt | The Frankfurt Parliament
+On 18 May 1848, 831 elected representatives marched in a festive procession to take their places in the Frankfurt parliament, convened in the Church of St Paul. They drafted a constitution for a German nation to be headed by a monarchy subject to a parliament. When the deputies offered the crown on these terms to Friedrich Wilhelm IV, King of Prussia, he rejected it and joined other monarchs to oppose the elected assembly.
+
+While the opposition of the aristocracy and military became stronger, the social basis of the parliament eroded. The parliament was dominated by the middle classes, who resisted the demands of workers and artisans and consequently lost their support. In the end, troops were called in and the assembly was forced to disband. Women, who had formed their own political associations and taken part in the demonstrations, were admitted to the parliament only as observers, standing in the visitors' gallery.
+END SOURCE
+
+SECTION A
+
+Q. [1] The Civil Code of 1804 in France is usually known as the:
+a) Constitution of the Republic
+b) Napoleonic Code *
+c) Treaty of Vienna
+d) Declaration of the Rights of Man
+
+Q. [1] The Congress of Vienna (1815) was hosted by:
+a) Louis Philippe of France
+b) the Austrian Chancellor Duke Metternich *
+c) Kaiser William I of Prussia
+d) Giuseppe Mazzini
+
+Q. [1] The Zollverein, formed in 1834 at the initiative of Prussia, was:
+a) a secret society of revolutionaries
+b) a customs union that abolished tariff barriers between German states *
+c) a military alliance against France
+d) an association of German universities
+
+Q. [1] 'Young Italy', the secret society founded in 1831, was the creation of:
+a) Count Cavour
+b) Giuseppe Garibaldi
+c) Giuseppe Mazzini *
+d) Victor Emmanuel II
+
+Q. [1] Assertion (A): Women were denied the right to vote during the liberal revolutions of the nineteenth century.
+Reason (R): Liberal nationalism, despite its ideal of equality before the law, defined the franchise narrowly — political rights were limited to property-owning men.
+a) Both A and R are true, and R is the correct explanation of A *
+b) Both A and R are true, but R is not the correct explanation of A
+c) A is true but R is false
+d) A is false but R is true
+
+Q. [1] Greece was recognised as an independent nation by the:
+a) Treaty of Vienna, 1815
+b) Treaty of Constantinople, 1832 *
+c) Treaty of Versailles, 1871
+d) Act of Union, 1707
+
+Q. [1] The Chief Minister who led the movement for the unification of Italy through a tactful diplomatic alliance with France was:
+a) Giuseppe Mazzini
+b) Count Camillo de Cavour *
+c) Giuseppe Garibaldi
+d) Otto von Bismarck
+
+Q. [1] The female allegory that came to represent the German nation was:
+a) Marianne
+b) Britannia
+c) Germania *
+d) Liberty
+
+SECTION B
+
+Q. [2] What was the main intention of the conservatives who drew up the Treaty of Vienna in 1815?
+HINT: 2 marks = 2 points — what they undid, and the new order they wanted.
+SCHEME:
+- To undo the changes of the Napoleonic wars: the Bourbon dynasty was restored and France lost its annexed territories, with new states set up on its boundaries to prevent future expansion (1)
+- To restore the monarchies overthrown by Napoleon and create a new conservative order in Europe (1)
+MODEL:
+The Treaty of Vienna of 1815 was drawn up with the object of undoing most of the changes that had come about in Europe during the Napoleonic wars. The Bourbon dynasty was restored to power in France, France lost the territories it had annexed, and a series of states were set up on its boundaries to prevent French expansion in future. The main intention was to restore the monarchies that had been overthrown by Napoleon and to create a new conservative order in Europe.
+
+Q. [2] Why did Metternich describe Mazzini as 'the most dangerous enemy of our social order'?
+SCHEME:
+- Mazzini opposed monarchy and dreamed of unified democratic republics, which directly threatened the conservative order of kings and empires (1)
+- Through his secret societies (Young Italy, Young Europe) his ideas inspired revolutionaries across Europe (1)
+MODEL:
+Mazzini believed that nations were the natural units of mankind, and he wanted Italy to be forged into a single unified democratic republic — not a patchwork of kingdoms. His opposition to monarchy struck at the very basis of the conservative order that Metternich defended. Moreover, through the secret societies he founded — Young Italy and Young Europe — his vision inspired young revolutionaries far beyond Italy. That is why Metternich described him as 'the most dangerous enemy of our social order'.
+
+Q. [2] Mention any two attributes seen in the visual representation of Germania, and what they stand for.
+SCHEME:
+- Any correct attribute + meaning, e.g. crown of oak leaves = heroism; sword = readiness to fight; broken chains = being freed (1)
+- A second correct attribute + meaning, e.g. breastplate with eagle = strength of the German empire; olive branch around the sword = willingness to make peace; black, red and gold tricolour = the flag of the liberal-nationalists of 1848 (1)
+MODEL:
+Germania, the female allegory of the German nation, is shown with symbolic attributes. Her crown of oak leaves stands for heroism, since the German oak was a symbol of courage. The sword in her hand stands for readiness to fight, while the olive branch wrapped around it signifies a willingness to make peace. The broken chains at her feet represent freedom, and the black, red and gold tricolour is the flag of the liberal-nationalists of 1848.
+
+SECTION C
+
+Q. [3] Describe any three measures introduced by the French revolutionaries to create a sense of collective identity among the French people.
+HINT: 3 marks = 3 distinct measures. Name the measure, don't just describe the mood.
+SCHEME:
+- The ideas of la patrie (the fatherland) and le citoyen (the citizen) emphasised a united community with equal rights under a constitution (1)
+- A new French flag, the tricolour, replaced the royal standard; the Estates General was renamed the National Assembly and was elected by citizens (1)
+- New hymns were composed, oaths taken and martyrs commemorated in the name of the nation; a centralised administration made uniform laws, weights and measures, and promoted the French language (1)
+MODEL:
+The French revolutionaries introduced various measures to create a sense of collective identity among the French people. The ideas of la patrie (the fatherland) and le citoyen (the citizen) emphasised the notion of a united community enjoying equal rights under a constitution. A new French flag, the tricolour, was chosen to replace the royal standard. The Estates General was elected by the body of active citizens and renamed the National Assembly. New hymns were composed, oaths taken and martyrs commemorated, all in the name of the nation. A centralised administrative system made uniform laws for all citizens, internal customs duties were abolished, uniform weights and measures were adopted, and regional dialects were discouraged in favour of French as the common language of the nation.
+
+Q. [3] Explain any three features of the Napoleonic Code (Civil Code of 1804).
+SCHEME:
+- Did away with all privileges based on birth, established equality before the law (1)
+- Secured the right to property (1)
+- In the territories under French control it simplified administrative divisions, abolished the feudal system, freed peasants from serfdom and manorial dues, and removed guild restrictions in towns (1)
+MODEL:
+The Civil Code of 1804, usually known as the Napoleonic Code, did away with all privileges based on birth and established equality before the law. It also secured the right to property. When Napoleon carried the Code to the regions under French control — the Dutch Republic, Switzerland, Italy and Germany — he simplified administrative divisions, abolished the feudal system and freed peasants from serfdom and manorial dues. In the towns, guild restrictions were removed, and transport and communication systems were improved.
+
+SECTION D
+
+Q. [5] Explain the process by which the unification of Germany was achieved.
+HINT: 5 marks = 5 points in sequence — 1848 failure, Prussia's lead, Bismarck's method, the three wars, and the proclamation of 1871.
+SCHEME:
+- Nationalist feelings were widespread among middle-class Germans, who in 1848 tried to unite the German confederation into a nation-state, but the attempt was repressed by the monarchy and military, supported by large landowners of Prussia (1)
+- After 1848, Prussia took on the leadership of the movement for national unification (1)
+- Its Chief Minister Otto von Bismarck was the architect of the process, carried out with the help of the Prussian army and bureaucracy (1)
+- Three wars over seven years — with Denmark, Austria and France — ended in Prussian victory and completed unification (1)
+- In January 1871, the Prussian king William I was proclaimed German Emperor at Versailles; the new German state emphasised modernising the currency, banking and legal systems, with Prussian measures often serving as the model (1)
+MODEL:
+Nationalist feelings were widespread among middle-class Germans, who in 1848 attempted to unite the different regions of the German confederation into a nation-state governed by an elected parliament. This liberal initiative was, however, repressed by the combined forces of the monarchy and the military, supported by the large landowners (Junkers) of Prussia. From then on, Prussia took the leadership of the movement for national unification. Its Chief Minister, Otto von Bismarck, was the architect of the process, carried out with the help of the Prussian army and bureaucracy. Three wars over seven years — with Denmark, Austria and France — ended in Prussian victory and completed the process of unification. In January 1871, the Prussian king, William I, was proclaimed German Emperor in a ceremony held at Versailles. The new German state placed strong emphasis on modernising the currency, banking, legal and judicial systems, and Prussian measures and practices often became a model for the rest of Germany.
+
+SECTION E
+
+Q. [1] SOURCE src-frankfurt Where was the Frankfurt parliament convened on 18 May 1848?
+a) The Palace of Versailles
+b) The Church of St Paul *
+c) The Habsburg palace in Vienna
+d) The Prussian court in Berlin
+
+Q. [1] SOURCE src-frankfurt Who rejected the crown offered by the deputies of the Frankfurt parliament?
+a) Duke Metternich
+b) Kaiser William I
+c) Friedrich Wilhelm IV, King of Prussia *
+d) Otto von Bismarck
+
+Q. [2] SOURCE src-frankfurt Explain two reasons why the social basis of the Frankfurt parliament eroded.
+SCHEME:
+- The parliament was dominated by the middle classes, who resisted the demands of workers and artisans and so lost their support (1)
+- The opposition of the aristocracy and the military grew stronger, and in the end troops disbanded the assembly (1)
+MODEL:
+The social basis of the Frankfurt parliament eroded for two main reasons. First, the parliament was dominated by the middle classes, who resisted the demands of workers and artisans and consequently lost their support. Second, the opposition of the aristocracy and the military became stronger; deprived of popular support and facing armed opposition, the assembly was finally forced to disband when troops were called in.

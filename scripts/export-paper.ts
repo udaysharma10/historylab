@@ -13,7 +13,7 @@ import { parsePaper } from '../src/lib/paperFormat'
 const PAPERS_DIR = 'content-src/papers'
 // Bump this filename (later timestamp) whenever seeds change after the
 // previous seed migration has already been pushed.
-const MIGRATION = 'supabase/migrations/20260719081000_seed_papers_v2.sql'
+const MIGRATION = 'supabase/migrations/20260719120000_seed_papers_v3.sql'
 const TAG = '$paper_seed$'
 
 function q(value: string): string {
