@@ -17,6 +17,7 @@ export function HomePage() {
   const cid = chapterId || 'ch1'
   const totalStars = useProgressStore((s) => s.totalStars)
   const progressSections = useProgressStore((s) => s.chapters[cid]) ?? {}
+  const completedSubsections = useProgressStore((s) => s.completedSubsections)
 
   const chapter = getChapter(cid)
   // Free-preview mode: the server served only this section; the rest render
@@ -39,9 +40,23 @@ export function HomePage() {
     )
   }
 
-  const totalCompleted = Object.values(progressSections).reduce((sum, s) => sum + s.completed, 0)
-  const totalProblems = Object.values(progressSections).reduce((sum, s) => sum + s.total, 0)
-  const overallProgress = totalProblems > 0 ? Math.round((totalCompleted / totalProblems) * 100) : 0
+  // Progress counts what the section cards promise: every topic (narrative
+  // completed) + the section quiz as one unit each (Neha's Sprint-4 review —
+  // the old quiz-only metric showed 0% after finishing all the reading).
+  const sectionUnits = (section: (typeof chapter.sections)[number]) => {
+    const topicsDone = section.subsections.filter((sub) => completedSubsections[sub.id]).length
+    const quiz = progressSections[section.id]
+    const quizDone = !!quiz && quiz.total > 0 && quiz.completed >= quiz.total
+    return { done: topicsDone + (quizDone ? 1 : 0), total: section.subsections.length + 1 }
+  }
+  const overall = chapter.sections.reduce(
+    (acc, s) => {
+      const u = sectionUnits(s)
+      return { done: acc.done + u.done, total: acc.total + u.total }
+    },
+    { done: 0, total: 0 },
+  )
+  const overallProgress = overall.total > 0 ? Math.round((overall.done / overall.total) * 100) : 0
 
   // Chapter-level study tools — whole-chapter revision modalities (the in-section
   // timeline/maps cover one topic; these span all sections). Only show what has data.
@@ -91,7 +106,7 @@ export function HomePage() {
               ⭐ {totalStars} stars
             </div>
             <div className="flex items-center gap-1.5 bg-hist-indigo-soft px-3.5 py-2 rounded-[11px] font-bold text-[13.5px] text-hist-indigo" style={{ border: '1px solid #E0D9F2' }}>
-              ✅ {totalCompleted} activities done
+              ✅ {overall.done} activities done
             </div>
           </div>
         </div>
@@ -129,8 +144,8 @@ export function HomePage() {
           {chapter.sections.map((section, i) => {
             const color = sectionColors[section.id] || '#3E3548'
             const icon = sectionIcons[section.id] || section.icon || '📖'
-            const progress = progressSections[section.id]
-            const pct = progress?.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0
+            const units = sectionUnits(section)
+            const pct = units.total > 0 ? Math.round((units.done / units.total) * 100) : 0
             const started = pct > 0
             const topicCount = section.subsections.length
             const locked = !!previewSection && section.id !== previewSection
