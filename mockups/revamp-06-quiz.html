@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Revamp 06 · Practice Quiz (same language, real states)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --ok:#5C9368; --ok-bg:#E8F1E9;
+    --teal:#3F8E84; --teal-bg:#E4F1EF; --purple:#9B5C9A; --purple-bg:#F3E9F3; --amber:#C2893E; --amber-bg:#F7EFDD;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:680px;margin:0 auto;padding:18px 22px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 16px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink)}
+  .brand .lab{color:var(--accent)}
+  .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--ink),#5d564a);
+    color:#fff;display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif}
+  .crumb{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 2px 14px}
+  .crumb b{color:var(--ink)}
+
+  .head{background:linear-gradient(140deg,#453A5E,#67589B);border-radius:20px;box-shadow:var(--shadow);
+    padding:20px 24px;margin-bottom:16px;color:#EFEAFB;display:flex;align-items:center;gap:18px}
+  .head .qicon{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.12);display:grid;place-items:center;font-size:21px;flex-shrink:0}
+  .head h1{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#fff;margin-bottom:2px}
+  .head p{font-size:12.5px;font-weight:600;color:#CFC7E8}
+  .headchip{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);
+    border-radius:999px;padding:7px 14px;font-size:11.5px;font-weight:800;color:#fff}
+
+  .modes{display:flex;flex-direction:column;gap:11px;margin-bottom:8px}
+  .mode{background:var(--paper);border-radius:16px;box-shadow:var(--shadow-sm);border:1px solid var(--line);
+    padding:14px 17px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:transform .12s}
+  .mode:hover{transform:translateY(-2px)}
+  .micon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex-shrink:0}
+  .mode h3{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink)}
+  .mmeta{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:1px}
+  .mstate{margin-left:auto;flex-shrink:0;text-align:right}
+  .stars{font-size:13px;letter-spacing:1px}
+  .mstate span{display:block;font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-top:1px}
+  .go{flex-shrink:0;font-weight:800;color:var(--muted);margin-left:6px}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:14px 0 8px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">History<span class="lab">Lab</span></div><div class="avatar">A</div></div>
+  <div class="crumb">Chapter 1 · The French Revolution and the Idea of the Nation · <b>Practice Quiz</b></div>
+
+  <div class="head">
+    <div class="qicon">🧠</div>
+    <div>
+      <h1>Practice Quiz</h1>
+      <p>Finish any round and this section counts ✓ complete</p>
+    </div>
+    <span class="headchip">Best ⭐ 2/3 · 1 round done</span>
+  </div>
+  <div class="spec"><b>Header joins the design system:</b> violet band = the "test yourself" identity (same as the home Test
+    band and the section's Finish band — one visual language at every zoom). The chip carries the section-completion promise
+    ("finish any round → section ✓") and the best-stars fact. States: "Not tried yet" → "Best ⭐ x/3 · N rounds done".</div>
+
+  <div class="modes">
+    <div class="mode">
+      <div class="micon" style="background:var(--s1-bg)">🔤</div>
+      <div><h3>Multiple Choice</h3><div class="mmeta">6 questions · ~4 min</div></div>
+      <div class="mstate"><span class="stars">⭐⭐☆</span><span>best round</span></div>
+      <span class="go">→</span>
+    </div>
+    <div class="mode">
+      <div class="micon" style="background:var(--teal-bg)">✏️</div>
+      <div><h3>Fill in the Blank</h3><div class="mmeta">2 questions · ~2 min</div></div>
+      <div class="mstate"><span style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted)">Not tried</span></div>
+      <span class="go">→</span>
+    </div>
+    <div class="mode">
+      <div class="micon" style="background:var(--purple-bg)">⚖️</div>
+      <div><h3>True or False</h3><div class="mmeta">3 questions · ~2 min</div></div>
+      <div class="mstate"><span style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted)">Not tried</span></div>
+      <span class="go">→</span>
+    </div>
+    <div class="mode">
+      <div class="micon" style="background:var(--amber-bg)">🔗</div>
+      <div><h3>Match the Following</h3><div class="mmeta">1 set · ~2 min</div></div>
+      <div class="mstate"><span style="font-size:10px;font-weight:800;text-transform:uppercase;color:var(--muted)">Not tried</span></div>
+      <span class="go">→</span>
+    </div>
+  </div>
+  <div class="spec"><b>Four tiny centred boxes → full-width rows</b> with per-format identity colour, question count, a time
+    estimate, and — the big miss today — <b>each format's own state</b> (best stars / not tried). No more "which one is the real
+    quiz?": the header says any round completes the section, and the rows show exactly what's been earned where. The play
+    experience inside each format is unchanged.</div>
+
+  <div class="spec"><b>⚖️ DELIBERATION POINT (teacher's push):</b> keep four format doors (drill-friendly, granular states — as
+    drawn) <b>vs</b> one "Mixed round" that samples across formats like a real paper (exam-realistic, one decision, one state).
+    A middle path: keep the four rows and ADD a featured "Mixed round · 12 questions" row on top. Neha's call — the mockup can
+    show any of the three in one iteration.</div>
+
+</div>
+</body>
+</html>
