@@ -65,3 +65,23 @@ is the fallback for future chapters without strong art — Neha curates any gene
 - **Phase 2:** build shell components + tokens once; port section page + chapter home.
 - **Phase 3:** propagate to quiz, Test Centre, player, results mechanically. Landing seam review before public launch.
 - **Parked (roadmap, need content/build):** Notes PDF per chapter, My Progress page, quote-band curation per section (cheap — Neha supplies one quote per section).
+
+## 6. Iteration loop (Neha's process, 2026-07-26)
+Round-trip: Neha feeds our latest render to her AI tool → we critique the output against the laws
+(§4) → merge what survives into the next version → she reviews. Every adoption/refusal is logged here.
+
+**Round v5 (from her AI's iteration of our v4):**
+- ADOPTED: grouped sidebar (LEARN/PRACTICE/REVISE) · profile block (name/class/stars — no XP) ·
+  breadcrumb in main pane · light hero with white stat chips · **"Continue learning" resume band**
+  (deep-link to exact topic + minutes-left estimate) · numbered journey stepper with connector line
+  + per-section time estimates · purple quote band · stats as 2×2 grid (streak/stars/best quiz/topics done).
+- REFUSED: Mock Test dropped from the rail (violates §4.3 — restored as the violet prime CTA) ·
+  per-row bar+%+pill on every section (bar only on in-progress, no empty tracks) · fabricated
+  XP/level/"Today's Goal"/badge systems (fake state; see Parked) · lock icons on paid sections
+  (pending Neha's call below).
+- **OPEN QUESTION for Neha: sequential locking.** Her AI locked sections 3–6 until 2 completes.
+  Enforced order helps first-pass discipline but blocks revision jumps (a boards student MUST be able
+  to open S5 directly). Recommendation: "recommended next" highlight without hard locks. Her call.
+- **PARKED — Gamification roadmap** (good ideas, real features, not paint): XP + levels ("Historian II"),
+  daily goals with rewards, chapter badges ("French Revolution Master"), time-spent tracking.
+  Needs product decision + engine + a DPDPA look at streak mechanics for minors; candidate for post-launch retention work.
