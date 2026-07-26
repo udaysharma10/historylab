@@ -107,7 +107,7 @@ export function AttemptResult() {
   const headline =
     delta !== null && delta > 0
       ? `Your best yet, ${firstName} — ${objAwarded}/${objMax}`
-      : `${firstName}, you scored ${objAwarded}/${objMax} on objective`
+      : `${firstName}, you scored ${objAwarded}/${objMax} on MCQs`
 
   return (
     <div className="max-w-3xl mx-auto pb-16">
@@ -159,7 +159,7 @@ export function AttemptResult() {
               day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
             })}
             {attempt.auto_submitted && ' · auto-submitted when time ran out'}
-            {' '}· objective marked instantly
+            {' '}· MCQs marked instantly
           </div>
           <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
             {delta !== null && (
@@ -201,7 +201,7 @@ export function AttemptResult() {
                   />
                 </div>
                 <span className="text-[11px] font-bold text-hist-muted">
-                  {s.got}/{s.max} objective
+                  {s.got}/{s.max} MCQ
                 </span>
               </div>
             )

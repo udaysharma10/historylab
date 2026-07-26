@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAccess } from '../../components/auth/AccessProvider'
 import { PurchaseSheet } from '../../components/purchase/PurchaseSheet'
@@ -67,14 +67,7 @@ export function TestCentre() {
 
   return (
     <div className="max-w-4xl mx-auto pb-10">
-      {/* Breadcrumb */}
-      <div className="text-[12.5px] font-semibold text-hist-muted mb-3.5 px-0.5">
-        <Link to="/" className="hover:text-hist-dark">All Chapters</Link>
-        <span className="mx-1.5">·</span>
-        <Link to={`/chapter/${cid}`} className="hover:text-hist-dark">{book?.title ?? 'Chapter'}</Link>
-        <span className="mx-1.5">·</span>
-        <b className="text-hist-dark">Test Centre</b>
-      </div>
+      {/* Breadcrumb lives in the workspace shell (Overview › Mock Tests) */}
 
       {/* Hero */}
       <motion.div
@@ -112,7 +105,7 @@ export function TestCentre() {
               {best ? `${Number(best.objective_awarded ?? 0)}/${Number(best.objective_max ?? 0)}` : '—'}
             </b>
             <span className="text-[10px] font-extrabold uppercase tracking-wide text-hist-muted">
-              Best objective
+              Best MCQ
             </span>
           </div>
         </div>
@@ -124,7 +117,7 @@ export function TestCentre() {
             🔒 Practice tests come with the chapter
           </div>
           <p className="font-body text-sm text-gray-600 mb-3">
-            Unlock the chapter to attempt timed CBSE-pattern papers with instant objective
+            Unlock the chapter to attempt timed CBSE-pattern papers with instant MCQ
             marking and the marking scheme on every written answer.
           </p>
           {product && !product.is_free && (

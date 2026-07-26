@@ -117,7 +117,6 @@ export function QuizMode() {
   }
 
   const cidSafe = chapterId || 'ch1'
-  const chapterNumber = cidSafe === 'ch2' ? 2 : 1
   const handleBackToSection = () => {
     navigate(`/chapter/${cidSafe}/section/${sectionId}`)
   }
@@ -147,15 +146,14 @@ export function QuizMode() {
       <div className="max-w-lg mx-auto px-4 pt-5 pb-8">
         {/* Header */}
         <div className="mb-6">
-          <nav className="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-[12.5px] font-semibold text-hist-muted mb-3 px-0.5">
-            <button className="hover:text-hist-navy transition-colors" onClick={() => navigate('/')}>All Chapters</button>
-            <span aria-hidden>·</span>
-            <button className="hover:text-hist-navy transition-colors" onClick={() => navigate(`/chapter/${cidSafe}`)}>Chapter {chapterNumber}</button>
-            <span aria-hidden>·</span>
-            <button className="hover:text-hist-navy transition-colors truncate max-w-[40%]" onClick={handleBackToSection}>{section.title}</button>
-            <span aria-hidden>·</span>
-            <span className="text-hist-navy">Quiz</span>
-          </nav>
+          {/* Immersion exit — quiz is Altitude 3, one way out (decision #37) */}
+          <button
+            className="flex items-center gap-1.5 text-[12.5px] font-bold text-hist-muted hover:text-hist-dark transition-colors mb-3"
+            onClick={handleBackToSection}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            Back to Section {section.number}
+          </button>
 
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: color }}>
