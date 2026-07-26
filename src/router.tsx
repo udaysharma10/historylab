@@ -3,9 +3,11 @@ import { createBrowserRouter, Navigate, Outlet, useParams } from 'react-router-d
 import { AppShell } from './components/layout/AppShell'
 import { useAccess } from './components/auth/AccessProvider'
 import { getCachedBundle, loadChapterBundle } from './data/chapterBundle'
+import { WorkspaceLayout } from './components/shell/WorkspaceLayout'
 import { BookHome } from './modules/BookHome'
 import { HomePage } from './modules/HomePage'
 import { SectionModule } from './modules/SectionModule'
+import { TopicReader } from './modules/TopicReader'
 import { QuizMode } from './modules/QuizMode'
 import { TimelineMode } from './modules/TimelineMode'
 import { MapMode } from './modules/MapMode'
@@ -82,26 +84,8 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppShell />,
     children: [
-      // Book home — chapter selector
+      // Altitude 1 — the shelf (chapter selector)
       { index: true, element: <BookHome /> },
-
-      // Chapter-scoped routes (guarded by chapter access)
-      {
-        element: <RequireChapterAccess />,
-        children: [
-          { path: 'chapter/:chapterId', element: <HomePage /> },
-          { path: 'chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
-          { path: 'chapter/:chapterId/section/:sectionId/quiz', element: <QuizMode /> },
-          { path: 'chapter/:chapterId/timeline', element: <TimelineMode /> },
-          { path: 'chapter/:chapterId/maps', element: <MapMode /> },
-          { path: 'chapter/:chapterId/flashcards', element: <FlashcardMode /> },
-          { path: 'chapter/:chapterId/figures', element: <FigureMode /> },
-          { path: 'chapter/:chapterId/exam', element: <ExamPractice /> },
-          { path: 'chapter/:chapterId/tests', element: <TestCentre /> },
-          { path: 'chapter/:chapterId/tests/:paperId/play', element: <PaperPlayer /> },
-          { path: 'chapter/:chapterId/tests/result/:attemptId', element: <AttemptResult /> },
-        ],
-      },
 
       // Backward compat — old routes redirect to ch1
       { path: 'section/:sectionId', element: <RedirectToChapter /> },
@@ -115,6 +99,36 @@ export const router = createBrowserRouter([
       // Dashboard + admin
       { path: 'dashboard', element: <TeacherDashboard /> },
       { path: 'admin', element: <AdminPanel /> },
+    ],
+  },
+
+  // Chapter-scoped routes (guarded) — V2 three-altitude layout (decision #37/#38):
+  // workspace panes render inside WorkspaceLayout (sidebar + pane + rail);
+  // immersive experiences (reader, quiz, paper player) render full-screen.
+  {
+    element: <RequireChapterAccess />,
+    children: [
+      {
+        element: <WorkspaceLayout />,
+        children: [
+          { path: '/chapter/:chapterId', element: <HomePage /> },
+          { path: '/chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
+          { path: '/chapter/:chapterId/timeline', element: <TimelineMode /> },
+          { path: '/chapter/:chapterId/maps', element: <MapMode /> },
+          { path: '/chapter/:chapterId/flashcards', element: <FlashcardMode /> },
+          { path: '/chapter/:chapterId/figures', element: <FigureMode /> },
+          { path: '/chapter/:chapterId/exam', element: <ExamPractice /> },
+          { path: '/chapter/:chapterId/tests', element: <TestCentre /> },
+          { path: '/chapter/:chapterId/tests/result/:attemptId', element: <AttemptResult /> },
+        ],
+      },
+      // Altitude 3 — immersion, shell hidden
+      {
+        path: '/chapter/:chapterId/section/:sectionId/topic/:topicIndex',
+        element: <TopicReader />,
+      },
+      { path: '/chapter/:chapterId/section/:sectionId/quiz', element: <QuizMode /> },
+      { path: '/chapter/:chapterId/tests/:paperId/play', element: <PaperPlayer /> },
     ],
   },
 ])

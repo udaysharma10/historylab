@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { getChapter, getChapterPreview, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { SectionHeader } from '../components/layout/SectionHeader'
-import { NarrativeMode } from './NarrativeMode'
 import { useProgressStore } from '../store/useProgressStore'
 import { SectionTimeline } from '../components/section/SectionTimeline'
 import { SectionMaps } from '../components/section/SectionMaps'
@@ -13,7 +11,6 @@ export function SectionModule() {
   const navigate = useNavigate()
   const basePath = `/chapter/${chapterId || 'ch1'}`
   const cid = chapterId || 'ch1'
-  const [activeSubsection, setActiveSubsection] = useState<number | null>(null)
   const completedSubsections = useProgressStore((s) => s.completedSubsections)
   const sectionProgress = useProgressStore((s) => s.chapters[cid]?.[sectionId ?? ''])
 
@@ -53,30 +50,9 @@ export function SectionModule() {
     ? Math.round((completedCount / section.subsections.length) * 100)
     : 0
 
-  // If in narrative mode, render it
-  if (activeSubsection !== null) {
-    const subsection = section.subsections[activeSubsection]
-    return (
-      <NarrativeMode
-        key={subsection.id}
-        subsection={subsection}
-        sectionColor={color}
-        subsectionIndex={activeSubsection}
-        totalSubsections={section.subsections.length}
-        onComplete={() => {
-          // Subsection marked complete inside NarrativeMode
-        }}
-        onNextSubsection={() => {
-          if (activeSubsection < section.subsections.length - 1) {
-            setActiveSubsection(activeSubsection + 1)
-          } else {
-            setActiveSubsection(null)
-          }
-        }}
-        onBackToSection={() => setActiveSubsection(null)}
-      />
-    )
-  }
+  // Topics are routes since decision #37 — the reader is the immersive
+  // /topic/:topicIndex route (1-based), not local state.
+  const topicPath = (i: number) => `${basePath}/section/${sectionId}/topic/${i + 1}`
 
   // Section overview with subsection list
   const chapterNumber = cid === 'ch2' ? 2 : 1
@@ -138,7 +114,7 @@ export function SectionModule() {
           whileTap={{ scale: 0.98 }}
           onClick={() => {
             const firstIncomplete = section.subsections.findIndex((sub) => !completedSubsections[sub.id])
-            setActiveSubsection(firstIncomplete >= 0 ? firstIncomplete : 0)
+            navigate(topicPath(firstIncomplete >= 0 ? firstIncomplete : 0))
           }}
         >
           <span className="text-xl">📖</span>
@@ -175,7 +151,7 @@ export function SectionModule() {
               transition={{ delay: 0.15 + i * 0.06 }}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              onClick={() => setActiveSubsection(i)}
+              onClick={() => navigate(topicPath(i))}
             >
               <div className="flex items-center gap-3">
                 {/* Number/check */}

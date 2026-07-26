@@ -49,6 +49,28 @@
   --shadow-card: 0 6px 18px rgba(70, 60, 100, 0.07);
   --shadow-card-hover: 0 14px 34px rgba(70, 60, 100, 0.11);
   --shadow-button: 0 4px 0px rgba(70, 60, 100, 0.15);
+
+  /* ============================================================
+     Design Language V2 "Workspace" — LOCKED 2026-07-26 (#38).
+     Additive: legacy hist-* tokens stay until every page is ported.
+     Spec: DESIGN_LANGUAGE_V2.md + mockups/finalmockup/
+     ============================================================ */
+  --color-v2-ink: #2E2A3B;
+  --color-v2-body: #6E6478;
+  --color-v2-muted: #A1969F;
+  --color-v2-line: #EFE3DA;
+  --color-v2-page1: #FBF3EC;
+  --color-v2-page2: #F7F0F5;
+  --color-v2-accent: #E8551F;
+  --color-v2-accent-soft: #FDEAE0;
+  --color-v2-accent-deep: #A8431A;
+  --color-v2-cta: #C05F35;
+  --color-v2-lav: #7E72C2;
+  --color-v2-lav-soft: #F1ECFA;
+  --color-v2-ok: #3E8E5A;
+  --color-v2-ok-bg: #E3F2E8;
+  --shadow-v2: 0 14px 40px rgba(70, 60, 100, 0.10);
+  --shadow-v2-sm: 0 4px 14px rgba(70, 60, 100, 0.08);
 }
 
 /* Base styles */
