@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
   // The order must belong to the calling user.
   const { data: purchase } = await service
     .from("purchases")
-    .select("id, user_id, product_id, status, products(kind)")
+    .select("id, user_id, product_id, status, attempt_id, products(kind)")
     .eq("razorpay_order_id", orderId)
     .eq("user_id", user.id)
     .maybeSingle();
@@ -102,6 +102,19 @@ Deno.serve(async (req) => {
         purchase_id: purchase.id,
       },
       { onConflict: "user_id,chapter_id", ignoreDuplicates: true },
+    );
+  }
+  // Examiner review (Milestone B): a paid addon opens the review record for
+  // its attempt — that row IS Neha's queue entry.
+  if (kind === "addon" && purchase.attempt_id) {
+    await service.from("examiner_reviews").upsert(
+      {
+        attempt_id: purchase.attempt_id,
+        user_id: user.id,
+        purchase_id: purchase.id,
+        status: "paid",
+      },
+      { onConflict: "attempt_id", ignoreDuplicates: true },
     );
   }
 

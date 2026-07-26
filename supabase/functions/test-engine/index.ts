@@ -5,7 +5,13 @@
 //
 // Actions (POST {action, ...}):
 //   student: list, start, save, submit, result
-//   admin:   upsert_paper, get_paper, set_status, delete_paper, admin_list
+//   admin:   upsert_paper, get_paper, set_status, delete_paper, admin_list,
+//            review_queue, review_get, review_save, review_publish
+//
+// Examiner review (Milestone B, decision #39): human marking only, per
+// attempt. The examiner's marks live on examiner_reviews.marks (jsonb keyed
+// by question_id) — answers rows are never fabricated for unanswered
+// questions. Publish is re-runnable (silent edits allowed).
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -69,12 +75,20 @@ Deno.serve(async (req) => {
       case "get_paper":
       case "set_status":
       case "delete_paper":
-      case "admin_list": {
+      case "admin_list":
+      case "review_queue":
+      case "review_get":
+      case "review_save":
+      case "review_publish": {
         if (!isAdmin) return json({ error: "forbidden" }, 403);
         if (action === "upsert_paper") return await upsertPaper(service, body);
         if (action === "get_paper") return await getPaperAdmin(service, body);
         if (action === "set_status") return await setStatus(service, body);
         if (action === "delete_paper") return await deletePaper(service, body);
+        if (action === "review_queue") return await reviewQueue(service);
+        if (action === "review_get") return await reviewGet(service, body);
+        if (action === "review_save") return await reviewSave(service, body, false);
+        if (action === "review_publish") return await reviewSave(service, body, true);
         return await adminList(service);
       }
       default:
@@ -211,8 +225,18 @@ async function list(
       .order("created_at", { ascending: false })
     : { data: [] };
 
+  // Review status per attempt (chips in the attempts table).
+  const attemptIds = (attempts ?? []).map((a) => a.id as string);
+  const { data: reviews } = attemptIds.length
+    ? await service
+      .from("examiner_reviews")
+      .select("attempt_id, status")
+      .in("attempt_id", attemptIds)
+      .neq("status", "refunded")
+    : { data: [] };
+
   const entitled = isAdmin || await hasChapterAccess(service, userId, chapter);
-  return json({ papers: papers ?? [], attempts: attempts ?? [], entitled });
+  return json({ papers: papers ?? [], attempts: attempts ?? [], reviews: reviews ?? [], entitled });
 }
 
 async function start(
@@ -396,6 +420,13 @@ async function result(
         .eq("attempt_id", attemptId),
     ]);
 
+  const { data: review } = await service
+    .from("examiner_reviews")
+    .select("status, marks, overall_comment, marked_at")
+    .eq("attempt_id", attemptId)
+    .neq("status", "refunded")
+    .maybeSingle();
+
   return json({
     attempt: {
       id: attempt.id,
@@ -410,6 +441,16 @@ async function result(
     questions: questions ?? [],
     sources: sources ?? [],
     answers: answers ?? [],
+    // null = never submitted for review; status 'paid' = with the examiner;
+    // 'marked' = marks/comments below are live. Marks stay hidden pre-publish.
+    review: review
+      ? {
+        status: review.status,
+        marks: review.status === "marked" ? review.marks : null,
+        overall_comment: review.status === "marked" ? review.overall_comment : null,
+        marked_at: review.marked_at,
+      }
+      : null,
   });
 }
 
@@ -507,6 +548,19 @@ async function upsertPaper(service: ReturnType<typeof createClient>, body: Json)
   const { data: existing } = await service
     .from("papers").select("status").eq("id", p.id).maybeSingle();
 
+  // "The paper stays always" (decision #39): a re-upload wipes questions and
+  // answer sheets — never allowed once anyone has PAID for a review of an
+  // attempt on this paper. (A restrictive FK backs this at the DB level.)
+  if (existing) {
+    const blocked = await paperHasReviews(service, p.id);
+    if (blocked) {
+      return json(
+        { error: "this paper has paid examiner reviews — it can no longer be replaced" },
+        409,
+      );
+    }
+  }
+
   const { error: paperErr } = await service.from("papers").upsert({
     id: p.id,
     chapter_id: p.chapter_id,
@@ -592,9 +646,197 @@ async function setStatus(service: ReturnType<typeof createClient>, body: Json) {
 
 async function deletePaper(service: ReturnType<typeof createClient>, body: Json) {
   if (!validSlug(body.paper_id)) return json({ error: "bad request" }, 400);
+  if (await paperHasReviews(service, body.paper_id)) {
+    return json(
+      { error: "this paper has paid examiner reviews — it can no longer be deleted" },
+      409,
+    );
+  }
   const { error } = await service.from("papers").delete().eq("id", body.paper_id);
   if (error) return json({ error: "delete failed" }, 500);
   return json({ ok: true });
+}
+
+// ============================================================
+// examiner review (Milestone B, decision #39) — admin only
+// ============================================================
+
+async function paperHasReviews(
+  service: ReturnType<typeof createClient>,
+  paperId: string,
+): Promise<boolean> {
+  const { data: attempts } = await service
+    .from("attempts").select("id").eq("paper_id", paperId);
+  const ids = (attempts ?? []).map((a) => a.id as string);
+  if (!ids.length) return false;
+  const { data } = await service
+    .from("examiner_reviews")
+    .select("id")
+    .in("attempt_id", ids)
+    .neq("status", "refunded")
+    .limit(1);
+  return !!data?.length;
+}
+
+async function reviewQueue(service: ReturnType<typeof createClient>) {
+  const { data: reviews } = await service
+    .from("examiner_reviews")
+    .select("id, attempt_id, user_id, status, created_at, marked_at")
+    .neq("status", "refunded")
+    .order("created_at", { ascending: true });
+  const rows = reviews ?? [];
+
+  const attemptIds = rows.map((r) => r.attempt_id as string);
+  const userIds = [...new Set(rows.map((r) => r.user_id as string))];
+  const [{ data: attempts }, { data: profiles }] = await Promise.all([
+    attemptIds.length
+      ? service.from("attempts")
+        .select("id, paper_id, submitted_at, objective_awarded, objective_max")
+        .in("id", attemptIds)
+      : Promise.resolve({ data: [] }),
+    userIds.length
+      ? service.from("profiles").select("id, name, email").in("id", userIds)
+      : Promise.resolve({ data: [] }),
+  ]);
+  const paperIds = [...new Set((attempts ?? []).map((a) => a.paper_id as string))];
+  const { data: papers } = paperIds.length
+    ? await service.from("papers").select("id, title, total_marks, objective_marks").in("id", paperIds)
+    : { data: [] };
+
+  const attemptById = new Map((attempts ?? []).map((a) => [a.id as string, a]));
+  const paperById = new Map((papers ?? []).map((p) => [p.id as string, p]));
+  const profileById = new Map((profiles ?? []).map((p) => [p.id as string, p]));
+
+  return json({
+    reviews: rows.map((r) => {
+      const attempt = attemptById.get(r.attempt_id as string);
+      const paper = attempt ? paperById.get(attempt.paper_id as string) : null;
+      const student = profileById.get(r.user_id as string);
+      return {
+        id: r.id,
+        attempt_id: r.attempt_id,
+        status: r.status,
+        created_at: r.created_at,
+        marked_at: r.marked_at,
+        submitted_at: attempt?.submitted_at ?? null,
+        student_name: student?.name ?? "Student",
+        student_email: student?.email ?? "",
+        paper_title: paper?.title ?? attempt?.paper_id ?? "",
+        total_marks: paper?.total_marks ?? null,
+        objective_awarded: attempt?.objective_awarded ?? null,
+        objective_max: attempt?.objective_max ?? null,
+      };
+    }),
+  });
+}
+
+async function reviewGet(service: ReturnType<typeof createClient>, body: Json) {
+  const reviewId = body.review_id;
+  if (typeof reviewId !== "string") return json({ error: "bad request" }, 400);
+
+  const { data: review } = await service
+    .from("examiner_reviews").select("*").eq("id", reviewId).maybeSingle();
+  if (!review) return json({ error: "not found" }, 404);
+
+  const { data: attempt } = await service
+    .from("attempts").select("*").eq("id", review.attempt_id).single();
+  const [{ data: paper }, { data: questions }, { data: sources }, { data: answers }, { data: student }] =
+    await Promise.all([
+      service.from("papers")
+        .select("id, chapter_id, title, total_marks, objective_marks, duration_minutes")
+        .eq("id", attempt.paper_id).single(),
+      service.from("questions")
+        .select("id, position, section_label, qtype, marks, prompt, source_id, options, correct_index, scheme")
+        .eq("paper_id", attempt.paper_id)
+        .order("position"),
+      service.from("paper_sources").select("source_id, title, body").eq("paper_id", attempt.paper_id),
+      service.from("answers")
+        .select("question_id, response, is_correct, marks_awarded")
+        .eq("attempt_id", review.attempt_id),
+      service.from("profiles").select("name, email").eq("id", review.user_id).maybeSingle(),
+    ]);
+
+  return json({
+    review,
+    attempt: {
+      id: attempt.id,
+      submitted_at: attempt.submitted_at,
+      objective_awarded: attempt.objective_awarded,
+      objective_max: attempt.objective_max,
+    },
+    paper,
+    questions: questions ?? [],
+    sources: sources ?? [],
+    answers: answers ?? [],
+    student_name: student?.name ?? "Student",
+    student_email: student?.email ?? "",
+  });
+}
+
+// Save (draft) or publish the examiner's marking. Payload:
+//   { review_id, marks: {question_id: {marks, comment?}}, overall_comment? }
+// Marks are validated against the paper's TEXT questions and their maxima.
+// Publish is idempotent and re-runnable — decision #39 allows silent edits.
+async function reviewSave(
+  service: ReturnType<typeof createClient>,
+  body: Json,
+  publish: boolean,
+) {
+  const reviewId = body.review_id;
+  if (typeof reviewId !== "string") return json({ error: "bad request" }, 400);
+
+  const { data: review } = await service
+    .from("examiner_reviews").select("id, attempt_id, status").eq("id", reviewId).maybeSingle();
+  if (!review) return json({ error: "not found" }, 404);
+  if (review.status === "refunded") return json({ error: "review was refunded" }, 409);
+
+  const { data: attempt } = await service
+    .from("attempts").select("paper_id").eq("id", review.attempt_id).single();
+  const { data: questions } = await service
+    .from("questions")
+    .select("id, qtype, marks")
+    .eq("paper_id", attempt.paper_id);
+  const textQ = new Map(
+    (questions ?? []).filter((q) => q.qtype === "text").map((q) => [q.id as string, q.marks as number]),
+  );
+
+  const rawMarks = (body.marks ?? {}) as Record<string, { marks?: unknown; comment?: unknown }>;
+  const clean: Record<string, { marks: number; comment?: string }> = {};
+  for (const [qid, entry] of Object.entries(rawMarks)) {
+    const max = textQ.get(qid);
+    if (max === undefined) return json({ error: `unknown text question ${qid}` }, 400);
+    const m = Number(entry?.marks);
+    if (!Number.isFinite(m) || m < 0 || m > max || Math.round(m * 2) !== m * 2) {
+      return json({ error: `marks for ${qid} must be 0–${max} in half-mark steps` }, 400);
+    }
+    const comment = typeof entry?.comment === "string" ? entry.comment.slice(0, 2000).trim() : "";
+    clean[qid] = comment ? { marks: m, comment } : { marks: m };
+  }
+
+  if (publish) {
+    // Publishing requires every text question to carry a mark.
+    for (const qid of textQ.keys()) {
+      if (!(qid in clean)) {
+        return json({ error: "all written questions need marks before publishing" }, 400);
+      }
+    }
+  }
+
+  const overall = typeof body.overall_comment === "string"
+    ? body.overall_comment.slice(0, 4000).trim()
+    : undefined;
+
+  const update: Record<string, unknown> = { marks: clean };
+  if (overall !== undefined) update.overall_comment = overall || null;
+  if (publish) {
+    update.status = "marked";
+    update.marked_at = new Date().toISOString();
+  }
+
+  const { error } = await service
+    .from("examiner_reviews").update(update).eq("id", reviewId);
+  if (error) return json({ error: "save failed", detail: error.message }, 500);
+  return json({ ok: true, status: publish ? "marked" : review.status });
 }
 
 async function adminList(service: ReturnType<typeof createClient>) {

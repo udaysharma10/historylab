@@ -6,6 +6,7 @@ import { useAuthContext } from '../components/auth'
 import { useAccess } from '../components/auth/AccessProvider'
 import { chapterSlug } from '../lib/contentIds'
 import { PapersAdmin } from './testcentre/PapersAdmin'
+import { ExaminerQueue } from './testcentre/ExaminerQueue'
 
 // Admin panel v1 (Sprint 1, plan §6): view users, grant/revoke chapter
 // entitlements (admin_grant rows — how pilot cohorts and FOC comps get
@@ -46,7 +47,7 @@ export function AdminPanel() {
   const { profile } = useAuthContext()
   const { isAdmin, loading: accessLoading, products, refresh } = useAccess()
 
-  const [tab, setTab] = useState<'users' | 'purchases' | 'pricing' | 'papers'>('users')
+  const [tab, setTab] = useState<'users' | 'purchases' | 'pricing' | 'papers' | 'examiner'>('users')
   const [priceEdits, setPriceEdits] = useState<Record<string, { price: string; list: string }>>({})
   const [users, setUsers] = useState<AdminUser[]>([])
   const [entitlements, setEntitlements] = useState<EntitlementRow[]>([])
@@ -150,7 +151,7 @@ export function AdminPanel() {
 
         {/* Tabs */}
         <div className="flex gap-2 mb-5">
-          {(['users', 'purchases', 'pricing', 'papers'] as const).map((t) => (
+          {(['users', 'purchases', 'pricing', 'papers', 'examiner'] as const).map((t) => (
             <button
               key={t}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
@@ -164,7 +165,9 @@ export function AdminPanel() {
                   ? `Purchases (${purchases.length})`
                   : t === 'pricing'
                     ? 'Pricing'
-                    : 'Papers'}
+                    : t === 'papers'
+                      ? 'Papers'
+                      : 'Examiner'}
             </button>
           ))}
         </div>
@@ -402,6 +405,7 @@ export function AdminPanel() {
         )}
 
         {tab === 'papers' && <PapersAdmin />}
+        {tab === 'examiner' && <ExaminerQueue />}
       </motion.div>
     </div>
   )

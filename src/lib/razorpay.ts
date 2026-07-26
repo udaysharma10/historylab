@@ -38,7 +38,12 @@ export interface CheckoutCallbacks {
   onDismiss: () => void
 }
 
-export async function startCheckout(productId: string, cb: CheckoutCallbacks) {
+export async function startCheckout(
+  productId: string,
+  cb: CheckoutCallbacks,
+  /** Examiner review addon: which attempt the review is for. */
+  opts?: { attemptId?: string },
+) {
   const loaded = await loadCheckoutScript()
   if (!loaded || !window.Razorpay) {
     cb.onFailure('Could not load the payment window. Check your connection and try again.')
@@ -46,7 +51,7 @@ export async function startCheckout(productId: string, cb: CheckoutCallbacks) {
   }
 
   const { data: order, error } = await supabase.functions.invoke('create-order', {
-    body: { product_id: productId },
+    body: { product_id: productId, attempt_id: opts?.attemptId },
   })
   if (error || !order?.order_id) {
     // Surface the server's own error body — a generic message hides the cause.
@@ -66,7 +71,9 @@ export async function startCheckout(productId: string, cb: CheckoutCallbacks) {
     }
     cb.onFailure(
       status === 409
-        ? 'This chapter is already unlocked on your account — reload the page.'
+        ? serverMsg && serverMsg.includes('review')
+          ? 'This attempt is already with the examiner — reload the page.'
+          : 'This chapter is already unlocked on your account — reload the page.'
         : `Could not start the payment${serverMsg ? ` (${serverMsg})` : ''}. Please try again in a minute.`
     )
     return

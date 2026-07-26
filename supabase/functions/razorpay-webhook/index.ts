@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
   if (event.event === "payment.captured" && payment?.order_id) {
     const { data: purchase } = await service
       .from("purchases")
-      .select("id, user_id, product_id, status, products(kind)")
+      .select("id, user_id, product_id, status, attempt_id, products(kind)")
       .eq("razorpay_order_id", payment.order_id)
       .maybeSingle();
     if (purchase) {
@@ -92,7 +92,8 @@ Deno.serve(async (req) => {
           })
           .eq("id", purchase.id);
       }
-      if ((purchase.products as { kind?: string } | null)?.kind === "chapter") {
+      const kind = (purchase.products as { kind?: string } | null)?.kind;
+      if (kind === "chapter") {
         await service.from("entitlements").upsert(
           {
             user_id: purchase.user_id,
@@ -101,6 +102,17 @@ Deno.serve(async (req) => {
             purchase_id: purchase.id,
           },
           { onConflict: "user_id,chapter_id", ignoreDuplicates: true },
+        );
+      }
+      if (kind === "addon" && purchase.attempt_id) {
+        await service.from("examiner_reviews").upsert(
+          {
+            attempt_id: purchase.attempt_id,
+            user_id: purchase.user_id,
+            purchase_id: purchase.id,
+            status: "paid",
+          },
+          { onConflict: "attempt_id", ignoreDuplicates: true },
         );
       }
     } else {
@@ -123,6 +135,14 @@ Deno.serve(async (req) => {
           .eq("id", purchase.id);
         // Refund revokes the chapter (plan §4).
         await service.from("entitlements").delete().eq("purchase_id", purchase.id);
+        // Examiner reviews are NO-REFUND by policy (decision #39) — but if a
+        // dashboard refund happens anyway, keep state coherent: an unmarked
+        // review is withdrawn; a marked one stays (work was delivered).
+        await service
+          .from("examiner_reviews")
+          .update({ status: "refunded" })
+          .eq("purchase_id", purchase.id)
+          .neq("status", "marked");
       }
     }
   }

@@ -57,6 +57,12 @@ export function TestCentre() {
         .sort((a, b) => (b.submitted_at ?? '').localeCompare(a.submitted_at ?? '')),
     [data],
   )
+
+  // Examiner review chips per attempt (Milestone B).
+  const reviewByAttempt = useMemo(
+    () => new Map((data?.reviews ?? []).map((r) => [r.attempt_id, r.status])),
+    [data],
+  )
   const best = submitted.reduce<AttemptMeta | null>(
     (acc, a) =>
       acc === null || (a.objective_awarded ?? 0) > (acc.objective_awarded ?? 0) ? a : acc,
@@ -237,15 +243,25 @@ export function TestCentre() {
                             <span className="text-hist-muted font-semibold text-[11.5px]">objective</span>
                           </td>
                           <td className={`px-2.5 py-3 ${i < submitted.length - 1 ? 'border-b border-hist-line' : ''}`}>
-                            <span
-                              className={`inline-flex items-center gap-1 text-[10.5px] font-extrabold uppercase px-2.5 py-1 rounded-full ${
-                                a.auto_submitted
-                                  ? 'bg-hist-orange/10 text-hist-orange'
-                                  : 'bg-hist-green/10 text-hist-green'
-                              }`}
-                            >
-                              {a.auto_submitted ? '⏱ Time up' : 'Marked ✓'}
-                            </span>
+                            {(() => {
+                              // Honest status: only an examiner-marked attempt is
+                              // "marked"; auto-marking covers MCQs alone.
+                              const review = reviewByAttempt.get(a.id)
+                              const chip = review === 'marked'
+                                ? { label: '🖋️ Examiner-marked ✓', cls: 'bg-hist-green/10 text-hist-green' }
+                                : review === 'paid'
+                                  ? { label: 'With examiner', cls: 'bg-hist-indigo-soft text-hist-indigo' }
+                                  : a.auto_submitted
+                                    ? { label: '⏱ Time up', cls: 'bg-hist-orange/10 text-hist-orange' }
+                                    : { label: 'MCQs marked', cls: 'bg-hist-green/10 text-hist-green' }
+                              return (
+                                <span
+                                  className={`inline-flex items-center gap-1 text-[10.5px] font-extrabold uppercase px-2.5 py-1 rounded-full ${chip.cls}`}
+                                >
+                                  {chip.label}
+                                </span>
+                              )
+                            })()}
                           </td>
                           <td className={`px-2.5 py-3 text-right ${i < submitted.length - 1 ? 'border-b border-hist-line' : ''}`}>
                             <button

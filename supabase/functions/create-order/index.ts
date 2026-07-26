@@ -33,8 +33,9 @@ Deno.serve(async (req) => {
   if (!user) return json({ error: "unauthorized" }, 401);
 
   let productId: unknown;
+  let attemptId: unknown;
   try {
-    ({ product_id: productId } = await req.json());
+    ({ product_id: productId, attempt_id: attemptId } = await req.json());
   } catch {
     return json({ error: "bad request" }, 400);
   }
@@ -69,6 +70,31 @@ Deno.serve(async (req) => {
     if (owned) return json({ error: "already owned" }, 409);
   }
 
+  // Examiner review (Milestone B): the addon is bought FOR one submitted
+  // attempt. Validate ownership + state, refuse double-purchase per attempt.
+  if (product.kind === "addon") {
+    if (typeof attemptId !== "string" || !/^[0-9a-f-]{36}$/.test(attemptId)) {
+      return json({ error: "attempt required" }, 400);
+    }
+    const { data: attempt } = await service
+      .from("attempts")
+      .select("id, user_id, status")
+      .eq("id", attemptId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (!attempt) return json({ error: "unknown attempt" }, 404);
+    if (attempt.status !== "submitted") {
+      return json({ error: "attempt not submitted" }, 409);
+    }
+    const { data: existing } = await service
+      .from("examiner_reviews")
+      .select("id, status")
+      .eq("attempt_id", attemptId)
+      .neq("status", "refunded")
+      .maybeSingle();
+    if (existing) return json({ error: "already submitted for review" }, 409);
+  }
+
   const { data: purchase, error: purchaseErr } = await service
     .from("purchases")
     .insert({
@@ -76,6 +102,7 @@ Deno.serve(async (req) => {
       product_id: product.id,
       amount_paise: product.price_paise,
       status: "created",
+      attempt_id: product.kind === "addon" ? attemptId : null,
     })
     .select("id")
     .single();
@@ -97,7 +124,14 @@ Deno.serve(async (req) => {
       amount: product.price_paise,
       currency: "INR",
       receipt: purchase.id,
-      notes: { user_id: user.id, product_id: product.id, purchase_id: purchase.id },
+      notes: {
+        user_id: user.id,
+        product_id: product.id,
+        purchase_id: purchase.id,
+        ...(product.kind === "addon" && typeof attemptId === "string"
+          ? { attempt_id: attemptId }
+          : {}),
+      },
     }),
   });
   if (!rzpRes.ok) {

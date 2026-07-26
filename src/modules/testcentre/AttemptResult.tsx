@@ -2,10 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAuthContext } from '../../components/auth'
+import { useAccess } from '../../components/auth/AccessProvider'
+import { startCheckout } from '../../lib/razorpay'
 import {
   testEngine,
   type AttemptResult as AttemptResultData,
   type ResultQuestion,
+  type ExaminerMark,
 } from '../../lib/testEngine'
 
 // Results — aligned to mockups/launch-08-results-feedback.html (2026-07-19
@@ -20,9 +23,37 @@ export function AttemptResult() {
   const { chapterId, attemptId } = useParams<{ chapterId: string; attemptId: string }>()
   const cid = chapterId || 'ch1'
 
+  const { products } = useAccess()
   const [data, setData] = useState<AttemptResultData | null>(null)
   const [error, setError] = useState('')
   const [prevBest, setPrevBest] = useState<number | null>(null)
+  const [payBusy, setPayBusy] = useState(false)
+  const [payNote, setPayNote] = useState<string | null>(null)
+
+  const reviewProduct = products.find((p) => p.id === 'examiner-review')
+  const reviewPrice = Math.round((reviewProduct?.price_paise ?? 14900) / 100)
+
+  const buyReview = () => {
+    if (!attemptId || payBusy) return
+    setPayBusy(true)
+    setPayNote(null)
+    startCheckout(
+      'examiner-review',
+      {
+        onSuccess: () => window.location.reload(),
+        onPending: () => {
+          setPayBusy(false)
+          setPayNote('Payment received — confirming with the bank. This page will show "With the examiner" in a minute; reload to check.')
+        },
+        onFailure: (msg) => {
+          setPayBusy(false)
+          setPayNote(msg)
+        },
+        onDismiss: () => setPayBusy(false),
+      },
+      { attemptId },
+    )
+  }
 
   useEffect(() => {
     if (!attemptId) return
@@ -94,6 +125,15 @@ export function AttemptResult() {
   const written = questions.filter((q) => q.qtype === 'text')
   const firstName = (profile?.name || 'there').split(' ')[0]
   const delta = prevBest !== null ? objAwarded - prevBest : null
+
+  // Examiner review state (Milestone B): marks live on the review record.
+  const examinerMarks = data.review?.status === 'marked' ? data.review.marks : null
+  const examinerMarked = !!examinerMarks
+  const writtenMax = written.reduce((s, q) => s + q.marks, 0)
+  const writtenAwarded = examinerMarks
+    ? written.reduce((s, q) => s + (examinerMarks[q.id]?.marks ?? 0), 0)
+    : 0
+  const examinerTotal = objAwarded + writtenAwarded
 
   // Per-section summary. EVERY section appears (Neha 2026-07-27 — written-only
   // sections B/C/D were silently dropped and read as missing): MCQ sections get
@@ -230,11 +270,96 @@ export function AttemptResult() {
         </button>
       </div>
 
+      {/* ── Examiner review (Milestone B, decision #39) ─────────────────── */}
+      {written.length > 0 && !data.review && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl p-5 sm:p-6 mb-7 text-white"
+          style={{ background: 'linear-gradient(135deg, #7E72C2, #5E53A0)' }}
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex-1 min-w-0">
+              <h2 className="font-display text-[18px] font-semibold leading-snug mb-1">
+                Get this attempt marked by a Senior CBSE Examiner
+              </h2>
+              <p className="font-body text-[13px] font-medium opacity-90">
+                Real marks and comments on every written answer, the way the board marks —
+                returned within 72 hours.
+              </p>
+              <p className="font-body text-[11px] font-semibold opacity-75 mt-1.5">
+                Covers this attempt only · No refunds on examiner reviews
+              </p>
+            </div>
+            <button
+              className="shrink-0 font-display font-bold text-[15px] text-hist-indigo bg-white rounded-xl px-6 py-3 shadow-button btn-press disabled:opacity-60"
+              onClick={buyReview}
+              disabled={payBusy}
+            >
+              {payBusy ? 'Opening payment…' : `Submit for review · ₹${reviewPrice}`}
+            </button>
+          </div>
+          {payNote && (
+            <p className="font-body text-[12px] font-semibold bg-white/15 rounded-xl px-4 py-2.5 mt-3.5">
+              {payNote}
+            </p>
+          )}
+        </motion.div>
+      )}
+
+      {data.review?.status === 'paid' && (
+        <div className="flex items-center gap-3 bg-hist-indigo-soft border border-[#DED7F0] rounded-2xl px-5 py-4 mb-7">
+          <span className="text-[22px]">🖋️</span>
+          <div>
+            <b className="block font-display text-[14.5px] font-semibold text-hist-indigo">
+              With the examiner
+            </b>
+            <span className="font-body text-[12.5px] font-semibold text-hist-muted">
+              Your written answers are being marked — check back here, marks arrive within 72 hours.
+            </span>
+          </div>
+        </div>
+      )}
+
+      {examinerMarked && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white border-[1.5px] border-[#DED7F0] rounded-2xl shadow-card p-5 sm:p-6 mb-7"
+        >
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-1.5">
+            <span className="text-[11px] font-extrabold uppercase tracking-[1.2px] text-hist-indigo">
+              🖋️ Marked by the Senior CBSE Examiner
+            </span>
+            {data.review?.marked_at && (
+              <span className="text-[11.5px] font-semibold text-hist-muted">
+                {new Date(data.review.marked_at).toLocaleDateString('en-IN', {
+                  day: 'numeric', month: 'short',
+                })}
+              </span>
+            )}
+          </div>
+          <div className="font-display text-[24px] font-bold text-hist-dark mb-2">
+            {examinerTotal}/{data.paper.total_marks}
+            <span className="font-body text-[13px] font-semibold text-hist-muted ml-2">
+              MCQ {objAwarded}/{objMax} + written {writtenAwarded}/{writtenMax}
+            </span>
+          </div>
+          {data.review?.overall_comment && (
+            <p className="font-body text-sm text-hist-ink bg-hist-indigo-soft/50 border-l-[3px] border-hist-indigo rounded-r-xl px-4 py-3 leading-relaxed whitespace-pre-line">
+              {data.review.overall_comment}
+            </p>
+          )}
+        </motion.div>
+      )}
+
       {/* Written answers — rich per-question cards */}
       {written.length > 0 && (
         <>
           <div className="text-[11px] font-extrabold uppercase tracking-[1.2px] text-hist-muted mb-2.5 px-0.5">
-            Written answers · check yourself against the CBSE marking scheme
+            {examinerMarked
+              ? 'Written answers · marked by the examiner'
+              : 'Written answers · check yourself against the CBSE marking scheme'}
           </div>
           <div className="space-y-4 mb-8">
             {written.map((q) => (
@@ -246,6 +371,7 @@ export function AttemptResult() {
                   return a && 'text' in a.response ? a.response.text : ''
                 })()}
                 sourceBody={q.source_id ? sourceById.get(q.source_id)?.body : undefined}
+                examinerMark={examinerMarks?.[q.id]}
               />
             ))}
           </div>
@@ -307,10 +433,12 @@ function WrittenCard({
   q,
   text,
   sourceBody,
+  examinerMark,
 }: {
   q: ResultQuestion
   text: string
   sourceBody?: string
+  examinerMark?: ExaminerMark
 }) {
   return (
     <motion.div
@@ -322,9 +450,23 @@ function WrittenCard({
         <span className="text-[11px] font-extrabold uppercase tracking-wide text-hist-gold">
           Q{q.position} · Section {q.section_label}
         </span>
-        <span className="text-[12px] font-extrabold text-hist-indigo bg-hist-indigo-soft rounded-full px-3 py-1">
-          {q.marks} mark{q.marks > 1 ? 's' : ''}
-        </span>
+        {examinerMark ? (
+          <span
+            className={`text-[12px] font-extrabold rounded-full px-3 py-1 ${
+              examinerMark.marks >= q.marks
+                ? 'text-hist-green bg-hist-green/10'
+                : examinerMark.marks > 0
+                  ? 'text-hist-indigo bg-hist-indigo-soft'
+                  : 'text-red-500 bg-red-50'
+            }`}
+          >
+            🖋️ {examinerMark.marks}/{q.marks}
+          </span>
+        ) : (
+          <span className="text-[12px] font-extrabold text-hist-indigo bg-hist-indigo-soft rounded-full px-3 py-1">
+            {q.marks} mark{q.marks > 1 ? 's' : ''}
+          </span>
+        )}
       </div>
 
       {sourceBody && (
@@ -356,6 +498,17 @@ function WrittenCard({
           </p>
         )}
       </div>
+
+      {examinerMark?.comment && (
+        <div className="mb-3">
+          <span className="block text-[10.5px] font-extrabold uppercase tracking-wide text-hist-indigo mb-1.5">
+            🖋️ Examiner's comment
+          </span>
+          <p className="font-body text-sm text-hist-ink bg-hist-indigo-soft/50 border-l-[3px] border-hist-indigo rounded-r-xl px-4 py-3 leading-relaxed whitespace-pre-line">
+            {examinerMark.comment}
+          </p>
+        </div>
+      )}
 
       {q.scheme?.points && q.scheme.points.length > 0 && (
         <div className="mb-3">

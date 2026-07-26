@@ -67,9 +67,31 @@ export interface ResultAnswer extends SavedAnswer {
   marking: unknown
 }
 
+/** Examiner review (Milestone B): 'paid' = with the examiner; 'marked' = done. */
+export type ReviewStatus = 'paid' | 'marked'
+
+export interface ReviewChip {
+  attempt_id: string
+  status: ReviewStatus
+}
+
+export interface ExaminerMark {
+  marks: number
+  comment?: string
+}
+
+export interface ReviewResult {
+  status: ReviewStatus
+  /** keyed by question_id — null until published */
+  marks: Record<string, ExaminerMark> | null
+  overall_comment: string | null
+  marked_at: string | null
+}
+
 export interface ListResult {
   papers: PaperMeta[]
   attempts: AttemptMeta[]
+  reviews: ReviewChip[]
   entitled: boolean
 }
 
@@ -96,6 +118,46 @@ export interface AttemptResult {
   questions: ResultQuestion[]
   sources: PaperSource[]
   answers: ResultAnswer[]
+  review: ReviewResult | null
+}
+
+// ---- examiner queue (admin) ----
+export interface QueueReview {
+  id: string
+  attempt_id: string
+  status: ReviewStatus
+  created_at: string
+  marked_at: string | null
+  submitted_at: string | null
+  student_name: string
+  student_email: string
+  paper_title: string
+  total_marks: number | null
+  objective_awarded: number | null
+  objective_max: number | null
+}
+
+export interface ReviewDetail {
+  review: {
+    id: string
+    attempt_id: string
+    status: ReviewStatus
+    marks: Record<string, ExaminerMark> | null
+    overall_comment: string | null
+    marked_at: string | null
+  }
+  attempt: {
+    id: string
+    submitted_at: string
+    objective_awarded: number
+    objective_max: number
+  }
+  paper: Pick<PaperMeta, 'id' | 'chapter_id' | 'title' | 'total_marks' | 'objective_marks' | 'duration_minutes'>
+  questions: ResultQuestion[]
+  sources: PaperSource[]
+  answers: ResultAnswer[]
+  student_name: string
+  student_email: string
 }
 
 export class TestEngineError extends Error {
@@ -156,4 +218,23 @@ export const testEngine = {
     call<{ paper: PaperMeta; questions: ResultQuestion[]; sources: PaperSource[] }>(
       { action: 'get_paper', paper_id: paperId },
     ),
+
+  // examiner review queue (admin)
+  reviewQueue: () => call<{ reviews: QueueReview[] }>({ action: 'review_queue' }),
+  reviewGet: (reviewId: string) =>
+    call<ReviewDetail>({ action: 'review_get', review_id: reviewId }),
+  reviewSave: (reviewId: string, marks: Record<string, ExaminerMark>, overallComment?: string) =>
+    call<{ ok: true; status: string }>({
+      action: 'review_save',
+      review_id: reviewId,
+      marks,
+      overall_comment: overallComment,
+    }),
+  reviewPublish: (reviewId: string, marks: Record<string, ExaminerMark>, overallComment?: string) =>
+    call<{ ok: true; status: string }>({
+      action: 'review_publish',
+      review_id: reviewId,
+      marks,
+      overall_comment: overallComment,
+    }),
 }
