@@ -81,7 +81,11 @@ export function HomePage() {
   const sectionUnits = (section: (typeof chapter.sections)[number]) => {
     const topicsDone = section.subsections.filter((sub) => completedSubsections[sub.id]).length
     const quiz = progressSections[section.id]
-    const quizDone = !!quiz && quiz.total > 0 && quiz.completed >= quiz.total
+    // Quiz unit = at least one completed quiz round in this section. (NOT
+    // completed>=total: setSectionTotal has no callers so total is always 0 —
+    // that check made 5/5 unreachable. Found in the 2026-07-26 code review;
+    // A-fix #1, approved by Uday.)
+    const quizDone = !!quiz && quiz.completed >= 1
     const topicTotal = section.subsections.length || section.topicCount || 0
     return { done: topicsDone + (quizDone ? 1 : 0), total: topicTotal + 1 }
   }
