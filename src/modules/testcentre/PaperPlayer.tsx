@@ -189,7 +189,7 @@ export function PaperPlayer() {
 
   if (phase === 'error' || !data || !page) {
     return (
-      <div className="max-w-md mx-auto text-center py-16">
+      <div className="max-w-md mx-auto px-4 text-center py-16">
         <div className="text-4xl mb-3">🙈</div>
         <p className="font-body text-sm text-gray-600 mb-4">{error || 'Something went wrong.'}</p>
         <button
@@ -220,7 +220,7 @@ export function PaperPlayer() {
   const subLabels = 'abcdefgh'
 
   return (
-    <div className="max-w-3xl mx-auto pb-24">
+    <div className="max-w-3xl mx-auto px-4 pt-5 pb-24">
       {/* Sticky exam bar: title · palette · timer (launch-07) */}
       <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur-md border border-hist-line rounded-2xl shadow-card px-4 py-3 mb-5 flex items-center justify-between gap-3 flex-wrap">
         <div className="min-w-0">

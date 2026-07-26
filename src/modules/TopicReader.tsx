@@ -40,6 +40,7 @@ export function TopicReader() {
       key={subsection.id}
       subsection={subsection}
       sectionColor={color}
+      sectionTitle={`Section ${section.number} · ${section.title}`}
       subsectionIndex={index}
       totalSubsections={section.subsections.length}
       onComplete={() => {

@@ -144,7 +144,7 @@ export function QuizMode() {
   // === PICK TYPE PHASE ===
   if (phase === 'pick-type') {
     return (
-      <div className="max-w-lg mx-auto">
+      <div className="max-w-lg mx-auto px-4 pt-5 pb-8">
         {/* Header */}
         <div className="mb-6">
           <nav className="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-[12.5px] font-semibold text-hist-muted mb-3 px-0.5">
@@ -216,7 +216,7 @@ export function QuizMode() {
     const currentActivity = activities[currentIndex]
 
     return (
-      <div className="max-w-lg mx-auto">
+      <div className="max-w-lg mx-auto px-4 pt-5 pb-8">
         {/* Back button */}
         <motion.button
           className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
