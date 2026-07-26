@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>nl-04 — Revise tools, content-first (Flashcards + Timeline)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2E2A3B; --body:#6E6478; --muted:#A1969F;
+    --paper:#FFFFFF; --line:#EFE3DA; --page1:#FBF3EC; --page2:#F7F0F5;
+    --accent:#E8551F; --accent-soft:#FDEAE0; --accent-deep:#A8431A;
+    --lav:#7E72C2; --lav-soft:#F1ECFA; --lav-deep:#5E53A0;
+    --ok:#3E8E5A; --ok-bg:#E3F2E8;
+    --s1:#C36B53; --s2:#5571B5; --s3:#C2893E; --s4:#5C9368; --s5:#9B5C9A; --s6:#3F8E84;
+    --shadow:0 14px 40px rgba(70,60,100,.10);
+    --shadow-sm:0 4px 14px rgba(70,60,100,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--page1),var(--page2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .disp{font-family:'Fraunces',serif}
+  svg.i{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+  /* ── mock-only view switcher (not product UI) ── */
+  .switch{position:fixed;right:14px;top:14px;z-index:90;display:flex;gap:6px;background:#fff;
+    border:1.5px dashed #C9B8AC;border-radius:999px;padding:5px 6px;box-shadow:var(--shadow-sm)}
+  .switch a{font-size:12px;font-weight:800;color:var(--body);text-decoration:none;padding:5px 12px;border-radius:999px}
+  body[data-view="flash"] .switch a[href="#flashcards"],
+  body[data-view="time"]  .switch a[href="#timeline"]{background:var(--ink);color:#fff}
+  body[data-view="flash"] #view-time{display:none}
+  body[data-view="time"]  #view-flash{display:none}
+
+  .shell{display:grid;grid-template-columns:224px minmax(0,1fr);gap:28px;max-width:1300px;margin:0 auto;padding:20px 28px 80px}
+
+  /* ── SIDEBAR (product-accurate, with the ONE proposed change: All Chapters legibility) ── */
+  .side{position:sticky;top:20px;height:calc(100dvh - 40px);display:flex;flex-direction:column}
+  .brand{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--ink);padding:0 12px 12px}
+  .brand em{font-style:normal;color:var(--accent)}
+  .upline{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:800;letter-spacing:.6px;
+    text-transform:uppercase;color:#8E8290;padding:0 12px;margin-bottom:7px;text-decoration:none}
+  .upline:hover{color:var(--ink)}
+  .chpill{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;box-shadow:var(--shadow-sm);
+    padding:10px 12px;margin:0 4px 16px;text-align:left}
+  .chpill b{width:28px;height:28px;border-radius:9px;background:var(--accent);color:#fff;display:grid;place-items:center;
+    font-family:'Fraunces',serif;font-size:12px;flex-shrink:0}
+  .chpill span{font-size:12px;font-weight:800;color:var(--ink);line-height:1.3}
+  .gl{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:0 12px;margin:14px 0 6px}
+  .gl:first-of-type{margin-top:0}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;font-size:13.5px;
+    font-weight:700;color:var(--body);text-decoration:none;margin-bottom:2px}
+  .nav-item.on{background:#fff;color:var(--accent-deep);box-shadow:var(--shadow-sm)}
+  .profile{margin-top:auto;display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;
+    box-shadow:var(--shadow-sm);padding:12px;margin-left:4px;margin-right:4px}
+  .profile b{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#F2914E);
+    color:#fff;display:grid;place-items:center;font-family:'Fraunces',serif;font-size:16px}
+  .profile span{font-size:13px;font-weight:800;color:var(--ink);display:block;line-height:1.3}
+  .profile small{font-size:10.5px;font-weight:700;color:var(--muted);display:block}
+
+  /* ── PANE ── */
+  .crumb{display:flex;gap:8px;align-items:center;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:14px}
+  .crumb b{color:var(--ink)}
+  .crumb svg{width:13px;height:13px}
+
+  /* Tool header row: title left, ONE primary action right. No lobby cards. */
+  .toolhead{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px;flex-wrap:wrap}
+  .toolhead h1{font-family:'Fraunces',serif;font-size:27px;font-weight:600;color:var(--ink);line-height:1.1}
+  .toolhead p{font-size:13px;font-weight:600;margin-top:4px}
+  .cta{display:inline-flex;align-items:center;gap:9px;border-radius:13px;padding:12px 18px;font-size:13.5px;
+    font-weight:800;color:#fff;text-decoration:none;box-shadow:0 8px 22px rgba(126,114,194,.35)}
+  .cta.orange{background:var(--accent-deep);box-shadow:0 8px 22px rgba(192,95,53,.32)}
+  .cta.violet{background:var(--lav)}
+  .cta small{display:block;font-size:10.5px;font-weight:700;opacity:.85}
+
+  /* filter chips row */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  .chip{font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:999px;background:#fff;border:1.5px solid var(--line);color:var(--body)}
+  .chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .chip.exam{margin-left:auto;display:flex;align-items:center;gap:7px;border-style:solid}
+  .chip.exam i{width:26px;height:15px;border-radius:999px;background:#E4DAD2;position:relative;display:inline-block}
+  .chip.exam i::after{content:"";position:absolute;left:2px;top:2px;width:11px;height:11px;border-radius:50%;background:#fff}
+  .chip.exam.on{background:#fff;color:var(--accent-deep);border-color:var(--accent-deep)}
+  .chip.exam.on i{background:var(--accent-deep)}
+  .chip.exam.on i::after{left:13px}
+
+  /* annotation notes */
+  .note{border:1.5px dashed #C9A98F;background:#FFF9F3;border-radius:12px;padding:10px 14px;font-size:12px;
+    font-weight:600;color:#8A6A50;margin:14px 0}
+  .note b{color:#6E4F36}
+
+  /* ══ FLASHCARDS ══ */
+  .fc-sub{font-size:12.5px;font-weight:700;color:var(--muted)}
+  .fc-sub b{color:var(--ink)}
+  .sec-acc{background:#fff;border:1.5px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+  .sec-acc header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}
+  .sec-acc header i{width:26px;height:26px;border-radius:8px;color:#fff;display:grid;place-items:center;
+    font-family:'Fraunces',serif;font-size:11.5px;font-weight:700;font-style:normal;flex-shrink:0}
+  .sec-acc header h3{font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:var(--ink);flex:1;min-width:0}
+  .sec-acc header .cnt{font-size:11.5px;font-weight:700;color:var(--muted)}
+  .sec-acc header .go{font-size:11.5px;font-weight:800;color:var(--lav-deep);white-space:nowrap}
+  .sec-acc header svg{color:var(--muted)}
+  .fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 16px 16px}
+  .fc-card{background:linear-gradient(170deg,#FFFDFA,#FBF4EE);border:1.5px solid var(--line);border-radius:13px;
+    padding:13px 14px;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.45;position:relative}
+  .fc-card small{display:block;margin-top:8px;font-size:10.5px;font-weight:700;color:var(--muted)}
+  .fc-card.flip{background:#fff}
+  .fc-card.flip .q{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
+  .fc-card.flip .a{margin-top:4px;color:var(--ink)}
+
+  /* ══ TIMELINE ══ */
+  .tl-wrap{display:grid;grid-template-columns:64px minmax(0,1fr);gap:0}
+  .tl-rail{position:relative}
+  .tl-rail::before{content:"";position:absolute;left:31px;top:8px;bottom:8px;width:2px;background:#E7DBD1}
+  .decade{position:relative;z-index:1;background:var(--ink);color:#fff;font-size:10.5px;font-weight:800;
+    border-radius:999px;padding:4px 0;width:52px;text-align:center;margin:18px 0 10px 5px}
+  .tl-col{padding-bottom:6px}
+  .ev{background:#fff;border:1.5px solid var(--line);border-radius:14px;margin:0 0 10px;overflow:hidden}
+  .ev header{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer}
+  .ev .yr{font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:#fff;border-radius:9px;padding:4px 9px;flex-shrink:0}
+  .ev h4{font-family:'Fraunces',serif;font-size:14.5px;font-weight:600;color:var(--ink);flex:1;min-width:0}
+  .ev .exam-tag{font-size:9px;font-weight:800;letter-spacing:.5px;color:var(--accent-deep);background:var(--accent-soft);
+    border-radius:999px;padding:3px 8px;flex-shrink:0}
+  .ev .body{padding:0 16px 14px 16px;font-size:13px;line-height:1.6}
+  .ev .body .why{margin-top:8px;background:var(--lav-soft);border-left:3px solid var(--lav);border-radius:0 9px 9px 0;
+    padding:8px 12px;font-size:12px;font-weight:600;color:var(--lav-deep)}
+  .ev.open header h4{font-weight:700}
+
+  /* ── mobile ── */
+  .mobilebar{display:none}
+  @media (max-width:768px){
+    .shell{display:block;padding:0 14px 70px}
+    .side{display:none}
+    .mobilebar{display:flex;align-items:center;gap:12px;padding:12px 16px;position:sticky;top:0;z-index:50;
+      background:rgba(251,243,236,.95);backdrop-filter:blur(8px)}
+    .mobilebar .burger{width:34px;height:34px;border-radius:10px;background:#fff;box-shadow:var(--shadow-sm);
+      display:grid;place-items:center;color:var(--ink)}
+    .mobilebar .brand{font-size:17px;padding:0}
+    .mobilebar .pill{margin-left:auto;background:var(--accent-soft);color:var(--accent-deep);font-size:10px;
+      font-weight:800;border-radius:999px;padding:5px 10px}
+    .toolhead{align-items:flex-start;flex-direction:column}
+    .cta{width:100%;justify-content:center}
+    .fc-grid{grid-template-columns:1fr}
+    .tl-wrap{grid-template-columns:44px minmax(0,1fr)}
+    .tl-rail::before{left:21px}
+    .decade{width:42px;font-size:9.5px;margin-left:0}
+    .chip.exam{margin-left:0}
+  }
+</style>
+</head>
+<body data-view="flash">
+
+<nav class="switch">
+  <a href="#flashcards">Flashcards</a>
+  <a href="#timeline">Timeline</a>
+</nav>
+
+<!-- ════════════════ VIEW 1 · FLASHCARDS ════════════════ -->
+<div id="view-flash">
+  <div class="mobilebar">
+    <span class="burger"><svg class="i" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span>
+    <span class="brand disp">History<em style="font-style:normal;color:var(--accent)">Lab</em></span>
+    <span class="pill">CH 1</span>
+  </div>
+
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">History<em>Lab</em></div>
+      <a class="upline" href="#">
+        <svg class="i" style="width:13px;height:13px" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        All Chapters
+      </a>
+      <div class="chpill"><b>1</b><span>The Rise of Nationalism in Europe</span></div>
+      <div class="gl">Learn</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Overview</a>
+      <div class="gl">Revise</div>
+      <a class="nav-item on" href="#"><svg class="i" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>Flashcards</a>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>Timeline</a>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="m9 4-6 2v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg>Maps</a>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m21 15-4.5-4.5L7 20"/></svg>Figures</a>
+      <div class="gl">Practice</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></svg>Mock Tests</a>
+      <div class="gl">Exam Prep</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Exam Prep</a>
+      <div class="profile"><b>V</b><span>Vedansh<small>Student · ⭐ 0 Stars</small></span></div>
+    </aside>
+
+    <main>
+      <div class="crumb">All Chapters
+        <svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        The Rise of Nationalism in Europe
+        <svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        <b>Flashcards</b>
+      </div>
+
+      <div class="toolhead">
+        <div>
+          <h1>Flashcards</h1>
+          <p class="fc-sub"><b>100 cards</b> across 6 sections · <b>100 new</b> · 0 due for review</p>
+        </div>
+        <a class="cta orange" href="#">
+          <svg class="i" viewBox="0 0 24 24"><path d="m5 3 14 9-14 9V3Z"/></svg>
+          <span>Start today's revision<small>20 cards · ~6 min</small></span>
+        </a>
+      </div>
+
+      <div class="note"><b>Changes on this screen:</b> the lobby (stats bar + 3 mode cards + 6 section tiles) is gone —
+        ONE primary button starts revision; the app picks the right 20 cards silently (due first, then new).
+        Counts are honest: a fresh account reads “100 new · 0 due”, never “100 due today”. No “SM-2” jargon anywhere.
+        Browsing is grouped by section below — open a section, read cards in place, or practise just that section.</div>
+
+      <!-- S1 accordion — OPEN -->
+      <div class="sec-acc">
+        <header>
+          <i style="background:var(--s1)">S1</i>
+          <h3>The French Revolution and the Idea of the Nation</h3>
+          <span class="cnt">17 cards</span>
+          <span class="go">Practise S1 →</span>
+          <svg class="i" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
+        </header>
+        <div class="fc-grid">
+          <div class="fc-card">What was Frédéric Sorrieu's 1848 series of prints called?<small>Tap to reveal</small></div>
+          <div class="fc-card flip"><span class="q">Answer</span><div class="a">“The Dream of Worldwide Democratic and Social Republics” — nations marching past the Statue of Liberty.</div></div>
+          <div class="fc-card">What is absolutist government?<small>Tap to reveal</small></div>
+          <div class="fc-card">What did the tricolour flag of France stand for?<small>Tap to reveal</small></div>
+          <div class="fc-card">What was 'la patrie' and 'le citoyen'?<small>Tap to reveal</small></div>
+          <div class="fc-card">Which reform created a uniform system of weights &amp; measures?<small>Tap to reveal</small></div>
+        </div>
+      </div>
+
+      <!-- S2..S6 — closed -->
+      <div class="sec-acc"><header>
+        <i style="background:var(--s2)">S2</i><h3>The Making of Nationalism in Europe</h3>
+        <span class="cnt">14 cards</span><span class="go">Practise S2 →</span>
+        <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+      <div class="sec-acc"><header>
+        <i style="background:var(--s3)">S3</i><h3>The Age of Revolutions: 1830–1848</h3>
+        <span class="cnt">21 cards</span><span class="go">Practise S3 →</span>
+        <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+      <div class="sec-acc"><header>
+        <i style="background:var(--s4)">S4</i><h3>The Making of Germany and Italy</h3>
+        <span class="cnt">20 cards</span><span class="go">Practise S4 →</span>
+        <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+      <div class="sec-acc"><header>
+        <i style="background:var(--s5)">S5</i><h3>Visualising the Nation</h3>
+        <span class="cnt">17 cards</span><span class="go">Practise S5 →</span>
+        <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+      <div class="sec-acc"><header>
+        <i style="background:var(--s6)">S6</i><h3>Nationalism and Imperialism</h3>
+        <span class="cnt">11 cards</span><span class="go">Practise S6 →</span>
+        <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+
+      <div class="note"><b>Sidebar change (both views):</b> “‹ All Chapters” bumped from 10.5px muted to 12px with a
+        real hover — same placement (top = “up one level”), just visible now. Future option once Ch 3+ exist:
+        the chapter pill becomes a switcher menu and this link folds into it.</div>
+    </main>
+  </div>
+</div>
+
+<!-- ════════════════ VIEW 2 · TIMELINE ════════════════ -->
+<div id="view-time">
+  <div class="mobilebar">
+    <span class="burger"><svg class="i" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span>
+    <span class="brand disp">History<em style="font-style:normal;color:var(--accent)">Lab</em></span>
+    <span class="pill">CH 1</span>
+  </div>
+
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">History<em>Lab</em></div>
+      <a class="upline" href="#">
+        <svg class="i" style="width:13px;height:13px" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        All Chapters
+      </a>
+      <div class="chpill"><b>1</b><span>The Rise of Nationalism in Europe</span></div>
+      <div class="gl">Learn</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Overview</a>
+      <div class="gl">Revise</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>Flashcards</a>
+      <a class="nav-item on" href="#"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>Timeline</a>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="m9 4-6 2v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg>Maps</a>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m21 15-4.5-4.5L7 20"/></svg>Figures</a>
+      <div class="gl">Practice</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></svg>Mock Tests</a>
+      <div class="gl">Exam Prep</div>
+      <a class="nav-item" href="#"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Exam Prep</a>
+      <div class="profile"><b>V</b><span>Vedansh<small>Student · ⭐ 0 Stars</small></span></div>
+    </aside>
+
+    <main>
+      <div class="crumb">All Chapters
+        <svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        The Rise of Nationalism in Europe
+        <svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        <b>Timeline</b>
+      </div>
+
+      <div class="toolhead">
+        <div>
+          <h1>Timeline</h1>
+          <p class="fc-sub"><b>32 events</b> · 1688 – 1905 · tap any event for the story</p>
+        </div>
+        <a class="cta violet" href="#">
+          <svg class="i" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg>
+          <span>Practice: order the events<small>7 activities · board pattern</small></span>
+        </a>
+      </div>
+
+      <div class="filters">
+        <span class="chip on">All</span>
+        <span class="chip" style="color:var(--s1)">French Revolution</span>
+        <span class="chip" style="color:var(--s2)">Making of Nationalism</span>
+        <span class="chip" style="color:var(--s3)">Age of Revolutions</span>
+        <span class="chip" style="color:var(--s4)">Germany &amp; Italy</span>
+        <span class="chip exam on"><i></i> Exam only</span>
+      </div>
+
+      <div class="note"><b>Changes on this screen:</b> the explorer IS the page — no “Explore Timeline” lobby card, no
+        duplicate activities list (those 7 activities live behind the one violet button). The red “EXAM IMPORTANT”
+        chip on two-thirds of events is replaced by an <b>Exam only</b> filter toggle (shown ON here); a small tag
+        remains only on events backed by a real past board question — Neha rules on which.</div>
+
+      <div class="tl-wrap">
+        <div class="tl-rail">
+          <div class="decade">1780s</div>
+          <div style="height:118px"></div>
+          <div class="decade">1800s</div>
+          <div style="height:64px"></div>
+          <div class="decade">1810s</div>
+          <div style="height:170px"></div>
+          <div class="decade">1830s</div>
+        </div>
+        <div class="tl-col">
+          <div style="height:44px"></div>
+          <div class="ev open">
+            <header>
+              <span class="yr" style="background:var(--s1)">1789</span>
+              <h4>French Revolution</h4>
+              <span class="exam-tag">BOARD Q · 2019</span>
+              <svg class="i" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
+            </header>
+            <div class="body">
+              The Third Estate declares itself the National Assembly; the Bastille falls. For the first time,
+              sovereignty moves from a king to <b>the people of a nation</b> — the idea this whole chapter follows.
+              <div class="why">WHY IT MATTERS: every later revolt in this chapter copies the vocabulary invented here — nation, citizen, tricolour.</div>
+            </div>
+          </div>
+          <div style="height:46px"></div>
+          <div class="ev"><header>
+            <span class="yr" style="background:var(--s1)">1804</span><h4>Civil Code (Napoleonic Code) introduced</h4>
+            <span class="exam-tag">BOARD Q · 2022</span>
+            <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+          <div style="height:46px"></div>
+          <div class="ev"><header>
+            <span class="yr" style="background:var(--s2)">1815</span><h4>Congress of Vienna</h4>
+            <span class="exam-tag">BOARD Q · 2020</span>
+            <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+          <div class="ev"><header>
+            <span class="yr" style="background:var(--s2)">1814–15</span><h4>Fall of Napoleon; Vienna Peace Settlement</h4>
+            <span class="exam-tag">BOARD Q · 2018</span>
+            <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+          <div style="height:46px"></div>
+          <div class="ev"><header>
+            <span class="yr" style="background:var(--s3)">1830</span><h4>July Revolution in France</h4>
+            <span class="exam-tag">BOARD Q · 2023</span>
+            <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+          <div class="ev"><header>
+            <span class="yr" style="background:var(--s3)">1834</span><h4>Zollverein (customs union) formed</h4>
+            <span class="exam-tag">BOARD Q · 2021</span>
+            <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></header></div>
+        </div>
+      </div>
+
+      <div class="note"><b>Layout note (all four tools):</b> full pane width — no more 512px phone column floating in
+        the workspace. The same header-row + content-first template then applies to Maps (the 3 map cards ARE the
+        page) and Figures (the gallery IS the page) mechanically.</div>
+    </main>
+  </div>
+</div>
+
+<script>
+  function route(){
+    document.body.dataset.view = location.hash === '#timeline' ? 'time' : 'flash'
+    window.scrollTo(0,0)
+  }
+  addEventListener('hashchange', route); route()
+</script>
+</body>
+</html>
