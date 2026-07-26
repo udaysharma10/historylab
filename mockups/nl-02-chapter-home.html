@@ -10,123 +10,126 @@
 <style>
   :root{
     --ink:#2E2A3B; --body:#6E6478; --muted:#A1969F;
-    --paper:#FFFFFF; --line:#F0E5DF; --page1:#FBF3EC; --page2:#F6EFF7;
+    --paper:#FFFFFF; --line:#EFE3DA; --page1:#FBF3EC; --page2:#F7F0F5;
     --accent:#E8551F; --accent-soft:#FDEAE0; --accent-deep:#A8431A; --cta:#C05F35;
     --lav:#7E72C2; --lav-soft:#ECE8F8; --ok:#3E8E5A; --ok-bg:#E3F2E8;
-    --shadow:0 12px 34px rgba(70,60,100,.10); --shadow-sm:0 4px 16px rgba(70,60,100,.07);
+    --shadow:0 14px 40px rgba(70,60,100,.10);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
     background:linear-gradient(170deg,var(--page1),var(--page2));min-height:100vh;-webkit-font-smoothing:antialiased}
   svg.i{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-  .shell{display:grid;grid-template-columns:232px 1fr 300px;gap:16px;max-width:1240px;margin:0 auto;padding:16px 20px 64px}
+  .shell{display:grid;grid-template-columns:224px 1fr 288px;gap:28px;max-width:1280px;margin:0 auto;padding:20px 28px 72px}
   .shell > *{min-width:0}
 
-  /* SIDEBAR */
-  .side{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);
-    padding:16px 12px;height:fit-content;position:sticky;top:16px}
-  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:21px;color:var(--ink);padding:0 10px 12px}
+  /* SIDEBAR — flat on the canvas, no card */
+  .side{height:fit-content;position:sticky;top:20px;padding-right:4px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--ink);padding:2px 12px 14px}
   .brand .lab{color:var(--accent)}
-  .allch{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--muted);padding:0 10px 6px;text-decoration:none}
-  .chpill{margin:0 10px 16px;background:var(--accent-soft);border:1px solid #F6D4C2;border-radius:10px;
-    padding:8px 11px;font-size:11.5px;font-weight:800;color:var(--accent-deep);line-height:1.35}
-  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13px;
+  .allch{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--muted);padding:0 12px 8px;text-decoration:none}
+  .chname{padding:0 12px 18px;font-size:12px;font-weight:800;color:var(--ink);line-height:1.4}
+  .nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;font-size:13.5px;
     font-weight:700;color:var(--body);text-decoration:none;margin-bottom:2px}
-  .nav a.active{background:var(--accent-soft);color:var(--accent-deep)}
-  .nav .div{height:1px;background:var(--line);margin:8px 12px}
-  .sidecard{margin:16px 6px 2px;background:linear-gradient(150deg,#FFF9F5,var(--accent-soft));border:1.5px solid #F6D4C2;
-    border-radius:12px;padding:14px;text-align:center}
-  .sidecard b{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:2px}
-  .sidecard b svg.i{stroke:#D99A2B;fill:#F2C14E;width:16px;height:16px}
-  .sidecard span{font-size:11px;font-weight:600;color:var(--body)}
+  .nav a:hover{color:var(--ink)}
+  .nav a.active{background:#fff;color:var(--accent-deep);box-shadow:0 4px 14px rgba(70,60,100,.08)}
+  .nav .div{height:1px;background:var(--line);margin:10px 12px}
+  .sidestars{display:flex;align-items:center;gap:8px;margin:18px 12px 0;font-size:12.5px;font-weight:800;color:var(--ink)}
+  .sidestars svg.i{stroke:#D99A2B;fill:#F2C14E;width:16px;height:16px}
+  .sidestars span{font-weight:600;color:var(--muted)}
 
-  /* HERO */
-  .hero{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);
-    background:#FBF1E6;margin-bottom:16px;min-height:208px;display:flex;align-items:center}
-  .hero .art{position:absolute;inset:0;background:url('assets/fig-01-sorrieu.png') right 38% / 64% auto no-repeat;
+  /* HERO — the banner IS the surface */
+  .hero{position:relative;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);
+    background:#F7EBDD;margin-bottom:28px;min-height:224px;display:flex;align-items:center}
+  .hero .art{position:absolute;inset:0;background:url('assets/fig-01-sorrieu.png') right 38% / 66% auto no-repeat;
     filter:sepia(.32) saturate(.82) brightness(1.04) contrast(.9)}
   .hero .warm{position:absolute;inset:0;background:rgba(240,168,112,.16);mix-blend-mode:multiply}
-  .hero .fade{position:absolute;inset:0;background:linear-gradient(90deg,#FBF1E6 40%,rgba(251,241,230,.92) 52%,rgba(251,241,230,.4) 72%,rgba(251,241,230,.06))}
-  .hero .inner{position:relative;padding:28px 32px;max-width:63%}
+  .hero .fade{position:absolute;inset:0;background:linear-gradient(90deg,#F7EBDD 38%,rgba(247,235,221,.9) 52%,rgba(247,235,221,.35) 72%,rgba(247,235,221,.04))}
+  .hero .inner{position:relative;padding:30px 34px;max-width:63%}
   .herotop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
   .chnum{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--accent);
     color:#fff;font-family:'Fraunces',serif;font-weight:700;font-size:19px;box-shadow:0 6px 16px rgba(232,85,31,.35)}
-  .heropill{background:var(--accent-soft);color:var(--accent-deep);font-size:10.5px;font-weight:800;
+  .heropill{background:rgba(255,255,255,.75);color:var(--accent-deep);font-size:10.5px;font-weight:800;
     text-transform:uppercase;letter-spacing:.6px;padding:5px 12px;border-radius:999px}
   .hero h1{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);line-height:1.12;margin-bottom:12px}
   .herometa{display:flex;align-items:center;gap:16px;font-size:12.5px;font-weight:700;color:var(--body);flex-wrap:wrap}
   .herometa .chip{display:flex;align-items:center;gap:6px}
   .herometa .chip svg.i{width:15px;height:15px;color:var(--muted)}
-  .state-done{display:flex;align-items:center;gap:6px;color:var(--ok);background:var(--ok-bg);border-radius:999px;padding:4px 12px;font-weight:800}
+  .state-done{display:flex;align-items:center;gap:6px;color:var(--ok);background:rgba(255,255,255,.8);border-radius:999px;padding:4px 12px;font-weight:800}
   .state-done svg.i{width:14px;height:14px}
 
-  /* CARDS */
-  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);
-    padding:24px;margin-bottom:16px}
-  .card h2{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:16px}
-  .card h2 .hic{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
-  .learn{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px}
-  .learn div{display:flex;gap:10px;font-size:13px;font-weight:500;color:var(--body);line-height:1.55}
-  .ck{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin-top:2px}
+  /* THE SHEET — one continuous surface for all content */
+  .sheet{background:var(--paper);border-radius:20px;box-shadow:var(--shadow);padding:32px 36px}
+  .sheet h2{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:18px}
+  .sheet h2 svg.i{color:var(--accent);width:20px;height:20px}
+  .learn{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px}
+  .learn div{display:flex;gap:10px;font-size:13.5px;font-weight:500;color:var(--body);line-height:1.6}
+  .ck{flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--accent);display:grid;place-items:center;margin-top:3px}
   .ck svg{width:10px;height:10px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .sheet hr{border:none;height:1px;background:var(--line);margin:28px -8px}
 
-  .topic{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);
-    border-left:4px solid var(--tc);border-radius:13px;box-shadow:var(--shadow-sm);
-    padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .12s}
-  .topic:hover{transform:translateY(-1px)}
-  .topic:last-child{margin-bottom:0}
-  .topic .ticon{width:40px;height:40px;border-radius:50%;background:var(--tb);display:grid;place-items:center;color:var(--tc);flex-shrink:0}
+  /* Topics — flat rows inside the sheet, hairline separated */
+  .topic{display:flex;align-items:center;gap:14px;padding:16px 10px;margin:0 -10px;border-radius:12px;cursor:pointer;
+    border-bottom:1px solid var(--line)}
+  .topic:last-of-type{border-bottom:none;padding-bottom:6px}
+  .topic:hover{background:#FDF8F4}
+  .topic .ticon{width:42px;height:42px;border-radius:50%;background:var(--tb);display:grid;place-items:center;color:var(--tc);flex-shrink:0}
   .topic > div{min-width:0}
-  .topic h4{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink);overflow-wrap:break-word}
+  .topic h4{font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:var(--ink)}
   .tmeta{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:2px}
   .tstate{margin-left:auto;flex-shrink:0;display:flex;align-items:center;gap:12px}
-  .done-pill{display:flex;align-items:center;gap:5px;background:var(--ok-bg);color:var(--ok);font-size:11px;font-weight:800;padding:5px 12px;border-radius:999px}
-  .done-pill svg.i{width:13px;height:13px}
+  .done-pill{display:flex;align-items:center;gap:5px;color:var(--ok);font-size:11.5px;font-weight:800}
+  .done-pill svg.i{width:14px;height:14px}
   .chev{color:var(--muted)}
 
-  .quote{display:flex;align-items:center;gap:16px;background:linear-gradient(150deg,#FFF6EF,var(--accent-soft));
-    border:1px solid #F6D4C2;border-radius:16px;padding:16px 24px}
-  .quote .qic{color:var(--accent);flex-shrink:0}
-  .quote .q{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink);min-width:0}
-  .quote .who{margin-left:auto;font-size:18px;flex-shrink:0}
+  /* Quote — flat on the canvas */
+  .quote{display:flex;align-items:center;justify-content:center;gap:12px;padding:26px 20px 0;text-align:center}
+  .quote .qic{color:var(--accent)}
+  .quote .q{font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;color:var(--ink)}
 
-  /* RAIL */
-  .rail{display:flex;flex-direction:column;gap:16px;height:fit-content;position:sticky;top:16px}
-  .rcard{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:20px}
-  .rcard h3{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink);margin-bottom:14px}
+  /* RAIL — flat, one emphasis block */
+  .rail{height:fit-content;position:sticky;top:20px}
+  .rail h3{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink);margin-bottom:14px}
   .ringwrap{display:grid;place-items:center;margin-bottom:10px;position:relative}
   .ringtxt{position:absolute;text-align:center}
   .ringtxt b{display:block;font-family:'Fraunces',serif;font-size:19px;color:var(--ink)}
-  .rnote{text-align:center;font-size:12px;font-weight:600;color:var(--body);line-height:1.5}
-  .rbtn{display:flex;align-items:center;gap:12px;width:100%;border:none;cursor:pointer;text-align:left;
-    background:#FBF6F2;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-family:'Inter',sans-serif}
-  .rbtn:last-child{margin-bottom:0}
-  .rbtn .ric{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
-  .rbtn > div{min-width:0}
-  .rbtn b{display:block;font-size:13px;font-weight:800;color:var(--ink)}
-  .rbtn span{font-size:11px;font-weight:600;color:var(--muted)}
-  .rbtn .go{margin-left:auto;color:var(--muted)}
-  .rbtn.prime{background:linear-gradient(140deg,#453A5E,#67589B);border:none}
-  .rbtn.prime b{color:#fff}.rbtn.prime span{color:#C9BEEC}.rbtn.prime .go{color:#C9BEEC}
+  .rnote{text-align:center;font-size:12px;font-weight:600;color:var(--body);line-height:1.55;padding:0 6px}
+  .railsec{margin-bottom:26px}
+  .prime{display:flex;align-items:center;gap:12px;width:100%;border:none;cursor:pointer;text-align:left;
+    background:linear-gradient(140deg,#453A5E,#67589B);border-radius:16px;padding:16px;font-family:'Inter',sans-serif;
+    box-shadow:0 10px 26px rgba(69,58,94,.3);margin-bottom:22px}
+  .prime .ric{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.14);display:grid;place-items:center;color:#fff;flex-shrink:0}
+  .prime > div{min-width:0}
+  .prime b{display:block;font-size:13.5px;font-weight:800;color:#fff}
+  .prime span{font-size:11px;font-weight:600;color:#C9BEEC}
+  .prime .go{margin-left:auto;color:#C9BEEC}
+  .flatrow{display:flex;align-items:center;gap:12px;width:100%;border:none;cursor:pointer;text-align:left;
+    background:transparent;padding:12px 2px;font-family:'Inter',sans-serif;border-bottom:1px solid var(--line)}
+  .flatrow:last-of-type{border-bottom:none}
+  .flatrow .ric{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+  .flatrow > div{min-width:0}
+  .flatrow b{display:block;font-size:13px;font-weight:800;color:var(--ink)}
+  .flatrow span{font-size:11px;font-weight:600;color:var(--muted)}
+  .flatrow .go{margin-left:auto;color:var(--muted)}
   .readagain{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:1.5px solid var(--accent);
-    color:var(--accent);background:#fff;font-weight:800;font-size:13px;border-radius:12px;padding:12px;cursor:pointer;font-family:'Inter',sans-serif}
+    color:var(--accent);background:transparent;font-weight:800;font-size:13px;border-radius:12px;padding:12px;cursor:pointer;
+    font-family:'Inter',sans-serif;margin-top:22px}
 
   /* MOBILE */
   .mobilebar{display:none}
   @media (max-width:900px){
-    .shell{grid-template-columns:1fr;padding:12px 12px 40px}
+    .shell{grid-template-columns:1fr;padding:12px 14px 44px;gap:20px}
     .side{display:none}
-    .mobilebar{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);
-      border-radius:13px;box-shadow:var(--shadow-sm);padding:10px 14px;margin:10px 12px 0}
+    .mobilebar{display:flex;align-items:center;gap:12px;padding:12px 16px}
     .mobilebar .mb-brand{font-family:'Fraunces',serif;font-weight:700;font-size:17px;color:var(--ink)}
     .mobilebar .mb-brand .lab{color:var(--accent)}
     .mobilebar .mb-ch{margin-left:auto;background:var(--accent-soft);border-radius:999px;padding:4px 10px;
       font-size:10px;font-weight:800;color:var(--accent-deep)}
     .hero .inner{max-width:100%;padding:22px}
     .hero .art{opacity:.22;background-size:cover}
-    .hero .fade{background:linear-gradient(90deg,#FBF1E6 30%,rgba(251,241,230,.72))}
+    .hero .fade{background:linear-gradient(90deg,#F7EBDD 30%,rgba(247,235,221,.72))}
     .hero h1{font-size:23px}
+    .sheet{padding:22px 20px}
     .learn{grid-template-columns:1fr}
     .rail{position:static}
   }
@@ -141,10 +144,10 @@
 
 <div class="shell">
 
-  <aside class="side">
+<aside class="side">
     <div class="brand">History<span class="lab">Lab</span></div>
     <a class="allch" href="#"><svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M15 18l-6-6 6-6"/></svg>All Chapters</a>
-    <div class="chpill">Chapter 1 · The Rise of Nationalism in Europe</div>
+    <div class="chname">Chapter 1 · The Rise of Nationalism in Europe</div>
     <nav class="nav">
       <a class="active" href="#"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Overview</a>
       <a href="#"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.5"/></svg>Mock Tests</a>
@@ -155,9 +158,9 @@
       <a href="#"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>Flashcards</a>
       <a href="#"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>Figures</a>
     </nav>
-    <div class="sidecard">
-      <b><svg class="i" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3L22 9.3l-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2z"/></svg>21 stars</b>
-      <span>earned in this chapter</span>
+    <div class="sidestars">
+      <svg class="i" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3L22 9.3l-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2z"/></svg>
+      21 stars <span>this chapter</span>
     </div>
   </aside>
 
@@ -175,53 +178,52 @@
       </div>
     </div>
 
-    <div class="card">
-      <h2><span class="hic"><svg class="i" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M4 19.5V21h16v-4"/></svg></span>Sections</h2>
+    <div class="sheet">
+      <h2><svg class="i" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M4 19.5V21h16v-4"/></svg>Sections</h2>
       <div class="topic" style="--tc:#C36B53;--tb:#F9E9E3">
         <span class="ticon"><svg class="i" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4c4.5-2.2 6.5 2.2 11 0v9c-4.5 2.2-6.5-2.2-11 0"/></svg></span>
         <div><h4>The French Revolution and the Idea of the Nation</h4><div class="tmeta">4 topics · 1 quiz</div></div>
-        <div class="tstate"><span class="done-pill"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Completed</span><svg class="i chev"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="tstate"><span class="done-pill"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Completed</span><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
       <div class="topic" style="--tc:#5571B5;--tb:#E9ECF8">
         <span class="ticon"><svg class="i" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M9 21V10M15 21V10M19 21V10"/><path d="M3 10l9-6 9 6"/></svg></span>
         <div><h4>The Making of Nationalism in Europe</h4><div class="tmeta">5 topics · 1 quiz</div></div>
-        <div class="tstate"><svg class="i chev"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="tstate"><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
       <div class="topic" style="--tc:#C2893E;--tb:#F7EFDD">
-        <span class="ticon"><svg class="i" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3 3 .5 5 2.5 5 5.5a5 5 0 0 1-10 0c0-1.5.5-2.8 1.5-4 .3 1.5 1 3 2 4z"/></svg></span>
+        <span class="ticon"><svg class="i" viewBox="0 0 24 24"><path d="M12 2c1 3-2 4-2 7a4 4 0 0 0 8 .5C18 6 14 5 12 2z"/><path d="M8.5 10.5C7 12 6 13.7 6 16a6 6 0 0 0 12 0c0-1.6-.6-3-1.5-4.2"/></svg></span>
         <div><h4>The Age of Revolutions: 1830–1848</h4><div class="tmeta">5 topics · 1 quiz</div></div>
-        <div class="tstate"><svg class="i chev"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="tstate"><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
       <div class="topic" style="--tc:#3E8E5A;--tb:#E3F2E8">
         <span class="ticon"><svg class="i" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg></span>
         <div><h4>The Making of Germany and Italy</h4><div class="tmeta">4 topics · 1 quiz</div></div>
-        <div class="tstate"><svg class="i chev"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="tstate"><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
       <div class="topic" style="--tc:#9B5C9A;--tb:#F3E9F3">
         <span class="ticon"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg></span>
         <div><h4>Visualising the Nation</h4><div class="tmeta">3 topics · 1 quiz</div></div>
-        <div class="tstate"><svg class="i chev"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="tstate"><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
       <div class="topic" style="--tc:#3F8E84;--tb:#E4F1EF">
         <span class="ticon"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/></svg></span>
         <div><h4>Nationalism and Imperialism</h4><div class="tmeta">3 topics · 1 quiz</div></div>
-        <div class="tstate"><svg class="i chev"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="tstate"><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
     </div>
 
     <div class="quote">
-      <span class="qic"><svg class="i" viewBox="0 0 24 24" style="width:22px;height:22px"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22"/></svg></span>
+      <span class="qic"><svg class="i" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z"/><path d="M16 8L2 22"/></svg></span>
       <span class="q">"When France sneezes, the rest of Europe catches a cold." — Metternich</span>
-      <span class="who">🇪🇺</span>
     </div>
   </main>
 
   <div class="rail">
-    <div class="rcard">
+    <div class="railsec">
       <h3>Chapter Progress</h3>
       <div class="ringwrap">
         <svg width="104" height="104" style="transform:rotate(-90deg)">
-          <circle cx="52" cy="52" r="44" stroke="#F1EAF3" stroke-width="10" fill="none"/>
+          <circle cx="52" cy="52" r="44" stroke="#F0E7EA" stroke-width="10" fill="none"/>
           <circle cx="52" cy="52" r="44" stroke="#E8551F" stroke-width="10" fill="none"
             stroke-linecap="round" stroke-dasharray="276" stroke-dashoffset="229"/>
         </svg>
@@ -230,26 +232,23 @@
       <div class="rnote">1 of 6 sections complete — a strong start, Aarav. Keep going!</div>
     </div>
 
-    <div class="rcard" style="background:linear-gradient(140deg,#453A5E,#67589B);border:none">
-      <h3 style="color:#fff">Mock Test Centre</h3>
-      <div class="rnote" style="color:#CFC7E8;text-align:left;margin-bottom:12px">Timed board-pattern papers set by a Senior CBSE Examiner.</div>
-      <button class="rbtn" style="background:#C05F35;border:none;margin:0">
-        <div><b style="color:#fff">Start your first mock test</b><span style="color:#FFE3D3">Practice Paper 1 · 60 min · 29 marks</span></div>
-        <svg class="i go" style="color:#FFE3D3"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
-    </div>
+    <button class="prime">
+      <span class="ric"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.5"/></svg></span>
+      <div><b>Start your first mock test</b><span>Practice Paper 1 · 60 min · 29 marks</span></div>
+      <svg class="i go" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
 
-    <div class="rcard">
+    <div class="railsec" style="margin-bottom:0">
       <h3>Quick practice</h3>
-      <button class="rbtn">
+      <button class="flatrow">
         <span class="ric" style="background:var(--accent-soft);color:var(--accent)"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4z"/></svg></span>
         <div><b>Practice questions</b><span>quizzes · sources · NCERT</span></div>
-        <svg class="i go"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="i go" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </button>
-      <button class="rbtn">
+      <button class="flatrow">
         <span class="ric" style="background:#F3E9F3;color:#9B5C9A"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
         <div><b>Flashcards</b><span>100 smart cards</span></div>
-        <svg class="i go"><path d="M9 18l6-6-6-6"/></svg>
+        <svg class="i go" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </button>
     </div>
   </div>
