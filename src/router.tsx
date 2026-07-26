@@ -108,12 +108,12 @@ export const router = createBrowserRouter([
   {
     element: <RequireChapterAccess />,
     children: [
-      // Overview composes WorkspaceShell itself (custom rail)
+      // Overview + Section compose WorkspaceShell themselves (custom rails)
       { path: '/chapter/:chapterId', element: <HomePage /> },
+      { path: '/chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
       {
         element: <WorkspaceLayout />,
         children: [
-          { path: '/chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
           { path: '/chapter/:chapterId/timeline', element: <TimelineMode /> },
           { path: '/chapter/:chapterId/maps', element: <MapMode /> },
           { path: '/chapter/:chapterId/flashcards', element: <FlashcardMode /> },
