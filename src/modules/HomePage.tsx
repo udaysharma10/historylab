@@ -276,29 +276,9 @@ export function HomePage() {
         )
       )}
 
-      {/* Quick practice */}
-      {entitled && (
-        <div className="mb-7">
-          <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-2">
-            Quick practice
-          </h3>
-          <button
-            className="w-full flex items-center gap-3 py-3 text-left"
-            onClick={() => navigate(`${basePath}/flashcards`)}
-          >
-            <span className="w-9 h-9 rounded-[10px] bg-[#F3E9F3] text-hist-purple grid place-items-center shrink-0">
-              <IconLayers className="w-4 h-4" />
-            </span>
-            <span className="min-w-0">
-              <b className="block text-[13px] font-extrabold text-v2-ink">Flashcards</b>
-              <span className="block text-[11px] font-semibold text-v2-muted">
-                {flashcardCount} smart cards · spaced repetition
-              </span>
-            </span>
-            <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
-          </button>
-        </div>
-      )}
+      {/* Quick-practice block removed (Neha 2026-07-27): the rail's Flashcards
+          card duplicated the sidebar item one inch to its left. Section pages
+          keep their rail cards — those are section-scoped, the sidebar isn't. */}
 
       {/* Stats — 2×2, honest facts only (no streak until we track one) */}
       <div>

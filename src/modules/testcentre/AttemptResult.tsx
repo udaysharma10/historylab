@@ -95,13 +95,16 @@ export function AttemptResult() {
   const firstName = (profile?.name || 'there').split(' ')[0]
   const delta = prevBest !== null ? objAwarded - prevBest : null
 
-  // Per-section objective bars (Sprint 5 adds written marks to these).
+  // Per-section summary. EVERY section appears (Neha 2026-07-27 — written-only
+  // sections B/C/D were silently dropped and read as missing): MCQ sections get
+  // a scored bar; written-only sections state what they are instead of a bar.
   const sections = [...new Set(questions.map((q) => q.section_label))].map((label) => {
-    const qs = questions.filter((q) => q.section_label === label && q.qtype === 'mcq')
-    const max = qs.reduce((s, q) => s + q.marks, 0)
-    const got = qs.reduce((s, q) => s + Number(answerByQ.get(q.id)?.marks_awarded ?? 0), 0)
-    return { label, got, max }
-  }).filter((s) => s.max > 0)
+    const qs = questions.filter((q) => q.section_label === label)
+    const mcqs = qs.filter((q) => q.qtype === 'mcq')
+    const max = mcqs.reduce((s, q) => s + q.marks, 0)
+    const got = mcqs.reduce((s, q) => s + Number(answerByQ.get(q.id)?.marks_awarded ?? 0), 0)
+    return { label, got, max, written: qs.length - mcqs.length }
+  })
 
   const RING_C = 2 * Math.PI * 47
   const headline =
@@ -188,15 +191,23 @@ export function AttemptResult() {
                 <b className="block text-[12.5px] font-bold text-hist-dark mb-2">
                   Section {s.label}
                 </b>
-                <div className="h-[7px] rounded-full overflow-hidden mb-1.5" style={{ backgroundColor: '#F1EADD' }}>
-                  <div
-                    className="h-full rounded-full"
-                    style={{ width: `${s.max ? (s.got / s.max) * 100 : 0}%`, backgroundColor: color }}
-                  />
-                </div>
-                <span className="text-[11px] font-bold text-hist-muted">
-                  {s.got}/{s.max} MCQ
-                </span>
+                {s.max > 0 ? (
+                  <>
+                    <div className="h-[7px] rounded-full overflow-hidden mb-1.5" style={{ backgroundColor: '#F1EADD' }}>
+                      <div
+                        className="h-full rounded-full"
+                        style={{ width: `${(s.got / s.max) * 100}%`, backgroundColor: color }}
+                      />
+                    </div>
+                    <span className="text-[11px] font-bold text-hist-muted">
+                      {s.got}/{s.max} MCQ{s.written > 0 ? ` · ${s.written} written` : ''}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-[11px] font-bold text-hist-muted">
+                    {s.written} written · check the scheme below
+                  </span>
+                )}
               </div>
             )
           })}
