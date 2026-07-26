@@ -122,6 +122,10 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
     },
   ]
 
+  // Inside a section the tree is expanded — drop the chapter-only Exam Prep
+  // group there so the menu stays within one viewport (Uday 2026-07-27).
+  const visibleGroups = inSection ? groups.filter((g) => g.label !== 'Exam Prep') : groups
+
   function goTo(to: string) {
     navigate(to)
     onNavigate?.()
@@ -156,7 +160,8 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
         </span>
       </button>
 
-      <nav>
+      {/* Nav scrolls on its own; identity above and profile below stay put. */}
+      <nav className="flex-1 min-h-0 overflow-y-auto">
         {/* LEARN — Overview + the section tree (the sitemap, visible) */}
         <div>
           <div className="text-[10px] font-extrabold tracking-[1.2px] uppercase text-v2-muted px-3 mb-1.5 mt-0">
@@ -202,7 +207,7 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
           )}
         </div>
 
-        {groups.map((group) => (
+        {visibleGroups.map((group) => (
           <div key={group.label}>
             <div className="text-[10px] font-extrabold tracking-[1.2px] uppercase text-v2-muted px-3 mb-1.5 mt-3.5">
               {group.label}
@@ -234,7 +239,7 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
       {/* Profile block — replaces the old top-header identity + menu.
           mt-auto pins it to the sidebar's bottom edge (desktop gives the
           sidebar full viewport height). */}
-      <div className="relative mt-auto pt-5 mx-1" ref={menuRef}>
+      <div className="relative shrink-0 pt-4 mx-1" ref={menuRef}>
         <button
           className="w-full flex items-center gap-2.5 p-3 bg-white rounded-[14px] shadow-v2-sm text-left"
           onClick={() => setMenuOpen(!menuOpen)}

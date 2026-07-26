@@ -83,7 +83,7 @@ export function WorkspaceShell({
       >
         {/* Sidebar — desktop only (drawer covers mobile). Fixed viewport
             height so the profile block pins to the bottom edge. */}
-        <aside className="hidden lg:block sticky top-5 min-w-0 h-[calc(100dvh-2.5rem)] overflow-y-auto">
+        <aside className="hidden lg:block sticky top-5 min-w-0 h-[calc(100dvh-2.5rem)]">
           <Sidebar chapterId={chapterId} />
         </aside>
 
