@@ -153,6 +153,30 @@
   .done-pill{display:flex;align-items:center;gap:5px;color:var(--ok);font-size:11.5px;font-weight:800}
   .done-pill svg.i{width:14px;height:14px}
   .now-pill{background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:6px 14px;border-radius:999px}
+
+  /* Practice & Explore — section-scoped, embedded in the sheet (live-app style) */
+  .pq{display:flex;align-items:center;gap:14px;width:100%;border:1.5px solid var(--line);background:#FDFAF7;
+    border-radius:16px;padding:16px 18px;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;margin-bottom:26px}
+  .pq:hover{border-color:#E3CFC2}
+  .pq .picon{width:46px;height:46px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;font-size:21px;flex-shrink:0}
+  .pq h4{font-family:'Fraunces',serif;font-size:16.5px;font-weight:600;color:var(--ink)}
+  .pq span{display:block;font-size:12.5px;font-weight:600;color:var(--body);margin-top:2px}
+  .pq .go{margin-left:auto;color:var(--accent);font-weight:800}
+  .xhead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .xhead .picon{width:40px;height:40px;border-radius:50%;background:var(--lav-soft);display:grid;place-items:center;font-size:18px;flex-shrink:0}
+  .xhead h4{font-family:'Fraunces',serif;font-size:16.5px;font-weight:600;color:var(--ink)}
+  .xhead span{display:block;font-size:12.5px;font-weight:600;color:var(--body);margin-top:1px}
+  .years{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 12px}
+  .ychip{display:flex;align-items:center;gap:9px;border:1.5px solid var(--line);background:#fff;border-radius:12px;
+    padding:11px 18px;font-family:'Fraunces',serif;font-weight:700;font-size:16px;color:var(--ink);cursor:pointer}
+  .ychip .dot{width:14px;height:14px;border-radius:50%;border:2px solid #DACFC7;flex-shrink:0}
+  .ychip.on{border-color:var(--accent);background:var(--accent-soft)}
+  .ychip.on .dot{border-color:var(--accent);background:var(--accent)}
+  .ychip .star{color:#D0433B;font-size:12px}
+  .yreveal{border:1.5px dashed #E0D4CB;border-radius:12px;padding:16px 18px;font-size:13.5px;font-weight:600;
+    color:var(--body);background:#FDFAF7;line-height:1.65;margin-bottom:26px}
+  .yreveal b{color:var(--ink);font-family:'Fraunces',serif;font-size:15px}
+  .secmap{width:100%;border-radius:14px;margin-top:12px;display:block;border:1px solid var(--line)}
   #pane-sec .quote{display:flex;align-items:center;justify-content:center;gap:12px;padding:26px 20px 0;text-align:center}
   #pane-sec .quote .qic{color:var(--accent)}
   #pane-sec .quote .q{font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;color:var(--ink)}
@@ -209,31 +233,37 @@
   .rtrack{width:120px;height:5px;border-radius:99px;background:#F0E7EA;overflow:hidden}
   .rtrack i{display:block;height:100%;border-radius:99px;background:var(--accent);width:60%}
 
-  .rpage{max-width:680px;margin:0 auto;padding:44px 24px 80px}
-  .rkicker{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent-deep)}
-  .rpage h1{font-family:'Fraunces',serif;font-size:34px;font-weight:600;color:var(--ink);line-height:1.15;margin:10px 0 14px}
-  .rlede{font-size:16.5px;font-weight:500;color:var(--body);line-height:1.75;margin-bottom:28px}
-  .rpage h2{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);margin:34px 0 12px}
-  .rpage p{font-size:15px;line-height:1.85;color:#4E4558;margin-bottom:16px}
-  .rpage mark{background:var(--accent-soft);color:var(--accent-deep);font-weight:700;padding:1px 5px;border-radius:5px}
-  .wordbox{display:flex;gap:14px;align-items:flex-start;background:var(--lav-soft);border-radius:14px;padding:16px 18px;margin:22px 0}
-  .wordbox .wic{font-family:'Fraunces',serif;font-size:22px;color:var(--lav);line-height:1}
-  .wordbox b{color:var(--ink)}
-  .wordbox p{font-size:13.5px;line-height:1.7;margin:0}
-  .remember{border-left:4px solid var(--accent);background:#FFF6EF;border-radius:0 14px 14px 0;padding:16px 20px;margin:26px 0}
-  .remember .rtag{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent-deep);margin-bottom:6px}
-  .remember p{font-size:14px;line-height:1.75;margin:0;color:var(--ink);font-weight:500}
-  .examcall{display:flex;gap:12px;align-items:flex-start;border:1.5px dashed #D9C8E8;border-radius:14px;padding:14px 18px;margin:30px 0 0;background:#FBF8FE}
-  .examcall svg.i{color:var(--lav);margin-top:2px}
-  .examcall b{display:block;font-size:12px;font-weight:800;color:var(--lav);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
-  .examcall p{font-size:13.5px;margin:0;color:var(--ink);font-weight:600}
-  .rnav{display:flex;gap:12px;margin-top:44px;padding-top:26px;border-top:1px solid var(--line)}
-  .rback{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--line);color:var(--body);
-    font-family:'Inter',sans-serif;font-weight:800;font-size:13px;padding:13px 18px;border-radius:12px;cursor:pointer}
-  .rnext{flex:1;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--accent);border:none;color:#fff;
-    font-family:'Inter',sans-serif;font-weight:800;font-size:13.5px;padding:13px 20px;border-radius:12px;cursor:pointer;
-    box-shadow:0 6px 18px rgba(232,85,31,.35);text-align:left}
-  .rnext small{display:block;font-size:10.5px;font-weight:700;color:#FFE1D2;text-transform:uppercase;letter-spacing:.6px}
+  /* Card-by-card player (matches live NarrativeMode flow) */
+  .rpage{max-width:840px;margin:0 auto;padding:26px 24px 60px}
+  .segs{display:flex;gap:6px;margin-bottom:12px}
+  .seg{flex:1;height:4px;border-radius:99px;background:#E6DFE9}
+  .seg.on{background:#5B67B7}
+  .rmeta{display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:700;color:var(--muted);margin-bottom:14px}
+  .rmeta .rml{display:flex;align-items:center;gap:7px}
+  .rmeta svg.i{width:15px;height:15px}
+  .card{background:#fff;border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+  .card .strip{height:6px;background:linear-gradient(90deg,#5B67B7,#C9CFEE)}
+  .card .cbody{padding:34px 42px 40px;min-height:280px}
+  .card h2{font-family:'Fraunces',serif;font-size:27px;font-weight:700;color:#5B67B7;line-height:1.2;margin-bottom:18px}
+  .card p{font-size:17px;line-height:1.8;color:#3E3548;margin-bottom:14px}
+  .card p:last-child{margin-bottom:0}
+  .card b{color:var(--ink)}
+  .card mark{background:var(--accent-soft);color:var(--accent-deep);font-weight:700;padding:1px 5px;border-radius:5px}
+  .card .rem{border-left:4px solid var(--accent);background:#FFF6EF;border-radius:0 14px 14px 0;padding:14px 18px;margin-top:20px}
+  .card .rem .rtag{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent-deep);margin-bottom:6px}
+  .card .rem p{font-size:14.5px;line-height:1.7;margin:0;color:var(--ink);font-weight:500}
+  .card .examcall{display:flex;gap:12px;align-items:flex-start;border:1.5px dashed #D9C8E8;border-radius:14px;padding:14px 18px;margin-top:20px;background:#FBF8FE}
+  .card .examcall svg.i{color:#5B67B7;margin-top:2px}
+  .card .examcall b{display:block;font-size:12px;font-weight:800;color:#5B67B7;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
+  .card .examcall p{font-size:14px;margin:0;color:var(--ink);font-weight:600}
+  .cnav{display:flex;align-items:center;justify-content:space-between;margin-top:24px}
+  .cback{display:flex;align-items:center;gap:8px;background:transparent;border:none;color:var(--muted);
+    font-family:'Fraunces',serif;font-weight:700;font-size:16px;cursor:pointer;padding:12px 8px}
+  .cback:disabled{opacity:.4;cursor:default}
+  .cnext{display:flex;align-items:center;gap:10px;background:#5B67B7;border:none;color:#fff;
+    font-family:'Fraunces',serif;font-weight:700;font-size:17px;padding:14px 32px;border-radius:14px;cursor:pointer;
+    box-shadow:0 8px 20px rgba(91,103,183,.4)}
+  .khint{text-align:center;font-size:13px;font-weight:600;color:var(--muted);margin-top:18px}
 
   /* TOAST (demo affordance for unwired links) */
   #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
@@ -458,6 +488,45 @@
           <div><h4>The Revolutionaries</h4><div class="tmeta">4 cards · 1 quiz</div></div>
           <div class="tstate"><svg class="i chev" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
         </div>
+
+        <hr>
+
+        <h2><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4z"/></svg>Practice &amp; Explore</h2>
+
+        <button class="pq" onclick="toast('Section quiz — not wired in this flow demo')">
+          <span class="picon">🧠</span>
+          <div>
+            <h4>Practice Quiz</h4>
+            <span>MCQ, Fill in the Blank, True/False, Match the Following</span>
+          </div>
+          <span class="go">›</span>
+        </button>
+
+        <div class="xhead">
+          <span class="picon">📅</span>
+          <div>
+            <h4>Explore Timeline</h4>
+            <span>5 key events — select a year to read more</span>
+          </div>
+        </div>
+        <div class="years" id="years">
+          <button class="ychip" onclick="pickYear(this,'1797')"><span class="dot"></span>1797</button>
+          <button class="ychip" onclick="pickYear(this,'1815')"><span class="dot"></span>1815<span class="star">★</span></button>
+          <button class="ychip" onclick="pickYear(this,'1831')"><span class="dot"></span>1831</button>
+          <button class="ychip" onclick="pickYear(this,'1834')"><span class="dot"></span>1834<span class="star">★</span></button>
+          <button class="ychip" onclick="pickYear(this,'1848')"><span class="dot"></span>1848</button>
+        </div>
+        <div class="yreveal" id="yreveal">👆 Select a year above to see what happened</div>
+
+        <div class="xhead">
+          <span class="picon">🗺️</span>
+          <div>
+            <h4>Explore Map</h4>
+            <span>Europe after the Congress of Vienna, 1815</span>
+          </div>
+        </div>
+        <img class="secmap" src="assets/fig-03-europe-map.png" alt="Map of Europe after the Congress of Vienna, 1815"
+          onclick="toast('Interactive map — not wired in this flow demo')">
       </div>
 
       <div class="quote">
@@ -551,11 +620,6 @@
 
       <div class="railsec" style="margin-bottom:0">
         <h3>Keep practising</h3>
-        <button class="flatrow" onclick="toast('Section quiz — not wired in this flow demo')">
-          <span class="ric" style="background:var(--accent-soft);color:var(--accent)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .3c0 1.7-2.5 2.2-2.5 3.7"/><path d="M12 17h.01"/></svg></span>
-          <div><b>Section quiz</b><span>unlocks when topics are done</span></div>
-          <svg class="i go" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
         <button class="flatrow" onclick="toast('Flashcards — not wired in this flow demo')">
           <span class="ric" style="background:#F3E9F3;color:#9B5C9A"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
           <div><b>Flashcards</b><span>revise this section's cards</span></div>
@@ -582,51 +646,31 @@
     </div>
   </div>
 
-  <article class="rpage">
-    <span class="rkicker">Section 2 · Topic 3</span>
-    <h1>What Liberal Nationalism Stood For</h1>
-    <p class="rlede">In the 1800s, if you asked a young lawyer in Frankfurt or a merchant's son in Milan what they were fighting for, one word kept coming up: <em>liberalism</em>. But what did it actually mean to them?</p>
-
-    <div class="wordbox">
-      <span class="wic">Aa</span>
-      <p><b>Word first:</b> <b>Liberalism</b> comes from the Latin <b>liber</b> — <em>free</em>. Every idea in this topic grows out of that one root: freedom.</p>
+  <div class="rpage">
+    <div class="segs" id="segs"></div>
+    <div class="rmeta">
+      <span class="rml"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Reading</span>
+      <span id="cof">1 of 9</span>
     </div>
-
-    <h2>Freedom for the individual</h2>
-    <p>For the <mark>new middle classes</mark> — the factory owners, traders, lawyers and professors we met in the last topic — liberalism meant two things above all: <mark>freedom for the individual</mark> and <mark>equality of all before the law</mark>. Remember, these were people whose importance came from talent and hard work, not from birth. A world ruled by aristocratic privilege had no place for them — so they imagined a world governed by law instead.</p>
-
-    <h2>Freedom in politics</h2>
-    <p>Politically, liberalism stood for <mark>government by consent</mark>. It meant the end of autocracy and clerical privileges, a <mark>constitution</mark>, and a <mark>representative government</mark> elected by the people. The nation, liberals argued, should not be the private property of a king.</p>
-    <p>But here is the twist your examiner loves: this "freedom" had sharp limits. In revolutionary France, the right to vote belonged only to <mark>property-owning men</mark>. Men without property, and <mark>all women</mark>, were excluded from political rights. Women would demand the vote for another century.</p>
-
-    <div class="remember">
-      <div class="rtag">Remember this</div>
-      <p>Liberal democracy in the 1800s ≠ democracy today. Voting = property-owning men only. No property, no vote. Woman? No vote at all.</p>
-    </div>
-
-    <h2>Freedom in the economy</h2>
-    <p>In economics, liberalism stood for the <mark>freedom of markets</mark> and the abolition of state-imposed restrictions on the movement of goods and capital. Picture a merchant in 1833 moving goods across the German lands: <mark>39 states</mark>, each with its own currency, weights and measures — customs duty at every border, sometimes calculated by the <em>time</em> the journey took.</p>
-    <p>The answer came in <mark>1834</mark>: the <mark>Zollverein</mark>, a customs union formed at the initiative of Prussia. It abolished tariff barriers between member states and reduced the number of currencies from over thirty to <mark>two</mark>. A new railway network moved people and goods along with something less visible — the feeling of being one nation.</p>
-
-    <div class="examcall">
-      <svg class="i" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4z"/></svg>
-      <div>
-        <b>Board has asked this</b>
-        <p>"What did liberal nationalism stand for? Explain." — 3 marks. Structure your answer: individual freedom → political meaning → economic meaning (Zollverein).</p>
+    <div class="card">
+      <div class="strip"></div>
+      <div class="cbody">
+        <h2 id="ctitle"></h2>
+        <div id="cbody"></div>
       </div>
     </div>
-
-    <div class="rnav">
-      <button class="rback" onclick="exitReader()">
-        <svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M15 18l-6-6 6-6"/></svg>
-        Section 2
+    <div class="cnav">
+      <button class="cback" id="cback" onclick="prevCard()">
+        <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        Back
       </button>
-      <button class="rnext" onclick="toast('Only Topic 3 is wired in this flow demo')">
-        <div><small>Next topic</small>A New Conservatism after 1815</div>
-        <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <button class="cnext" id="cnext" onclick="nextCard()">
+        <span id="cnextlabel">Next</span>
+        <svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
     </div>
-  </article>
+    <div class="khint">Use arrow keys or swipe to navigate</div>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -643,6 +687,7 @@
     var r = VIEWS[h] || VIEWS['/chapter'];
     document.body.dataset.view = r.v;
     document.title = r.t;
+    if (r.v === 'top') { ci = 0; drawCard(); }
     window.scrollTo(0,0);
   }
   function go(path){ location.hash = path; }
@@ -651,7 +696,6 @@
     if (history.length > 1) history.back(); else go('/chapter/section-2');
   }
   window.addEventListener('hashchange', route);
-  route();
 
   var tt;
   function toast(msg){
@@ -661,6 +705,79 @@
     clearTimeout(tt);
     tt = setTimeout(function(){ t.classList.remove('on'); }, 1900);
   }
+
+  // ===== Card-by-card reader (live NarrativeMode flow) =====
+  var CARDS = [
+    { h: 'The Ideology Behind the Dream: Liberalism',
+      b: '<p>The dream of national unity wasn\'t just an emotion — it was built on a specific <b>ideology</b>: <b>liberalism</b>. The word comes from the Latin <b>liber</b>, meaning <b>free</b>. And that tells you everything about what the middle class wanted.</p>' },
+    { h: 'Freedom for the Individual',
+      b: '<p>For the <mark>new middle classes</mark> — the factory owners, traders, lawyers and professors we met in the last topic — liberalism meant two things above all: <mark>freedom for the individual</mark> and <mark>equality of all before the law</mark>.</p><p>These were people whose importance came from <b>talent and hard work</b>, not from birth. A world ruled by aristocratic privilege had no place for them — so they imagined a world governed by law instead.</p>' },
+    { h: 'Freedom in Politics',
+      b: '<p>Politically, liberalism stood for <mark>government by consent</mark>. It meant the end of <b>autocracy</b> and <b>clerical privileges</b>, a <mark>constitution</mark>, and a <mark>representative government</mark> elected through parliament.</p><p>The nation, liberals argued, should not be the private property of a king.</p>' },
+    { h: 'But Whose Freedom?',
+      b: '<p>Here is the twist your examiner loves: this "freedom" had sharp limits. In revolutionary France, the right to vote belonged only to <mark>property-owning men</mark>. Men without property, and <mark>all women</mark>, were excluded from political rights.</p><div class="rem"><div class="rtag">Remember this</div><p>Liberal democracy in the 1800s ≠ democracy today. Voting = property-owning men only. No property, no vote. Woman? No vote at all.</p></div>' },
+    { h: 'Freedom in the Economy',
+      b: '<p>In economics, liberalism stood for the <mark>freedom of markets</mark> and the <b>abolition of state-imposed restrictions</b> on the movement of goods and capital.</p><p>For the merchant class, this was not theory — it was survival. And nowhere was the problem worse than in the German lands.</p>' },
+    { h: 'A Merchant\'s Nightmare',
+      b: '<p>Picture a merchant in 1833 moving goods across the German lands: <mark>39 states</mark>, each with its <b>own currency</b> and its <b>own weights and measures</b>.</p><p>Customs duty at every single border — sometimes calculated by the <b>time</b> the journey took. Trade was being strangled by the very borders nationalism wanted to erase.</p>' },
+    { h: 'The Answer: Zollverein, 1834',
+      b: '<p>In <mark>1834</mark>, a <mark>customs union</mark> called the <mark>Zollverein</mark> was formed at the initiative of <b>Prussia</b>, and most German states joined it.</p><p>It <b>abolished tariff barriers</b> between member states and reduced the number of currencies from <mark>over thirty to two</mark>. For the first time, the German lands began to behave like one economy.</p>' },
+    { h: 'Railways: The Invisible Thread',
+      b: '<p>A new <mark>railway network</mark> stimulated mobility, moving goods and people across the old borders — and carrying something less visible with them: <b>the feeling of being one nation</b>.</p><p>A wave of <mark>economic nationalism</mark> was quietly strengthening the wider nationalist movement. Unity was being built in ledgers and train timetables before it was won on battlefields.</p>' },
+    { h: 'Lock It In',
+      b: '<p>Liberal nationalism = <b>freedom</b> in three arenas: the <mark>individual</mark> (equality before law), <mark>politics</mark> (constitution + representative government), and the <mark>economy</mark> (free markets, Zollverein).</p><div class="examcall"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5l4 4L7 21H3v-4z"/></svg><div><b>Board has asked this</b><p>"What did liberal nationalism stand for? Explain." — 3 marks. Structure: individual freedom → political meaning → economic meaning (Zollverein).</p></div></div>' }
+  ];
+  var ci = 0;
+  function drawCard(){
+    var segs = document.getElementById('segs');
+    segs.innerHTML = '';
+    for (var i = 0; i < CARDS.length; i++){
+      var s = document.createElement('span');
+      s.className = 'seg' + (i <= ci ? ' on' : '');
+      segs.appendChild(s);
+    }
+    document.getElementById('cof').textContent = (ci + 1) + ' of ' + CARDS.length;
+    document.getElementById('ctitle').textContent = CARDS[ci].h;
+    document.getElementById('cbody').innerHTML = CARDS[ci].b;
+    document.getElementById('cback').disabled = (ci === 0);
+    document.getElementById('cnextlabel').textContent = (ci === CARDS.length - 1) ? 'Finish ✓' : 'Next';
+  }
+  function nextCard(){
+    if (ci < CARDS.length - 1){ ci++; drawCard(); window.scrollTo(0,0); }
+    else { go('/chapter/section-2'); toast('Topic 3 complete — nice work! (demo: state not saved)'); }
+  }
+  function prevCard(){ if (ci > 0){ ci--; drawCard(); window.scrollTo(0,0); } }
+  document.addEventListener('keydown', function(e){
+    if (document.body.dataset.view !== 'top') return;
+    if (e.key === 'ArrowRight') nextCard();
+    if (e.key === 'ArrowLeft') prevCard();
+  });
+  var tx0 = null;
+  document.getElementById('reader').addEventListener('touchstart', function(e){ tx0 = e.changedTouches[0].clientX; }, {passive:true});
+  document.getElementById('reader').addEventListener('touchend', function(e){
+    if (tx0 === null) return;
+    var dx = e.changedTouches[0].clientX - tx0;
+    if (dx < -50) nextCard();
+    if (dx > 50) prevCard();
+    tx0 = null;
+  }, {passive:true});
+
+  // ===== Section timeline (embedded, section-scoped) =====
+  var EVENTS = {
+    '1797': 'Napoleon invades Italy — the Napoleonic wars begin, carrying revolutionary ideas across Europe.',
+    '1815': '★ Napoleon is defeated at Waterloo. The Treaty of Vienna redraws Europe\'s map — conservative regimes are restored, and nationalists go underground.',
+    '1831': 'Giuseppe Mazzini founds Young Italy in Marseilles — a secret society to unite Italy as a republic.',
+    '1834': '★ The Zollverein customs union is formed at Prussia\'s initiative — tariff barriers abolished, currencies reduced from over thirty to two.',
+    '1848': 'Revolutions sweep Europe — liberals demand constitutions while artisans and workers rise over bread and wages.'
+  };
+  function pickYear(el, y){
+    var chips = document.querySelectorAll('#years .ychip');
+    for (var i = 0; i < chips.length; i++) chips[i].classList.remove('on');
+    el.classList.add('on');
+    document.getElementById('yreveal').innerHTML = '<b>' + y + '</b> — ' + EVENTS[y];
+  }
+
+  route(); // boot last — cards must exist before a deep link into the reader renders
 </script>
 
 </body>
