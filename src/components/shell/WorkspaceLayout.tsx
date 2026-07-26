@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useParams } from 'react-router-dom'
 import { getChapter } from '../../data/getChapter'
+import { getChapter as getBookChapter } from '../../data/books'
 import { WorkspaceShell, type Crumb } from './WorkspaceShell'
 
 const TOOL_LABELS: Record<string, string> = {
@@ -7,7 +8,7 @@ const TOOL_LABELS: Record<string, string> = {
   maps: 'Maps',
   flashcards: 'Flashcards',
   figures: 'Figures',
-  exam: 'Practice',
+  exam: 'Exam Prep',
   tests: 'Mock Tests',
 }
 
@@ -27,25 +28,28 @@ export function WorkspaceLayout() {
   const base = `/chapter/${cid}`
   const chapterNumber = chapterNumberOf(cid)
 
+  // One crumb grammar everywhere (Uday 2026-07-27, supersedes the #37
+  // two-segment cap): All Chapters › {chapter title} › {current page}.
+  const chapterTitle = getBookChapter('history-10', cid)?.title ?? `Chapter ${chapterNumber}`
+  const root: Crumb[] = [
+    { label: 'All Chapters', to: '/' },
+    { label: chapterTitle, to: base },
+  ]
+
   let crumbs: Crumb[]
   if (sectionId) {
     const section = getChapter(cid)?.sections.find((s) => s.id === sectionId)
-    crumbs = [
-      { label: 'Overview', to: base },
-      { label: section ? `Section ${section.number}` : 'Section' },
-    ]
+    crumbs = [...root, { label: section ? `Section ${section.number}` : 'Section' }]
   } else if (pathname === base) {
-    crumbs = [{ label: 'All Chapters', to: '/' }, { label: `Chapter ${chapterNumber}` }]
+    crumbs = [{ label: 'All Chapters', to: '/' }, { label: chapterTitle }]
   } else {
     const rest = pathname.slice(base.length + 1)
     const segment = rest.split('/')[0]
     if (segment === 'tests' && rest.startsWith('tests/result')) {
       // Detail page under Mock Tests — the only tool route with real depth.
-      crumbs = [{ label: 'Mock Tests', to: `${base}/tests` }, { label: 'Result' }]
+      crumbs = [...root, { label: 'Mock Tests', to: `${base}/tests` }, { label: 'Result' }]
     } else {
-      // Sidebar destinations are SIBLINGS of Overview, not children — a
-      // single-segment crumb; the sidebar itself is the way back up.
-      crumbs = [{ label: TOOL_LABELS[segment] || 'Tools' }]
+      crumbs = [...root, { label: TOOL_LABELS[segment] || 'Tools' }]
     }
   }
 

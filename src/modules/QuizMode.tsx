@@ -154,7 +154,7 @@ export function QuizMode() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
           </button>
           <div className="min-w-0">
-            <b className="block text-[13.5px] font-extrabold text-v2-ink truncate">Practice Quiz</b>
+            <b className="block text-[13.5px] font-extrabold text-v2-ink truncate">Section Quiz</b>
             <span className="block text-[11px] font-bold text-v2-muted truncate">
               Section {section.number} · {section.title}
             </span>

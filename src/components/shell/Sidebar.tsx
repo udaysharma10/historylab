@@ -4,6 +4,7 @@ import { useAuthContext } from '../auth'
 import { useAccess } from '../auth/AccessProvider'
 import { useProgressStore } from '../../store/useProgressStore'
 import { getChapter as getBookChapter } from '../../data/books'
+import { getChapter } from '../../data/getChapter'
 import {
   IconHome,
   IconPencil,
@@ -43,6 +44,13 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
   const base = `/chapter/${chapterId}`
   const bookChapter = getBookChapter('history-10', chapterId)
   const chapterEntitled = canAccessChapter(chapterId)
+  // Section tree under Overview (Uday 2026-07-27): location-driven — it
+  // expands ONLY while inside a section (on Overview the journey list IS the
+  // section list; duplicating it would wall up the sidebar). Titles only, no
+  // progress marks — the rail ring is THE progress fact. No user-managed
+  // collapse state: going deeper is what opens the map.
+  const inSection = pathname.startsWith(`${base}/section/`)
+  const sections = inSection ? (getChapter(chapterId)?.sections ?? []) : []
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -54,38 +62,10 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [menuOpen])
 
+  // Grouping per Neha's four concepts (2026-07-27): Learn / Revise /
+  // Practice (Mock Tests) / Exam Prep. LEARN renders separately — it carries
+  // the section tree.
   const groups: Array<{ label: string; items: NavItem[] }> = [
-    {
-      label: 'Learn',
-      items: [
-        {
-          label: 'Overview',
-          to: base,
-          icon: <IconHome />,
-          isActive: (p, b) => p === b || p.startsWith(`${b}/section`),
-        },
-      ],
-    },
-    {
-      label: 'Practice',
-      items: [
-        {
-          label: 'Practice',
-          to: `${base}/exam`,
-          icon: <IconPencil />,
-          isActive: (p, b) => p.startsWith(`${b}/exam`),
-        },
-        {
-          label: 'Mock Tests',
-          to: `${base}/tests`,
-          icon: <IconTarget />,
-          isActive: (p, b) => p.startsWith(`${b}/tests`),
-          // Honest discovery (law §4.6): preview users see the destination
-          // exists but that it rides with the chapter purchase.
-          badge: chapterEntitled ? undefined : '🔒',
-        },
-      ],
-    },
     {
       label: 'Revise',
       items: [
@@ -112,6 +92,31 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
           to: `${base}/figures`,
           icon: <IconImage />,
           isActive: (p, b) => p.startsWith(`${b}/figures`),
+        },
+      ],
+    },
+    {
+      label: 'Practice',
+      items: [
+        {
+          label: 'Mock Tests',
+          to: `${base}/tests`,
+          icon: <IconTarget />,
+          isActive: (p, b) => p.startsWith(`${b}/tests`),
+          // Honest discovery (law §4.6): preview users see the destination
+          // exists but that it rides with the chapter purchase.
+          badge: chapterEntitled ? undefined : '🔒',
+        },
+      ],
+    },
+    {
+      label: 'Exam Prep',
+      items: [
+        {
+          label: 'Exam Prep',
+          to: `${base}/exam`,
+          icon: <IconPencil />,
+          isActive: (p, b) => p.startsWith(`${b}/exam`),
         },
       ],
     },
@@ -152,13 +157,54 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
       </button>
 
       <nav>
-        {groups.map((group, gi) => (
+        {/* LEARN — Overview + the section tree (the sitemap, visible) */}
+        <div>
+          <div className="text-[10px] font-extrabold tracking-[1.2px] uppercase text-v2-muted px-3 mb-1.5 mt-0">
+            Learn
+          </div>
+          <button
+            className={`w-full flex items-center gap-[11px] px-3 py-2.5 rounded-[11px] text-[13.5px] font-bold text-left mb-0.5 transition-colors ${
+              pathname === base
+                ? 'bg-white text-v2-accent-deep shadow-v2-sm'
+                : 'text-v2-body hover:text-v2-ink'
+            }`}
+            onClick={() => goTo(base)}
+          >
+            <IconHome />
+            Overview
+          </button>
+          {sections.length > 0 && (
+            <div className="ml-[21px] pl-2.5 border-l-2 border-v2-line mb-1">
+              {sections.map((s) => {
+                const active = pathname.startsWith(`${base}/section/${s.id}`)
+                return (
+                  <button
+                    key={s.id}
+                    className={`w-full flex items-center gap-2 px-2 py-[7px] rounded-[9px] text-[12px] font-bold text-left transition-colors ${
+                      active
+                        ? 'bg-white text-v2-accent-deep shadow-v2-sm'
+                        : 'text-v2-muted hover:text-v2-ink'
+                    }`}
+                    onClick={() => goTo(`${base}/section/${s.id}`)}
+                  >
+                    <span
+                      className={`text-[10px] font-extrabold shrink-0 ${
+                        active ? 'text-v2-accent' : 'text-v2-muted/70'
+                      }`}
+                    >
+                      S{s.number}
+                    </span>
+                    <span className="truncate">{s.title}</span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        {groups.map((group) => (
           <div key={group.label}>
-            <div
-              className={`text-[10px] font-extrabold tracking-[1.2px] uppercase text-v2-muted px-3 mb-1.5 ${
-                gi === 0 ? 'mt-0' : 'mt-3.5'
-              }`}
-            >
+            <div className="text-[10px] font-extrabold tracking-[1.2px] uppercase text-v2-muted px-3 mb-1.5 mt-3.5">
               {group.label}
             </div>
             {group.items.map((item) => {

@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FlashcardSingle } from '../components/flashcard'
 import { getFlashcards, getChapter, CHAPTER_SECTION_COLORS } from '../data/getChapter'
@@ -34,6 +34,8 @@ export function FlashcardMode() {
 
   const [phase, setPhase] = useState<FlashcardPhase>('home')
   const [sectionFilter, setSectionFilter] = useState<string | null>(null)
+  const [searchParams] = useSearchParams()
+  const autoStarted = useRef(false)
   const [practiceCards, setPracticeCards] = useState(flashcards)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [practiceMode, setPracticeMode] = useState<'all' | 'due' | 'section'>('all')
@@ -96,6 +98,22 @@ export function FlashcardMode() {
     setSessionCorrect(0)
     setPhase('practice')
   }, [dueCards])
+
+  // Section-page rail deep link: /flashcards?section=s3 opens straight into
+  // that section's practice (Uday 2026-07-27). Runs once per mount; deferred
+  // a tick so the effect doesn't set state synchronously.
+  useEffect(() => {
+    if (autoStarted.current) return
+    const sec = searchParams.get('section')
+    if (!sec || !flashcards.some((c) => c.sectionId === sec)) return
+    // Flag is set when the timer FIRES (not when scheduled) so StrictMode's
+    // discarded first effect run doesn't burn the one-shot.
+    const t = setTimeout(() => {
+      autoStarted.current = true
+      handleStartPractice('section', sec)
+    }, 0)
+    return () => clearTimeout(t)
+  }, [searchParams, flashcards, handleStartPractice])
 
   const handleRate = useCallback((quality: number) => {
     const card = practiceCards[currentIndex]

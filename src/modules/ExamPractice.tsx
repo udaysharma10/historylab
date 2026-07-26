@@ -130,7 +130,7 @@ export function ExamPractice() {
           whileHover={{ x: -3 }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Practice
+          Back to Exam Prep
         </motion.button>
 
         <QuizProgress
@@ -166,7 +166,7 @@ export function ExamPractice() {
           whileHover={{ x: -3 }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Practice
+          Back to Exam Prep
         </motion.button>
 
         <motion.div
@@ -240,7 +240,7 @@ export function ExamPractice() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="font-display text-2xl font-bold text-hist-dark">Practice</h1>
+        <h1 className="font-display text-2xl font-bold text-hist-dark">Exam Prep</h1>
         <p className="font-body text-sm text-gray-400">
           Source analysis, NCERT questions & model answers
         </p>

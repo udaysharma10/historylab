@@ -96,7 +96,7 @@ export function WorkspaceShell({
                   <span key={i} className="flex items-center gap-2 min-w-0">
                     {crumb.to && !last ? (
                       <button
-                        className="hover:text-v2-ink transition-colors"
+                        className="hover:text-v2-ink transition-colors truncate max-w-[240px]"
                         onClick={() => navigate(crumb.to!)}
                       >
                         {crumb.label}

@@ -12,7 +12,6 @@ import {
   IconArrowRight,
   IconClock,
   IconTarget,
-  IconPencil,
   IconLayers,
   IconImage,
   IconStar,
@@ -284,21 +283,6 @@ export function HomePage() {
             Quick practice
           </h3>
           <button
-            className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
-            onClick={() => navigate(`${basePath}/exam`)}
-          >
-            <span className="w-9 h-9 rounded-[10px] bg-v2-accent-soft text-v2-accent grid place-items-center shrink-0">
-              <IconPencil className="w-4 h-4" />
-            </span>
-            <span className="min-w-0">
-              <b className="block text-[13px] font-extrabold text-v2-ink">Practice questions</b>
-              <span className="block text-[11px] font-semibold text-v2-muted">
-                board-style, section by section
-              </span>
-            </span>
-            <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
-          </button>
-          <button
             className="w-full flex items-center gap-3 py-3 text-left"
             onClick={() => navigate(`${basePath}/flashcards`)}
           >
@@ -338,7 +322,7 @@ export function HomePage() {
     <WorkspaceShell
       chapterId={cid}
       chapterNumber={chapterNumber}
-      crumbs={[{ label: 'All Chapters', to: '/' }, { label: `Chapter ${chapterNumber}` }]}
+      crumbs={[{ label: 'All Chapters', to: '/' }, { label: chapter.title }]}
       rail={rail}
     >
       {/* HERO — light, art fades in from the right, stat chips */}

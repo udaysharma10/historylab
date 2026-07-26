@@ -162,24 +162,26 @@ export function SectionModule() {
         <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-2">
           Keep practising
         </h3>
+        {/* Section-scoped shortcuts: rail = the altitude of the page you're
+            on; the sidebar stays chapter-level (Uday 2026-07-27). */}
         <button
           className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
-          onClick={() => navigate(`${basePath}/exam`)}
+          onClick={() => navigate(`${basePath}/section/${section.id}/quiz`)}
         >
           <span className="w-9 h-9 rounded-[10px] bg-v2-accent-soft text-v2-accent grid place-items-center shrink-0">
             <IconPencil className="w-4 h-4" />
           </span>
           <span className="min-w-0">
-            <b className="block text-[13px] font-extrabold text-v2-ink">Practice questions</b>
+            <b className="block text-[13px] font-extrabold text-v2-ink">Section Quiz</b>
             <span className="block text-[11px] font-semibold text-v2-muted">
-              board-style, exam technique
+              completes this section
             </span>
           </span>
           <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
         </button>
         <button
           className="w-full flex items-center gap-3 py-3 text-left"
-          onClick={() => navigate(`${basePath}/flashcards`)}
+          onClick={() => navigate(`${basePath}/flashcards?section=${section.id}`)}
         >
           <span className="w-9 h-9 rounded-[10px] bg-[#F3E9F3] text-hist-purple grid place-items-center shrink-0">
             <IconLayers className="w-4 h-4" />
@@ -187,7 +189,7 @@ export function SectionModule() {
           <span className="min-w-0">
             <b className="block text-[13px] font-extrabold text-v2-ink">Flashcards</b>
             <span className="block text-[11px] font-semibold text-v2-muted">
-              revise this chapter's cards
+              this section's cards
             </span>
           </span>
           <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
@@ -200,7 +202,11 @@ export function SectionModule() {
     <WorkspaceShell
       chapterId={cid}
       chapterNumber={chapterNumber}
-      crumbs={[{ label: 'Overview', to: basePath }, { label: `Section ${section.number}` }]}
+      crumbs={[
+        { label: 'All Chapters', to: '/' },
+        { label: chapter.title, to: basePath },
+        { label: `Section ${section.number}` },
+      ]}
       rail={rail}
     >
       {/* HERO — dark cinematic, the banner IS the surface */}
@@ -367,7 +373,7 @@ export function SectionModule() {
             🧠
           </span>
           <span className="min-w-0 flex-1">
-            <h4 className="font-display text-[16.5px] font-semibold text-v2-ink">Practice Quiz</h4>
+            <h4 className="font-display text-[16.5px] font-semibold text-v2-ink">Section Quiz</h4>
             <span className="block text-[12.5px] font-semibold text-v2-body mt-0.5">
               MCQ, Fill in the Blank, True/False, Match the Following
             </span>
