@@ -1,12 +1,13 @@
 import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { getChapter, getChapterPreview, CHAPTER_SECTION_COLORS } from '../data/getChapter'
+import { getChapter, getChapterPreview, getTimelineActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { useProgressStore } from '../store/useProgressStore'
 import { WorkspaceShell } from '../components/shell/WorkspaceShell'
 import {
   IconBook,
   IconCheck,
   IconChevronRight,
+  IconCalendar,
   IconClock,
   IconTarget,
   IconQuiz,
@@ -76,6 +77,10 @@ export function SectionModule() {
 
   const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
   const color = sectionColors[section.id] || '#3E3548'
+  // Rail card appears only for sections with authored ordering activities.
+  const hasTimelinePractice = getTimelineActivities(cid).some(
+    (a) => a.sectionId === section.id,
+  )
   const art = SECTION_ART[cid]?.[section.id]
 
   const topicsDone = section.subsections.filter((sub) => completedSubsections[sub.id]).length
@@ -164,6 +169,23 @@ export function SectionModule() {
         </h3>
         {/* Section-scoped shortcuts: rail = the altitude of the page you're
             on; the sidebar stays chapter-level (Uday 2026-07-27). */}
+        {hasTimelinePractice && (
+          <button
+            className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
+            onClick={() => navigate(`${basePath}/timeline?practice=${section.id}`)}
+          >
+            <span className="w-9 h-9 rounded-[10px] bg-v2-lav-soft text-hist-indigo grid place-items-center shrink-0">
+              <IconCalendar className="w-4 h-4" />
+            </span>
+            <span className="min-w-0">
+              <b className="block text-[13px] font-extrabold text-v2-ink">Order the events</b>
+              <span className="block text-[11px] font-semibold text-v2-muted">
+                timeline practice for this section
+              </span>
+            </span>
+            <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
+          </button>
+        )}
         <button
           className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
           onClick={() => navigate(`${basePath}/section/${section.id}/quiz`)}

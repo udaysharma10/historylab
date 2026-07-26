@@ -4,7 +4,8 @@ import { getKeyDates, CHAPTER_SECTION_COLORS, CHAPTER_SECTION_LABELS, CHAPTER_SE
 import type { KeyDate } from '../../types/chapter'
 
 interface TimelineExplorerProps {
-  onBack: () => void
+  /** Omitted when the explorer IS the page (Neha 2026-07-27) — no back link. */
+  onBack?: () => void
   chapterId: string
 }
 
@@ -55,24 +56,18 @@ export function TimelineExplorer({ onBack, chapterId }: TimelineExplorerProps) {
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-5">
-        <motion.button
-          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
-          onClick={onBack}
-          whileHover={{ x: -3 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Timeline
-        </motion.button>
-
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-hist-blue">
-            <span className="text-white text-lg">📅</span>
-          </div>
-          <div>
-            <h1 className="font-display text-xl font-bold text-hist-dark">Timeline Explorer</h1>
-            <p className="font-body text-sm text-gray-400">{filtered.length} events{yearRange ? ` from ${yearRange}` : ''}</p>
-          </div>
-        </div>
+        {onBack && (
+          <motion.button
+            className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
+            onClick={onBack}
+            whileHover={{ x: -3 }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            Back to Timeline
+          </motion.button>
+        )}
+        <h1 className="font-display text-2xl font-bold text-hist-dark">Timeline</h1>
+        <p className="font-body text-sm text-gray-400">{filtered.length} events{yearRange ? ` from ${yearRange}` : ''} · tap any event for the story</p>
       </div>
 
       {/* Section filter chips */}
@@ -167,8 +162,8 @@ export function TimelineExplorer({ onBack, chapterId }: TimelineExplorerProps) {
                           {event.event}
                         </h3>
                         {isMajor && (
-                          <span className="inline-block mt-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-hist-gold/15 text-hist-gold">
-                            EXAM IMPORTANT
+                          <span className="inline-block mt-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-hist-gold/15 text-hist-gold tracking-wide">
+                            BOARD Q{event.boardYear ? ` · ${event.boardYear}` : ''}
                           </span>
                         )}
                       </div>
