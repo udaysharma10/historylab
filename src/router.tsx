@@ -108,10 +108,11 @@ export const router = createBrowserRouter([
   {
     element: <RequireChapterAccess />,
     children: [
+      // Overview composes WorkspaceShell itself (custom rail)
+      { path: '/chapter/:chapterId', element: <HomePage /> },
       {
         element: <WorkspaceLayout />,
         children: [
-          { path: '/chapter/:chapterId', element: <HomePage /> },
           { path: '/chapter/:chapterId/section/:sectionId', element: <SectionModule /> },
           { path: '/chapter/:chapterId/timeline', element: <TimelineMode /> },
           { path: '/chapter/:chapterId/maps', element: <MapMode /> },

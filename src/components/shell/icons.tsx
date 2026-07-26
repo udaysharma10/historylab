@@ -147,6 +147,23 @@ export function IconCheck({ className }: IconProps) {
   )
 }
 
+export function IconStar({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <path d="M12 2l3.1 6.3L22 9.3l-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1L12 2z" />
+    </svg>
+  )
+}
+
+export function IconTrophy({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <path d="M8 21h8M12 17v4M17 4H7v5a5 5 0 0 0 10 0z" />
+      <path d="M17 5h3a2 2 0 0 1-2 4h-1M7 5H4a2 2 0 0 0 2 4h1" />
+    </svg>
+  )
+}
+
 export function IconQuiz({ className }: IconProps) {
   return (
     <svg {...base(className)}>

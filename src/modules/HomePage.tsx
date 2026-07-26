@@ -1,34 +1,54 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useProgressStore } from '../store/useProgressStore'
-import { useAuthContext } from '../components/auth'
 import { useAccess } from '../components/auth/AccessProvider'
 import { PurchaseSheet } from '../components/purchase/PurchaseSheet'
+import { WorkspaceShell } from '../components/shell/WorkspaceShell'
+import {
+  IconBook,
+  IconCheck,
+  IconChevronRight,
+  IconArrowRight,
+  IconClock,
+  IconTarget,
+  IconPencil,
+  IconLayers,
+  IconImage,
+  IconStar,
+  IconTrophy,
+} from '../components/shell/icons'
 import { chapterKey } from '../lib/contentIds'
 import { testEngine, type PaperMeta, type AttemptMeta } from '../lib/testEngine'
 import {
   getChapter,
   getChapterPreview,
-  getKeyDates,
   getFlashcards,
   getFigures,
-  getMapIdentifyActivities,
-  getMapLabelActivities,
-  CHAPTER_SECTION_COLORS,
-  CHAPTER_SECTION_ICONS,
 } from '../data/getChapter'
 
-// Chapter home — decision #34 (locked 2026-07-20, mockups revamp-01 v4 +
-// revamp-01b): breadcrumb → slim hero (ring says "% chapter done") → numbered
-// loop bands: 1 Learn (bar only on in-progress sections) · 2 Test yourself
-// (paid: dark band, one giant CTA / preview: warm unlock band) · 3 Revise
-// tools (paid: payload mini-cards / preview: greyed 🔒). Rules: each fact
-// once; test facts live only in the Test band; "MCQ marks" never "objective".
+// Chapter home ("Overview") — Design Language V2, LOCKED 2026-07-26
+// (decision #38, mockups/finalmockup/nl-03-flow.html): light chip hero with
+// the chapter's signature NCERT painting, Continue-learning resume band
+// (deep-links into the topic reader), journey stepper (no sequential locks —
+// "recommended next" is the highlighted step), quote band; rail = progress
+// ring + Mock Test prime + quick practice + stats. Laws: one-fact-once,
+// honest completion, Mock Tests never buried, no subscription wording.
+const HERO_ART: Record<string, string> = {
+  ch1: '/images/fig-11-german-empire-proclamation.png',
+  ch2: '/images/ch2/fig-07-dandi-march.png',
+}
+
+const CHAPTER_QUOTES: Record<string, { q: string; by: string }> = {
+  ch1: { q: 'When France sneezes, the rest of Europe catches a cold.', by: 'Metternich' },
+}
+
+const MIN_PER_CARD = 0.75 // reading-pace estimate: ~45s per story card
+const MIN_PER_QUIZ = 5
+
 export function HomePage() {
   const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
-  const { profile } = useAuthContext()
   const { products, canAccessChapter } = useAccess()
   const [sheetOpen, setSheetOpen] = useState(false)
   const cid = chapterId || 'ch1'
@@ -41,11 +61,9 @@ export function HomePage() {
   const entitled = canAccessChapter(cid)
   const product = products.find((p) => p.id === chapterKey(cid))
   const basePath = `/chapter/${cid}`
-  const sectionColors = CHAPTER_SECTION_COLORS[cid] || {}
-  const sectionIcons = CHAPTER_SECTION_ICONS[cid] || {}
+  const chapterNumber = parseInt(cid.replace(/\D/g, ''), 10) || 1
 
-  // Test band data (entitled users only) — papers + attempts drive the stat
-  // line and the recommended-paper CTA.
+  // Papers + attempts drive the rail's Mock Test prime and the best-MCQ stat.
   const [papers, setPapers] = useState<PaperMeta[]>([])
   const [attempts, setAttempts] = useState<AttemptMeta[]>([])
   useEffect(() => {
@@ -69,25 +87,24 @@ export function HomePage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <div className="text-5xl mb-4">🔍</div>
-          <h2 className="font-display text-xl font-bold text-hist-dark mb-2">Chapter Not Found</h2>
-          <button className="text-hist-blue underline font-body" onClick={() => navigate('/')}>Back to Home</button>
+          <h2 className="font-display text-xl font-bold text-v2-ink mb-2">Chapter Not Found</h2>
+          <button className="text-hist-blue underline font-body" onClick={() => navigate('/')}>
+            Back to Home
+          </button>
         </div>
       </div>
     )
   }
 
   // Progress: topics + section quiz as one unit each (decision #29); preview
-  // trim keeps the whole-chapter denominator via topicCount.
+  // trim keeps the whole-chapter denominator via topicCount. Quiz unit =
+  // at least one completed round (A-fix #1).
   const sectionUnits = (section: (typeof chapter.sections)[number]) => {
     const topicsDone = section.subsections.filter((sub) => completedSubsections[sub.id]).length
     const quiz = progressSections[section.id]
-    // Quiz unit = at least one completed quiz round in this section. (NOT
-    // completed>=total: setSectionTotal has no callers so total is always 0 —
-    // that check made 5/5 unreachable. Found in the 2026-07-26 code review;
-    // A-fix #1, approved by Uday.)
     const quizDone = !!quiz && quiz.completed >= 1
     const topicTotal = section.subsections.length || section.topicCount || 0
-    return { done: topicsDone + (quizDone ? 1 : 0), total: topicTotal + 1 }
+    return { done: topicsDone + (quizDone ? 1 : 0), total: topicTotal + 1, quizDone }
   }
   const overall = chapter.sections.reduce(
     (acc, s) => {
@@ -97,10 +114,47 @@ export function HomePage() {
     { done: 0, total: 0 },
   )
   const overallProgress = overall.total > 0 ? Math.round((overall.done / overall.total) * 100) : 0
+  const sectionsDone = chapter.sections.filter((s) => {
+    const u = sectionUnits(s)
+    return u.total > 0 && u.done >= u.total
+  }).length
 
-  const firstName = (profile?.name || 'there').split(' ')[0]
+  const isLockedSection = (sectionId: string) =>
+    !entitled && !!previewSection && sectionId !== previewSection
 
-  // Test-band derived state
+  // Resume target: first incomplete topic in the first unfinished (unlocked)
+  // section — the daily one-click path straight into the reader (#37).
+  let resume: { sectionId: string; sectionTitle: string; topicIndex: number; topicTitle: string; minutes: number } | null = null
+  for (const section of chapter.sections) {
+    if (isLockedSection(section.id) || section.subsections.length === 0) continue
+    const idx = section.subsections.findIndex((sub) => !completedSubsections[sub.id])
+    if (idx >= 0) {
+      const sub = section.subsections[idx]
+      resume = {
+        sectionId: section.id,
+        sectionTitle: section.title,
+        topicIndex: idx,
+        topicTitle: sub.title,
+        minutes: Math.max(2, Math.round(sub.narrativeCards.length * MIN_PER_CARD)),
+      }
+      break
+    }
+  }
+
+  // Honest time-left estimate — only counts content we actually have locally
+  // (preview users' locked sections carry no cards, so no fake numbers).
+  let minutesLeft = 0
+  for (const section of chapter.sections) {
+    if (isLockedSection(section.id)) continue
+    const u = sectionUnits(section)
+    for (const sub of section.subsections) {
+      if (!completedSubsections[sub.id]) minutesLeft += sub.narrativeCards.length * MIN_PER_CARD
+    }
+    if (!u.quizDone && section.subsections.length > 0) minutesLeft += MIN_PER_QUIZ
+  }
+  const estLeft = formatMinutes(Math.round(minutesLeft))
+
+  // Rail Mock Test prime — resume a live attempt, else least-attempted paper.
   const submitted = attempts.filter((a) => a.status === 'submitted')
   const live = attempts.find((a) => a.status === 'in_progress')
   const best = submitted.reduce<AttemptMeta | null>(
@@ -108,8 +162,6 @@ export function HomePage() {
       acc === null || (a.objective_awarded ?? 0) > (acc.objective_awarded ?? 0) ? a : acc,
     null,
   )
-  // Recommendation: resume a live attempt; otherwise the least-attempted
-  // published paper (ties → lowest position).
   const recommended = live
     ? papers.find((p) => p.id === live.paper_id)
     : [...papers].sort((a, b) => {
@@ -118,321 +170,450 @@ export function HomePage() {
         return at - bt || a.position - b.position
       })[0]
 
-  // Tool payloads (real counts; trimmed bundles make these preview-safe
-  // because preview users see the locked variant anyway).
-  const tools = [
-    { id: 'timeline', label: 'Timeline', icon: '📅', bg: '#E9ECF8', route: `${basePath}/timeline`, payload: `${getKeyDates(cid).length} key dates` },
-    { id: 'maps', label: 'Maps', icon: '🗺️', bg: '#E4F1EF', route: `${basePath}/maps`, payload: `${getMapIdentifyActivities(cid).length + getMapLabelActivities(cid).length} board-map exercises` },
-    { id: 'flashcards', label: 'Flashcards', icon: '🃏', bg: '#F3E9F3', route: `${basePath}/flashcards`, payload: `${getFlashcards(cid).length} smart cards · spaced repetition` },
-    { id: 'figures', label: 'Figures', icon: '🖼️', bg: '#F7EFDD', route: `${basePath}/figures`, payload: `${getFigures(cid).length} NCERT figures, explorable` },
-  ]
+  const resumeInfo = resume
+  const flashcardCount = getFlashcards(cid).length
+  const figureCount = getFigures(cid).length
+  const topicsDoneTotal = chapter.sections.reduce(
+    (n, s) => n + s.subsections.filter((sub) => completedSubsections[sub.id]).length,
+    0,
+  )
+  const quote = CHAPTER_QUOTES[cid]
+  const heroArt = HERO_ART[cid]
 
-  const ringCirc = 2 * Math.PI * 34
+  // The "recommended next" step (no sequential locks — decision #38): the
+  // first unlocked section that isn't complete.
+  const nextSectionId = chapter.sections.find((s) => {
+    if (isLockedSection(s.id)) return false
+    const u = sectionUnits(s)
+    return u.total === 0 || u.done < u.total
+  })?.id
 
-  return (
-    <div className="max-w-5xl mx-auto pb-10">
-      {/* Breadcrumb */}
-      <div className="text-[12.5px] font-semibold text-hist-muted mb-3.5 px-0.5">
-        <Link to="/" className="hover:text-hist-dark">All Chapters</Link>
-        <span className="mx-1.5">·</span>
-        <b className="text-hist-dark">Chapter {cid.replace(/\D/g, '')} · {chapter.title}</b>
+  const rail = (
+    <div>
+      {/* Chapter progress — THE progress fact (one-fact-once) */}
+      <div className="mb-7">
+        <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-3.5">
+          Chapter Progress
+        </h3>
+        <div className="flex items-center gap-4">
+          <div className="relative grid place-items-center shrink-0">
+            <svg width="92" height="92" className="-rotate-90">
+              <circle cx="46" cy="46" r="39" stroke="#F0E7EA" strokeWidth="9" fill="none" />
+              <circle
+                cx="46"
+                cy="46"
+                r="39"
+                stroke="#E8551F"
+                strokeWidth="9"
+                fill="none"
+                strokeLinecap="round"
+                strokeDasharray={2 * Math.PI * 39}
+                strokeDashoffset={2 * Math.PI * 39 * (1 - overallProgress / 100)}
+              />
+            </svg>
+            <b className="absolute font-display text-[17px] text-v2-ink">{overallProgress}%</b>
+          </div>
+          <div>
+            <b className="block font-display text-[15px] text-v2-ink">
+              {sectionsDone} of {chapter.sections.length} sections
+            </b>
+            <span className="block text-[11px] font-bold text-v2-muted mt-0.5">completed</span>
+            {estLeft && (
+              <span className="flex items-center gap-1.5 mt-2.5 text-[11.5px] font-bold text-v2-body">
+                <IconClock className="w-3.5 h-3.5 text-v2-muted" />
+                about {estLeft} left
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Slim hero — orientation, not action */}
+      {/* Prime CTA — Mock Tests never buried (law) / unlock for preview */}
+      {entitled ? (
+        <button
+          className="w-full flex items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
+          style={{ background: 'linear-gradient(140deg, #453A5E, #67589B)' }}
+          onClick={() =>
+            recommended
+              ? navigate(`${basePath}/tests/${recommended.id}/play`)
+              : navigate(`${basePath}/tests`)
+          }
+        >
+          <span className="w-[38px] h-[38px] rounded-[11px] bg-white/15 grid place-items-center text-white shrink-0">
+            <IconTarget />
+          </span>
+          <span className="min-w-0">
+            <b className="block text-[13.5px] font-extrabold text-white">
+              {live ? 'Resume your mock test' : best ? 'Take a mock test' : 'Start your first mock test'}
+            </b>
+            <span className="block text-[11px] font-semibold text-[#C9BEEC] truncate">
+              {recommended
+                ? `${recommended.title} · ${recommended.duration_minutes} min · ${recommended.total_marks} marks`
+                : 'Board-pattern papers, timed'}
+            </span>
+          </span>
+          <IconChevronRight className="w-[18px] h-[18px] ml-auto text-[#C9BEEC] shrink-0" />
+        </button>
+      ) : (
+        product && (
+          <button
+            className="w-full flex items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(192,95,53,.35)]"
+            style={{ background: 'linear-gradient(140deg, #8A4B2F, #C05F35)' }}
+            onClick={() => setSheetOpen(true)}
+          >
+            <span className="w-[38px] h-[38px] rounded-[11px] bg-white/15 grid place-items-center text-white shrink-0 text-base">
+              🔓
+            </span>
+            <span className="min-w-0">
+              <b className="block text-[13.5px] font-extrabold text-white">
+                Unlock this chapter · ₹{(product.price_paise / 100).toFixed(0)}
+              </b>
+              <span className="block text-[11px] font-semibold text-[#F4DCCB]">
+                One-time · all sections, tools &amp; mock tests
+              </span>
+            </span>
+            <IconChevronRight className="w-[18px] h-[18px] ml-auto text-[#F4DCCB] shrink-0" />
+          </button>
+        )
+      )}
+
+      {/* Quick practice */}
+      {entitled && (
+        <div className="mb-7">
+          <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-2">
+            Quick practice
+          </h3>
+          <button
+            className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
+            onClick={() => navigate(`${basePath}/exam`)}
+          >
+            <span className="w-9 h-9 rounded-[10px] bg-v2-accent-soft text-v2-accent grid place-items-center shrink-0">
+              <IconPencil className="w-4 h-4" />
+            </span>
+            <span className="min-w-0">
+              <b className="block text-[13px] font-extrabold text-v2-ink">Practice questions</b>
+              <span className="block text-[11px] font-semibold text-v2-muted">
+                board-style, section by section
+              </span>
+            </span>
+            <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
+          </button>
+          <button
+            className="w-full flex items-center gap-3 py-3 text-left"
+            onClick={() => navigate(`${basePath}/flashcards`)}
+          >
+            <span className="w-9 h-9 rounded-[10px] bg-[#F3E9F3] text-hist-purple grid place-items-center shrink-0">
+              <IconLayers className="w-4 h-4" />
+            </span>
+            <span className="min-w-0">
+              <b className="block text-[13px] font-extrabold text-v2-ink">Flashcards</b>
+              <span className="block text-[11px] font-semibold text-v2-muted">
+                {flashcardCount} smart cards · spaced repetition
+              </span>
+            </span>
+            <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
+          </button>
+        </div>
+      )}
+
+      {/* Stats — 2×2, honest facts only (no streak until we track one) */}
+      <div>
+        <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-2">Your stats</h3>
+        <div className="grid grid-cols-2">
+          <StatCell icon={<IconStar className="w-[17px] h-[17px] text-v2-accent" />} value={`${totalStars}`} label="stars" divider="r" />
+          <StatCell icon={<IconBook className="w-[17px] h-[17px] text-v2-accent" />} value={`${topicsDoneTotal}`} label="topics done" />
+          <StatCell
+            icon={<IconTrophy className="w-[17px] h-[17px] text-v2-accent" />}
+            value={best ? `${Number(best.objective_awarded ?? 0)}/${Number(best.objective_max ?? 0)}` : '—'}
+            label="best MCQ"
+            divider="rt"
+          />
+          <StatCell icon={<IconCheck className="w-[17px] h-[17px] text-v2-accent" />} value={`${sectionsDone}`} label="sections done" divider="t" />
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <WorkspaceShell
+      chapterId={cid}
+      chapterNumber={chapterNumber}
+      crumbs={[{ label: 'All Chapters', to: '/' }, { label: `Chapter ${chapterNumber}` }]}
+      rail={rail}
+    >
+      {/* HERO — light, art fades in from the right, stat chips */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-[22px] shadow-card border border-hist-line px-6 py-4 mb-5 flex items-center gap-5"
+        className="relative rounded-[20px] overflow-hidden shadow-v2 mb-[18px] min-h-[224px] flex items-center"
+        style={{ backgroundColor: '#F8EDDF' }}
       >
-        <div className="flex-1 min-w-0">
-          {!entitled && previewSection && (
-            <span className="inline-flex items-center gap-1.5 bg-hist-green/10 text-hist-green text-[10.5px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full mb-1.5">
-              ✓ Section 1 free
+        {heroArt && (
+          <div
+            className="absolute inset-0 opacity-25 md:opacity-100"
+            style={{
+              background: `url(${heroArt}) right 30% / 62% auto no-repeat`,
+              filter: 'sepia(.25) saturate(.85) brightness(1.03)',
+            }}
+          />
+        )}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg,#F8EDDF 38%,rgba(248,237,223,.92) 52%,rgba(248,237,223,.4) 72%,rgba(248,237,223,.08))',
+          }}
+        />
+        <div className="relative px-6 md:px-[34px] py-[30px] w-full">
+          <div className="flex items-center gap-2.5 mb-3 flex-wrap">
+            <span className="w-[42px] h-[42px] rounded-xl bg-v2-accent text-white grid place-items-center font-display font-bold text-lg shadow-[0_6px_16px_rgba(232,85,31,.35)]">
+              {chapterNumber}
             </span>
-          )}
-          <h1 className="font-display text-[21px] font-semibold text-hist-dark leading-tight mb-0.5">
+            <span className="text-[12.5px] font-extrabold text-v2-accent-deep">
+              CBSE Class 10 <em className="not-italic text-v2-muted font-bold mx-1">·</em> History
+            </span>
+            {!entitled && previewSection && (
+              <span className="bg-v2-ok-bg text-v2-ok text-[10.5px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full">
+                ✓ Section 1 free
+              </span>
+            )}
+          </div>
+          <h1 className="font-display text-[24px] md:text-[31px] font-semibold text-v2-ink leading-[1.12] mb-4 max-w-full md:max-w-[60%]">
             {chapter.title}
           </h1>
-          <p className="font-body text-[12.5px] font-medium text-hist-muted">
-            {entitled
-              ? `Welcome back, ${firstName}. Pick up the story where you left off — or test what you've learnt.`
-              : `Welcome, ${firstName}. Section 1 is yours to read free — the full chapter unlocks everything below it.`}
-          </p>
-          <div className="inline-flex items-center gap-1.5 bg-hist-gold-soft/50 border border-hist-line px-2.5 py-1 rounded-lg font-bold text-xs text-hist-ink mt-2">
-            ⭐ <b className="text-hist-dark">{totalStars} stars</b>
-          </div>
-        </div>
-        <div className="relative shrink-0 grid place-items-center" style={{ width: 84, height: 84 }}>
-          <svg width="84" height="84" className="-rotate-90">
-            <circle cx="42" cy="42" r="34" stroke="#EDE6F0" strokeWidth="8" fill="none" />
-            <circle
-              cx="42" cy="42" r="34" stroke="url(#homeRingGrad)" strokeWidth="8" fill="none"
-              strokeLinecap="round" strokeDasharray={ringCirc}
-              strokeDashoffset={ringCirc * (1 - overallProgress / 100)}
-            />
-            <defs>
-              <linearGradient id="homeRingGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#DC835F" />
-                <stop offset="1" stopColor="#7E72C2" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div className="absolute text-center leading-tight">
-            <b className="block font-display text-[15.5px] text-hist-dark">{overallProgress}%</b>
-            <span className="block text-[8px] font-extrabold uppercase text-hist-muted">chapter</span>
-            <span className="block text-[8px] font-extrabold uppercase text-hist-muted">done</span>
+          <div className="flex gap-2.5 flex-wrap">
+            <HeroChip icon={<IconBook className="w-[15px] h-[15px] text-v2-accent" />} label={`${chapter.sections.length} Sections`} />
+            {entitled && papers.length > 0 && (
+              <HeroChip icon={<IconTarget className="w-[15px] h-[15px] text-v2-accent" />} label={`${papers.length} Mock Test${papers.length === 1 ? '' : 's'}`} />
+            )}
+            {flashcardCount > 0 && (
+              <HeroChip icon={<IconLayers className="w-[15px] h-[15px] text-v2-accent" />} label={`${flashcardCount} Flashcards`} />
+            )}
+            {figureCount > 0 && (
+              <HeroChip icon={<IconImage className="w-[15px] h-[15px] text-v2-accent" />} label={`${figureCount} Figures`} />
+            )}
           </div>
         </div>
       </motion.div>
 
-      {/* BAND 1 · LEARN */}
-      <BandLabel num={1} title="Learn the story"
-        sub={entitled
-          ? `${chapter.sections.length} sections · continue where you left off`
-          : 'Section 1 free · the rest with the chapter'} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-7">
-        {chapter.sections.map((section, i) => {
-          const locked = !entitled && !!previewSection && section.id !== previewSection
-          const units = sectionUnits(section)
-          const state = locked
-            ? 'locked'
-            : units.done >= units.total && units.total > 0
-              ? 'done'
-              : units.done > 0
-                ? 'progress'
-                : 'idle'
-          const color = sectionColors[section.id] || '#3E3548'
-          const icon = sectionIcons[section.id] || section.icon || '📖'
-          const topicCount = section.subsections.length || section.topicCount || 0
-          const pct = units.total > 0 ? Math.round((units.done / units.total) * 100) : 0
-
-          return (
-            <motion.button
-              key={section.id}
-              className={`relative rounded-2xl p-4 text-left border transition-all ${
-                state === 'progress'
-                  ? 'border-2 border-hist-gold shadow-card bg-gradient-to-br from-white to-hist-gold-soft/60'
-                  : locked
-                    ? 'bg-[#FBF7F4] border-hist-line shadow-card'
-                    : 'bg-white border-hist-line shadow-card hover:shadow-card-hover'
-              }`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
-              whileTap={{ scale: 0.99 }}
-              onClick={() => (locked ? setSheetOpen(true) : navigate(`${basePath}/section/${section.id}`))}
-            >
-              <span
-                className={`absolute right-3 top-3 text-[10px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full ${
-                  state === 'done'
-                    ? 'bg-hist-green/10 text-hist-green'
-                    : state === 'progress'
-                      ? 'bg-hist-gold text-white'
-                      : locked
-                        ? 'bg-hist-gold-soft text-[#B5652F]'
-                        : 'bg-gray-100 text-gray-400'
-                }`}
-              >
-                {state === 'done' ? '✓ Done' : state === 'progress' ? 'Continue →' : locked ? '🔒 Unlock' : 'Not started'}
-              </span>
-              <div className="flex items-center gap-3 pr-[86px]">
-                <div
-                  className={`w-10 h-10 rounded-xl grid place-items-center text-lg shrink-0 ${locked ? 'grayscale opacity-60' : ''}`}
-                  style={{ backgroundColor: color + '1A' }}
-                >
-                  {icon}
-                </div>
-                <div className="min-w-0">
-                  <h3 className={`font-display text-[14.5px] font-semibold leading-tight ${locked ? 'text-[#8D8496]' : 'text-hist-dark'}`}>
-                    {section.title}
-                  </h3>
-                  <div className="text-[11px] font-semibold text-hist-muted mt-0.5">
-                    {locked
-                      ? `${topicCount} topics · with the chapter`
-                      : state === 'done'
-                        ? `${topicCount} topics · quiz done`
-                        : state === 'progress'
-                          ? `${units.done} of ${units.total} done`
-                          : `${topicCount} topics · 1 quiz`}
-                  </div>
-                </div>
-              </div>
-              {state === 'progress' && (
-                <div className="h-[5px] rounded-full mt-3 overflow-hidden" style={{ backgroundColor: '#EDE7F0' }}>
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ backgroundColor: color }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${pct}%` }}
-                    transition={{ duration: 0.7, delay: 0.3 }}
-                  />
-                </div>
-              )}
-            </motion.button>
-          )
-        })}
-      </div>
-
-      {/* BAND 2 · TEST (paid) or UNLOCK (preview) */}
-      {entitled ? (
-        <>
-          <BandLabel num={2} title="Test yourself" sub="board-pattern papers, marked like CBSE marks" />
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative rounded-[22px] shadow-card px-7 py-6 mb-7 flex flex-col sm:flex-row items-center gap-6 overflow-hidden"
-            style={{ background: 'linear-gradient(140deg, #453A5E, #67589B)' }}
+      {/* RESUME BAND — one click into the reader */}
+      {resumeInfo && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="flex items-center gap-4 rounded-2xl px-5 py-4 mb-6 border flex-wrap"
+          style={{
+            background: 'linear-gradient(140deg,#FFF3E9,#FDE7D7)',
+            borderColor: '#F6D4C2',
+          }}
+        >
+          <span className="w-[46px] h-[46px] rounded-[13px] bg-v2-accent text-white grid place-items-center shrink-0 shadow-[0_6px_16px_rgba(232,85,31,.3)]">
+            <IconBook className="w-[22px] h-[22px]" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="font-display text-[13px] font-bold text-v2-accent mb-0.5">
+              {overall.done > 0 ? 'Continue learning' : 'Start here'}
+            </div>
+            <b className="block text-[14.5px] font-extrabold text-v2-ink truncate">
+              {resumeInfo.sectionTitle}
+            </b>
+            <span className="block text-xs font-semibold text-v2-body mt-0.5 truncate">
+              {overall.done > 0 ? 'Resume from' : 'Begin with'} Topic {resumeInfo.topicIndex + 1}:{' '}
+              {resumeInfo.topicTitle} · about {resumeInfo.minutes} min
+            </span>
+          </div>
+          <button
+            className="flex items-center gap-2 bg-v2-accent text-white font-extrabold text-[13.5px] px-[22px] py-3 rounded-xl shadow-[0_6px_18px_rgba(232,85,31,.35)] btn-press max-md:w-full max-md:justify-center"
+            onClick={() =>
+              navigate(`${basePath}/section/${resumeInfo.sectionId}/topic/${resumeInfo.topicIndex + 1}`)
+            }
           >
-            <span className="absolute text-[110px] opacity-5 pointer-events-none" style={{ right: '34%', bottom: -40 }}>🎯</span>
-            <div className="flex-1 min-w-0 relative">
-              <span className="block text-[10.5px] font-extrabold uppercase tracking-[1.6px] text-[#C9BEEC] mb-1.5">
-                The real exam rehearsal
-              </span>
-              <h2 className="font-display text-[22px] font-semibold text-white mb-1.5">Mock Test Centre</h2>
-              <p className="font-body text-[13px] font-medium text-[#CFC7E8] max-w-[46ch]">
-                Timed papers set by a Senior CBSE Examiner — with the official marking scheme on
-                every written answer.
-              </p>
-              <div className="text-[12.5px] font-bold text-[#C9BEEC] mt-3">
-                {best ? (
-                  <>Best <b className="text-white font-display text-[14.5px]">{Number(best.objective_awarded ?? 0)}/{Number(best.objective_max ?? 0)}</b> MCQ</>
-                ) : (
-                  'No attempts yet'
-                )}
-                {' '}· {submitted.length} attempt{submitted.length === 1 ? '' : 's'} · {papers.length} paper{papers.length === 1 ? '' : 's'}
-              </div>
-            </div>
-            <div className="text-center shrink-0 relative">
-              {recommended ? (
-                <button
-                  className="flex flex-col items-center gap-0.5 rounded-2xl px-8 py-4 shadow-button btn-press"
-                  style={{ backgroundColor: '#C05F35' }}
-                  onClick={() => navigate(`${basePath}/tests/${recommended.id}/play`)}
-                >
-                  <b className="font-display text-white text-base font-extrabold">
-                    {live ? 'Resume mock test →' : 'Start mock test →'}
-                  </b>
-                  <span className="text-[11.5px] font-bold text-[#FFF3EC]">
-                    {recommended.title.length > 34 ? `${recommended.title.slice(0, 32)}…` : recommended.title} · {recommended.duration_minutes} min · {recommended.total_marks} marks
-                  </span>
-                </button>
-              ) : (
-                <button
-                  className="font-display font-bold text-white rounded-2xl px-8 py-4 shadow-button btn-press"
-                  style={{ backgroundColor: '#C05F35' }}
-                  onClick={() => navigate(`${basePath}/tests`)}
-                >
-                  Open Test Centre →
-                </button>
-              )}
-              <button
-                className="block mx-auto mt-2.5 text-xs font-bold text-[#C9BEEC] hover:text-white"
-                onClick={() => navigate(`${basePath}/tests`)}
-              >
-                All papers &amp; past attempts →
-              </button>
-            </div>
-          </motion.div>
-        </>
-      ) : (
-        <>
-          <BandLabel num={2} title="Unlock the full chapter" sub="everything below is included" />
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative rounded-[22px] shadow-card px-7 py-6 mb-7 flex flex-col sm:flex-row items-center gap-6 overflow-hidden"
-            style={{ background: 'linear-gradient(140deg, #8A4B2F, #C05F35)' }}
-          >
-            <span className="absolute text-[110px] opacity-[0.09] pointer-events-none -right-2 -bottom-6">🔒</span>
-            <div className="flex-1 min-w-0 relative">
-              <span className="block text-[10.5px] font-extrabold uppercase tracking-[1.6px] text-[#F3C9B2] mb-1.5">
-                One payment · yours for life
-              </span>
-              <h2 className="font-display text-[21px] font-semibold text-white mb-1.5">
-                The rest of the story — and the exam rehearsal
-              </h2>
-              <p className="font-body text-[13px] font-medium text-[#F4DCCB] max-w-[46ch] mb-3">
-                All sections, every revision tool, and timed board-pattern mock tests set by a
-                Senior CBSE Examiner.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[12.5px] font-semibold text-[#FBEADF]">
-                <span>✓ <b className="text-white">All {chapter.sections.length} story sections</b></span>
-                <span>✓ <b className="text-white">Mock tests</b> — timed, board pattern</span>
-                <span>✓ Flashcards · timeline · maps · figures</span>
-                <span>✓ Marking scheme on every answer</span>
-              </div>
-            </div>
-            {product && (
-              <div className="bg-white rounded-2xl px-6 py-5 text-center shrink-0 shadow-card-hover min-w-[240px] relative">
-                <div className="flex items-baseline justify-center gap-2 mb-1">
-                  {product.list_price_paise && (
-                    <span className="font-body text-sm text-gray-400 line-through font-semibold">
-                      ₹{(product.list_price_paise / 100).toFixed(0)}
-                    </span>
-                  )}
-                  <span className="font-display text-[28px] font-bold text-hist-dark">
-                    ₹{(product.price_paise / 100).toFixed(0)}
-                  </span>
-                  {product.list_price_paise && (
-                    <span className="text-[10.5px] font-extrabold text-hist-green">LAUNCH</span>
-                  )}
-                </div>
-                <div className="text-[11px] font-semibold text-hist-muted mb-3">
-                  One-time · no subscription
-                </div>
-                <button
-                  className="w-full font-display font-extrabold text-white text-sm rounded-xl px-5 py-3 shadow-button btn-press"
-                  style={{ backgroundColor: '#DC835F' }}
-                  onClick={() => setSheetOpen(true)}
-                >
-                  Unlock chapter →
-                </button>
-              </div>
-            )}
-          </motion.div>
-        </>
+            {overall.done > 0 ? 'Continue' : 'Start'}
+            <IconArrowRight className="w-[15px] h-[15px]" />
+          </button>
+        </motion.div>
       )}
 
-      {/* BAND 3 · REVISE */}
-      <BandLabel
-        num={3}
-        title="Revise with tools"
-        sub={entitled ? 'quick whole-chapter revision' : '🔒 included with the full chapter'}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {tools.map((tool) =>
-          entitled ? (
-            <motion.button
-              key={tool.id}
-              className="bg-white rounded-[14px] border border-hist-line shadow-card px-4 py-3 flex items-center gap-3 text-left hover:shadow-card transition-all"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => navigate(tool.route)}
-            >
-              <div className="w-[42px] h-[42px] rounded-xl grid place-items-center text-lg shrink-0" style={{ backgroundColor: tool.bg }}>
-                {tool.icon}
-              </div>
-              <div className="min-w-0">
-                <b className="block text-[13px] font-extrabold text-hist-dark">{tool.label}</b>
-                <span className="block text-[11.5px] font-semibold text-hist-muted truncate">{tool.payload}</span>
-              </div>
-              <span className="ml-auto text-hist-muted font-extrabold">→</span>
-            </motion.button>
-          ) : (
+      {/* JOURNEY STEPPER — the one sheet */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white rounded-[20px] shadow-v2 px-5 md:px-8 py-7"
+      >
+        <h2 className="font-display text-[19px] font-semibold text-v2-ink mb-5">
+          Your chapter journey
+        </h2>
+        <div className="relative">
+          <span className="absolute left-[21px] top-7 bottom-7 w-0.5 bg-v2-line" />
+          {chapter.sections.map((section) => {
+            const locked = isLockedSection(section.id)
+            const units = sectionUnits(section)
+            const done = !locked && units.total > 0 && units.done >= units.total
+            const inProgress = !locked && !done && units.done > 0
+            const isNext = section.id === nextSectionId
+            const topicCount = section.subsections.length || section.topicCount || 0
+            const pct = units.total > 0 ? Math.round((units.done / units.total) * 100) : 0
+            const estMin =
+              section.subsections.length > 0
+                ? Math.round(
+                    section.subsections.reduce((n, sub) => n + sub.narrativeCards.length, 0) *
+                      MIN_PER_CARD +
+                      MIN_PER_QUIZ,
+                  )
+                : null
+
+            return (
+              <button
+                key={section.id}
+                className="relative w-full flex items-center gap-4 py-3.5 text-left group"
+                onClick={() =>
+                  locked ? setSheetOpen(true) : navigate(`${basePath}/section/${section.id}`)
+                }
+              >
+                <span
+                  className={`relative z-[1] w-11 h-11 rounded-full grid place-items-center font-display font-bold text-base shrink-0 border-[3px] border-white ${
+                    done
+                      ? 'bg-v2-ok-bg text-v2-ok'
+                      : inProgress || isNext
+                        ? 'bg-v2-accent text-white shadow-[0_5px_14px_rgba(232,85,31,.35)]'
+                        : 'bg-[#F5EEE7] text-v2-muted'
+                  }`}
+                >
+                  {done ? <IconCheck className="w-[18px] h-[18px]" /> : section.number}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h4 className={`font-display text-[15.5px] font-semibold leading-tight ${locked ? 'text-[#8D8496]' : 'text-v2-ink'}`}>
+                    {section.title}
+                  </h4>
+                  <div className="flex items-center gap-2 text-[11.5px] font-semibold text-v2-muted mt-0.5 flex-wrap">
+                    <span>{topicCount} topics</span>
+                    <span>·</span>
+                    {locked ? (
+                      <span>with the chapter</span>
+                    ) : (
+                      <>
+                        <span>1 quiz</span>
+                        {estMin !== null && (
+                          <>
+                            <span>·</span>
+                            <span className="flex items-center gap-1">
+                              <IconClock className="w-[13px] h-[13px]" />
+                              {estMin} min
+                            </span>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="hidden sm:flex items-center gap-3.5 shrink-0">
+                  {inProgress && (
+                    <>
+                      <span className="w-[90px] h-1.5 rounded-full bg-[#F0E7EA] overflow-hidden">
+                        <span
+                          className="block h-full rounded-full bg-v2-accent"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </span>
+                      <span className="text-[11.5px] font-extrabold text-v2-accent-deep min-w-[32px] text-right">
+                        {pct}%
+                      </span>
+                    </>
+                  )}
+                  <span
+                    className={`text-[10.5px] font-extrabold px-3 py-[5px] rounded-full ${
+                      done
+                        ? 'bg-v2-ok-bg text-v2-ok'
+                        : inProgress
+                          ? 'bg-v2-accent-soft text-v2-accent-deep'
+                          : locked
+                            ? 'bg-v2-accent-soft/60 text-[#B5652F]'
+                            : 'bg-[#F3EEE8] text-v2-muted'
+                    }`}
+                  >
+                    {done
+                      ? '✓ Completed'
+                      : inProgress
+                        ? 'In progress'
+                        : locked
+                          ? '🔒 Unlock'
+                          : 'Not started'}
+                  </span>
+                  <IconChevronRight className="w-[18px] h-[18px] text-v2-muted" />
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      </motion.div>
+
+      {/* UNLOCK BAND — preview users (paywall surface, decision #27/#28 copy) */}
+      {!entitled && product && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="relative rounded-[22px] shadow-v2 px-7 py-6 mt-6 flex flex-col sm:flex-row items-center gap-6 overflow-hidden"
+          style={{ background: 'linear-gradient(140deg, #8A4B2F, #C05F35)' }}
+        >
+          <span className="absolute text-[110px] opacity-[0.09] pointer-events-none -right-2 -bottom-6">🔒</span>
+          <div className="flex-1 min-w-0 relative">
+            <span className="block text-[10.5px] font-extrabold uppercase tracking-[1.6px] text-[#F3C9B2] mb-1.5">
+              One payment · yours for life
+            </span>
+            <h2 className="font-display text-[21px] font-semibold text-white mb-1.5">
+              The rest of the story — and the exam rehearsal
+            </h2>
+            <p className="font-body text-[13px] font-medium text-[#F4DCCB] max-w-[46ch] mb-3">
+              All sections, every revision tool, and timed board-pattern mock tests set by a
+              Senior CBSE Examiner.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-[12.5px] font-semibold text-[#FBEADF]">
+              <span>✓ <b className="text-white">All {chapter.sections.length} story sections</b></span>
+              <span>✓ <b className="text-white">Mock tests</b> — timed, board pattern</span>
+              <span>✓ Flashcards · timeline · maps · figures</span>
+              <span>✓ Marking scheme on every answer</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl px-6 py-5 text-center shrink-0 shadow-card-hover min-w-[240px] relative">
+            <div className="flex items-baseline justify-center gap-2 mb-1">
+              {product.list_price_paise && (
+                <span className="font-body text-sm text-gray-400 line-through font-semibold">
+                  ₹{(product.list_price_paise / 100).toFixed(0)}
+                </span>
+              )}
+              <span className="font-display text-[28px] font-bold text-v2-ink">
+                ₹{(product.price_paise / 100).toFixed(0)}
+              </span>
+              {product.list_price_paise && (
+                <span className="text-[10.5px] font-extrabold text-v2-ok">LAUNCH</span>
+              )}
+            </div>
+            <div className="text-[11px] font-semibold text-v2-muted mb-3">
+              One-time · no subscription
+            </div>
             <button
-              key={tool.id}
-              className="bg-[#F7F2F0] rounded-[14px] border border-hist-line px-4 py-3 flex items-center gap-3 text-left relative"
+              className="w-full font-display font-extrabold text-white text-sm rounded-xl px-5 py-3 shadow-button btn-press bg-v2-cta"
               onClick={() => setSheetOpen(true)}
             >
-              <span className="absolute right-2.5 top-2.5 text-[11px]">🔒</span>
-              <div className="w-[42px] h-[42px] rounded-xl grid place-items-center text-lg shrink-0 grayscale opacity-55 bg-[#EFE7E2]">
-                {tool.icon}
-              </div>
-              <b className="text-[13px] font-extrabold text-[#A79DA9]">{tool.label}</b>
+              Unlock chapter →
             </button>
-          ),
-        )}
-      </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* QUOTE */}
+      {quote && (
+        <div className="flex items-center justify-center gap-3 bg-v2-lav-soft rounded-2xl px-6 py-[18px] mt-5 text-center">
+          <span className="font-display text-[34px] leading-[0.6] text-v2-lav mt-2.5">“</span>
+          <span className="font-display italic text-[15px] text-v2-ink">
+            {quote.q} — {quote.by}
+          </span>
+          <span className="font-display text-[34px] leading-[0.6] text-v2-lav mt-2.5">”</span>
+        </div>
+      )}
 
       {product && (
         <PurchaseSheet
@@ -442,18 +623,51 @@ export function HomePage() {
           onClose={() => setSheetOpen(false)}
         />
       )}
+    </WorkspaceShell>
+  )
+}
+
+function HeroChip({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <span className="flex items-center gap-[7px] bg-white/85 rounded-[11px] px-[13px] py-2 text-xs font-extrabold text-v2-ink shadow-[0_3px_10px_rgba(70,60,100,.06)]">
+      {icon}
+      {label}
+    </span>
+  )
+}
+
+function StatCell({
+  icon,
+  value,
+  label,
+  divider,
+}: {
+  icon: React.ReactNode
+  value: string
+  label: string
+  divider?: string
+}) {
+  const borders = [
+    divider?.includes('r') ? 'border-r border-v2-line pr-3.5' : 'pl-3.5',
+    divider?.includes('t') ? 'border-t border-v2-line' : '',
+  ].join(' ')
+  return (
+    <div className={`flex items-center gap-2.5 py-2.5 px-1 ${borders}`}>
+      {icon}
+      <div>
+        <b className="block font-display text-base text-v2-ink leading-[1.1]">{value}</b>
+        <span className="text-[9.5px] font-extrabold uppercase tracking-[0.3px] text-v2-muted">
+          {label}
+        </span>
+      </div>
     </div>
   )
 }
 
-function BandLabel({ num, title, sub }: { num: number; title: string; sub: string }) {
-  return (
-    <div className="flex items-center gap-2.5 mb-3 px-0.5">
-      <span className="w-6 h-6 rounded-full bg-hist-dark text-white grid place-items-center text-xs font-extrabold font-display">
-        {num}
-      </span>
-      <h2 className="font-display text-[19px] font-semibold text-hist-dark">{title}</h2>
-      <span className="ml-auto text-xs font-semibold text-hist-muted hidden sm:block">{sub}</span>
-    </div>
-  )
+function formatMinutes(min: number): string | null {
+  if (min <= 0) return null
+  if (min < 60) return `${min}m`
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return m > 0 ? `${h}h ${m}m` : `${h}h`
 }
