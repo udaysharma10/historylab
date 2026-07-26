@@ -197,7 +197,7 @@ export function PaperPlayer() {
           style={{ backgroundColor: '#C05F35' }}
           onClick={() => navigate(`/chapter/${cid}/tests`)}
         >
-          Back to Test Centre
+          Back to Mock Tests
         </button>
       </div>
     )
@@ -223,13 +223,24 @@ export function PaperPlayer() {
     <div className="max-w-3xl mx-auto px-4 pt-5 pb-24">
       {/* Sticky exam bar: title · palette · timer (launch-07) */}
       <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur-md border border-hist-line rounded-2xl shadow-card px-4 py-3 mb-5 flex items-center justify-between gap-3 flex-wrap">
-        <div className="min-w-0">
-          <b className="block font-display font-bold text-hist-dark text-sm leading-tight truncate">
-            {data.paper.title}
-          </b>
-          <span className="text-[11.5px] font-semibold text-hist-muted">
-            {data.paper.total_marks} marks · {answeredIds.size}/{questions.length} answered
-          </span>
+        <div className="flex items-center gap-2.5 min-w-0">
+          {/* One exit from the exam room — answers autosave, so leaving is safe. */}
+          <button
+            className="w-9 h-9 rounded-[10px] border-[1.5px] border-hist-line bg-white text-hist-dark grid place-items-center shrink-0 btn-press"
+            aria-label="Save & exit"
+            title="Save & exit — your answers are saved"
+            onClick={() => navigate(`/chapter/${cid}/tests`)}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <div className="min-w-0">
+            <b className="block font-display font-bold text-hist-dark text-sm leading-tight truncate">
+              {data.paper.title}
+            </b>
+            <span className="text-[11.5px] font-semibold text-hist-muted">
+              {data.paper.total_marks} marks · {answeredIds.size}/{questions.length} answered
+            </span>
+          </div>
         </div>
         <div className="flex flex-wrap gap-1.5 max-w-[46%] justify-center">
           {pages.map((p, i) => (

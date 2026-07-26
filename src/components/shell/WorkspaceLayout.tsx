@@ -37,11 +37,16 @@ export function WorkspaceLayout() {
   } else if (pathname === base) {
     crumbs = [{ label: 'All Chapters', to: '/' }, { label: `Chapter ${chapterNumber}` }]
   } else {
-    const segment = pathname.slice(base.length + 1).split('/')[0]
-    crumbs = [
-      { label: 'Overview', to: base },
-      { label: TOOL_LABELS[segment] || 'Tools' },
-    ]
+    const rest = pathname.slice(base.length + 1)
+    const segment = rest.split('/')[0]
+    if (segment === 'tests' && rest.startsWith('tests/result')) {
+      // Detail page under Mock Tests — the only tool route with real depth.
+      crumbs = [{ label: 'Mock Tests', to: `${base}/tests` }, { label: 'Result' }]
+    } else {
+      // Sidebar destinations are SIBLINGS of Overview, not children — a
+      // single-segment crumb; the sidebar itself is the way back up.
+      crumbs = [{ label: TOOL_LABELS[segment] || 'Tools' }]
+    }
   }
 
   return (

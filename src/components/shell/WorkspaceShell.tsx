@@ -81,8 +81,9 @@ export function WorkspaceShell({
             : 'lg:grid-cols-[224px_minmax(0,1fr)]'
         }`}
       >
-        {/* Sidebar — desktop only (drawer covers mobile) */}
-        <aside className="hidden lg:block sticky top-5 h-fit min-w-0">
+        {/* Sidebar — desktop only (drawer covers mobile). Fixed viewport
+            height so the profile block pins to the bottom edge. */}
+        <aside className="hidden lg:block sticky top-5 min-w-0 h-[calc(100dvh-2.5rem)] overflow-y-auto">
           <Sidebar chapterId={chapterId} />
         </aside>
 

@@ -89,7 +89,7 @@ export function HomePage() {
           <div className="text-5xl mb-4">🔍</div>
           <h2 className="font-display text-xl font-bold text-v2-ink mb-2">Chapter Not Found</h2>
           <button className="text-hist-blue underline font-body" onClick={() => navigate('/')}>
-            Back to Home
+            All Chapters
           </button>
         </div>
       </div>

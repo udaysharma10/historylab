@@ -38,7 +38,7 @@ export function ComingSoon() {
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate('/')}
         >
-          ← Back to Home
+          ← All Chapters
         </motion.button>
       </motion.div>
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams, Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAuthContext } from '../../components/auth'
 import {
@@ -69,7 +69,7 @@ export function AttemptResult() {
           style={{ backgroundColor: '#C05F35' }}
           onClick={() => navigate(`/chapter/${cid}/tests`)}
         >
-          Back to Test Centre
+          Back to Mock Tests
         </button>
       </div>
     )
@@ -111,14 +111,8 @@ export function AttemptResult() {
 
   return (
     <div className="max-w-3xl mx-auto pb-16">
-      {/* Breadcrumb */}
-      <div className="text-[12.5px] font-semibold text-hist-muted mb-3.5 px-0.5">
-        <Link to={`/chapter/${cid}/tests`} className="hover:text-hist-dark">Test Centre</Link>
-        <span className="mx-1.5">·</span>
-        <b className="text-hist-dark">{paper.title}</b>
-      </div>
-
-      {/* Score hero (launch-08) */}
+      {/* Score hero (launch-08) — the shell's crumb (Mock Tests > Result) is
+          the only wayfinding row; the paper is named in the hero meta. */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -154,7 +148,7 @@ export function AttemptResult() {
             {headline}
           </h1>
           <div className="text-[12.5px] font-semibold text-hist-muted mb-3">
-            Submitted{' '}
+            <b className="text-hist-dark">{paper.title}</b> · Submitted{' '}
             {new Date(attempt.submitted_at).toLocaleString('en-IN', {
               day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
             })}
@@ -215,7 +209,7 @@ export function AttemptResult() {
           style={{ backgroundColor: '#5571B5' }}
           onClick={() => navigate(`/chapter/${cid}/tests`)}
         >
-          Test Centre
+          Mock Tests
         </button>
         <button
           className="font-display font-bold text-hist-dark bg-hist-gold-soft rounded-[11px] px-4 py-2.5 text-[13px] btn-press"

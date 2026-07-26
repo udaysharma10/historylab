@@ -66,7 +66,7 @@ const MODE_LABELS: Record<string, string> = {
   timeline: 'Timeline',
   maps: 'Maps',
   figures: 'Figures',
-  exam: 'Exam Prep',
+  exam: 'Practice',
   flashcards: 'Flashcards',
 }
 

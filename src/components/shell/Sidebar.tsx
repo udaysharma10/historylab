@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuthContext } from '../auth'
 import { useAccess } from '../auth/AccessProvider'
 import { useProgressStore } from '../../store/useProgressStore'
+import { getChapter as getBookChapter } from '../../data/books'
 import {
   IconHome,
   IconPencil,
@@ -34,12 +35,14 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { profile, signOut } = useAuthContext()
-  const { isAdmin } = useAccess()
+  const { isAdmin, canAccessChapter } = useAccess()
   const totalStars = useProgressStore((s) => s.totalStars)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   const base = `/chapter/${chapterId}`
+  const bookChapter = getBookChapter('history-10', chapterId)
+  const chapterEntitled = canAccessChapter(chapterId)
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -77,6 +80,9 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
           to: `${base}/tests`,
           icon: <IconTarget />,
           isActive: (p, b) => p.startsWith(`${b}/tests`),
+          // Honest discovery (law §4.6): preview users see the destination
+          // exists but that it rides with the chapter purchase.
+          badge: chapterEntitled ? undefined : '🔒',
         },
       ],
     },
@@ -117,12 +123,32 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <button
-        className="font-display text-[22px] font-bold text-v2-ink px-3 pb-4 text-left"
+        className="font-display text-[22px] font-bold text-v2-ink px-3 pb-3 text-left"
         onClick={() => goTo('/')}
       >
         History<span className="text-v2-accent">Lab</span>
+      </button>
+
+      {/* Chapter identity (spec §1): ‹ All Chapters + the current chapter pill */}
+      <button
+        className="flex items-center gap-1 text-[10.5px] font-extrabold uppercase tracking-[0.8px] text-v2-muted hover:text-v2-ink transition-colors px-3 mb-1.5 text-left"
+        onClick={() => goTo('/')}
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+        All Chapters
+      </button>
+      <button
+        className="mx-1 mb-4 flex items-center gap-2.5 bg-white rounded-[12px] px-3 py-2.5 shadow-v2-sm text-left"
+        onClick={() => goTo(base)}
+      >
+        <span className="w-7 h-7 rounded-[9px] bg-v2-accent text-white grid place-items-center font-display font-bold text-[12px] shrink-0">
+          {bookChapter?.number ?? '?'}
+        </span>
+        <span className="text-[12px] font-extrabold text-v2-ink leading-snug line-clamp-2">
+          {bookChapter?.title ?? 'Chapter'}
+        </span>
       </button>
 
       <nav>
@@ -149,6 +175,9 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
                 >
                   {item.icon}
                   {item.label}
+                  {item.badge && (
+                    <span className="ml-auto text-[11px] opacity-70">{item.badge}</span>
+                  )}
                 </button>
               )
             })}
@@ -156,8 +185,10 @@ export function Sidebar({ chapterId, onNavigate }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Profile block — replaces the old top-header identity + menu */}
-      <div className="relative mt-5 mx-1" ref={menuRef}>
+      {/* Profile block — replaces the old top-header identity + menu.
+          mt-auto pins it to the sidebar's bottom edge (desktop gives the
+          sidebar full viewport height). */}
+      <div className="relative mt-auto pt-5 mx-1" ref={menuRef}>
         <button
           className="w-full flex items-center gap-2.5 p-3 bg-white rounded-[14px] shadow-v2-sm text-left"
           onClick={() => setMenuOpen(!menuOpen)}

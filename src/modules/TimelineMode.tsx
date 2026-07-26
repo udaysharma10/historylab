@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TimelineExplorer, TimelineOrderCard } from '../components/timeline'
 import { QuizProgress } from '../components/quiz'
@@ -28,7 +28,6 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function TimelineMode() {
-  const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
   const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
@@ -154,24 +153,8 @@ export function TimelineMode() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <motion.button
-          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
-          onClick={() => navigate('/')}
-          whileHover={{ x: -3 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Home
-        </motion.button>
-
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-hist-blue">
-            <span className="text-white text-2xl">📅</span>
-          </div>
-          <div>
-            <h1 className="font-display text-2xl font-bold text-hist-dark">Timeline</h1>
-            <p className="font-body text-sm text-gray-400">{yearRange ? `${yearRange}: ` : ''}{keyDates.length} key events to revise</p>
-          </div>
-        </div>
+        <h1 className="font-display text-2xl font-bold text-hist-dark">Timeline</h1>
+        <p className="font-body text-sm text-gray-400">{yearRange ? `${yearRange}: ` : ''}{keyDates.length} key events to revise</p>
       </motion.div>
 
       {/* Two mode cards */}

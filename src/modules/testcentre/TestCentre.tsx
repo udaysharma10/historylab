@@ -81,10 +81,10 @@ export function TestCentre() {
         />
         <div className="flex-1 min-w-0">
           <span className="inline-block text-[11px] font-bold uppercase tracking-[1.5px] text-hist-gold mb-1.5">
-            {book?.title ?? 'Chapter'} · Study Tools
+            {book?.title ?? 'Chapter'}
           </span>
           <h1 className="font-display text-[26px] font-semibold text-hist-dark leading-tight mb-1">
-            Test Centre
+            Mock Tests
           </h1>
           <p className="font-body text-[13.5px] font-medium text-hist-muted max-w-[48ch]">
             Real board-pattern papers, marked the way CBSE marks — with the official marking
@@ -97,7 +97,7 @@ export function TestCentre() {
               {submitted.length}
             </b>
             <span className="text-[10px] font-extrabold uppercase tracking-wide text-hist-muted">
-              Attempts
+              {submitted.length === 1 ? 'Attempt' : 'Attempts'}
             </span>
           </div>
           <div className="bg-hist-gold-soft/50 border border-hist-line rounded-[14px] px-4 py-3 text-center min-w-[88px]">
