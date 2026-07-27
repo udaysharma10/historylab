@@ -85,7 +85,8 @@ export function TermsPage() {
       <h2>Changes and contact</h2>
       <p>
         We may update these terms; material changes will be notified to the registered email.
-        Questions: <a href="mailto:info@teknomatics.com">info@teknomatics.com</a>.
+        These terms are governed by the laws of India. Questions:{' '}
+        <a href="mailto:info@teknomatics.com">info@teknomatics.com</a>.
       </p>
     </LegalShell>
   )
