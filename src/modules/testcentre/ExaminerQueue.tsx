@@ -321,7 +321,11 @@ function ReviewWorkbench({ reviewId, onBack }: { reviewId: string; onBack: () =>
               </div>
 
               <textarea
-                placeholder="Comment for the student (optional) — what earned marks, what was missing…"
+                placeholder={
+                  marks[q.id]?.marks !== '' && Number(marks[q.id]?.marks) < q.marks
+                    ? 'Where was the mark lost? Students read this line first.'
+                    : 'Comment for the student (optional) — what earned marks, what was missing…'
+                }
                 value={marks[q.id]?.comment ?? ''}
                 onChange={(e) =>
                   setMarks((m) => ({

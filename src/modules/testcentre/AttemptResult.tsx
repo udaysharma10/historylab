@@ -120,7 +120,6 @@ export function AttemptResult() {
   const { attempt, paper, questions } = data
   const objAwarded = Number(attempt.objective_awarded ?? 0)
   const objMax = Number(attempt.objective_max ?? 0)
-  const objPct = objMax > 0 ? objAwarded / objMax : 0
   const mcqs = questions.filter((q) => q.qtype === 'mcq')
   const written = questions.filter((q) => q.qtype === 'text')
   const firstName = (profile?.name || 'there').split(' ')[0]
@@ -135,20 +134,28 @@ export function AttemptResult() {
     : 0
   const examinerTotal = objAwarded + writtenAwarded
 
-  // Per-section summary. EVERY section appears (Neha 2026-07-27 — written-only
-  // sections B/C/D were silently dropped and read as missing): MCQ sections get
-  // a scored bar; written-only sections state what they are instead of a bar.
+  // Per-section summary — shown ONLY once the examiner has marked (Uday: the
+  // self-check-era cards were noise; post-marking they finally carry real
+  // marks). Each section totals MCQ auto-marks + the examiner's written marks.
   const sections = [...new Set(questions.map((q) => q.section_label))].map((label) => {
     const qs = questions.filter((q) => q.section_label === label)
-    const mcqs = qs.filter((q) => q.qtype === 'mcq')
-    const max = mcqs.reduce((s, q) => s + q.marks, 0)
-    const got = mcqs.reduce((s, q) => s + Number(answerByQ.get(q.id)?.marks_awarded ?? 0), 0)
-    return { label, got, max, written: qs.length - mcqs.length }
+    const max = qs.reduce((s, q) => s + q.marks, 0)
+    const got = qs.reduce((s, q) => {
+      if (q.qtype === 'mcq') return s + Number(answerByQ.get(q.id)?.marks_awarded ?? 0)
+      return s + (examinerMarks?.[q.id]?.marks ?? 0)
+    }, 0)
+    return { label, got, max }
   })
 
   const RING_C = 2 * Math.PI * 47
-  const headline =
-    delta !== null && delta > 0
+  // Marked attempts headline the examiner total — the number a student quotes.
+  // The MCQ-only score is the headline only until then.
+  const ringGot = examinerMarked ? examinerTotal : objAwarded
+  const ringMax = examinerMarked ? Number(paper.total_marks) : objMax
+  const ringPct = ringMax > 0 ? ringGot / ringMax : 0
+  const headline = examinerMarked
+    ? `Examiner-marked, ${firstName} — ${examinerTotal}/${paper.total_marks}`
+    : delta !== null && delta > 0
       ? `Your best yet, ${firstName} — ${objAwarded}/${objMax}`
       : `${firstName}, you scored ${objAwarded}/${objMax} on MCQs`
 
@@ -168,7 +175,7 @@ export function AttemptResult() {
               cx="56" cy="56" r="47" stroke="url(#scoreGrad)" strokeWidth="10" fill="none"
               strokeLinecap="round"
               strokeDasharray={RING_C}
-              strokeDashoffset={RING_C * (1 - objPct)}
+              strokeDashoffset={RING_C * (1 - ringPct)}
             />
             <defs>
               <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
@@ -178,11 +185,11 @@ export function AttemptResult() {
             </defs>
           </svg>
           <div className="absolute text-center">
-            <b className="block font-display text-[19px] font-bold text-hist-dark leading-none">
-              {objAwarded}/{objMax}
+            <b className={`block font-display ${examinerMarked ? 'text-[16px]' : 'text-[19px]'} font-bold text-hist-dark leading-none`}>
+              {ringGot}/{ringMax}
             </b>
             <span className="text-[11px] font-extrabold text-hist-muted">
-              {Math.round(objPct * 100)}%
+              {Math.round(ringPct * 100)}%
             </span>
           </div>
         </div>
@@ -196,32 +203,43 @@ export function AttemptResult() {
               day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
             })}
             {attempt.auto_submitted && ' · auto-submitted when time ran out'}
-            {' '}· MCQs marked instantly
+            {!examinerMarked && ' · MCQs marked instantly'}
           </div>
           <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-            {delta !== null && (
-              <span className={`flex items-center gap-1.5 border px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold ${
-                delta > 0
-                  ? 'bg-hist-green/10 border-hist-green/20 text-hist-green'
-                  : 'bg-hist-gold-soft/60 border-hist-line text-hist-ink'
-              }`}>
-                📈 <b>{delta > 0 ? `+${delta}` : delta === 0 ? 'level' : delta} vs previous best</b>
-              </span>
-            )}
-            <span className="flex items-center gap-1.5 bg-hist-gold-soft/60 border border-hist-line px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold text-hist-ink">
-              🎯 <b className="text-hist-dark">MCQ: {objAwarded}/{objMax}</b>
-            </span>
-            {written.length > 0 && (
-              <span className="flex items-center gap-1.5 bg-hist-indigo-soft border border-[#DED7F0] px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold text-hist-indigo">
-                ✍️ <b>{written.length} written · check the scheme below</b>
-              </span>
+            {examinerMarked ? (
+              <>
+                <span className="flex items-center gap-1.5 bg-hist-gold-soft/60 border border-hist-line px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold text-hist-ink">
+                  🎯 <b className="text-hist-dark">MCQ {objAwarded}/{objMax}</b>
+                </span>
+                <span className="flex items-center gap-1.5 bg-hist-indigo-soft border border-[#DED7F0] px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold text-hist-indigo">
+                  🖋️ <b>Written {writtenAwarded}/{writtenMax} · marked by the examiner</b>
+                </span>
+              </>
+            ) : (
+              <>
+                {delta !== null && (
+                  <span className={`flex items-center gap-1.5 border px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold ${
+                    delta > 0
+                      ? 'bg-hist-green/10 border-hist-green/20 text-hist-green'
+                      : 'bg-hist-gold-soft/60 border-hist-line text-hist-ink'
+                  }`}>
+                    📈 <b>{delta > 0 ? `+${delta}` : delta === 0 ? 'level' : delta} vs previous best</b>
+                  </span>
+                )}
+                {written.length > 0 && (
+                  <span className="flex items-center gap-1.5 bg-hist-indigo-soft border border-[#DED7F0] px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold text-hist-indigo">
+                    ✍️ <b>{written.length} written · check the scheme below</b>
+                  </span>
+                )}
+              </>
             )}
           </div>
         </div>
       </motion.div>
 
-      {/* Section bars */}
-      {sections.length > 1 && (
+      {/* Section bars — examiner-marked attempts only: every section now has a
+          real total (MCQ auto-marks + examiner's written marks). */}
+      {examinerMarked && sections.length > 1 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
           {sections.map((s, i) => {
             const colors = ['#C36B53', '#5571B5', '#C2893E', '#5C9368', '#9B5C9A']
@@ -231,23 +249,15 @@ export function AttemptResult() {
                 <b className="block text-[12.5px] font-bold text-hist-dark mb-2">
                   Section {s.label}
                 </b>
-                {s.max > 0 ? (
-                  <>
-                    <div className="h-[7px] rounded-full overflow-hidden mb-1.5" style={{ backgroundColor: '#F1EADD' }}>
-                      <div
-                        className="h-full rounded-full"
-                        style={{ width: `${(s.got / s.max) * 100}%`, backgroundColor: color }}
-                      />
-                    </div>
-                    <span className="text-[11px] font-bold text-hist-muted">
-                      {s.got}/{s.max} MCQ{s.written > 0 ? ` · ${s.written} written` : ''}
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-[11px] font-bold text-hist-muted">
-                    {s.written} written · check the scheme below
-                  </span>
-                )}
+                <div className="h-[7px] rounded-full overflow-hidden mb-1.5" style={{ backgroundColor: '#F1EADD' }}>
+                  <div
+                    className="h-full rounded-full"
+                    style={{ width: `${s.max > 0 ? (s.got / s.max) * 100 : 0}%`, backgroundColor: color }}
+                  />
+                </div>
+                <span className="text-[11px] font-bold text-hist-muted">
+                  {s.got}/{s.max}
+                </span>
               </div>
             )
           })}
@@ -510,6 +520,9 @@ function WrittenCard({
         </div>
       )}
 
+      {/* Neha (2026-07-27): scheme OR model answer, never both — two versions
+          of "the right answer" under her comment confuse students. The
+          point-by-point scheme wins; the model answer is the fallback. */}
       {q.scheme?.points && q.scheme.points.length > 0 && (
         <div className="mb-3">
           <span className="block text-[10.5px] font-extrabold uppercase tracking-wide text-hist-green mb-1.5">
@@ -521,17 +534,23 @@ function WrittenCard({
                 <span className="font-body text-[13px] text-hist-ink leading-relaxed">
                   • {p.point}
                 </span>
-                <b className="text-[12px] font-extrabold text-hist-green shrink-0">+{p.marks}</b>
+                {/* Neutral weight chip — the scheme states weights; only the
+                    examiner awards marks (the green "+1" read as awarded). */}
+                <b className="text-[11px] font-bold text-hist-muted bg-black/5 rounded-md px-2 py-0.5 shrink-0 whitespace-nowrap">
+                  {p.marks} mark{p.marks > 1 ? 's' : ''}
+                </b>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {q.scheme?.model_answer && (
-        <details>
+      {q.scheme?.model_answer && !(q.scheme?.points && q.scheme.points.length > 0) && (
+        <details className="group">
           <summary className="text-[12.5px] font-bold text-hist-blue cursor-pointer">
-            Show model answer (full {q.marks} mark{q.marks > 1 ? 's' : ''})
+            <span className="group-open:hidden">Show</span>
+            <span className="hidden group-open:inline">Hide</span>
+            {' '}model answer (full {q.marks} mark{q.marks > 1 ? 's' : ''})
           </summary>
           <p className="font-body text-[13px] text-hist-ink whitespace-pre-line leading-relaxed bg-hist-blue/5 border border-hist-blue/15 rounded-xl px-4 py-3 mt-2">
             {q.scheme.model_answer}
