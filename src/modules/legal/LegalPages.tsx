@@ -94,8 +94,8 @@ export function PrivacyPage() {
   return (
     <LegalShell title="Privacy Policy" updated={UPDATED}>
       <p>
-        HistoryLab is built for students, so we collect the minimum and never monetise data.
-        Operated by <b>Teknomatics</b> (historylab.in).
+        HistoryLab (historylab.in) is built for students, so we collect the minimum and never
+        monetise data. Operated by <b>Pi By Two Tech Solutions Pvt. Ltd.</b>
       </p>
       <h2>What we collect</h2>
       <p>
@@ -112,7 +112,7 @@ export function PrivacyPage() {
       </p>
       <h2>Who processes the data</h2>
       <p>
-        Data is stored with Supabase (our database and authentication provider), sign-in is via
+        Your data and activity on HistoryLab.in are stored in our service database, sign-in is via
         Google, and payments are via Razorpay (we never see card details). Papers submitted for
         examiner review are marked personally by our human examiner — no AI service processes your
         child's answers.
@@ -120,9 +120,9 @@ export function PrivacyPage() {
       <h2>Parents' rights</h2>
       <p>
         The parent/guardian on an account can ask us to export or delete the account and all its
-        data — email <a href="mailto:help@historylab.in">help@historylab.in</a> from the guardian
-        address and we'll complete it within 7 days. Deleting the account removes progress and
-        entitlements permanently.
+        data — email <a href="mailto:info@teknomatics.com">info@teknomatics.com</a> from the
+        registered email address and we'll complete it within 7 days. Deleting the account removes
+        progress and entitlements permanently.
       </p>
       <h2>Retention and security</h2>
       <p>
@@ -133,7 +133,7 @@ export function PrivacyPage() {
       <h2>Changes and contact</h2>
       <p>
         Material changes to this policy are notified to the parent/guardian email. Questions:{' '}
-        <a href="mailto:help@historylab.in">help@historylab.in</a>.
+        <a href="mailto:info@teknomatics.com">info@teknomatics.com</a>.
       </p>
     </LegalShell>
   )
