@@ -20,6 +20,9 @@ interface PriceInfo {
 
 const FALLBACK_PRICES: PriceInfo = { chapter: '₹199', chapterList: '₹499', examiner: '₹149' }
 
+// Testimonials stay hidden until real pilot-student quotes (with permission) replace the placeholders.
+const SHOW_PILOT_QUOTES = false
+
 function rupees(paise: number): string {
   return `₹${(paise / 100).toFixed(0)}`
 }
@@ -510,7 +513,9 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS — hidden until real pilot-student quotes replace the placeholder ones.
+          Flip to true after swapping in genuine quotes (names used with permission). */}
+      {SHOW_PILOT_QUOTES && (
       <section className="band band-ink">
         <div className="in">
           <div className="bhead">
@@ -547,6 +552,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
           </div>
         </div>
       </section>
+      )}
 
       {/* ROADMAP */}
       <section className="band">
