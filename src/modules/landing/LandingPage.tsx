@@ -184,7 +184,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                 <br />
                 Practice like the boards.
                 <br />
-                Get every answer <b>marked in seconds</b>.
+                Get your paper <b>marked by a real CBSE examiner</b>.
               </p>
               <div className="cta-row">
                 {start}
@@ -303,8 +303,8 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <div className="jhead">
                 <div className="jnum">3</div>
                 <div>
-                  <b>Get marked in seconds</b>
-                  <span>Point-by-point, against the marking scheme.</span>
+                  <b>Check like an examiner</b>
+                  <span>Match your answer point-by-point against the real marking scheme.</span>
                 </div>
               </div>
               <div className="mini">
@@ -435,14 +435,14 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <p>
                 Anyone can build a portal with AI. We built ours around a person: HistoryLab has
                 onboarded a <b>Senior CBSE Examiner with 20 years of teaching and board-marking
-                experience</b> — and the whole marking engine works in their image.
+                experience</b> — and every paper, marking scheme and remark carries their red pen.
               </p>
               <ul>
                 <li>Every paper and marking scheme is authored by the examiner</li>
-                <li>Instant marking is calibrated against the examiner's own marking</li>
+                <li>MCQs are marked instantly; every written answer carries the examiner's own marking scheme</li>
                 <li>
-                  Send any paper for the examiner's personal review — {prices.examiner}, back in
-                  48–72h
+                  Send any paper for the examiner's personal marking — {prices.examiner}, back
+                  within 72 hours
                 </li>
               </ul>
             </div>
@@ -463,11 +463,11 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               </div>
               <div className="rnote">
                 <p>
-                  "Your points are exam-ready; your reading of the stem isn't yet. Underline the
-                  verb in the question before you write — this exact slip costs thousands of
-                  students a mark every board year."
+                  "A neat, well-ordered answer — you clearly know the chapter. You dropped the
+                  third mark by drifting to a different group. Anchor every point to the exact
+                  group the question names."
                 </p>
-                <span>Examiner's remark · returned in 51 hours</span>
+                <span>Examiner's remark · returned within 72 hours</span>
               </div>
             </div>
           </div>
@@ -496,7 +496,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             </div>
             <div className="row">
               <div className="cell">No feedback on written answers</div>
-              <div className="cell hl">Every answer marked, in seconds</div>
+              <div className="cell hl">Marking schemes on every answer — and a real examiner's red pen</div>
             </div>
             <div className="row">
               <div className="cell">Hard to remember</div>
@@ -504,7 +504,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             </div>
             <div className="row">
               <div className="cell">Generic content</div>
-              <div className="cell hl">NCERT-exact · board-pattern · examiner-calibrated</div>
+              <div className="cell hl">NCERT-exact · board-pattern · examiner-authored</div>
             </div>
           </div>
         </div>
@@ -567,7 +567,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <div className="ic" style={{ background: 'var(--lav-soft)' }}>🗿</div>
               <div>
                 <b>Class 9 — next</b>
-                <span>Same story-mode, same marking engine.</span>
+                <span>Same story-mode, same examiner-backed marking.</span>
               </div>
             </div>
             <div className="cls">
@@ -629,7 +629,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                   <b>Board-pattern test papers</b>
                 </li>
                 <li>
-                  <b>Examiner-calibrated marking on every answer</b>
+                  <b>The examiner's marking scheme on every answer</b>
                 </li>
                 <li>Lifetime access · GST invoice</li>
               </ul>
@@ -645,7 +645,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                   <b>A Senior CBSE Examiner reviews your written paper</b>
                 </li>
                 <li>Personal remarks on every answer</li>
-                <li>Returned in 48–72 hours</li>
+                <li>Returned within 72 hours</li>
                 <li>Buy only when you want it</li>
               </ul>
             </div>
@@ -687,12 +687,12 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             <details>
               <summary>How does the answer marking work?</summary>
               <p>
-                Your child writes answers to board-pattern questions. Objective questions are
-                checked instantly; written answers are marked point-by-point against the CBSE
-                marking scheme in under a minute — by an engine built and calibrated by the{' '}
-                <b>Senior CBSE Examiner</b> we've onboarded (20 years of board experience). For any
-                paper, the examiner can also review it personally and return detailed remarks
-                within 48–72 hours ({prices.examiner} per paper).
+                Your child writes answers to board-pattern questions. MCQs are checked instantly.
+                Every written answer comes with the exact marking scheme — authored by the{' '}
+                <b>Senior CBSE Examiner</b> we've onboarded (20 years of board experience) — so
+                your child learns to check their answer the way the board would. And for any mock
+                test, the examiner personally marks the paper and returns detailed remarks within
+                72 hours ({prices.examiner} per paper).
               </p>
             </details>
             <details>
