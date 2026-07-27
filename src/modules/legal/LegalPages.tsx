@@ -55,15 +55,15 @@ export function TermsPage() {
         Chapter purchases are one-time payments giving that account lifetime access to the chapter
         on HistoryLab. Prices are shown at checkout and include applicable GST; a GST invoice is
         emailed to the parent/guardian. Payments are processed by Razorpay — we never see or store
-        card details. Refunds are governed by our <a href="/refunds">Refund Policy</a> (chapters:
-        7-day full refund; examiner reviews: no refunds).
+        card details. All purchases are final — no refunds — as set out in our{' '}
+        <a href="/refunds">Refund Policy</a>; the first section of Chapter 1 is free so you can
+        judge the service before paying.
       </p>
       <h2>Acceptable use</h2>
       <p>
         Don't attempt to copy, scrape, resell or redistribute chapter content; don't probe,
         overload or attempt to bypass access controls; don't submit abusive or unlawful content in
-        answers. We may suspend accounts that violate these terms, with a refund of unused recent
-        purchases at our reasonable discretion.
+        answers. We may suspend accounts that violate these terms.
       </p>
       <h2>Content and intellectual property</h2>
       <p>
@@ -142,23 +142,30 @@ export function PrivacyPage() {
 
 export function RefundPage() {
   return (
-    <LegalShell title="Refunds & Cancellation" updated={UPDATED}>
-      <h2>Chapters — 7-day full refund, no questions asked</h2>
+    <LegalShell title="Refund Policy" updated={UPDATED}>
+      <h2>All purchases are final — no refunds</h2>
       <p>
-        If a chapter purchase isn't working for your child, email{' '}
-        <a href="mailto:help@historylab.in">help@historylab.in</a> from the parent/guardian email
-        within 7 days of purchase and we'll refund it in full. Access to the chapter is removed
-        when the refund is issued. Refunds are processed to the original payment method within
-        5–7 working days via Razorpay.
+        HistoryLab purchases — chapter unlocks and examiner reviews — are one-time payments and
+        are <b>not refundable</b> once made. Instead of a refund window, we let you judge the
+        product before paying: the first section of Chapter 1 is completely free, with no card
+        and no trial timer.
       </p>
-      <h2>Examiner review add-on — no refunds</h2>
+      <h2>Examiner review add-on</h2>
       <p>
-        Examiner reviews are <b>not refundable</b>. Each review is a personal marking service — a
-        Senior CBSE Examiner hand-marks the submitted paper — so once the fee is paid it cannot be
-        cancelled or refunded, whether or not the paper has been marked yet. Please submit a paper
-        for review only when you are sure. This is also stated at checkout.
+        Examiner reviews are likewise <b>not refundable</b>. Each review is a personal marking
+        service — a Senior CBSE Examiner hand-marks the submitted paper — so once the fee is paid
+        it cannot be cancelled or refunded. Please submit a paper for review only when you are
+        sure. This is also stated at checkout.
       </p>
-      <h2>Cancellation</h2>
+      <h2>Failed or duplicate payments</h2>
+      <p>
+        If money was deducted but your purchase did not unlock, or you were charged twice for the
+        same purchase, that is a payment error — not a refund request. Email{' '}
+        <a href="mailto:help@historylab.in">help@historylab.in</a> with the payment reference and
+        we will reverse the erroneous charge via Razorpay to the original payment method within
+        5–7 working days.
+      </p>
+      <h2>No subscriptions — nothing to cancel</h2>
       <p>
         There are no subscriptions on HistoryLab, so there is nothing to cancel — every purchase is
         one-time. You can stop using the service at any time, and the parent/guardian can request

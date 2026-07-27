@@ -545,9 +545,6 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               </div>
             </div>
           </div>
-          <div className="samplenote">
-            Sample quotes for layout — to be replaced with real pilot-student quotes before ship.
-          </div>
         </div>
       </section>
 
@@ -657,7 +654,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             <div className="chip">🚫 <b>No ads, ever</b></div>
             <div className="chip">🔒 <b>No data sharing</b></div>
             <div className="chip">🧾 <b>Every invoice to the parent</b></div>
-            <div className="chip">↩️ <b>7-day full refund</b></div>
+            <div className="chip">🆓 <b>Try free before you pay</b></div>
           </div>
         </div>
       </section>
@@ -725,8 +722,10 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             <details>
               <summary>What if it doesn't work for my child?</summary>
               <p>
-                Full refund within 7 days of any chapter purchase, no questions asked. Write to
-                help@historylab.in.
+                That's exactly why the first section of Chapter 1 is completely free — no card, no
+                trial timer. Let your child judge it fully before you pay. Purchases are one-time
+                and final, and if anything ever doesn't work as promised, write to
+                help@historylab.in and we'll make it right.
               </p>
             </details>
           </div>
@@ -768,20 +767,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <a href="mailto:help@historylab.in">Contact</a>
               <a href="/terms">Terms of Service</a>
               <a href="/privacy">Privacy Policy</a>
-              <a href="/refunds">Refunds &amp; Cancellation</a>
-            </div>
-            <div className="fnews">
-              <h4>For parents</h4>
-              <p>One short email a month — study tips and new chapters. No spam, ever.</p>
-              <div className="row">
-                <EmailCapture
-                  table="parent_updates"
-                  placeholder="parent@example.com"
-                  buttonLabel="Subscribe"
-                  small
-                />
-              </div>
-              <small>Parent emails only. Unsubscribe anytime.</small>
+              <a href="/refunds">Refund Policy</a>
             </div>
           </div>
           <div className="fbase">
