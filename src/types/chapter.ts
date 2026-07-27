@@ -14,6 +14,8 @@ export interface Section {
   color: string
   icon: string
   subsections: Subsection[]
+  /** set by the server's preview trim on locked sections (subsections emptied) */
+  topicCount?: number
   keyPoints: string[]
   figureIds: string[]
   sourceIds: string[]
@@ -65,6 +67,9 @@ export interface KeyDate {
   detail: string
   sectionId: string
   importance: 'major' | 'minor'
+  /** Year this event was asked in a CBSE board paper — renders "BOARD Q · <year>".
+      Authored by Neha; the pill shows plain "BOARD Q" until supplied. */
+  boardYear?: number
 }
 
 export interface KeyPerson {

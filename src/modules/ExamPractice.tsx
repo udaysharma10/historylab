@@ -1,15 +1,13 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SourceReader, SourceQuizCard } from '../components/source'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
-import { getSources, getNcertQuestions, CHAPTER_SECTION_COLORS } from '../data/getChapter'
-import { sourceAnalysisActivities as ch1SourceAnalysisActivities } from '../data/activities/sourceAnalysis'
+import { getSources, getNcertQuestions, getSourceAnalysisActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 import type { NCERTQuestion } from '../types/chapter'
 
 type ExamPhase = 'home' | 'source-read' | 'source-practice' | 'ncert' | 'results'
@@ -24,7 +22,6 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function ExamPractice() {
-  const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
   const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
@@ -32,8 +29,7 @@ export function ExamPractice() {
   const sources = useMemo(() => getSources(cid), [cid])
   const ncertQuestions = useMemo(() => getNcertQuestions(cid), [cid])
   const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
-  // Source-comprehension quiz activities are only authored for Ch1 so far.
-  const sourceAnalysisActivities = useMemo(() => (cid === 'ch2' ? [] : ch1SourceAnalysisActivities), [cid])
+  const sourceAnalysisActivities = useMemo(() => getSourceAnalysisActivities(cid), [cid])
   const hasSourcePractice = sourceAnalysisActivities.length > 0
   const hasSources = sources.length > 0
 
@@ -89,9 +85,9 @@ export function ExamPractice() {
       const mistakes = finalTotal - finalCorrect
       const stars = calculateStars(mistakes, 0)
       const primarySection = activities[0]?.sectionId || 's1'
-      completeProblem(primarySection as SectionId, stars)
+      completeProblem(cid, primarySection, stars)
       logActivity({
-        chapter_id: chapterId || 'ch1',
+        chapter_id: cid,
         mode: 'exam',
         section_id: primarySection,
         activity_type: 'source-comprehension',
@@ -102,7 +98,7 @@ export function ExamPractice() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activities, totalCorrect, totalQuestions, completeProblem])
+  }, [questionResults, currentIndex, activities, totalCorrect, totalQuestions, completeProblem, cid])
 
   const finalMistakes = totalQuestions - totalCorrect
   const stars = useMemo(() => calculateStars(finalMistakes, 0), [finalMistakes])
@@ -244,26 +240,10 @@ export function ExamPractice() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <motion.button
-          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
-          onClick={() => navigate('/')}
-          whileHover={{ x: -3 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Home
-        </motion.button>
-
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-hist-red">
-            <span className="text-white text-2xl">📝</span>
-          </div>
-          <div>
-            <h1 className="font-display text-2xl font-bold text-hist-dark">Exam Prep</h1>
-            <p className="font-body text-sm text-gray-400">
-              Source analysis, NCERT questions & model answers
-            </p>
-          </div>
-        </div>
+        <h1 className="font-display text-2xl font-bold text-hist-dark">Exam Prep</h1>
+        <p className="font-body text-sm text-gray-400">
+          Source analysis, NCERT questions & model answers
+        </p>
       </motion.div>
 
       {/* Mode cards */}

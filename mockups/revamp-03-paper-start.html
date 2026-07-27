@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Revamp 03 · Paper start (the exam ritual)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s4:#5C9368; --s4-bg:#E8F1E9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 22px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 18px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink)}
+  .brand .lab{color:var(--accent)}
+  .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--ink),#5d564a);
+    color:#fff;display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif}
+
+  .card{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);border:1px solid var(--line);padding:30px 34px}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.6px;color:var(--lav);margin-bottom:8px}
+  h1{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .meta{display:flex;gap:16px;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:20px;flex-wrap:wrap}
+
+  .paperinfo{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:20px}
+  .pi{background:var(--bg-1);border:1px solid var(--line);border-radius:13px;padding:12px 15px;text-align:center}
+  .pi b{display:block;font-family:'Fraunces',serif;font-size:20px;color:var(--ink)}
+  .pi span{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+
+  h2{font-family:'Fraunces',serif;font-size:15.5px;font-weight:600;color:var(--ink);margin:0 0 10px}
+  .inst{list-style:none;margin-bottom:22px}
+  .inst li{display:flex;gap:10px;font-size:13px;font-weight:500;color:var(--body);line-height:1.55;padding:7px 0;border-bottom:1px solid #F6EFEA}
+  .inst li:last-child{border:none}
+  .inst .k{flex-shrink:0;width:22px;height:22px;border-radius:7px;background:var(--lav-soft);color:var(--lav);
+    display:grid;place-items:center;font-size:11px;font-weight:800;margin-top:1px}
+
+  .secrow{display:flex;gap:9px;margin-bottom:24px;flex-wrap:wrap}
+  .sec{background:var(--bg-1);border:1px solid var(--line);border-radius:11px;padding:8px 13px;font-size:11.5px;font-weight:700;color:var(--body)}
+  .sec b{color:var(--ink)}
+
+  .startrow{display:flex;align-items:center;gap:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
+    font-weight:800;font-size:14.5px;padding:14px 30px;border-radius:13px;background:var(--accent);color:#fff;
+    box-shadow:0 6px 18px rgba(220,131,95,.35)}
+  .startnote{font-size:12px;font-weight:600;color:var(--muted);line-height:1.5}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:16px 0 8px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">History<span class="lab">Lab</span></div><div class="avatar">A</div></div>
+
+  <div class="card">
+    <span class="eyebrow">Mock test · Chapter 2</span>
+    <h1>Nationalism in India — Practice Paper 1</h1>
+    <div class="meta"><span>Set by a Senior CBSE Examiner</span><span>·</span><span>Board pattern 2025-26</span></div>
+
+    <div class="paperinfo">
+      <div class="pi"><b>29</b><span>Marks</span></div>
+      <div class="pi"><b>60 min</b><span>Time</span></div>
+      <div class="pi"><b>17</b><span>Questions</span></div>
+    </div>
+
+    <h2>General instructions — read like it's the real thing</h2>
+    <ul class="inst">
+      <li><span class="k">i</span>The paper has <b>five sections (A–E)</b>. All questions are compulsory.</li>
+      <li><span class="k">ii</span><b>Section A</b> — multiple choice, 1 mark each. <b>B</b> — 2-mark short answers. <b>C</b> — 3-mark answers. <b>D</b> — one 5-mark long answer. <b>E</b> — source-based questions on a passage.</li>
+      <li><span class="k">iii</span>Write point-wise — CBSE awards marks per point, not per paragraph. Watch the 💡 technique tips.</li>
+      <li><span class="k">iv</span>Your answers <b>save automatically</b> every few seconds. You can close the tab and resume — the clock keeps running.</li>
+      <li><span class="k">v</span>When time ends the paper submits itself with whatever you've written. There is no negative marking.</li>
+    </ul>
+
+    <div class="secrow">
+      <span class="sec">A · MCQ <b>8×1</b></span>
+      <span class="sec">B · Short <b>3×2</b></span>
+      <span class="sec">C · Answer <b>2×3</b></span>
+      <span class="sec">D · Long <b>1×5</b></span>
+      <span class="sec">E · Source <b>1+1+2</b></span>
+    </div>
+
+    <div class="startrow">
+      <button class="btn">Start — the clock begins now ⏱</button>
+      <div class="startnote">Best on this paper: <b style="color:var(--ink)">21/29</b><br>Attempt 3 · unlimited re-attempts</div>
+    </div>
+  </div>
+
+  <div class="spec"><b>Why this screen exists (finding 5):</b> real board papers open with general instructions — the ritual sets
+    expectations (sections, marks, no negative) and lowers panic. Today we drop students straight onto Q1 with a running clock.
+    <b>The attempt row is created only when Start is pressed</b> — browsing this screen costs no clock time. Section chips are
+    generated from the paper's actual section labels/marks (no extra authoring). <b>Mobile player fix riding along:</b> below
+    ~480px the palette collapses to a "Q4 / 14" pill that opens a bottom-sheet palette — the current dot-wrap is cramped.</div>
+
+</div>
+</body>
+</html>

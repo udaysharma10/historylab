@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Revamp 05 · Section Page (the band grammar goes inside)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8; --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --ok:#5C9368; --ok-bg:#E8F1E9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 22px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 16px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink)}
+  .brand .lab{color:var(--accent)}
+  .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--ink),#5d564a);
+    color:#fff;display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif}
+  .crumb{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 2px 14px}
+  .crumb b{color:var(--ink)}
+
+  .head{background:var(--paper);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);
+    padding:16px 22px;margin-bottom:14px;display:flex;align-items:center;gap:16px}
+  .snum{width:44px;height:44px;border-radius:13px;background:var(--s1-bg);display:grid;place-items:center;
+    font-family:'Fraunces',serif;font-weight:700;font-size:17px;color:var(--s1);flex-shrink:0}
+  .head h1{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);line-height:1.2}
+  .statechip{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;
+    background:var(--accent-soft);border:1px solid var(--line);border-radius:999px;
+    padding:7px 14px;font-size:12px;font-weight:800;color:#B5652F}
+
+  .learnbox{background:var(--paper);border-radius:16px;box-shadow:var(--shadow-sm);border:1px solid var(--line);
+    padding:14px 18px;margin-bottom:20px}
+  .learnbox summary{font-size:12.5px;font-weight:800;color:var(--ink);cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+  .learnbox summary::after{content:"▾";margin-left:auto;color:var(--muted)}
+  .learnbox ul{margin:10px 0 2px 4px;list-style:none}
+  .learnbox li{font-size:12.5px;font-weight:500;color:var(--body);padding:3px 0;display:flex;gap:8px}
+  .learnbox li::before{content:"•";color:var(--s1)}
+
+  .band-label{display:flex;align-items:center;gap:10px;margin:4px 2px 12px}
+  .band-label .num{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;
+    font-size:12px;font-weight:800;font-family:'Fraunces',serif}
+  .band-label h2{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--ink)}
+  .band-label .sub{font-size:12px;font-weight:600;color:var(--muted);margin-left:auto}
+
+  .topics{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+  .tcard{background:var(--paper);border-radius:15px;box-shadow:var(--shadow-sm);border:1px solid var(--line);
+    padding:13px 16px;display:flex;align-items:center;gap:12px;position:relative;cursor:pointer}
+  .tcard.next{border:2px solid var(--accent);background:linear-gradient(150deg,#FFFDFB,var(--accent-soft))}
+  .tnum{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;
+    font-weight:700;font-size:13px;flex-shrink:0}
+  .t-done{background:var(--ok-bg);color:var(--ok)} .t-todo{background:var(--s1-bg);color:var(--s1)}
+  .tcard h4{font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--ink);line-height:1.2}
+  .tmeta{font-size:11px;font-weight:600;color:var(--muted);margin-top:1px}
+  .tpill{margin-left:auto;flex-shrink:0;font-size:10px;font-weight:800;text-transform:uppercase;
+    padding:4px 10px;border-radius:999px}
+  .quiet{text-align:center;margin-top:2px}
+  .quiet a{font-size:11.5px;font-weight:700;color:var(--muted);text-decoration:none}
+
+  /* FINISH BAND — violet, mirrors the home Test band identity */
+  .finishband{background:linear-gradient(140deg,#453A5E,#67589B);border-radius:20px;box-shadow:var(--shadow);
+    padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;color:#EFEAFB;position:relative;overflow:hidden}
+  .finishband::after{content:"🧠";position:absolute;right:30%;bottom:-26px;font-size:90px;opacity:.06}
+  .finishband .eyebrow{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:#C9BEEC;margin-bottom:4px;display:block}
+  .finishband h2{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#fff;margin-bottom:3px}
+  .finishband p{font-size:12.5px;font-weight:500;color:#CFC7E8}
+  .btn-quiz{flex-shrink:0;border:none;cursor:pointer;background:#C05F35;color:#fff;border-radius:13px;
+    padding:13px 24px;display:flex;flex-direction:column;align-items:center;gap:1px;box-shadow:0 6px 18px rgba(192,95,53,.45)}
+  .btn-quiz b{font-size:14px;font-weight:800}
+  .btn-quiz span{font-size:10.5px;font-weight:700;color:#FFF3EC}
+
+  .explore{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .ecard{background:var(--paper);border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-sm);
+    padding:12px 15px;display:flex;align-items:center;gap:11px;cursor:pointer}
+  .ecard .eicon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;flex-shrink:0}
+  .ecard b{display:block;font-size:12.5px;font-weight:800;color:var(--ink)}
+  .ecard span{font-size:11px;font-weight:600;color:var(--muted)}
+  .ecard .arrow{margin-left:auto;color:var(--muted);font-weight:800}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:10px 0 22px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">History<span class="lab">Lab</span></div><div class="avatar">A</div></div>
+  <div class="crumb">All Chapters · Chapter 1 · <b>The French Revolution and the Idea of the Nation</b></div>
+
+  <div class="head">
+    <div class="snum">S1</div>
+    <h1>The French Revolution and the Idea of the Nation</h1>
+    <span class="statechip">4 of 5 done · quiz left</span>
+  </div>
+  <div class="spec"><b>Header (fixes Neha's #2):</b> ONE state chip using the SAME units math as the chapter home — never a
+    second formula. States: "Not started" → "2 of 5 done" → <b>"4 of 5 done · quiz left"</b> (topics finished, the copy names
+    the missing unit) → "✓ Section complete". The old header's separate topics-% and stars row are gone (one-fact-once; stars
+    live on the quiz where they're earned).</div>
+
+  <details class="learnbox">
+    <summary>🎯 What you'll learn in this section</summary>
+    <ul>
+      <li>First clear expression of nationalism came with the French Revolution (1789)</li>
+      <li>Sovereignty transferred from monarchy to citizens — the people constitute the nation</li>
+      <li>Measures for collective identity: tricolour flag, National Assembly, uniform laws, common language</li>
+      <li>Napoleonic Code (1804): equality before law, abolished birth privileges, right to property</li>
+    </ul>
+  </details>
+  <div class="spec"><b>"What you'll learn" becomes collapsible</b> (open by default on first visit, collapsed once the section
+    is in progress) — a primer shouldn't outrank the topics on every return visit.</div>
+
+  <!-- BAND 1: TOPICS -->
+  <div class="band-label"><span class="num">1</span><h2>Read the topics</h2><span class="sub">in order · ~6 min each</span></div>
+  <div class="topics">
+    <div class="tcard"><div class="tnum t-done">✓</div>
+      <div><h4>Introduction: Sorrieu's Vision</h4><div class="tmeta">4 cards · 2 quizzes</div></div>
+      <span class="tpill" style="background:var(--ok-bg);color:var(--ok)">Done</span></div>
+    <div class="tcard"><div class="tnum t-done">✓</div>
+      <div><h4>The Emergence of the Nation-State</h4><div class="tmeta">4 cards</div></div>
+      <span class="tpill" style="background:var(--ok-bg);color:var(--ok)">Done</span></div>
+    <div class="tcard"><div class="tnum t-done">✓</div>
+      <div><h4>The French Revolution and the Idea of the Nation</h4><div class="tmeta">6 cards · 1 quiz</div></div>
+      <span class="tpill" style="background:var(--ok-bg);color:var(--ok)">Done</span></div>
+    <div class="tcard"><div class="tnum t-done">✓</div>
+      <div><h4>Napoleon and the Spread of Nationalism</h4><div class="tmeta">7 cards · 1 quiz</div></div>
+      <span class="tpill" style="background:var(--ok-bg);color:var(--ok)">Done</span></div>
+  </div>
+  <div class="spec"><b>Topic cards carry the flow themselves:</b> the next unread topic gets the home-style highlight
+    (orange border + "Continue →" pill — shown on none here because all four are done). <b>The big "Start/Continue/Read Again"
+    button is GONE</b> — it duplicated the topic list and, once topics were done, pointed backwards while the real next step
+    (quiz) sat unhighlighted. A quiet "Read the section again from the start" text link lives under the list instead.</div>
+  <div class="quiet"><a href="#">↻ Read the section again from the start</a></div>
+
+  <!-- BAND 2: FINISH -->
+  <div class="band-label" style="margin-top:22px"><span class="num">2</span><h2>Finish the section</h2><span class="sub">the quiz completes it</span></div>
+  <div class="finishband">
+    <div style="flex:1;position:relative;z-index:1">
+      <span class="eyebrow">Topics done ✓ — one step left</span>
+      <h2>Practice Quiz</h2>
+      <p>MCQ, fill-in-the-blank, true/false &amp; match — prove the section and it turns ✓ complete.</p>
+    </div>
+    <button class="btn-quiz"><b>Start the quiz →</b><span>12 questions · 4 formats</span></button>
+  </div>
+  <div class="spec"><b>The quiz is now a BAND, not a card in the pile</b> — violet family = the same "test yourself" identity as
+    the home Test band, so the loop reads the same at every zoom level. The band is state-aware: topics incomplete → muted
+    ("Finish the topics first — the quiz completes the section", button disabled-quiet); topics done → this active state;
+    quiz done → "✓ Section complete · best ⭐ 2/3 · retake". <b>This is where Neha's missing 5th unit becomes visible instead
+    of mysterious.</b></div>
+
+  <!-- BAND 3: EXPLORE -->
+  <div class="band-label"><span class="num">3</span><h2>Explore &amp; revise</h2><span class="sub">scoped to this section</span></div>
+  <div class="explore">
+    <div class="ecard"><div class="eicon" style="background:#E9ECF8">📅</div>
+      <div><b>Timeline</b><span>5 key events · 1789–1815</span></div><span class="arrow">→</span></div>
+    <div class="ecard"><div class="eicon" style="background:#E4F1EF">🗺️</div>
+      <div><b>Map</b><span>Europe after Vienna, 1815 · 7 regions</span></div><span class="arrow">→</span></div>
+  </div>
+  <div class="spec"><b>Timeline &amp; maps stop being mid-page widgets</b> — they become the same compact payload cards as the
+    home tools band, opening the SAME embedded explorers (tap → expands in place, unchanged functionality). Framing: "after
+    reading" revision, placed after the quiz band. The whole page is now three beats — read → prove → explore — the exact
+    grammar the home page teaches.</div>
+
+</div>
+</body>
+</html>

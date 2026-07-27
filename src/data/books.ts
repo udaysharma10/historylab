@@ -38,7 +38,9 @@ export const historyBook: Book = {
       subtitle: 'Section I: Events and Processes',
       icon: '🏛️',
       status: 'live',
-      isFree: true,
+      // Free-tier revision 2026-07-12: Ch1 is paid; Section 1 is the free
+      // preview (products.preview_section drives the actual behaviour).
+      isFree: false,
     },
     {
       id: 'ch2',

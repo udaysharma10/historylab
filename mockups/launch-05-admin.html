@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch 05 · Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8;
+    --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s2:#5571B5; --s2-bg:#E9ECF8;
+    --s3:#C2893E; --s3-bg:#F7EFDD; --s4:#5C9368; --s4-bg:#E8F1E9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:18px 22px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 20px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink);letter-spacing:-.3px}
+  .brand .lab{color:var(--accent)}
+  .adminpill{background:var(--ink);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    padding:6px 14px;border-radius:999px}
+
+  /* stat strip */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:16px 18px}
+  .stat b{display:block;font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--ink);line-height:1.1}
+  .stat span{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+
+  /* tabs */
+  .tabs{display:flex;gap:8px;margin-bottom:16px}
+  .tab{padding:9px 18px;border-radius:11px;font-size:13px;font-weight:700;color:var(--body);background:var(--paper);
+    border:1.5px solid var(--line);cursor:pointer}
+  .tab.on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 5px 14px rgba(220,131,95,.3)}
+
+  .panel{background:var(--paper);border-radius:20px;box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:22px 26px;margin-bottom:20px}
+  .panel h2{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .panel h2 .cnt{font-family:'Inter',sans-serif;font-size:11px;font-weight:800;background:var(--lav-soft);color:var(--lav);padding:3px 10px;border-radius:999px}
+
+  .search{display:flex;gap:10px;margin-bottom:14px}
+  .input{flex:1;border:1.5px solid var(--line);border-radius:11px;padding:10px 14px;font-family:'Inter',sans-serif;
+    font-size:13.5px;font-weight:500;color:var(--ink);outline:none}
+  .input::placeholder{color:var(--muted)}
+
+  table{width:100%;border-collapse:collapse}
+  th{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);text-align:left;
+    padding:8px 10px;border-bottom:1.5px solid var(--line)}
+  td{padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px;font-weight:500;vertical-align:middle}
+  td b{color:var(--ink);font-weight:700;display:block}
+  td .sub{font-size:11.5px;color:var(--muted);font-weight:600}
+  tr:last-child td{border-bottom:none}
+
+  .chippy{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:4px 10px;border-radius:999px;
+    text-transform:uppercase;letter-spacing:.4px;margin-right:5px}
+  .c-free{background:var(--s4-bg);color:var(--s4)}
+  .c-paid{background:var(--accent-soft);color:var(--accent)}
+  .c-grant{background:var(--lav-soft);color:var(--lav)}
+  .c-open{background:#F3F0F6;color:var(--muted)}
+  .c-warn{background:var(--s3-bg);color:var(--s3)}
+  .c-ok{background:var(--s4-bg);color:var(--s4)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:12px;padding:8px 14px;border-radius:10px;transition:transform .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+  .btn-lav{background:var(--lav);color:#fff}
+
+  /* grant modal */
+  .modalwrap{max-width:480px;margin:0 auto}
+  .modal{background:var(--paper);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:28px 30px;position:relative;overflow:hidden}
+  .modal::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--lav),var(--accent))}
+  .modal h2{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:4px}
+  .modal .who{font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:16px}
+  label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:0 2px 6px}
+  .chapsel{display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+  .chap{border:1.5px solid var(--line);border-radius:11px;padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--body);cursor:pointer}
+  .chap.on{border-color:var(--lav);background:var(--lav-soft);color:var(--lav)}
+  .minput{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:11px 14px;font-size:13.5px;font-weight:500;
+    color:var(--ink);outline:none;margin-bottom:16px;font-family:'Inter',sans-serif}
+
+  .screen-label{font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--lav);
+    margin:30px 2px 12px;display:flex;align-items:center;gap:10px}
+  .screen-label::after{content:"";flex:1;height:1px;background:#DCD3E8}
+
+  .mint{display:flex;gap:10px;align-items:flex-end;margin-bottom:16px}
+  .mint .f{flex:1}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:8px 0 4px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">History<span class="lab">Lab</span> <span style="font-size:14px;color:var(--muted);font-weight:600;font-family:'Inter',sans-serif">/ admin</span></div>
+    <span class="adminpill">Admin · Uday</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>47</b><span>Accounts</span></div>
+    <div class="stat"><b>12</b><span>Paid unlocks</span></div>
+    <div class="stat"><b>₹5,988</b><span>Revenue</span></div>
+    <div class="stat"><b>23</b><span>Waitlist</span></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on">Users &amp; Access</div>
+    <div class="tab">Invites</div>
+    <div class="tab">Waitlist</div>
+    <div class="tab">Purchases</div>
+  </div>
+
+  <!-- USERS -->
+  <div class="panel">
+    <h2>Users &amp; Access <span class="cnt">47 accounts</span></h2>
+    <div class="search">
+      <input class="input" placeholder="Search name or email…" />
+      <button class="btn btn-lav">+ Create account</button>
+    </div>
+    <table>
+      <tr><th>User</th><th>Chapter access</th><th>Invited by</th><th></th></tr>
+      <tr>
+        <td><b>Vedansh</b><span class="sub">vedansh@example.com · student</span></td>
+        <td><span class="chippy c-free">Ch1 free</span><span class="chippy c-paid">Ch2 paid</span></td>
+        <td><span class="sub">Aarav S.</span></td>
+        <td><button class="btn btn-ghost">Manage</button></td>
+      </tr>
+      <tr>
+        <td><b>Neha T.</b><span class="sub">neha.teacher@example.com · admin-created</span></td>
+        <td><span class="chippy c-free">Ch1 free</span><span class="chippy c-grant">Ch2 granted</span></td>
+        <td><span class="sub">— (admin)</span></td>
+        <td><button class="btn btn-ghost">Manage</button></td>
+      </tr>
+      <tr>
+        <td><b>Aarav S.</b><span class="sub">aarav@example.com · student</span></td>
+        <td><span class="chippy c-free">Ch1 free</span><span class="chippy c-grant">Ch2 granted</span></td>
+        <td><span class="sub">Waitlist batch #2</span></td>
+        <td><button class="btn btn-ghost">Manage</button></td>
+      </tr>
+      <tr>
+        <td><b>Riya M.</b><span class="sub">riya@example.com · student</span></td>
+        <td><span class="chippy c-free">Ch1 free</span></td>
+        <td><span class="sub">Vedansh</span></td>
+        <td><button class="btn btn-ghost">Manage</button></td>
+      </tr>
+    </table>
+  </div>
+  <div class="spec"><b>Spec:</b> "Create account" = admin-created accounts that bypass the invite gate (how teachers &amp; special cohorts get in — <b>no teacher role exists</b>; a teacher is just an account with granted chapters). "Manage" opens the grant modal below. Access chips show source: <b>paid</b> vs <b>granted</b>.</div>
+
+  <!-- GRANT MODAL -->
+  <div class="screen-label">Modal · Manage access (from "Manage")</div>
+  <div class="modalwrap">
+    <div class="modal">
+      <h2>Manage access</h2>
+      <div class="who">Riya M. · riya@example.com</div>
+      <label>Chapters</label>
+      <div class="chapsel">
+        <span class="chap on">Ch1 · free</span>
+        <span class="chap on">Ch2 ✓</span>
+        <span class="chap">Ch3</span>
+        <span class="chap">Ch4</span>
+        <span class="chap">Ch5</span>
+      </div>
+      <label>Note (internal — why this grant?)</label>
+      <input class="minput" value="Pilot cohort — FOC, Jul 2026" />
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-lav" style="flex:1;padding:11px">Save grants</button>
+        <button class="btn btn-ghost" style="padding:11px 18px">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div class="spec"><b>Spec:</b> writes/removes <b>entitlements</b> rows with source=<b>admin_grant</b>, granted_by=admin, plus the note. Revoking a <b>paid</b> chapter is blocked here (refund flow does that via the Purchases tab). Every grant/revoke is logged.</div>
+
+  <!-- INVITES -->
+  <div class="screen-label">Tab · Invites</div>
+  <div class="panel">
+    <h2>Invite batches <span class="cnt">3 batches</span></h2>
+    <div class="mint">
+      <div class="f"><label>How many codes</label><input class="input" value="30" style="width:100%" /></div>
+      <div class="f" style="flex:2"><label>Batch label</label><input class="input" value="Neha — Class 10B, July" style="width:100%" /></div>
+      <button class="btn btn-lav" style="padding:11px 18px">Mint batch</button>
+    </div>
+    <table>
+      <tr><th>Batch</th><th>Codes</th><th>Redeemed</th><th></th></tr>
+      <tr><td><b>Neha — Class 10A, July</b><span class="sub">minted 02 Jul 2026</span></td><td>30</td><td><span class="chippy c-ok">21 / 30</span></td><td><button class="btn btn-ghost">Export codes</button></td></tr>
+      <tr><td><b>Waitlist batch #2</b><span class="sub">minted 28 Jun 2026</span></td><td>15</td><td><span class="chippy c-ok">14 / 15</span></td><td><button class="btn btn-ghost">Export codes</button></td></tr>
+      <tr><td><b>Founders &amp; family</b><span class="sub">minted 25 Jun 2026</span></td><td>10</td><td><span class="chippy c-warn">6 / 10</span></td><td><button class="btn btn-ghost">Export codes</button></td></tr>
+    </table>
+  </div>
+
+  <!-- WAITLIST -->
+  <div class="screen-label">Tab · Waitlist</div>
+  <div class="panel">
+    <h2>Waitlist <span class="cnt">23 waiting</span></h2>
+    <table>
+      <tr><th>Parent email</th><th>Note</th><th>Requested</th><th></th></tr>
+      <tr><td><b>parent1@example.com</b></td><td><span class="sub">Class 10, TEST School, Gurugram</span></td><td><span class="sub">01 Jul</span></td><td><button class="btn btn-primary">Send invite</button></td></tr>
+      <tr><td><b>parent2@example.com</b></td><td><span class="sub">—</span></td><td><span class="sub">30 Jun</span></td><td><button class="btn btn-primary">Send invite</button></td></tr>
+      <tr><td><b>parent3@example.com</b></td><td><span class="sub">Class 10, TEST Public School</span></td><td><span class="sub">29 Jun</span></td><td><span class="chippy c-ok">Invited ✓</span></td></tr>
+    </table>
+  </div>
+  <div class="spec"><b>Spec:</b> "Send invite" mints a single code and emails it to the parent; row flips to "Invited ✓". Batch-select for opening seats in waves.</div>
+
+  <!-- PURCHASES -->
+  <div class="screen-label">Tab · Purchases</div>
+  <div class="panel">
+    <h2>Purchases <span class="cnt">₹5,988 total</span></h2>
+    <table>
+      <tr><th>When</th><th>User</th><th>Item</th><th>Amount</th><th>Status</th><th></th></tr>
+      <tr><td><span class="sub">02 Jul, 14:12</span></td><td><b>Vedansh</b></td><td>Ch2 · Nationalism in India</td><td><b>₹499</b></td><td><span class="chippy c-ok">Paid</span></td><td><button class="btn btn-ghost">Refund</button></td></tr>
+      <tr><td><span class="sub">02 Jul, 11:03</span></td><td><b>Kabir T.</b></td><td>Ch2 · Nationalism in India</td><td><b>₹499</b></td><td><span class="chippy c-ok">Paid</span></td><td><button class="btn btn-ghost">Refund</button></td></tr>
+      <tr><td><span class="sub">01 Jul, 19:44</span></td><td><b>Sana K.</b></td><td>Ch2 · Nationalism in India</td><td><b>₹499</b></td><td><span class="chippy c-warn">Pending</span></td><td></td></tr>
+    </table>
+  </div>
+  <div class="spec"><b>Spec:</b> read model over <b>purchases</b> + <b>payment_events</b> (webhook-written). Refund triggers the Razorpay refund; the <b>refund.processed</b> webhook revokes the entitlement — admin never edits payment state by hand.</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+# Nightly Postgres backup: Supabase -> Cloudflare R2 (private bucket).
+# GitHub only RUNS the backup; dumps are never committed to the repo (student PII).
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   SUPABASE_DB_URL      postgresql://postgres.zqryzlkvieljadntlomz:<DB_PASSWORD>@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres
+#   R2_ACCOUNT_ID        Cloudflare account id (dashboard -> R2 -> right sidebar)
+#   R2_ACCESS_KEY_ID     R2 API token key (create with Object Read & Write on the bucket)
+#   R2_SECRET_ACCESS_KEY R2 API token secret
+#   R2_BUCKET            e.g. historylab-backups
+#
+# Retention: set an R2 lifecycle rule to delete the daily/ prefix after 35 days.
+# monthly/ copies (1st of each month) are kept forever.
+#
+# NOTE: the schedule only fires from the DEFAULT branch (main) — this file must be
+# on main to run nightly. Use workflow_dispatch to test it manually.
+
+name: db-backup
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 21:00 UTC = 02:30 IST daily
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Install postgresql-client 17
+        run: |
+          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: Dump database
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          STAMP=$(date -u +%Y-%m-%d_%H%M)
+          pg_dump "$DB_URL" \
+            --format=custom --compress=9 \
+            --no-owner --no-privileges \
+            --schema=public --schema=auth \
+            --file="historylab_${STAMP}.dump"
+          ls -lh historylab_*.dump
+          echo "STAMP=$STAMP" >> "$GITHUB_ENV"
+
+      - name: Upload to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 cp "historylab_${STAMP}.dump" \
+            "s3://${BUCKET}/daily/historylab_${STAMP}.dump" --endpoint-url "$ENDPOINT"
+          # keep a permanent monthly copy on the 1st
+          if [ "$(date -u +%d)" = "01" ]; then
+            aws s3 cp "historylab_${STAMP}.dump" \
+              "s3://${BUCKET}/monthly/historylab_${STAMP}.dump" --endpoint-url "$ENDPOINT"
+          fi
+
+      - name: Verify upload
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 ls "s3://${BUCKET}/daily/historylab_${STAMP}.dump" --endpoint-url "$ENDPOINT"

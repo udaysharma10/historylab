@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HistoryLab — Launch 04 · Account, Purchases &amp; Invites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#3E3548; --body:#6E6478; --muted:#A1969F;
+    --bg-1:#FBEFE7; --bg-2:#F1ECFA; --paper:#FFFFFF; --line:#F0E5DF;
+    --accent:#DC835F; --accent-soft:#FAE4D8;
+    --lav:#7E72C2; --lav-soft:#ECE8F8;
+    --shadow:0 10px 30px rgba(70,60,100,.09); --shadow-sm:0 4px 14px rgba(70,60,100,.06);
+    --s1:#C36B53; --s1-bg:#F9E9E3; --s2:#5571B5; --s2-bg:#E9ECF8;
+    --s4:#5C9368; --s4-bg:#E8F1E9; --gold:#C99A3A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--body);
+    background:linear-gradient(170deg,var(--bg-1),var(--bg-2));min-height:100vh;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:18px 22px 64px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 22px}
+  .brand{font-family:'Fraunces',serif;font-weight:700;font-size:25px;color:var(--ink);letter-spacing:-.3px}
+  .brand .lab{color:var(--accent)}
+  .crumb{font-size:12.5px;font-weight:600;color:var(--muted);margin:0 2px 14px}
+  .crumb b{color:var(--ink)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:13px;padding:9px 16px;border-radius:11px;transition:transform .12s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 5px 14px rgba(220,131,95,.3)}
+  .btn-ghost{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+  .btn-wa{background:#E7F6EC;color:#1FA855;border:1.5px solid #CBEAD6}
+
+  /* profile hero */
+  .hero{background:var(--paper);border-radius:22px;box-shadow:var(--shadow);padding:26px 30px;
+    display:flex;align-items:center;gap:22px;border:1px solid var(--line);margin-bottom:22px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),var(--lav))}
+  .bigav{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--ink),#5d564a);color:#fff;
+    display:grid;place-items:center;font-weight:700;font-size:26px;font-family:'Fraunces',serif;flex-shrink:0}
+  .hero h1{font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:3px}
+  .hero .mail{font-size:13px;font-weight:600;color:var(--muted)}
+  .hero .chips{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:7px;background:var(--bg-1);border:1px solid var(--line);
+    padding:7px 13px;border-radius:11px;font-weight:600;font-size:12.5px;color:var(--body)}
+  .chip b{color:var(--ink)}
+
+  .panel{background:var(--paper);border-radius:20px;box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:24px 28px;margin-bottom:20px}
+  .panel h2{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:3px}
+  .panel .lead{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:16px}
+
+  .rowitem{display:flex;align-items:center;gap:14px;padding:14px 2px;border-top:1px solid var(--line)}
+  .rowitem:first-of-type{border-top:none}
+  .badge{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+  .rowitem .tt{flex:1}
+  .rowitem b{display:block;font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--ink)}
+  .rowitem span{font-size:12px;font-weight:600;color:var(--muted)}
+  .tagpill{font-size:10.5px;font-weight:800;padding:4px 11px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px}
+
+  /* invites */
+  .invgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .invite{border:1.5px dashed #DECBBF;border-radius:16px;padding:18px;text-align:center;background:var(--bg-1)}
+  .invite .code{font-family:'Fraunces',serif;font-size:19px;font-weight:700;letter-spacing:2px;color:var(--ink);margin-bottom:4px}
+  .invite .st{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:12px}
+  .invite.used{opacity:.65;border-style:solid;border-color:var(--line);background:var(--paper)}
+  .invite.used .st{color:var(--s4)}
+  .earn{display:flex;gap:12px;align-items:center;background:var(--lav-soft);border:1px solid #DED7F0;border-radius:14px;padding:13px 16px;margin-top:14px}
+  .earn p{font-size:12.5px;font-weight:500;color:var(--body);line-height:1.5}
+  .earn b{color:var(--lav)}
+
+  .spec{border:1.5px dashed #C9BFD6;border-radius:12px;background:rgba(255,255,255,.55);padding:12px 16px;margin:8px 0 20px;
+    font-size:12px;color:#7C7390;font-weight:500;line-height:1.55}
+  .spec b{color:#5C5470}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">History<span class="lab">Lab</span></div><button class="btn btn-ghost">Sign out</button></div>
+  <div class="crumb">All Chapters &nbsp;·&nbsp; <b>My Account</b></div>
+
+  <div class="hero">
+    <div class="bigav">V</div>
+    <div>
+      <h1>Vedansh</h1>
+      <div class="mail">vedansh@example.com · Class 10 · CBSE</div>
+      <div class="chips">
+        <div class="chip">⭐ <b>18 stars</b></div>
+        <div class="chip">🔥 <b>4-day streak</b></div>
+        <div class="chip">👨‍👩‍👧 <b>Parent: parent@example.com</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY CHAPTERS -->
+  <div class="panel">
+    <h2>My chapters</h2>
+    <div class="lead">Everything on this account — free, purchased, or granted.</div>
+    <div class="rowitem">
+      <div class="badge" style="background:var(--s1-bg);color:var(--s1)">🏛️</div>
+      <div class="tt"><b>The Rise of Nationalism in Europe</b><span>Chapter 1 · 60% complete</span></div>
+      <span class="tagpill" style="background:var(--s4-bg);color:var(--s4)">Free</span>
+    </div>
+    <div class="rowitem">
+      <div class="badge" style="background:var(--s2-bg);color:var(--s2)">🇮🇳</div>
+      <div class="tt"><b>Nationalism in India</b><span>Chapter 2 · purchased 02 Jul 2026 · ₹199 (launch price)</span></div>
+      <span class="tagpill" style="background:var(--accent-soft);color:var(--accent)">Owned</span>
+      <button class="btn btn-ghost">🧾 Invoice</button>
+    </div>
+  </div>
+  <div class="spec"><b>Spec:</b> rows come from <b>entitlements</b>. An admin-granted chapter shows the same "Owned" treatment (source is not exposed to the student — a comp should feel identical to a purchase). Invoice = Razorpay-generated PDF link.</div>
+
+  <!-- EXAMINER MARKING ORDERS -->
+  <div class="panel">
+    <h2>My examiner reviews</h2>
+    <div class="lead">Papers you've sent to a CBSE examiner for personal marking.</div>
+    <div class="rowitem">
+      <div class="badge" style="background:var(--s4-bg);color:var(--s4)">✅</div>
+      <div class="tt"><b>Full Chapter Paper · attempt 2</b><span>Returned 04 Jul · examiner score 30/40 (AI gave 29)</span></div>
+      <span class="tagpill" style="background:var(--s4-bg);color:var(--s4)">Returned</span>
+      <button class="btn btn-ghost">View</button>
+    </div>
+    <div class="rowitem">
+      <div class="badge" style="background:var(--accent-soft);color:var(--accent)">⏳</div>
+      <div class="tt"><b>S1 Sectional · attempt 1</b><span>Sent 06 Jul · ₹149 · promised by 09 Jul</span></div>
+      <span class="tagpill" style="background:var(--accent-soft);color:var(--accent)">In review</span>
+    </div>
+    <div class="earn">✦ <p><b>Any marked paper can be sent to a real CBSE examiner</b> for personal feedback — ₹149, back within 48–72h. Order from the paper's results page.</p></div>
+  </div>
+  <div class="spec"><b>Spec (v2, 2026-07-07):</b> invites section DELETED (decision #12 — invites killed entirely). Replaced by <b>examiner_reviews</b> lifecycle (queued → in_review → returned, with SLA date). Parent email shown in header chips = the guardian channel (fix #1). Share/WhatsApp mechanics return later as score cards (S3), not invites.</div>
+
+</div>
+</body>
+</html>

@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { FlashcardReviewState } from '../types/progress'
+import { markDirty } from '../lib/syncBus'
+import { inferChapterSlug } from '../lib/progressMerge'
 
 interface FlashcardStoreState {
   reviewStates: Record<string, FlashcardReviewState>
@@ -14,10 +16,15 @@ export const useFlashcardStore = create<FlashcardStoreState>()(
     (set, get) => ({
       reviewStates: {},
 
-      updateReviewState: (cardId, state) =>
+      updateReviewState: (cardId, state) => {
         set((s) => ({
-          reviewStates: { ...s.reviewStates, [cardId]: state },
-        })),
+          reviewStates: {
+            ...s.reviewStates,
+            [cardId]: { ...state, lastReviewedAt: new Date().toISOString() },
+          },
+        }))
+        markDirty(`fc:${inferChapterSlug(cardId)}:${cardId}`)
+      },
 
       getReviewState: (cardId) => get().reviewStates[cardId],
 

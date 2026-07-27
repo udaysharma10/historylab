@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapExplorer, MapIdentifyCard, MapLabelCard } from '../components/map'
 import { QuizProgress } from '../components/quiz'
@@ -9,7 +9,6 @@ import { calculateStars } from '../engine/scoringEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 import type { MapIdentifyActivity, MapLabelActivity } from '../types/activity'
 
 type MapPhase = 'home' | 'explore' | 'playing-identify' | 'playing-label' | 'results'
@@ -30,7 +29,6 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function MapMode() {
-  const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
   const cid = chapterId || 'ch1'
   const completeProblem = useProgressStore(s => s.completeProblem)
@@ -83,10 +81,10 @@ export function MapMode() {
       const stars = calculateStars(mistakes, 0)
       // Save progress for primary section of the activities
       const primarySection = (activeType === 'identify' ? identifyActivities : labelActivities)[0]?.sectionId || 's1'
-      completeProblem(primarySection as SectionId, stars)
+      completeProblem(cid, primarySection, stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
-        chapter_id: chapterId || 'ch1',
+        chapter_id: cid,
         mode: 'maps',
         section_id: primarySection,
         activity_type: activeType === 'identify' ? 'map-identify' : 'map-label',
@@ -97,7 +95,7 @@ export function MapMode() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activeType, identifyActivities, labelActivities, completeProblem])
+  }, [questionResults, currentIndex, activeType, identifyActivities, labelActivities, completeProblem, cid])
 
   const correctCount = useMemo(() => questionResults.filter(r => r === 'correct').length, [questionResults])
   const stars = useMemo(() => calculateStars(totalMistakes, 0), [totalMistakes])
@@ -134,6 +132,7 @@ export function MapMode() {
         <AnimatePresence mode="wait">
           <motion.div key={activity.id}>
             <MapIdentifyCard
+              chapterId={cid}
               activity={activity}
               sectionColor={color}
               questionNumber={currentIndex + 1}
@@ -172,6 +171,7 @@ export function MapMode() {
         <AnimatePresence mode="wait">
           <motion.div key={activity.id}>
             <MapLabelCard
+              chapterId={cid}
               activity={activity}
               sectionColor={color}
               questionNumber={currentIndex + 1}
@@ -210,24 +210,8 @@ export function MapMode() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <motion.button
-          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
-          onClick={() => navigate('/')}
-          whileHover={{ x: -3 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Home
-        </motion.button>
-
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-hist-teal">
-            <span className="text-white text-2xl">🗺️</span>
-          </div>
-          <div>
-            <h1 className="font-display text-2xl font-bold text-hist-dark">Maps</h1>
-            <p className="font-body text-sm text-gray-400">{mapDefinitions.length} {mapDefinitions.length === 1 ? 'map' : 'historical maps'} with {baseIdentify.length + baseLabel.length} activities</p>
-          </div>
-        </div>
+        <h1 className="font-display text-2xl font-bold text-hist-dark">Maps</h1>
+        <p className="font-body text-sm text-gray-400">{mapDefinitions.length} {mapDefinitions.length === 1 ? 'map' : 'historical maps'} with {baseIdentify.length + baseLabel.length} activities</p>
       </motion.div>
 
       {/* Three mode cards */}
@@ -339,56 +323,6 @@ export function MapMode() {
         )}
       </div>
 
-      {/* All activities list */}
-      {(hasIdentify || hasLabel) && (
-      <div>
-        <h3 className="font-display font-bold text-sm text-gray-500 mb-3 uppercase tracking-wide">All Map Activities</h3>
-        <div className="space-y-2">
-          {[...baseIdentify, ...baseLabel].map((activity, i) => {
-            const color = SECTION_COLORS[activity.sectionId] || '#5571B5'
-            const diff = DIFFICULTY_LABELS[activity.difficulty]
-            const isLabel = activity.type === 'map-label'
-
-            return (
-              <motion.div
-                key={activity.id}
-                className="bg-white rounded-xl p-4 shadow-card"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + i * 0.04 }}
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm shrink-0"
-                    style={{ backgroundColor: color }}
-                  >
-                    {isLabel ? '🏷️' : '📍'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-body text-sm text-hist-dark leading-snug">
-                      {isLabel ? (activity as MapLabelActivity).instruction : (activity as MapIdentifyActivity).question}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1.5">
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded text-white" style={{ backgroundColor: diff.color }}>
-                        {diff.label}
-                      </span>
-                      <span className="text-[10px] font-body text-gray-400">
-                        {isLabel ? 'Label' : 'Identify'}
-                      </span>
-                      {activity.examRelevance === 'high' && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-hist-gold/15 text-hist-gold">
-                          EXAM
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
-      </div>
-      )}
     </div>
   )
 }

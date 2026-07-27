@@ -5,7 +5,10 @@ import type { FigureType } from '../../types/figure'
 
 interface FigureGalleryProps {
   onSelectFigure: (figureId: string) => void
-  onBack: () => void
+  /** Omitted when the gallery IS the page (Neha 2026-07-27) — no back link. */
+  onBack?: () => void
+  /** Compact practice entry in the header (Ch1 image-analysis MCQs). */
+  onStartPractice?: () => void
   chapterId: string
 }
 
@@ -21,7 +24,7 @@ const FIGURE_TYPE_ICONS: Record<string, string> = {
   print: '🖼️',
 }
 
-export function FigureGallery({ onSelectFigure, onBack, chapterId }: FigureGalleryProps) {
+export function FigureGallery({ onSelectFigure, onBack, onStartPractice, chapterId }: FigureGalleryProps) {
   const [sectionFilter, setSectionFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<FigureType | 'all'>('all')
 
@@ -49,27 +52,39 @@ export function FigureGallery({ onSelectFigure, onBack, chapterId }: FigureGalle
 
   return (
     <div className="max-w-3xl mx-auto">
-      {/* Back button */}
-      <motion.button
-        className="text-gray-400 font-body text-sm mb-4 flex items-center gap-1 hover:text-hist-dark"
-        onClick={onBack}
-        whileHover={{ x: -3 }}
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        Back to Figures
-      </motion.button>
+      {onBack && (
+        <motion.button
+          className="text-gray-400 font-body text-sm mb-4 flex items-center gap-1 hover:text-hist-dark"
+          onClick={onBack}
+          whileHover={{ x: -3 }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to Figures
+        </motion.button>
+      )}
 
-      {/* Header */}
+      {/* Header — title left, quiet practice entry right */}
       <motion.div
-        className="mb-5"
+        className="mb-5 flex items-end justify-between gap-4 flex-wrap"
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h2 className="font-display text-2xl font-bold text-hist-dark mb-1">All Figures</h2>
-        <p className="font-body text-sm text-gray-400">
-          {filteredFigures.length} figure{filteredFigures.length !== 1 ? 's' : ''}
-          {sectionFilter !== 'all' && ` in ${SECTION_LABELS[sectionFilter]}`}
-        </p>
+        <div>
+          <h2 className="font-display text-2xl font-bold text-hist-dark mb-1">Figures</h2>
+          <p className="font-body text-sm text-gray-400">
+            {filteredFigures.length} figure{filteredFigures.length !== 1 ? 's' : ''}
+            {sectionFilter !== 'all' && ` in ${SECTION_LABELS[sectionFilter]}`}
+          </p>
+        </div>
+        {onStartPractice && (
+          <button
+            className="font-display font-bold text-[13px] text-white rounded-xl px-4 py-2.5 shadow-button btn-press"
+            style={{ backgroundColor: '#9B5C9A' }}
+            onClick={onStartPractice}
+          >
+            Practice: image analysis
+          </button>
+        )}
       </motion.div>
 
       {/* Section filter chips */}

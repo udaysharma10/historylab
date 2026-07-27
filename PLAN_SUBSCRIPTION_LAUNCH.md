@@ -1,169 +1,310 @@
-# HistoryLab → Subscription Education Portal — Launch Plan
+# HistoryLab → Open-Access CBSE Prep Portal — Launch Plan
 
-**Created:** 2026-06-28
-**Scope:** the engineering + commercial work to turn the current app into a paid, subscription-based portal.
+**Created:** 2026-06-28 · **Revised:** 2026-07-02 (freemium subscriptions → premium one-time, invite-only) · **Revised again 2026-07-07 after Neha's review — INVITE-ONLY AND ₹499 ARE DEAD: open access for all CBSE students, ₹199 launch price (₹499 list), test engine paid-only, human examiner marking as an add-on.**
 **Builds on (do not duplicate):**
-- `BIGGER_PICTURE.md` — product/pricing strategy (freemium tiers, ₹499/₹999, multi-class roadmap). This doc is the *technical execution* of its **Phase C**.
-- `PLAN_AUTH_AND_ANALYTICS.md` — Supabase auth (DONE) + server-side progress sync & analytics (its **Phase D**, *planned but NOT yet implemented*).
+- `BIGGER_PICTURE.md` — content roadmap (chapters/books/classes). Its original freemium/subscription pricing is **superseded** by this doc.
+- `PLAN_AUTH_AND_ANALYTICS.md` — Supabase auth (DONE) + server-side progress sync (its Phase D, *planned, NOT yet implemented*).
 
 ---
 
-## 0. Current state (honest assessment)
+## 0. The model (decided 2026-07-02; revised 2026-07-07 per Neha; free tier revised 2026-07-12 per Neha — see decision #26)
 
-| Area | Status |
+| Dimension | Decision |
 |---|---|
-| Hosting | Vercel (SPA) + `vercel.json` SPA rewrite ✅ |
-| Auth | Supabase Google OAuth ✅ (email/password not yet) |
-| User data (progress, SM-2 flashcards, stars) | **localStorage only** (Zustand `persist`). `src/lib/syncProgress.ts` is scaffolded but stores don't use it. → lost on device switch. |
-| Content | **Bundled into the JS shipped to the browser** (`src/data/**`). |
-| Payments / subscriptions / entitlements | **None.** No Razorpay, no plans, no paywall. |
-| Compliance (ToS/Privacy/Refund/GST/DPDPA) | None. |
+| **Positioning** | **India's CBSE prep portal — premium quality at a mass-market price.** Target = all-India CBSE Class 10 (~2M+ board candidates/yr), not just tier-1 metro schools. Neha's ruling: scale over exclusivity. Teacher credibility fronts the brand. |
+| **Access** | **OPEN TO ALL. No invite gate, no waitlist, no invite codes at all** (killed 2026-07-07). Landing page → "Start Chapter 1 free" → open signup. |
+| **Pricing** | **₹199 launch/early price per chapter, against a ₹499 list price** (shown struck through). One-time, lifetime access, no subscriptions. Whole-book bundle later, depending on uptake. |
+| **Free tier** | **REVISED 2026-07-12 (decision #26): only Ch1 SECTION 1 is free**, served as an in-chapter preview (S1 narrative + study tools filtered to S1; S2–S6 visible but locked, tap → purchase sheet). **Ch1 is a paid product like Ch2 (₹199 launch / ₹499 list).** Practice tests remain paid-only. Landing shows a static sample marked answer (zero marking cost). ~~Ch1 learning modes free for every signed-up student~~ |
+| **Test marking** | **Two tiers per paper:** (1) **AI marking included** with the chapter — instant, per-point against the CBSE scheme, unlimited attempts. (2) **Human "CBSE Examiner" marking as a paid add-on per paper** (Neha reviews with AI pre-marking in her queue; 48–72h turnaround; price TBD, mocked at ₹149). Every human-marked paper feeds AI calibration. |
+| **Teachers** | Unchanged — no teacher role; admin grants/revokes chapter access FOC for any account. |
+| **Anti-sharing** | Unchanged — personalised study state (progress, SM-2, attempts, marks, percentiles) + light 2-device session limits. |
+| **Payer** | Unchanged — parent pays (DPDPA consent); signup captures **guardian email** as a first-class field (product-review fix #1). Student→parent purchase handoff ("Ask your parent to unlock") is a core conversion mechanic (fix #2). |
 
-### ⚠️ The one architectural truth that drives everything
-**All chapter content currently ships inside the client bundle.** Anyone can read every "premium" chapter from browser DevTools for free. **A paywall is therefore not a UI toggle** — premium content must be **served from the backend on demand and gated by a server-checked entitlement.** This is the single biggest change and the backbone of this plan.
+### ⚠️ The architectural truth (unchanged)
+All chapter content currently ships in the client JS bundle — anyone can read "premium" chapters from DevTools. **The paywall is not a UI toggle:** premium content must be served on demand from the backend, gated by a server-checked entitlement. This remains the backbone of the plan. (The Round-8 client-side email allowlist `src/lib/chapterAccess.ts` is a stopgap for the student trial; it is **retired** once server entitlements land.)
 
 ---
 
-## 1. Target architecture (build on what exists)
+## 1. Target architecture
 
 ```
-React/Vite (Vercel)
+React/Vite (Vercel)  ← landing page w/ preview + waitlist
    │  anon key, RLS-scoped reads
    ▼
 Supabase
-   ├── Auth (Google + email/password)
-   ├── Postgres + Row-Level Security        ← user data, entitlements
-   └── Edge Functions (Deno)                ← Razorpay webhook, premium-content fetch, order create
+   ├── Auth (Google now; email/password in S2) — open signup, guardian email captured
+   ├── Postgres + RLS      ← entitlements, purchases, invites, progress, test attempts
+   └── Edge Functions      ← create-order, Razorpay webhook, get-chapter, mark-answer (S2)
    ▲
-   │  webhooks (server-to-server, signature-verified)
-Razorpay (Subscriptions: UPI / cards / netbanking, GST invoices)
+   │  webhooks (signature-verified, idempotent)
+Razorpay (one-time Orders — UPI/cards/netbanking; NO Subscriptions API)
 ```
-- **Keep:** Vercel + Supabase. **Add:** Razorpay (you already operate it at Blostem) + Supabase Edge Functions.
-- **Why Razorpay over Stripe:** India-first (UPI), GST invoices, recurring Subscriptions API, existing org familiarity. Revisit Stripe only if international.
+
+Dropping subscriptions removes the entire recurring stack: no UPI-Autopay/e-mandate consent friction at checkout, no dunning, no renewal lifecycle — one `payment.captured` webhook instead of five subscription states.
 
 ---
 
-## 2. Data model (extends the schema in PLAN_AUTH_AND_ANALYTICS.md)
+## 2. Data model
 
 ```sql
--- Plans (seed table)
-create table plans (
-  id text primary key,            -- 'free' | 'plus' | 'pro'
+-- Chapter SKUs (bundles become rows here later)
+create table products (
+  id text primary key,              -- 'ch2', 'ch3', ...
   name text not null,
-  razorpay_plan_id text,          -- maps to a Razorpay Plan (annual / monthly variants)
-  price_paise int not null,
-  interval text not null,         -- 'year' | 'month'
-  scope jsonb not null            -- e.g. {"books":["history"],"classes":["10"]}
+  price_paise int not null,         -- 49900
+  active boolean default true
 );
 
--- One row per user's current subscription (source of truth = webhook, never the client)
-create table subscriptions (
+-- One row per checkout attempt
+create table purchases (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references profiles(id),
+  product_id text references products(id),
+  razorpay_order_id text unique,
+  razorpay_payment_id text,
+  amount_paise int,
+  status text not null,             -- 'created' | 'paid' | 'refunded'
+  created_at timestamptz default now()
+);
+
+-- THE access table — one row = one unlocked chapter for one user.
+-- Unifies paid purchases and admin FOC grants (Uday's backend-comp requirement).
+create table entitlements (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references profiles(id) on delete cascade,
-  plan_id text references plans(id),
-  status text not null,           -- 'active' | 'past_due' | 'cancelled' | 'expired'
-  razorpay_subscription_id text,
-  current_period_end timestamptz,
+  chapter_id text not null,
+  source text not null,             -- 'purchase' | 'admin_grant'
+  purchase_id uuid references purchases(id),
+  granted_by uuid references profiles(id),   -- admin who comped
+  note text,                        -- e.g. 'Heritage pilot cohort'
   created_at timestamptz default now(),
-  updated_at timestamptz default now()
+  unique (user_id, chapter_id)
 );
 
--- Immutable audit log of every payment event (idempotent on event id)
+-- Invite-only gate + provenance graph (every account traces to an inviter)
+-- (2026-07-07) invites + waitlist tables DELETED — access is open, no gate.
+
+-- Human examiner marking add-on (one row per purchased review of one attempt)
+create table examiner_reviews (
+  id uuid primary key default gen_random_uuid(),
+  attempt_id uuid not null,                  -- references the test attempt
+  user_id uuid references profiles(id),
+  purchase_id uuid references purchases(id), -- the add-on payment
+  status text not null,                      -- 'queued' | 'in_review' | 'returned'
+  examiner_id uuid references profiles(id),  -- Neha (admin)
+  returned_at timestamptz,
+  created_at timestamptz default now()
+);
+-- products now includes marking add-on SKUs (e.g. 'examiner-review') alongside chapter SKUs.
+
+-- Immutable audit log of every payment event (idempotent on event id) — unchanged
 create table payment_events (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references profiles(id),
-  razorpay_event_id text unique,  -- idempotency key
-  type text,                      -- 'subscription.charged', 'payment.failed', ...
+  razorpay_event_id text unique,
+  type text,
   raw jsonb,
   created_at timestamptz default now()
 );
 ```
-- **Entitlement = a server-side check**, exposed as a Postgres function / view:
-  `has_access(user_id, book, chapter) → bool` (Ch1 always true; else look up an `active` subscription whose `plan.scope` covers it and `current_period_end > now()`).
-- **RLS:** users read only their own `subscriptions`; `payment_events`/writes happen **only** from the Edge Function (service-role), never the client.
-- Also finish **`student_progress` + `flashcard_state` sync** (PLAN_AUTH Phase D) — required so a *paying* user doesn't lose progress across devices.
+
+- **`has_access(user_id, chapter)`** (Postgres fn): chapter is free (`ch1`) → true for any signed-in account; else an `entitlements` row exists. Lifetime — no expiry logic anywhere.
+- **RLS:** users read only their own rows; `entitlements`/`purchases` writes happen **only** via Edge Functions (service role) or admin.
+- Also finish **`student_progress` + `flashcard_state` sync** (PLAN_AUTH Phase D) — under the personalised-study-state strategy this is no longer nice-to-have, it *is* the product moat's foundation.
 
 ---
 
-## 3. Paywall enforcement (the core)
+## 3. Paywall enforcement (unchanged core)
 
-**Principle: free content can ship in the bundle; premium content cannot.**
+1. Ch1 stays bundled (free). **Ch2+ content moves out of the build** into Supabase (table or private Storage).
+2. Edge Function `get-chapter(chapter)` runs `has_access(...)`; returns content or `403`.
+3. Client lazy-loads premium chapters; on `403` shows the purchase screen.
+4. UI locks remain cosmetic; the Edge Function is the real gate.
 
-1. **Split the content.** Keep **Ch1 (free)** bundled. Move **Ch2+ JSON out of the build** into Supabase (a `chapter_content` table or a private Storage bucket).
-2. **Gate the fetch.** A Supabase **Edge Function** `get-chapter(book, chapter)` runs `has_access(...)`; returns content only if entitled, else `402/403`.
-3. **Client** lazy-loads premium chapters from that function; on `403` shows the **upgrade screen** instead of the content.
-4. **Belt-and-braces UI gate** (`canAccessChapter()` from BIGGER_PICTURE) still hides locked UI — but it is **cosmetic**; the Edge Function is the real lock.
+> Once an entitled user has fetched a chapter it's in their browser — goal is "no casual free access," not unbreakable DRM.
 
-> Accept reality: once a paying user has fetched a chapter it's in their browser — perfect DRM is impossible. Goal is "no casual free access + not trivially scrapable," not unbreakable.
+## 4. Payments (Razorpay one-time Orders)
+
+1. Edge Function `create-order(product_id)` → Razorpay Order → open Checkout on client.
+2. Webhook (verify `X-Razorpay-Signature`, idempotent on event id): `payment.captured` → mark purchase `paid` + insert `entitlements` row; `refund.processed` → mark `refunded` + delete/flag the entitlement.
+3. Never trust client-reported payment state — entitlement derives only from webhook-written rows.
+4. GST invoice per charge (Razorpay-generated); admin can trigger refunds from Razorpay dashboard.
+
+## 5. Access flow (open — revised 2026-07-07)
+
+- **Open signup:** landing page → "Start Chapter 1 free" → Google sign-in → profile (student name, class) + **guardian email (required)** + DPDPA parental-consent → straight into Ch1. No codes, no waitlist, no gate.
+- Guardian email is the channel for: GST invoices, purchase links from the student→parent handoff, weekly reports (S2/6), new-device alerts.
+- **Student→parent purchase handoff:** at any paywall the student can tap **"Ask your parent"** → WhatsApp/email to the guardian with the student's progress + a one-tap checkout link. This is the primary conversion mechanic.
+- **DPDPA:** parental-consent capture at signup (guardian email + consent checkbox, timestamped); no behavioural ads/tracking of minors; privacy-friendly analytics only.
+
+## 6. Admin panel (backend flexibility — Uday's requirement)
+
+- Create accounts directly.
+- **Grant / revoke chapter entitlements for any account** (`admin_grant` rows with a `note`) — this is how teachers, pilot cohorts, and FOC consortiums get access. No teacher role exists.
+- View purchases + payment events; trigger refund flow.
+- **Examiner queue (new):** list of purchased `examiner_reviews` with the AI pre-marking shown; Neha adjusts per-point marks/comments and returns the paper. Queue depth + turnaround SLA visible.
+
+## 7. CBSE practice-test engine (the launch differentiator — PAID tier only)
+
+Per-chapter **CBSE-pattern papers**: same question typology and marking scheme as the board (objective/MCQ 1-mark, 2/3-mark short answers, 5-mark long answers, source-based and competency/case-based questions), timed attempts, typed answers. **Included with chapter purchase — not available on the free tier.** The landing page shows a static sample marked answer instead.
+
+**Two marking tiers per paper (decided 2026-07-07):**
+1. **AI marking — included.** Instant, per-point against the CBSE marking scheme, marker's notes, model answers, unlimited attempts. Calibrated by Neha's spot-check set; "request re-check" queues to admin.
+2. **CBSE Examiner marking — paid add-on per paper** (price TBD; mocked ₹149). Neha reviews the submitted paper *starting from the AI pre-marking* (≈5 min/paper, not 20), adjusts marks, adds examiner feedback; returned in 48–72h. Every human-marked paper becomes AI calibration data. **Public positioning (2026-07-11): "the portal has onboarded a Senior CBSE Examiner (20 yrs)" — Neha is NOT named or shown; NO public capacity/slot messaging** (internal queue management only; pivot if volume grows — "a good problem to have").
+
+- Attempt history, per-section mastery, percentile within cohort (once N ≥ 20).
+- **Why it kills credential sharing:** marks, feedback, attempt history, SM-2 scheduling, and mastery stats are meaningful only per-individual. A shared account produces garbage state for everyone using it.
+
+## 8. Compliance (launch blockers, not afterthoughts)
+
+- **DPDPA:** minors → verifiable parental consent (parent-pays flow provides it); no targeted ads; data-minimal analytics.
+- **GST** registration + compliant invoices on every charge.
+- **Razorpay prerequisites:** public Refund/Cancellation policy, ToS, Privacy Policy pages before go-live.
 
 ---
 
-## 4. Payments & subscription flow (Razorpay)
-
-1. **Seed Razorpay Plans** (Plus annual/monthly, Pro annual/monthly) → store `razorpay_plan_id` in `plans`.
-2. **Checkout:** Edge Function `create-subscription(plan_id)` → Razorpay `subscription_id` → open Razorpay Checkout on the client.
-3. **Webhook** (Edge Function, **verify `X-Razorpay-Signature`**, idempotent on event id) handles:
-   `subscription.activated / .charged / .pending / .halted / .cancelled`, `payment.failed` → upserts `subscriptions.status` + `current_period_end`, appends `payment_events`.
-4. **Renewals/dunning:** Razorpay auto-charges; on `past_due` show a banner + grace period, then downgrade to free on `expired`.
-5. **Never** trust client-reported payment state — entitlement always derives from the webhook-written `subscriptions` row.
-
----
-
-## 5. Accounts, billing & content ops
-- **Account page:** current plan, renewal date, **upgrade / cancel**, payment history, download GST invoice (Razorpay-generated).
-- **Email/password auth** + reset (not everyone has Google).
-- **Parent-owns / student-uses** account model (see §6).
-- **CMS for Neha** (Phase 2): edit content without code — admin UI over the `chapter_content` table (or a headless CMS). Becomes essential once content is a product, not a repo.
-- **Admin:** manage users, comp/refund a subscription, see MRR/active subs.
-
----
-
-## 6. Compliance (do NOT skip — it's a minors' product in India)
-- **DPDPA (India):** processing **children's** data requires **verifiable parental consent** and bars behavioural tracking/targeted ads to minors. Design accounts as **parent creates & pays, student uses**; capture consent at signup. (Aligns with your Blostem DPDPA experience.)
-- **GST:** register + issue **GST-compliant invoices** on every charge (Razorpay can generate).
-- **Razorpay requirement:** publicly visible **Refund/Cancellation policy**, plus **Terms of Service** and **Privacy Policy** pages before going live.
-- **Analytics:** privacy-friendly (PostHog/Plausible), no PII to third parties, no ad networks.
-
----
-
-## 7. Phased execution
+## 9. Phased execution
 
 | Phase | Goal | Key work | Outcome |
 |---|---|---|---|
-| **S0** | Foundation | Finish PLAN_AUTH Phase D (server-side progress + flashcard sync, activity logging) | Paid users keep progress across devices |
-| **S1 — MVP monetisation** | First rupee | `plans/subscriptions/payment_events` tables + RLS · Razorpay Plans + `create-subscription` + **webhook** · **move Ch2 server-side + `get-chapter` gate** · upgrade screen · account page (plan/cancel/invoice) · ToS/Privacy/Refund pages | **Launchable**: Ch1 free, Ch2 paywalled, real payments |
-| **S2 — Hardening** | Trust & ops | email/password auth · parent/student model + DPDPA consent · GST invoicing polish · analytics funnel (visit→signup→paywall→pay) · dunning/renewal UX · basic admin | Sustainable operations |
-| **S3 — Scale** | Growth | content CMS for Neha · coupons/referrals · more chapters/classes (BIGGER_PICTURE Phases D–F) · school licences · optional mobile wrapper | Catalogue + B2B |
+| **S0 — Foundation** | Personalised state survives devices | PLAN_AUTH Phase D: server-side progress + flashcard(SM-2) sync, activity logging | Prereq for both the moat and paid UX |
+| **S1 — Payments & paywall (private)** | Money works end-to-end | Schema (§2) + RLS · **open signup + guardian email + consent** · **Ch2 content server-side + `get-chapter`** · Razorpay one-time orders + webhook (₹199 launch / ₹499 list) · purchase screen + **ask-your-parent handoff** · admin panel (accounts, grants) · ToS/Privacy/Refund · landing page (open funnel) | Verified in test mode; NOT public yet (launch gated on test engine) |
+| **S2 — Test engine → LAUNCH** | CBSE prep portal goes live | **Test engine (§7): paper player, AI marking, results/feedback** · **examiner-review add-on (purchase + Neha's queue)** · then **PUBLIC LAUNCH** · parent progress email (weekly) · email/password auth · session/device limits (2 devices) · analytics funnel (visit→signup→purchase) | Launch: open access, Ch1 free learning, ₹199 chapters w/ tests |
+| **S3 — Growth** | Catalogue + loops | Ch3–5 content (BIGGER_PICTURE Phase D) · book-bundle SKU **if uptake supports it** · shareable score cards + gamification · CMS for Neha · more classes | Scale path |
 
-**Effort:** S0+S1 ≈ **a few focused weeks** — the heavy infra (auth, DB, hosting, gateway) already exists; the real work is the **entitlement/paywall + content-server move + Razorpay webhooks**.
+**Effort:** S0+S1 ≈ a few focused weeks (heavy infra exists; the work is entitlements + content-server move + one-time payment flow + admin panel). The test engine (S2) is the biggest net-new build — content authoring (papers + marking schemes) is the long pole, not code. **Launch = end of S2's test-engine work** (~sprint 5–6 of the 7-sprint pipeline).
+
+### 9.1 Sprint plan v2 (LOCKED 2026-07-12 — supersedes the sprint sketch above where they differ)
+
+One sprint ≈ one focused build week + Uday's review. Everything on `dev`; Vercel preview per sprint; merge to `main` only on approval.
+
+| # | Sprint | Builds | Exit test |
+|---|---|---|---|
+| **0** | **Personalised state** | Migrations: `student_progress`, `flashcard_state` (SM-2), `activity_logs` (chapter-aware, RLS). Zustand stores → offline-first sync. One-time migration of pilot students' localStorage progress (keep-highest merge). | Sign in on a second device → progress + flashcard schedule follow. Pilot students lose nothing. |
+| **1** | **Access & admin** | Migrations: `products`, `purchases`, `entitlements`, `examiner_reviews`, `class_interest`, `parent_updates` (newsletter) + RLS + `has_access()`. **Content IDs namespaced from day one: `c10-hist-ch2` format** (class-subject-chapter) across products/entitlements/content/papers — the expanded all-classes vision makes `ch2` ambiguous, and retrofitting paid entitlements later is risky. Signup rework: guardian email (required) + DPDPA consent, student/parent toggle. Admin panel v1: create accounts, grant/revoke chapters, purchases view. Retire the Round-8 client allowlist (admin grants replace it). | Onboard a new cohort + grant Ch2 entirely from admin UI; a granted account sees Ch2 exactly like Ch1. |
+| **2** | **Paywall + public face** | Ch2 content → `chapter_content` (server-side) + `get-chapter` Edge Function; client lazy-load + locked-chapter UI + purchase sheet + **ask-your-parent handoff** (WhatsApp/email to guardian w/ progress + checkout link). **Landing page (v8) built as the public React route** (`/` signed-out) + class-interest + newsletter captures. ToS/Privacy/Refund pages. Domain historylab.in wired (Vercel + Supabase auth + OAuth origins). | DevTools cannot read Ch2 without entitlement; landing live on historylab.in capturing emails. |
+| **3** | **Money (test mode)** | `create-order` + `razorpay-webhook` (signature-verified, idempotent) + purchase/success/pending states + refund→revoke flow + account page (chapters, invoices, examiner orders). Full test-mode E2E. | Test-mode rupee → webhook → entitlement → content, zero manual steps; refund revokes. |
+| **4** | **Test engine core** | Server-side `papers`/`questions` + `attempts`/`answers` schema; paper player (server timer, autosave, palette, submit); objective auto-marking; Test Centre + attempts history. **Paper authoring format + admin upload so Neha starts authoring THIS sprint** (her pace is the launch long pole). | A full Ch2 paper is attemptable end-to-end with objective marks; Neha has authored ≥1 paper in the format. |
+| **5** | **Marking** | `mark-answer` Edge Function (Claude vs marking scheme, per-point), results/feedback UI (per-point ✓/✗, marker's notes, model answers, re-check queue), Neha calibration set + adjudication in admin. **Examiner add-on**: ₹149 purchase → `examiner_reviews` queue → Neha's AI-pre-marked review UI → returned paper w/ examiner badge. | AI marks match Neha's marking on the calibration set to agreed tolerance; one examiner review completes the full loop. |
+| **6** | **Hardening → LAUNCH** | Email/password auth; 2-device session limits + new-device alerts; parent weekly email (provider: Resend/Postmark); analytics funnel (privacy-friendly); SEO/OG + landing prerender; live Razorpay keys; real testimonial quotes in. **PUBLIC LAUNCH.** | A stranger can find, sign up, study free Ch1, parent pays ₹199, student sits a marked paper — unassisted. |
+
+**Post-launch immediate:** landing iteration round with Neha's parked feedback · hero-image debt (illustrated story-card headers + try-a-question hook in the app) · bundle SKU per uptake · score cards/gamification (S3).
+
+**External gates (Uday/Neha, parallel):** Teknomatics Razorpay KYC (gates Sprint 3 live keys — start NOW) · GST readiness · domain DNS access (gates Sprint 2) · Neha's paper authoring from Sprint 4 + marking-calibration sessions in Sprint 5 · 2 real student quotes (Sprint 6).
+**Access Claude needs:** Supabase project (CLI access token or Uday runs migrations), Razorpay test keys (Sprint 3), Vercel env vars, email-provider key (Sprint 6).
 
 ---
 
-## 8. Cost (early stage)
-- Supabase free tier covers ~hundreds of students (see PLAN_AUTH cost table); Edge Functions included.
-- Vercel free/hobby fine initially.
-- Razorpay: **per-transaction fee (~2%)** + GST; no fixed monthly.
-- → Near-zero fixed cost until meaningful volume.
+## 10. Decision log
+
+**Closed 2026-07-02 (Uday):**
+1. Invite-only **founding cohort** while Class-10-only; open access once more classes ship. 3 invites/student; admin batches.
+2. **₹499 one-time per chapter**; bundle deferred until uptake data. Lifetime access.
+3. **No teacher role at all** — admin creates accounts / grants chapters from backend for anyone (FOC flexibility).
+4. Anti-sharing = personalised study state + **CBSE-style practice tests with real marking schemes, marks and feedback** (Tier 1 strategy). Light technical friction only.
+5. Signup roles: student/parent; parent always assumed payer (→ DPDPA consent).
+
+**Closed 2026-07-02 (round 2):**
+6. **Merchant of record: Teknomatics** (Uday's other company; Neha the operating owner) — Razorpay onboarding + GST under Teknomatics, NOT Blostem.
+7. **Launch choreography:** no direct selling to students. Admin **comps chapters FOC from the backend** to the pilot cohort; product spreads virally; students ask parents to buy. (This is why admin grant/revoke for any account is a launch requirement.)
+8. **Domain:** `historylab.in` already purchased (by Neha). Vercel/Supabase/OAuth wiring per HANDOFF.
+9. **Execution gate: mockups first.** Page-by-page HTML mockups of the entire new front end (landing, waitlist, invite flow, payment flow, admin panel) in the exact C2 design language, visually validated by Uday **before** actual development. Mockups live in `mockups/launch-*.html`.
+
+**Closed 2026-07-02 (round 3):**
+10. **Launch scope: public launch happens only WITH the CBSE test engine.** S1 (payments/paywall) is built and verified in test mode but does NOT go public on its own. Sprint sequence unchanged (S0 → S1 → test engine → **launch** → trust/ops). The test engine is the launch differentiator, not a fast-follow.
+11. **Mockup gate extended to ALL sprints:** every screen through Sprint 6 (test centre, paper player, AI-marked results, parent weekly email, email/password auth, devices/session limits) must be mocked and validated by Uday before development starts. Mockups: `mockups/launch-00..10`.
+
+**Closed 2026-07-07 (round 4 — Neha's review; SUPERSEDES rounds 1–3 where they conflict):**
+12. **OPEN ACCESS — invite-only is dead.** No gate, no waitlist, no invite codes at all. Rationale: all-India CBSE TAM (~2M+ Class 10/yr) over metro exclusivity; obscurity is already the gate at launch; the test engine's flywheels (percentiles, score sharing) need an open door. Accepted trade-off: this is a one-way door (can't gracefully re-gate).
+13. **₹199 launch/early price, ₹499 list** (struck through). Neha's scale argument accepted: elasticity across mass CBSE ≫ the 2.5× buyers needed to match ₹499 revenue; the moat is the cohort, not the margin.
+14. **Test engine is paid-only** — no practice tests in the free tier. Free Ch1 = learning modes. Landing shows a static sample marked answer (zero marking cost).
+15. **Two-tier marking:** AI marking included with the chapter; **human "CBSE Examiner" marking = paid add-on per paper** (Uday's concept). Neha marks from the AI pre-marking in an admin queue; 48–72h SLA.
+16. Product-review fixes #1 (guardian email at signup) and #2 (ask-your-parent handoff) are launch requirements.
+
+**Closed 2026-07-11 (round 5 — Neha's positioning review):**
+17. **Brand positions at the SUBJECT level, offer at the class level.** historylab.in = "the home of school History" (all levels, Neha's vision); the concrete offer stays "Live now: CBSE Class 10." No class number in the hero H1. Landing gets a **classes roadmap section** (Class 10 live → Class 9 next → Classes 6–8 coming) with per-class **"notify me" email capture** (`class_interest` table — demand list, not a gate).
+18. **Expansion is level-first, not subject-first:** next catalogue steps after Ch3–5 are other classes' History (9, then 6–8) — supersedes BIGGER_PICTURE Phase E's subject expansion while the brand is historylab.in. Multi-subject remains a someday-option under a different brand.
+19. Inner-page mockups approved "for now" by Neha; her final validation happens on the real built pages (Vercel preview during S1/S2).
+
+**Closed 2026-07-11 (round 6 — landing/positioning, Uday + Neha):**
+20. **The human examiner is THE differentiator and is positioned prominently page-wide** (hero credential, dedicated band, third pricing card) — reversing the earlier "demote to a strip" call. Framing: one marking story, two speeds — instant marking *calibrated by* the examiner; personal review *by* the examiner (₹149/paper).
+21. **Anonymity:** Neha is not named/shown anywhere (she is a serving head history teacher). Public identity = **"Senior CBSE Examiner, 20 years' experience, onboarded by the portal."**
+22. **No public capacity/slot messaging** — no counters, no "sold out" states. Internal queue management; pivot if volumes grow.
+23. Landing layout = **v5/v6 band grammar** (Uday: "layout looks better"). Header/theme temperature clash flagged → v6 ships three header variants (white / all-warm / adaptive) for Uday+Neha to pick.
+
+**Closed 2026-07-12 (round 7 — FREEZE, Uday):**
+24. **Mockup gate CLOSED.** Landing = **v8 as-is** (white header; illustrated problem trio; ChatGPT iPad hero; examiner band; roadmap; 3-card pricing). All inner-page mockups (launch-01..10) frozen as the build reference. **Neha has further landing feedback — parked deliberately; the landing iterates again post-build** (it's a React page then; copy/layout changes are cheap). Theme variants (warm/adaptive) also parked.
+25. **Development starts.** Sprint plan v2 in §9.1 below is the execution order.
+
+**Round 8 (2026-07-12, mid-Sprint-2 — Neha via Uday):**
+26. **Free tier shrinks to Ch1 Section 1 only** (Neha: a full free chapter + tools is a complete free meal; students consume and never hit a paywall). Implemented as an **in-chapter preview**: unentitled users get S1 in full (narrative + S1-scoped study tools) and see S2–S6 locked inside the chapter — a stronger conversion surface than a locked shelf card. Ch1 becomes a ₹199/₹499 product (`products.preview_section='s1'` drives it; `get-chapter` trims server-side, so nothing paid ever reaches the client). **NO grandfathering** of pilot accounts (Uday: clean conversion data). Landing copy must say "first section free", not "Chapter 1 free".
+
+**Round 9 (2026-07-19, Sprint-4 review — Neha live on the dev build, Uday relaying):**
+27. **Profile roles = Student + Teacher only; Parent role DROPPED.** Parents act through their kid's account (payment included). Teachers self-identify (no privileges attached — admins stay server-side). Guardian email still required for students (DPDPA anchor); a teacher's contact email is their own sign-in email. **Class/section capture DROPPED** (column kept, form no longer asks).
+28. **Purchase sheet simplified.** WhatsApp/email "ask your parent" handoff REMOVED (supersedes the launch-03 mockup's handoff button and Sprint-1 product-review fix #2); refund/GST fine-print line REMOVED from the sheet ("Secure payment via Razorpay" only — the refund policy lives on /refunds, which Razorpay requires).
+29. **Chapter progress = topics + section quiz, everywhere.** The ring and section bars count every topic (narrative completed) + the section quiz as one unit each — the old quiz-only metric showed 0% after finishing all the reading. Preview mode keeps the true whole-chapter denominator via `topicCount` on trimmed sections.
+30. **The `launch-0x` mockups ARE the post-signin UI spec.** Sprint 1–4 screens were built off the functional specs only; the alignment pass is now policy: launch-06/07/08 (Test Centre / player / results) DONE 2026-07-19 incl. authorable `HINT:` board-technique tips; **pending: launch-03 screen D (payment-pending/webhook-delay state) and the signup/purchase restyle** — apply decisions #27/#28 ON TOP of the mockup structure (mockups show Parent role + handoff; decisions win). Where any mockup conflicts with a locked decision, the decision wins, noted explicitly.
+
+31. **AI marking ON HOLD — Neha is revisiting whether written answers should be AI-checked at all** (2026-07-19). Her instinct: since the domain is narrow (one subject, per-question marking schemes), explore **RAG + a local/small model** rather than defaulting to a hosted LLM — to be explored LATER with real sample papers; no architecture decided. Until her call, results stay at scheme-self-check; nothing in the schema blocks either choice (the scheme points are the retrieval context in any design). **Milestone plan (2026-07-19): A = complete student journey (Ch1 paper + sectional Ch2 paper + empty-state sweep) NOW → Neha's single full E2E review → B (marking, architecture per her call; examiner ₹149 rides with it) → C (launch hardening).**
+
+32. **SELF-MARKING REJECTED (Neha, 2026-07-19).** Students must never award their own marks — "sometimes more than the marks, the assessment by a teacher or a system is itself the reward." The verdict-received moment is the product's emotional core. Consequences: results stay at honest scheme-display until a marking engine exists; marking tiers (system + ₹149 examiner) are the heart of Milestone B; no self-assessment UI anywhere.
+33. **Portal UX revamp — mockups first (Neha, 2026-07-20).** UX analysis accepted for deliberation: elevate the Test Centre out of the tools drawer (chapter home = numbered loop: 1 Learn · 2 Test yourself band · 3 Revise tools), merge "Exam Prep"+"Test Centre" into one Practice & Mock Tests destination (Mock Tests default tab), paper-start instructions screen (attempt created only on Start), results = one full-total ring with honest interim copy + revise deep-links, "MCQ marks" wording (never "objective"). **Mockups: `mockups/revamp-01..04-*.html` — Neha reviews these BEFORE any build.**
+
+34. **CHAPTER HOME LOCKED (Uday, 2026-07-20) = mockups `revamp-01` v4 (paid) + `revamp-01b` (preview).** Structure: breadcrumb → slim hero (title + welcome + stars chip + 84px ring labelled "% chapter done" in-ring) → numbered bands **1 Learn the story** (2-col section cards; status pill ✓Done/Continue/Not-started/🔒Unlock; **progress bar ONLY on in-progress sections**) → **2 Test yourself** (paid: dark-lavender band, stat line "Best X/Y MCQ · attempts · papers", ONE giant Start CTA that IS the recommendation, "All papers →" link · preview: warm **Unlock band** with includes grid + price box instead) → **3 Revise with tools** (paid: 4 identity-coloured mini-cards with content payloads · preview: greyed 🔒 tiles → purchase sheet). Rules locked with it: **each fact appears once; one progress system per zoom; test facts live only in the Test band; "MCQ marks" never "objective"; Exam Prep + Test Centre tiles gone from home** (merged destination = revamp-02, next deliberation).
+
+35. **Page-by-page deliberation is the standing review process (Neha, 2026-07-20).** For EVERY page: mockup → deliberate (render-verified rounds) → lock as a numbered decision → rebuild the live page → next page. **Queue after the locked home: (a) revamp-02 Practice & Mock Tests (also restores Exam Prep's home entry), (b) revamp-03 paper start, (c) revamp-04 results, then (d) "the exam" — the paper-player experience itself.** Only after the full journey is locked does the Milestone-B/#31 marking discussion reopen.
+
+36. **DESIGN LANGUAGE V2 "Workspace" track opened (2026-07-26)** — Neha wants a fresh design language for the whole app interior (landing keeps v8). Canonical spec: `DESIGN_LANGUAGE_V2.md` (shell anatomy, sidebar, tokens, laws, iteration log §6). Supersedes the VISUAL half of #34; structural laws carry. Mockups: `mockups/nl-01-section-page.html` (v4, dark hero) + `nl-02-chapter-home.html` (v5 — merge of Neha's external-AI iteration: grouped sidebar, profile block, resume band, journey stepper, light chip hero). **LOOP-EXIT RULE (Uday, 2026-07-26 — "we are stuck in a loop"): the external-AI iteration loop is CAPPED. One final Neha verdict on v5 answering exactly three questions — (a) hero: light-chips vs dark-cinematic, (b) sequential section locking: yes/no (recommendation: no locks, highlight recommended-next), (c) gamification (XP/badges/goals): launch or post-launch roadmap — then the language LOCKS as-is and Phase 2 BUILDS (shell + port section page & chapter home, then propagate). No further mockup rounds after the lock; polish lands as code tweaks.**
+
+37. **Sitemap locked: three altitudes + topic routes (Uday, 2026-07-26).** (1) **Shelf** = All Chapters library, OUTSIDE the shell (no sidebar; keeps current BookHome role; restyled in V2 language during Phase 2; returning users land in their last-open chapter workspace, shelf is one click up). (2) **Workspace** = chapter-scoped V2 shell (sidebar + pane + rail); pane depth never exceeds list→detail; section page is a child of Overview (crumb `Overview / Section N`, max two segments — chapter name lives in the sidebar only). (3) **Immersion** = full-screen, shell hidden, own minimal top bar + one exit: topic reader, section quiz, paper player. **Topics get URLs** — `/chapter/:cid/section/:sid/topic/:tid` (today `activeSubsection` is component state in SectionModule; no deep links, broken back button; the resume band requires this). Guardrails: one destination one URL regardless of entry point; immersion never links sideways; browser back always = up one altitude. Flow proven in `mockups/nl-03-flow.html` (working hash-router demo: Overview → Section 2 → Topic 3 reader, single topic wired).
+
+38. **DESIGN LANGUAGE V2 LOCKED (Neha + Uday, 2026-07-26) — Phase 2 build begins.** Neha approved the altitude navigation and content flow on nl-03 v2 (card-by-card reader kept from live NarrativeMode; Practice & Explore — quiz row + inline timeline + inline map — embedded in the section sheet; rail deduped). Her remaining design notes are MINOR and deferred to page-by-page polish AFTER the build (her call — closing the loop). **The #36 questions are resolved as rendered:** (a) hero = LIGHT chips on chapter home, DARK cinematic on section pages; (b) NO sequential locking; (c) gamification = post-launch roadmap. **Final mockups archived in `mockups/finalmockup/`** (nl-03-flow.html + landing-v8.html + README with the lock terms). Chapter home, section page, topic reader: CLOSED. Next: scaffold shell components + tokens, topic routes (#37), port the three locked pages, then propagate to quiz/Test Centre/player/results, landing seam last.
+
+**⚠️ OPEN — Neha reviews only COMPLETE experiences** (she doesn't think in sprints — things are "incomplete" unless fully done). Do NOT treat the test-engine UX as settled until the page-by-page queue (#35) completes. Her paper-authoring verdict (PAPER_AUTHORING_GUIDE.md format) is part of the same review. Sprint 5 must not start build on marking UX before decision #31 resolves.
+
+**Still open / assumptions to confirm:**
+- **Examiner-marking add-on (₹149/paper): NOT YET PURCHASABLE — deliberately Sprint 5, not missed.** Schema (`examiner_reviews`) + product row exist since Sprint 1; Sprint 5 builds the results-page "Send to examiner" card (launch-08), the purchase flow (same create-order/webhook path), and Neha's admin queue seeded with the AI pre-marking. Price still to confirm.
+- Examiner-marking add-on price (mocked ₹149/paper).
+- **Hero-image debt (Uday's call, 2026-07-12):** landing v8 hero uses the ChatGPT-generated iPad image showing an *aspirational* story-card UI (illustrated header, "Try a question" hook, story-progress bar) that the app does not have yet. Treat that image as a **design brief**: the narrative view should gain illustrated section-header images + an inline "try a question" hook so the product matches its own landing page (candidate for Sprint 2 polish or S3).
+- Parent weekly progress email: scoped to S2 post-launch (assumed).
+- ₹199 flat for all chapters (vs varying by chapter size).
+- When/whether shareable score cards ship (S3 assumed).
 
 ---
 
-## 9. Open decisions (for Uday)
-1. **Account model:** parent-pays/student-uses (recommended for DPDPA) vs student self-signup?
-2. **Plus vs Pro at launch:** ship one plan first (simpler) or both?
-3. **Billing default:** annual-only at launch (aligns to academic year, lower churn) or annual+monthly?
-4. **Free boundary:** Ch1 only (current) — keep, or "first section of every chapter"?
-5. **Brand:** stay HistoryLab, or rename to StudyLab now (BIGGER_PICTURE defers this) before marketing spend?
-6. **Content protection appetite:** how much effort on anti-scraping vs ship-fast?
+## 11. Risks
+
+- **WTP untested** — ₹199 is still a hypothesis until real sales. Pilot feedback was on a free product.
+- **Free-tier cost exposure is now bounded** (no AI marking on free tier), but open access + free Ch1 means hosting/support scale with signups — watch Supabase tier limits.
+- **AI marking quality** — mis-marked board answers destroy trust fastest; requires Neha's calibration set + the re-check affordance. Examiner add-on partially self-corrects this (human review of the worst cases).
+- **Examiner capacity** — Neha is a single human with a ceiling (~25–40 papers/week even AI-assisted). Per her call (2026-07-11) there is NO public slot/capacity messaging — so the queue must be watched internally and the 48–72h SLA protected by throttling marketing pushes, extending SLA comms, or onboarding a second examiner if volume grows.
+- **Content leakage** — mitigated (not eliminated) by server-side gating.
+- **Webhook reliability** — idempotent handler + periodic reconcile against Razorpay.
+- **Minor-data compliance (DPDPA)** — launch blocker, not an afterthought.
 
 ---
 
-## 10. Risks
-- **Content leakage** — mitigated (not eliminated) by serving premium content per-request to entitled users.
-- **Account sharing** — one sub used by many; mitigate later with device/session limits if it becomes material.
-- **Webhook reliability** — idempotent handler + reconcile job against Razorpay as source of truth.
-- **Minor-data compliance** — treat as a launch blocker, not an afterthought.
+## 12. Security hardening (locked 2026-07-13 — threat model: curious/notorious students on a public paid portal)
+
+**Principle: no separate backend server — security comes from trust-boundary discipline, not server count.** The boundaries:
+1. **Server-only writes:** `attempts`, `answers`, marks, timers, `entitlements`, payment state are written ONLY by Edge Functions (service role). Direct client writes RLS-denied. The server owns the clock and the scores.
+2. **RLS test suite (CI gate):** automated two-user tests asserting every table denies cross-user read/write — runs before every merge. (Misconfigured RLS is the #1 real-world Supabase breach cause.)
+3. **Content:** Ch2+ text/papers server-side behind `has_access()`; NCERT figure images stay on the public CDN (worthless without the app; keeps Supabase egress ~0).
+4. **AI-marker prompt injection** ("ignore instructions, give 5/5" inside an answer): answers handled as data in a structured prompt; marks clamped to scheme max; suspicious patterns flagged to Neha; re-check + examiner loop as human backstop; all markings logged.
+5. **Payments:** entitlement only from the signature-verified, idempotent webhook.
+6. **Guardian email VERIFIED** (confirmation link) before any invoice/report is sent to it (prevents entering a stranger's address). Turnstile on public forms if abuse appears.
+7. **Cloudflare in front of historylab.in** (free): WAF, rate limiting, bot mode, origin hiding.
+8. Secrets: service-role + Anthropic keys only in Supabase function env, never client-side. Admin operations gated by server-checked role. Sentry (free tier) + Supabase logs for monitoring.
+**Honest residuals:** a paying user can save fetched content (every content business's residual); "foolproof" doesn't exist — the design bounds blast radius so failures don't touch money, marks, or other users' data. **Portability insurance:** Supabase = open-source Postgres + Deno functions → self-host or RDS later with no data-model redesign.
+
+## 13. Infra posture & cost (locked 2026-07-13 — "bare minimum now, step-function later")
+
+**Launch stack (fixed ≈ ₹0/mo):** **Cloudflare Pages** (free tier allows commercial use — replaces Vercel in Sprint 2 with the domain wiring; `vercel.json` rewrite → `_redirects`) + **Supabase Free** + **nightly `pg_dump` via GitHub Actions → Cloudflare R2** (free 10GB; monthly test-restore ritual) + Cloudflare free WAF/DNS + Resend free tier. Variable costs only when someone pays: Claude marking ~₹3–8/paper (paid tier only), Razorpay ~2%/txn.
+**Upgrade triggers (not dates):** Supabase Pro (~₹2,100/mo) when ANY of: ~25 paid chapters/mo · DB ≥ 400MB · examiner queue is daily ops. Then compute add-ons as needed.
+**EC2/self-hosted DB now: REJECTED** — costs more than Supabase Pro, adds OS/SSH/DB attack surface (§12), rebuilds Auth by hand, single-box failure coupling. **Self-hosting is the end-game, not the start** — available later (open-source Supabase / RDS) when lakhs of MAU fund an ops function.
+**Accepted Free-tier trade-offs:** manual restore (mitigated by tested backups) + no SLA; both expire at the Traction trigger.
 
 ---
 
 ### TL;DR
-The **product strategy already exists** (BIGGER_PICTURE) and the **auth/backend foundation is partly built** (Supabase auth done; progress-sync planned). To actually launch paid you need, in order: **(S0)** finish server-side user-data sync, **(S1)** add Razorpay subscriptions + a **server-enforced paywall that moves premium content out of the bundle** + account/billing + legal pages, **(S2)** compliance (DPDPA/GST) + email auth + analytics. The paywall-enforcement piece is the non-obvious, must-do core.
+Open-access CBSE prep portal for all of India. Free Ch1 learning modes for everyone; **₹199 launch price (₹499 list) one-time per chapter** unlocks content + the board-pattern test engine with **AI marking included**; **human CBSE-Examiner marking is a paid add-on per paper** (Neha, AI-assisted, 48–72h). No subscriptions, no invite gate. Entitlements written only by the payment webhook or admin panel; premium content + papers live server-side behind `has_access`. Sequence: S0 progress-sync → S1 payments/paywall (private) → S2 test engine → **public launch** → parent reports/auth/limits → S3 catalogue/bundles/score cards.

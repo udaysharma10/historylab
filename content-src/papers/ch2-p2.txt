@@ -1,0 +1,89 @@
+PAPER: ch2-p2
+CHAPTER: ch2
+TITLE: S1 · First World War, Khilafat & Non-Cooperation — Sectional
+DESCRIPTION: Quick sectional practice on Section 1 — half the time, board-style questions
+DURATION: 30
+POSITION: 2
+
+SECTION A
+
+Q. [1] Gandhiji's satyagraha at Champaran in Bihar (1917) was organised to:
+a) support cotton mill workers over wages
+b) inspire peasants to struggle against the oppressive indigo plantation system *
+c) demand relaxation of revenue collection
+d) protest against the Rowlatt Act
+
+Q. [1] The satyagraha organised in Ahmedabad in 1918 supported:
+a) indigo cultivators
+b) peasants hit by crop failure
+c) cotton mill workers *
+d) plantation workers of Assam
+
+Q. [1] The Khilafat Committee was formed in Bombay in March 1919 by:
+a) Mahatma Gandhi and Jawaharlal Nehru
+b) the brothers Muhammad Ali and Shaukat Ali *
+c) Baba Ramchandra and Alluri Sitaram Raju
+d) Motilal Nehru and C.R. Das
+
+Q. [1] The Non-Cooperation programme was adopted at the Congress session of September 1920 held at:
+a) Nagpur
+b) Lahore
+c) Calcutta *
+d) Madras
+
+Q. [1] In which book (1909) did Gandhiji declare that British rule was established in India with the cooperation of Indians, and survived only because of this cooperation?
+a) My Experiments with Truth
+b) Hind Swaraj *
+c) Discovery of India
+d) Poverty and Un-British Rule in India
+
+SECTION B
+
+Q. [2] What is meant by the idea of satyagraha?
+HINT: Define the idea AND how it works on the oppressor — two distinct points.
+SCHEME:
+- Satyagraha emphasised the power of truth and the need to search for truth; it suggested that if the cause was true and the struggle against injustice, physical force was not necessary to fight the oppressor (1)
+- Without being aggressive, a satyagrahi could win the battle through non-violence — by appealing to the conscience of the oppressor, who had to be persuaded to see the truth (1)
+MODEL:
+The idea of satyagraha emphasised the power of truth and the need to search for truth. It suggested that if the cause was true and the struggle was against injustice, there was no need for physical force to fight the oppressor. Without seeking vengeance or being aggressive, a satyagrahi could win the battle through non-violence: by appealing to the conscience of the oppressor, people — including the oppressor — had to be persuaded to see the truth. Gandhiji believed this dharma of non-violence could unite all Indians.
+
+Q. [2] State any two economic effects of the First World War on India.
+SCHEME:
+- Any correct effect, e.g. defence expenditure was financed by war loans and increased taxes — customs duties were raised and income tax introduced (1)
+- A second correct effect, e.g. prices doubled between 1913 and 1918 causing extreme hardship / crops failed in 1918-19 and 1920-21 leading to shortages, with 12-13 million dying in the famines and influenza epidemic (1)
+MODEL:
+The First World War created a new economic situation in India. The huge rise in defence expenditure was financed by war loans and by increasing taxes: customs duties were raised and income tax was introduced. At the same time, prices increased sharply — doubling between 1913 and 1918 — which caused extreme hardship for the common people. Villages also suffered forced recruitment, and the failure of harvests in 1918-19 and 1920-21, together with the influenza epidemic, resulted in the death of 12 to 13 million people.
+
+Q. [2] Why did Gandhiji take up the Khilafat issue?
+SCHEME:
+- A harsh peace treaty was expected to be imposed on the Ottoman emperor, the spiritual head (Khalifa) of the Islamic world, angering Indian Muslims (1)
+- Gandhiji saw in the Khilafat issue an opportunity to bring Hindus and Muslims together under the umbrella of a unified national movement (1)
+MODEL:
+After the First World War, it was rumoured that a harsh peace treaty would be imposed on the Ottoman emperor of Turkey — the spiritual head of the Islamic world, the Khalifa. To defend the Khalifa's temporal powers, a Khilafat Committee was formed in Bombay in March 1919. Gandhiji felt that no national movement could be built without bringing Hindus and Muslims closer together, and he saw the Khilafat issue as an opportunity to unite the two communities under the umbrella of a single national movement. At the Calcutta session of 1920, he convinced other leaders to start a Non-Cooperation Movement in support of Khilafat as well as swaraj.
+
+SECTION C
+
+Q. [3] What happened at Jallianwala Bagh on 13 April 1919? What was its impact?
+HINT: 3 marks — the event, Dyer's intention, and the reaction that followed.
+SCHEME:
+- On Baisakhi day, a large crowd — many unaware that martial law had been imposed — gathered in the enclosed ground of Jallianwala Bagh in Amritsar; General Dyer blocked the exit points and ordered his troops to fire, killing hundreds (1)
+- Dyer's declared object was to produce a 'moral effect' — to create terror and awe in the minds of satyagrahis (1)
+- As the news spread, crowds took to the streets in north India: there were strikes, clashes with the police and attacks on government buildings; seeing violence spread, Gandhiji called off the Rowlatt Satyagraha (1)
+MODEL:
+On 13 April 1919, the infamous Jallianwala Bagh incident took place in Amritsar. A large crowd had gathered in the enclosed ground of Jallianwala Bagh — some to protest against the government's repressive measures, others to attend the annual Baisakhi fair. Many were unaware that martial law had been imposed in the city. General Dyer entered the area, blocked the exit points, and ordered his troops to open fire on the crowd, killing hundreds. His declared object, as he stated later, was to produce a 'moral effect' — to create in the minds of satyagrahis a feeling of terror and awe. As the news spread, crowds took to the streets in many north Indian towns; there were strikes, clashes with the police and attacks on government buildings. Seeing violence spread, Gandhiji called off the Rowlatt Satyagraha.
+
+Q. [3] Describe the programme of the Non-Cooperation Movement as proposed by Gandhiji.
+SCHEME:
+- The movement was to unfold in stages, beginning with the surrender of titles awarded by the government (1)
+- Boycott of civil services, army, police, courts, legislative councils, schools and foreign goods (1)
+- If the government used repression, a full civil disobedience campaign would be launched (1)
+MODEL:
+In his book Hind Swaraj, Gandhiji had declared that British rule was established in India with the cooperation of Indians and survived only because of this cooperation — if Indians refused to cooperate, British rule would collapse within a year. He proposed that the Non-Cooperation Movement unfold in stages. It should begin with the surrender of titles that the government had awarded. This would be followed by a boycott of the civil services, army, police, courts, legislative councils, schools, and of foreign goods. Then, in case the government used repression, a full civil disobedience campaign would be launched.
+
+Q. [3] Why was the Rowlatt Act (1919) opposed by Indians? How did Gandhiji propose to protest against it?
+SCHEME:
+- The Act had been hurriedly passed through the Imperial Legislative Council despite the united opposition of the Indian members (1)
+- It gave the government enormous powers to repress political activities and allowed detention of political prisoners without trial for two years (1)
+- Gandhiji launched a nationwide satyagraha against it — starting with a hartal on 6 April 1919, with rallies, strikes in railway workshops, and shops closing down (1)
+MODEL:
+The Rowlatt Act was opposed because it had been hurriedly passed through the Imperial Legislative Council despite the united opposition of the Indian members. It gave the government enormous powers to repress political activities, and allowed the detention of political prisoners without trial for two years. Gandhiji, who wanted a nationwide satyagraha against such unjust laws, proposed that it begin with a hartal on 6 April 1919. Rallies were organised in various cities, workers went on strike in railway workshops, and shops closed down in protest.

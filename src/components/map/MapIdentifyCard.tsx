@@ -1,12 +1,13 @@
 import { useState, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { MapIdentifyActivity } from '../../types/activity'
-import { getMapById } from '../../data/maps'
+import { getMapById } from '../../data/getChapter'
 import { InteractiveMap } from './InteractiveMap'
 import { HintButton } from '../common/HintButton'
 import { useSound } from '../../hooks/useSound'
 
 interface MapIdentifyCardProps {
+  chapterId: string
   activity: MapIdentifyActivity
   sectionColor: string
   questionNumber: number
@@ -14,14 +15,14 @@ interface MapIdentifyCardProps {
   onAnswer: (correct: boolean, hintsUsed: number) => void
 }
 
-export function MapIdentifyCard({ activity, sectionColor, questionNumber, totalQuestions, onAnswer }: MapIdentifyCardProps) {
+export function MapIdentifyCard({ chapterId, activity, sectionColor, questionNumber, totalQuestions, onAnswer }: MapIdentifyCardProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
   const [checked, setChecked] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [hintsUsed, setHintsUsed] = useState(0)
   const { playCorrect, playWrong } = useSound()
 
-  const mapDef = useMemo(() => getMapById(activity.mapId), [activity.mapId])
+  const mapDef = useMemo(() => getMapById(chapterId, activity.mapId), [chapterId, activity.mapId])
 
   const highlightedRegions = useMemo(() => {
     const map = new Map<string, 'correct' | 'wrong' | 'selected' | 'label'>()

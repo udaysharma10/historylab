@@ -7,7 +7,6 @@ import { calculateStars } from '../engine/quizEngine'
 import { calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
-import type { SectionId } from '../types/progress'
 import type { MCQActivity, FillBlankActivity, TrueFalseActivity, MatchActivity } from '../types/activity'
 
 type ActivityType = 'mcq' | 'fill-blank' | 'true-false' | 'match-following'
@@ -96,7 +95,7 @@ export function QuizMode() {
       // Quiz complete — save progress
       const mistakes = newResults.filter(r => r === 'wrong').length
       const stars = calculateStars(mistakes, hintsUsed)
-      completeProblem(sectionId as SectionId, stars)
+      completeProblem(cid, sectionId ?? 's1', stars)
       const correctCount = newResults.filter(r => r === 'correct').length
       logActivity({
         mode: 'quiz',
@@ -111,14 +110,13 @@ export function QuizMode() {
       })
       setTimeout(() => setPhase('results'), 300)
     }
-  }, [questionResults, currentIndex, activities.length, completeProblem, sectionId, activityType])
+  }, [questionResults, currentIndex, activities.length, completeProblem, sectionId, activityType, cid])
 
   const handleRetry = () => {
     if (activityType) handleSelectType(activityType)
   }
 
   const cidSafe = chapterId || 'ch1'
-  const chapterNumber = cidSafe === 'ch2' ? 2 : 1
   const handleBackToSection = () => {
     navigate(`/chapter/${cidSafe}/section/${sectionId}`)
   }
@@ -135,7 +133,7 @@ export function QuizMode() {
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/')}
           >
-            Back to Home
+            All Chapters
           </motion.button>
         </div>
       </div>
@@ -145,30 +143,25 @@ export function QuizMode() {
   // === PICK TYPE PHASE ===
   if (phase === 'pick-type') {
     return (
-      <div className="max-w-lg mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <nav className="flex items-center flex-wrap gap-x-1.5 gap-y-1 text-[12.5px] font-semibold text-hist-muted mb-3 px-0.5">
-            <button className="hover:text-hist-navy transition-colors" onClick={() => navigate('/')}>All Chapters</button>
-            <span aria-hidden>·</span>
-            <button className="hover:text-hist-navy transition-colors" onClick={() => navigate(`/chapter/${cidSafe}`)}>Chapter {chapterNumber}</button>
-            <span aria-hidden>·</span>
-            <button className="hover:text-hist-navy transition-colors truncate max-w-[40%]" onClick={handleBackToSection}>{section.title}</button>
-            <span aria-hidden>·</span>
-            <span className="text-hist-navy">Quiz</span>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: color }}>
-              <span className="text-white text-lg">🧠</span>
-            </div>
-            <div>
-              <h1 className="font-display text-xl font-bold text-hist-dark">Practice Quiz</h1>
-              <p className="font-body text-sm text-gray-400">Section {section.number}: {section.title}</p>
-            </div>
+      <div className="min-h-dvh">
+        {/* ── Immersion top bar (same grammar as the topic reader): one exit ── */}
+        <div className="sticky top-0 z-10 flex items-center gap-3.5 px-4 md:px-6 py-3 border-b border-v2-line backdrop-blur-md bg-[rgba(255,253,250,.94)]">
+          <button
+            className="w-[38px] h-[38px] rounded-[11px] border border-v2-line bg-white text-v2-ink grid place-items-center shrink-0"
+            aria-label={`Back to Section ${section.number}`}
+            onClick={handleBackToSection}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <div className="min-w-0">
+            <b className="block text-[13.5px] font-extrabold text-v2-ink truncate">Section Quiz</b>
+            <span className="block text-[11px] font-bold text-v2-muted truncate">
+              Section {section.number} · {section.title}
+            </span>
           </div>
         </div>
 
+        <div className="max-w-lg mx-auto px-4 pt-6 pb-8">
         {/* Activity type cards */}
         <div className="grid grid-cols-2 gap-3">
           {TYPE_CONFIG.map((cfg, i) => {
@@ -208,6 +201,7 @@ export function QuizMode() {
         >
           {Object.values(counts).reduce((a, b) => a + b, 0)} total quiz questions for this section
         </motion.p>
+        </div>
       </div>
     )
   }
@@ -217,7 +211,7 @@ export function QuizMode() {
     const currentActivity = activities[currentIndex]
 
     return (
-      <div className="max-w-lg mx-auto">
+      <div className="max-w-lg mx-auto px-4 pt-5 pb-8">
         {/* Back button */}
         <motion.button
           className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"

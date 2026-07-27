@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FlashcardSingle } from '../components/flashcard'
 import { getFlashcards, getChapter, CHAPTER_SECTION_COLORS } from '../data/getChapter'
@@ -20,7 +20,6 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function FlashcardMode() {
-  const navigate = useNavigate()
   const { chapterId } = useParams<{ chapterId: string }>()
   const cid = chapterId || 'ch1'
   const flashcards = useMemo(() => getFlashcards(cid), [cid])
@@ -35,6 +34,8 @@ export function FlashcardMode() {
 
   const [phase, setPhase] = useState<FlashcardPhase>('home')
   const [sectionFilter, setSectionFilter] = useState<string | null>(null)
+  const [searchParams] = useSearchParams()
+  const autoStarted = useRef(false)
   const [practiceCards, setPracticeCards] = useState(flashcards)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [practiceMode, setPracticeMode] = useState<'all' | 'due' | 'section'>('all')
@@ -97,6 +98,22 @@ export function FlashcardMode() {
     setSessionCorrect(0)
     setPhase('practice')
   }, [dueCards])
+
+  // Section-page rail deep link: /flashcards?section=s3 opens straight into
+  // that section's practice (Uday 2026-07-27). Runs once per mount; deferred
+  // a tick so the effect doesn't set state synchronously.
+  useEffect(() => {
+    if (autoStarted.current) return
+    const sec = searchParams.get('section')
+    if (!sec || !flashcards.some((c) => c.sectionId === sec)) return
+    // Flag is set when the timer FIRES (not when scheduled) so StrictMode's
+    // discarded first effect run doesn't burn the one-shot.
+    const t = setTimeout(() => {
+      autoStarted.current = true
+      handleStartPractice('section', sec)
+    }, 0)
+    return () => clearTimeout(t)
+  }, [searchParams, flashcards, handleStartPractice])
 
   const handleRate = useCallback((quality: number) => {
     const card = practiceCards[currentIndex]
@@ -368,26 +385,10 @@ export function FlashcardMode() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <motion.button
-          className="text-gray-400 font-body text-sm mb-3 flex items-center gap-1 hover:text-hist-dark"
-          onClick={() => navigate('/')}
-          whileHover={{ x: -3 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Back to Home
-        </motion.button>
-
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-hist-purple">
-            <span className="text-white text-2xl">🃏</span>
-          </div>
-          <div>
-            <h1 className="font-display text-2xl font-bold text-hist-dark">Flashcards</h1>
-            <p className="font-body text-sm text-gray-400">
-              {flashcards.length} cards with spaced repetition
-            </p>
-          </div>
-        </div>
+        <h1 className="font-display text-2xl font-bold text-hist-dark">Flashcards</h1>
+        <p className="font-body text-sm text-gray-400">
+          {flashcards.length} cards with spaced repetition
+        </p>
       </motion.div>
 
       {/* Quick stats bar */}

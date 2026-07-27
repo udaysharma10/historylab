@@ -1,11 +1,12 @@
 import { useState, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { MapLabelActivity } from '../../types/activity'
-import { getMapById } from '../../data/maps'
+import { getMapById } from '../../data/getChapter'
 import { InteractiveMap } from './InteractiveMap'
 import { useSound } from '../../hooks/useSound'
 
 interface MapLabelCardProps {
+  chapterId: string
   activity: MapLabelActivity
   sectionColor: string
   questionNumber: number
@@ -13,7 +14,7 @@ interface MapLabelCardProps {
   onAnswer: (correct: boolean, hintsUsed: number) => void
 }
 
-export function MapLabelCard({ activity, sectionColor, questionNumber, totalQuestions, onAnswer }: MapLabelCardProps) {
+export function MapLabelCard({ chapterId, activity, sectionColor, questionNumber, totalQuestions, onAnswer }: MapLabelCardProps) {
   // Currently selected label from the pool (waiting to be placed)
   const [activeLabelId, setActiveLabelId] = useState<string | null>(null)
   // Mapping: labelId → regionId (user's placements)
@@ -22,7 +23,7 @@ export function MapLabelCard({ activity, sectionColor, questionNumber, totalQues
   const [correctCount, setCorrectCount] = useState(0)
   const { playCorrect, playWrong } = useSound()
 
-  const mapDef = useMemo(() => getMapById(activity.mapId), [activity.mapId])
+  const mapDef = useMemo(() => getMapById(chapterId, activity.mapId), [chapterId, activity.mapId])
 
   // Which regions have been assigned (regionId → labelId)
   // Unplaced labels

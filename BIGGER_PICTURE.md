@@ -56,7 +56,9 @@ Platform (StudyLab)
 
 ## Monetization Strategy
 
-### Freemium + Annual Subscription
+> **⚠️ SUPERSEDED (2026-07-02).** After the Heritage Xperiential pilot feedback, the freemium/subscription model below was replaced with a **premium, invite-only founding cohort: ₹499 one-time per chapter, no subscriptions, no teacher tier (admin-granted comps instead), CBSE practice-test engine as the personalisation moat.** Canonical version: `PLAN_SUBSCRIPTION_LAUNCH.md` §0 + §10. The original is kept below for history only.
+
+### Freemium + Annual Subscription (superseded — see note above)
 
 | Tier | Access | Price |
 |------|--------|-------|

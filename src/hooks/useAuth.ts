@@ -10,6 +10,8 @@ export interface Profile {
   role: 'student' | 'teacher' | 'parent'
   school: string | null
   class: string | null
+  guardian_email: string | null
+  guardian_consent_at: string | null
   profile_completed: boolean
   created_at: string
 }
@@ -42,26 +44,46 @@ export function useAuth() {
   }, [])
 
   useEffect(() => {
-    // Get initial session with timeout (Supabase can hang on corrupted tokens)
     let settled = false
-    const timeout = setTimeout(() => {
-      if (!settled) {
-        console.warn('Auth session check timed out — showing login')
-        settled = true
-        setState({ user: null, profile: null, session: null, loading: false })
-      }
-    }, 5000)
 
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (settled) return
-      settled = true
-      clearTimeout(timeout)
+    const applySession = async (session: Session | null) => {
       if (session?.user) {
         const profile = await fetchProfile(session.user.id)
         setState({ user: session.user, profile, session, loading: false })
       } else {
         setState({ user: null, profile: null, session: null, loading: false })
       }
+    }
+
+    // getSession() can deadlock on supabase-js's internal auth lock (known
+    // issue: any supabase call made synchronously inside an onAuthStateChange
+    // callback holds the lock the initial getSession is waiting for). All
+    // callback work below is deferred out of the lock context, and if the
+    // initial check still stalls we fall back to the session persisted in
+    // localStorage instead of bouncing a logged-in user to the landing page.
+    const timeout = setTimeout(() => {
+      if (settled) return
+      settled = true
+      console.warn('Auth session check timed out — using persisted session fallback')
+      try {
+        const ref = new URL(import.meta.env.VITE_SUPABASE_URL).hostname.split('.')[0]
+        const raw = localStorage.getItem(`sb-${ref}-auth-token`)
+        const stored = raw ? (JSON.parse(raw) as Session) : null
+        if (stored?.user && (stored.expires_at ?? 0) * 1000 > Date.now()) {
+          applySession(stored)
+          return
+        }
+      } catch {
+        // fall through to signed-out
+      }
+      setState({ user: null, profile: null, session: null, loading: false })
+    }, 5000)
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      applySession(session)
     }).catch(() => {
       if (settled) return
       settled = true
@@ -69,34 +91,35 @@ export function useAuth() {
       setState({ user: null, profile: null, session: null, loading: false })
     })
 
-    // Listen for auth changes
+    // Listen for auth changes. NEVER run supabase calls synchronously in this
+    // callback — it executes while the auth lock is held (deadlock). Defer.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          const profile = await fetchProfile(session.user.id)
-          setState({ user: session.user, profile, session, loading: false })
+      (event, session) => {
+        setTimeout(() => {
+          settled = true
+          clearTimeout(timeout)
+          applySession(session)
 
-          // Log login session
-          if (event === 'SIGNED_IN') {
+          if (event === 'SIGNED_IN' && session?.user) {
             const device = /Mobile|Android|iPhone/i.test(navigator.userAgent)
               ? 'mobile'
               : /Tablet|iPad/i.test(navigator.userAgent)
                 ? 'tablet'
                 : 'desktop'
-
-            await supabase.from('login_sessions').insert({
+            supabase.from('login_sessions').insert({
               user_id: session.user.id,
               device,
               user_agent: navigator.userAgent,
-            })
+            }).then(() => {})
           }
-        } else {
-          setState({ user: null, profile: null, session: null, loading: false })
-        }
+        }, 0)
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      clearTimeout(timeout)
+      subscription.unsubscribe()
+    }
   }, [fetchProfile])
 
   const signInWithGoogle = useCallback(async () => {

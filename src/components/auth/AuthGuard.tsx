@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import type { Profile } from '../../hooks/useAuth'
-import { LoginPage } from './LoginPage'
 import { ProfileSetup } from './ProfileSetup'
+import { LandingPage } from '../../modules/landing/LandingPage'
+import { TermsPage, PrivacyPage, RefundPage } from '../../modules/legal/LegalPages'
 import type { ProfileFormData } from './ProfileSetup'
 import { isAdminTeacher } from '../../lib/adminEmails'
+import { startSync, stopSync } from '../../lib/progressSync'
+import { AccessProvider } from './AccessProvider'
 
 interface AuthContextValue {
   profile: Profile
@@ -29,6 +32,14 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const [savingProfile, setSavingProfile] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const autoSetupDone = useRef(false)
+
+  // Cross-device progress sync: hydrate + keep-highest merge on sign-in,
+  // debounced flush of local changes (lib/progressSync.ts).
+  useEffect(() => {
+    if (!user?.id) return
+    startSync(user.id)
+    return stopSync
+  }, [user?.id])
 
   // Auto-complete profile for admin teacher emails
   useEffect(() => {
@@ -61,7 +72,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
     )
   }
 
-  // Not signed in
+  // Not signed in → public site (Sprint 2): landing page + legal pages.
+  // AuthGuard sits above the router, so plain pathname routing here.
   if (!user) {
     const handleSignIn = async () => {
       setSigningIn(true)
@@ -72,7 +84,11 @@ export function AuthGuard({ children }: AuthGuardProps) {
       }
     }
 
-    return <LoginPage onSignIn={handleSignIn} loading={signingIn} />
+    const path = window.location.pathname
+    if (path === '/terms') return <TermsPage />
+    if (path === '/privacy') return <PrivacyPage />
+    if (path === '/refunds') return <RefundPage />
+    return <LandingPage onSignIn={handleSignIn} signingIn={signingIn} />
   }
 
   // Signed in but profile not completed
@@ -99,7 +115,8 @@ export function AuthGuard({ children }: AuthGuardProps) {
           name: data.name,
           school: data.school,
           role: data.role,
-          class: data.class || null,
+          guardian_email: data.guardianEmail,
+          guardian_consent_at: data.consentAt,
           profile_completed: true,
         })
       } catch (err) {
@@ -125,7 +142,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   // Fully authenticated
   return (
     <AuthContext.Provider value={{ profile, signOut }}>
-      {children}
+      <AccessProvider>{children}</AccessProvider>
     </AuthContext.Provider>
   )
 }
