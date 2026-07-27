@@ -118,7 +118,7 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
                   <li>✓ Smart flashcards + timeline</li>
                   <li>✓ Board map work</li>
                   <li className="font-bold">✓ Board-pattern test papers</li>
-                  <li className="font-bold">✓ Marking scheme on every answer</li>
+                  <li className="font-bold">✓ Instant MCQ marking, unlimited attempts</li>
                 </ul>
               </div>
             )}

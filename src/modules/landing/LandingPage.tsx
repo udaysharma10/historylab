@@ -306,8 +306,8 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <div className="jhead">
                 <div className="jnum">3</div>
                 <div>
-                  <b>Check like an examiner</b>
-                  <span>Match your answer point-by-point against the real marking scheme.</span>
+                  <b>Get marked by the examiner</b>
+                  <span>Real marks and remarks on your written paper, point by point.</span>
                 </div>
               </div>
               <div className="mini">
@@ -442,7 +442,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               </p>
               <ul>
                 <li>Every paper and marking scheme is authored by the examiner</li>
-                <li>MCQs are marked instantly; every written answer carries the examiner's own marking scheme</li>
+                <li>MCQs are marked instantly, on every attempt, unlimited retries</li>
                 <li>
                   Send any paper for the examiner's personal marking — {prices.examiner}, back
                   within 72 hours
@@ -499,7 +499,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             </div>
             <div className="row">
               <div className="cell">No feedback on written answers</div>
-              <div className="cell hl">Marking schemes on every answer — and a real examiner's red pen</div>
+              <div className="cell hl">A real CBSE examiner's red pen on your written paper</div>
             </div>
             <div className="row">
               <div className="cell">Hard to remember</div>
@@ -635,7 +635,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                   <b>Board-pattern test papers</b>
                 </li>
                 <li>
-                  <b>The examiner's marking scheme on every answer</b>
+                  <b>Instant MCQ marking · unlimited attempts</b>
                 </li>
                 <li>Lifetime access · receipt on email</li>
               </ul>
@@ -650,7 +650,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                 <li>
                   <b>A Senior CBSE Examiner reviews your written paper</b>
                 </li>
-                <li>Personal remarks on every answer</li>
+                <li>Point-by-point marks + remarks, against the official marking scheme</li>
                 <li>Returned within 72 hours</li>
                 <li>Buy only when you want it</li>
               </ul>
@@ -693,12 +693,12 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             <details>
               <summary>How does the answer marking work?</summary>
               <p>
-                Your child writes answers to board-pattern questions. MCQs are checked instantly.
-                Every written answer comes with the exact marking scheme — authored by the{' '}
-                <b>Senior CBSE Examiner</b> we've onboarded (20 years of board experience) — so
-                your child learns to check their answer the way the board would. And for any mock
-                test, the examiner personally marks the paper and returns detailed remarks within
-                72 hours ({prices.examiner} per paper).
+                Your child writes answers to board-pattern questions. MCQs are checked instantly,
+                with unlimited re-attempts. For written answers, the{' '}
+                <b>Senior CBSE Examiner</b> we've onboarded (20 years of board experience)
+                personally marks the paper — point-by-point against the exact marking scheme,
+                with remarks on every answer — returned within 72 hours ({prices.examiner} per
+                paper).
               </p>
             </details>
             <details>

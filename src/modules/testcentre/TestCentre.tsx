@@ -124,7 +124,7 @@ export function TestCentre() {
           </div>
           <p className="font-body text-sm text-gray-600 mb-3">
             Unlock the chapter to attempt timed CBSE-pattern papers with instant MCQ
-            marking and the marking scheme on every written answer.
+            marking — and have any attempt marked by a Senior CBSE Examiner.
           </p>
           {product && !product.is_free && (
             <button
@@ -166,7 +166,7 @@ export function TestCentre() {
           <div className="flex items-baseline justify-between mb-3.5 px-0.5">
             <h2 className="font-display text-xl font-semibold text-hist-dark">Papers</h2>
             <span className="text-[12.5px] font-semibold text-hist-muted">
-              Authored &amp; marking-schemed by a Senior CBSE Examiner
+              Authored by a Senior CBSE Examiner
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
