@@ -228,7 +228,7 @@ export function AttemptResult() {
                 )}
                 {written.length > 0 && (
                   <span className="flex items-center gap-1.5 bg-hist-indigo-soft border border-[#DED7F0] px-3 py-1.5 rounded-[11px] text-[12.5px] font-semibold text-hist-indigo">
-                    ✍️ <b>{written.length} written · check the scheme below</b>
+                    ✍️ <b>{written.length} written · {data.review ? 'with the examiner' : 'unmarked'}</b>
                   </span>
                 )}
               </>
@@ -384,6 +384,8 @@ export function AttemptResult() {
                 })()}
                 sourceBody={q.source_id ? sourceById.get(q.source_id)?.body : undefined}
                 examinerMark={examinerMarks?.[q.id]}
+                onSubmitReview={!data.review ? buyReview : undefined}
+                reviewPrice={reviewPrice}
               />
             ))}
           </div>
@@ -446,11 +448,16 @@ function WrittenCard({
   text,
   sourceBody,
   examinerMark,
+  onSubmitReview,
+  reviewPrice,
 }: {
   q: ResultQuestion
   text: string
   sourceBody?: string
   examinerMark?: ExaminerMark
+  /** set only when the attempt has NO review — renders the per-answer nudge (Neha 2026-07-27) */
+  onSubmitReview?: () => void
+  reviewPrice?: number
 }) {
   return (
     <motion.div
@@ -507,6 +514,17 @@ function WrittenCard({
         ) : (
           <p className="font-body text-sm text-gray-400 italic bg-gray-50 rounded-xl px-4 py-3">
             Not answered
+          </p>
+        )}
+        {onSubmitReview && text && (
+          <p className="font-body text-[12.5px] font-semibold text-hist-muted mt-2 px-0.5">
+            Want to know how this answer weighs in the board exam?{' '}
+            <button
+              onClick={onSubmitReview}
+              className="text-hist-indigo underline underline-offset-2 font-bold"
+            >
+              Submit for the examiner's marking · ₹{reviewPrice}
+            </button>
           </p>
         )}
       </div>
