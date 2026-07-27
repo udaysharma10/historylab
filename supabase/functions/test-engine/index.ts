@@ -427,6 +427,15 @@ async function result(
     .neq("status", "refunded")
     .maybeSingle();
 
+  // Decision (Neha 2026-07-27): the written marking scheme is part of the PAID
+  // examiner review. Without a review on this attempt (paid or marked) the
+  // scheme never leaves the server — client-side hiding would be cosmetic.
+  // MCQ answer keys still reveal post-submit; this covers text questions only.
+  const revealSchemes = !!review;
+  const outQuestions = (questions ?? []).map((q) =>
+    q.qtype === "text" && !revealSchemes ? { ...q, scheme: null } : q,
+  );
+
   return json({
     attempt: {
       id: attempt.id,
@@ -438,7 +447,7 @@ async function result(
       objective_max: attempt.objective_max,
     },
     paper,
-    questions: questions ?? [],
+    questions: outQuestions,
     sources: sources ?? [],
     answers: answers ?? [],
     // null = never submitted for review; status 'paid' = with the examiner;

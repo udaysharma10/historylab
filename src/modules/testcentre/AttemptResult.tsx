@@ -369,7 +369,9 @@ export function AttemptResult() {
           <div className="text-[11px] font-extrabold uppercase tracking-[1.2px] text-hist-muted mb-2.5 px-0.5">
             {examinerMarked
               ? 'Written answers · marked by the examiner'
-              : 'Written answers · check yourself against the CBSE marking scheme'}
+              : data.review
+                ? 'Written answers · with the examiner — marks arrive within 72 hours'
+                : 'Written answers · as you submitted them'}
           </div>
           <div className="space-y-4 mb-8">
             {written.map((q) => (
