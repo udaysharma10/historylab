@@ -1,5 +1,10 @@
 # HistoryLab — Session Handover (read this first)
 
+> **⏭ POST-LAUNCH STRUCTURE (Uday, 2026-07-27 sign-off): work runs on TWO TRACKS from 2026-07-28.**
+> **Track 1 — Adoption & Marketing:** getting real students/parents in (pilot-cohort conversion, positioning, channels, Neha's network, quotes/social proof once real users bite). Fresh territory — no plan exists yet; start by drafting one with Uday.
+> **Track 2 — Product & Content:** remaining Class-10 chapters (2 live, 3 in the works per landing), content rounds with Neha, deferred enhancements (P1 polish, parent/guardian email, boardYear pills, Ch2 S2 figures, summary-row leftovers) + the small post-launch tail in the LIVE block below (₹149 live smoke, webhook-secret rotation, `SHOW_PILOT_QUOTES`).
+> Keep the tracks separate in sessions; BIGGER_PICTURE.md holds the multi-class roadmap Track 1 should eventually feed.
+
 **Last updated:** 2026-07-27 · **Branch:** `dev`
 
 > **🎉 LIVE WITH REAL MONEY — 2026-07-27 ~22:06 IST.** Smoke verified in prod DB: nehud2017 bought c10-hist-ch1 for **₹499 real** (purchase paid → entitlement granted → `payment.captured` webhook delivered + HMAC-verified). Live keys + fresh webhook secret set via `supabase secrets set` (test keys retired; the placeholder-overwrite mishap was fixed by re-setting real values). Prices repriced ₹499/₹799 (Neha, decision: her call). **Pre-launch data wipe done via `supabase db query --linked`:** purchases/payment_events/examiner_reviews/purchase-entitlements zeroed, 5 admin grants kept (note: nehud2017's access now purchase-sourced from the real ₹499). `razorpay-webhook-live` clone endpoint deployed as URL-collision fallback (may be unused — the original webhook verified fine; confirm which URL carries the live secret, then optionally delete the spare). **PENDING to fully close:** (1) real ₹149 examiner-review purchase + Neha marks it (last untested live rail); (2) Neha's personal paywall heads-up to pilot cohort; (3) post-launch hygiene: rotate webhook secret (travelled through chat/shell history), day-80 reminder on Razorpay 90-day zero-fee offer, real student quotes → flip `SHOW_PILOT_QUOTES`.
