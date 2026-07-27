@@ -54,9 +54,10 @@ export function TermsPage() {
       <h2>Purchases</h2>
       <p>
         Chapter purchases are one-time payments giving that account lifetime access to the chapter
-        on HistoryLab. Prices are shown at checkout and include applicable GST; a GST invoice is
-        emailed to the parent/guardian. Payments are processed by Razorpay — we never see or store
-        card details. All purchases are final — no refunds — as set out in our{' '}
+        on HistoryLab. Prices are shown at checkout and include applicable taxes; Razorpay emails a
+        payment receipt, and a GST invoice is available on request from{' '}
+        <a href="mailto:info@teknomatics.com">info@teknomatics.com</a>. Payments are processed by
+        Razorpay — we never see or store card details. All purchases are final — no refunds — as set out in our{' '}
         <a href="/refunds">Refund Policy</a>; the first section of Chapter 1 is free so you can
         judge the service before paying.
       </p>

@@ -18,7 +18,7 @@ interface PriceInfo {
   examiner: string
 }
 
-const FALLBACK_PRICES: PriceInfo = { chapter: '₹199', chapterList: '₹499', examiner: '₹149' }
+const FALLBACK_PRICES: PriceInfo = { chapter: '₹499', chapterList: '₹799', examiner: '₹149' }
 
 // Testimonials stay hidden until real pilot-student quotes (with permission) replace the placeholders.
 const SHOW_PILOT_QUOTES = false
@@ -637,7 +637,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                 <li>
                   <b>The examiner's marking scheme on every answer</b>
                 </li>
-                <li>Lifetime access · GST invoice</li>
+                <li>Lifetime access · receipt on email</li>
               </ul>
             </div>
             <div className="price addon">
@@ -659,7 +659,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
           <div className="safety">
             <div className="chip">🚫 <b>No ads, ever</b></div>
             <div className="chip">🔒 <b>No data sharing</b></div>
-            <div className="chip">🧾 <b>Every invoice to the parent</b></div>
+            <div className="chip">🧾 <b>GST invoice on request</b></div>
             <div className="chip">🆓 <b>Try free before you pay</b></div>
           </div>
         </div>
@@ -721,8 +721,8 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <summary>Is my child's data safe?</summary>
               <p>
                 We store only a first name, emails and study progress. No ads, no tracking for
-                advertising, no selling of data — and every account has a parent's email on it,
-                which receives all invoices and alerts.
+                advertising, no selling of data. Full details in our Privacy Policy — written in
+                plain language, for parents.
               </p>
             </details>
             <details>
