@@ -385,7 +385,6 @@ export function AttemptResult() {
                 sourceBody={q.source_id ? sourceById.get(q.source_id)?.body : undefined}
                 examinerMark={examinerMarks?.[q.id]}
                 onSubmitReview={!data.review ? buyReview : undefined}
-                reviewPrice={reviewPrice}
               />
             ))}
           </div>
@@ -449,7 +448,6 @@ function WrittenCard({
   sourceBody,
   examinerMark,
   onSubmitReview,
-  reviewPrice,
 }: {
   q: ResultQuestion
   text: string
@@ -457,7 +455,6 @@ function WrittenCard({
   examinerMark?: ExaminerMark
   /** set only when the attempt has NO review — renders the per-answer nudge (Neha 2026-07-27) */
   onSubmitReview?: () => void
-  reviewPrice?: number
 }) {
   return (
     <motion.div
@@ -523,7 +520,7 @@ function WrittenCard({
               onClick={onSubmitReview}
               className="text-hist-indigo underline underline-offset-2 font-bold"
             >
-              Submit for the examiner's marking · ₹{reviewPrice}
+              Submit for the examiner's marking
             </button>
           </p>
         )}
