@@ -20,7 +20,8 @@ function LegalShell({ title, updated, children }: {
           </div>
         </div>
         <p className="text-center text-xs text-gray-400 font-body mt-6">
-          © 2026 Teknomatics · historylab.in · <a className="underline" href="mailto:help@historylab.in">help@historylab.in</a>
+          © 2026 Teknomatics (Pi By Two Tech Solutions Pvt. Ltd.) · historylab.in ·{' '}
+          <a className="underline" href="mailto:info@teknomatics.com">info@teknomatics.com</a>
         </p>
       </div>
     </div>
@@ -160,7 +161,7 @@ export function RefundPage() {
       <p>
         If money was deducted but your purchase did not unlock, or you were charged twice for the
         same purchase, that is a payment error — not a refund request. Email{' '}
-        <a href="mailto:help@historylab.in">help@historylab.in</a> with the payment reference and
+        <a href="mailto:info@teknomatics.com">info@teknomatics.com</a> with the payment reference and
         we will reverse the erroneous charge via Razorpay to the original payment method within
         5–7 working days.
       </p>
@@ -172,7 +173,7 @@ export function RefundPage() {
       </p>
       <h2>Contact</h2>
       <p>
-        <a href="mailto:help@historylab.in">help@historylab.in</a> — include the account email and
+        <a href="mailto:info@teknomatics.com">info@teknomatics.com</a> — include the account email and
         the invoice number from the purchase email.
       </p>
     </LegalShell>

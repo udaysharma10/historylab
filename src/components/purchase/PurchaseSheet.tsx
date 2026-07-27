@@ -150,7 +150,7 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
                     <b className="text-hist-dark">Confirming your payment…</b> UPI sometimes takes
                     a minute. The chapter unlocks automatically the moment the bank confirms — you
                     can keep studying meanwhile. If it takes longer than 15 minutes, write to{' '}
-                    <a className="underline" href="mailto:help@historylab.in">help@historylab.in</a>.
+                    <a className="underline" href="mailto:info@teknomatics.com">info@teknomatics.com</a>.
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-[12px] font-semibold text-hist-muted">

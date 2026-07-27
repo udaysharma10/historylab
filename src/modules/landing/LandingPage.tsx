@@ -725,7 +725,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                 That's exactly why the first section of Chapter 1 is completely free — no card, no
                 trial timer. Let your child judge it fully before you pay. Purchases are one-time
                 and final, and if anything ever doesn't work as promised, write to
-                help@historylab.in and we'll make it right.
+                info@teknomatics.com and we'll make it right.
               </p>
             </details>
           </div>
@@ -764,14 +764,14 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             </div>
             <div>
               <h4>Company</h4>
-              <a href="mailto:help@historylab.in">Contact</a>
+              <a href="mailto:info@teknomatics.com">Contact</a>
               <a href="/terms">Terms of Service</a>
               <a href="/privacy">Privacy Policy</a>
               <a href="/refunds">Refund Policy</a>
             </div>
           </div>
           <div className="fbase">
-            <span>© 2026 Teknomatics · historylab.in</span>
+            <span>© 2026 Teknomatics (Pi By Two Tech Solutions Pvt. Ltd.) · historylab.in</span>
             <span>Made with ❤️ for students</span>
           </div>
         </div>
