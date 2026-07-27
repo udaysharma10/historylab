@@ -27,7 +27,7 @@ function LegalShell({ title, updated, children }: {
   )
 }
 
-const UPDATED = '12 July 2026'
+const UPDATED = '27 July 2026'
 
 export function TermsPage() {
   return (
@@ -55,7 +55,8 @@ export function TermsPage() {
         Chapter purchases are one-time payments giving that account lifetime access to the chapter
         on HistoryLab. Prices are shown at checkout and include applicable GST; a GST invoice is
         emailed to the parent/guardian. Payments are processed by Razorpay — we never see or store
-        card details. Refunds are governed by our <a href="/refunds">Refund Policy</a>.
+        card details. Refunds are governed by our <a href="/refunds">Refund Policy</a> (chapters:
+        7-day full refund; examiner reviews: no refunds).
       </p>
       <h2>Acceptable use</h2>
       <p>
@@ -73,8 +74,10 @@ export function TermsPage() {
       <h2>Service quality and liability</h2>
       <p>
         We work hard to keep HistoryLab accurate and available, but we provide it "as is" — we
-        can't guarantee uninterrupted availability or specific exam outcomes. Automated marking is
-        calibrated by a Senior CBSE Examiner but remains indicative; board marking may differ. Our
+        can't guarantee uninterrupted availability or specific exam outcomes. MCQs are marked
+        automatically; written answers are self-checked against the marking scheme, unless you
+        purchase an examiner review, in which case a Senior CBSE Examiner marks the paper
+        personally. All marks are indicative — board marking may differ. Our
         total liability for any claim is limited to the amount you paid us in the 12 months before
         the claim.
       </p>
@@ -111,9 +114,9 @@ export function PrivacyPage() {
       <h2>Who processes the data</h2>
       <p>
         Data is stored with Supabase (our database and authentication provider), sign-in is via
-        Google, payments via Razorpay (we never see card details), and written-answer marking uses
-        an AI service that receives only the answer text and marking scheme — never your child's
-        identity.
+        Google, and payments are via Razorpay (we never see card details). Papers submitted for
+        examiner review are marked personally by our human examiner — no AI service processes your
+        child's answers.
       </p>
       <h2>Parents' rights</h2>
       <p>
@@ -148,11 +151,12 @@ export function RefundPage() {
         when the refund is issued. Refunds are processed to the original payment method within
         5–7 working days via Razorpay.
       </p>
-      <h2>Examiner review add-on</h2>
+      <h2>Examiner review add-on — no refunds</h2>
       <p>
-        An examiner-review purchase is fully refundable until the examiner has begun reviewing the
-        paper. Once the reviewed paper has been returned, it is not refundable — the work has been
-        done.
+        Examiner reviews are <b>not refundable</b>. Each review is a personal marking service — a
+        Senior CBSE Examiner hand-marks the submitted paper — so once the fee is paid it cannot be
+        cancelled or refunded, whether or not the paper has been marked yet. Please submit a paper
+        for review only when you are sure. This is also stated at checkout.
       </p>
       <h2>Cancellation</h2>
       <p>
