@@ -34,8 +34,8 @@ export function TermsPage() {
     <LegalShell title="Terms of Service" updated={UPDATED}>
       <p>
         HistoryLab (historylab.in) is an online learning service for school History, operated by
-        <b> Teknomatics</b> ("we", "us"). By creating an account or using HistoryLab you agree to
-        these terms.
+        <b> Pi By Two Tech Solutions Pvt. Ltd.</b> ("we", "us"). By creating an account or using
+        HistoryLab you agree to these terms.
       </p>
       <h2>The service</h2>
       <p>
@@ -45,10 +45,10 @@ export function TermsPage() {
       </p>
       <h2>Accounts and parental consent</h2>
       <p>
-        HistoryLab is used by school students, typically minors. Account creation requires a
-        parent/guardian email and confirmation of parental consent. The parent/guardian email
-        receives invoices, important account notices and (optionally) progress updates. Keep your
-        account credentials safe; accounts are personal and may not be shared.
+        HistoryLab is used by school students, typically minors. Account creation assumes that
+        there is consent from a parent/guardian. The registered email receives invoices, important
+        account notices and (optionally) progress updates. Keep your account credentials safe;
+        accounts are personal and may not be shared.
       </p>
       <h2>Purchases</h2>
       <p>
@@ -83,9 +83,8 @@ export function TermsPage() {
       </p>
       <h2>Changes and contact</h2>
       <p>
-        We may update these terms; material changes will be notified to the parent/guardian email.
-        These terms are governed by the laws of India. Questions:{' '}
-        <a href="mailto:help@historylab.in">help@historylab.in</a>.
+        We may update these terms; material changes will be notified to the registered email.
+        Questions: <a href="mailto:info@teknomatics.com">info@teknomatics.com</a>.
       </p>
     </LegalShell>
   )
