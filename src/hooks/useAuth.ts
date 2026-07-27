@@ -21,6 +21,8 @@ interface AuthState {
   profile: Profile | null
   session: Session | null
   loading: boolean
+  /** true when the last profile fetch errored AND we have no cached profile */
+  profileError: boolean
 }
 
 export function useAuth() {
@@ -29,18 +31,24 @@ export function useAuth() {
     profile: null,
     session: null,
     loading: true,
+    profileError: false,
   })
 
+  // maybeSingle: a genuinely missing row (new user) is NOT an error — only
+  // transient failures (expired token mid-refresh, network waking from sleep)
+  // count as errored, and those must never wipe a profile we already loaded.
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
-    if (error) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle()
+      if (!error) return { profile: data as Profile | null, errored: false }
       console.error('fetchProfile failed:', error)
+      if (attempt === 0) await new Promise((r) => setTimeout(r, 800))
     }
-    return data as Profile | null
+    return { profile: null, errored: true }
   }, [])
 
   useEffect(() => {
@@ -48,10 +56,19 @@ export function useAuth() {
 
     const applySession = async (session: Session | null) => {
       if (session?.user) {
-        const profile = await fetchProfile(session.user.id)
-        setState({ user: session.user, profile, session, loading: false })
+        const { profile, errored } = await fetchProfile(session.user.id)
+        // On a transient fetch failure, KEEP the profile we already have —
+        // regressing to null bounced set-up users back to "Who's studying?"
+        // (worst case: mid paper, after a device sleep).
+        setState((prev) => ({
+          user: session.user,
+          session,
+          profile: profile ?? (errored ? prev.profile : null),
+          loading: false,
+          profileError: errored && !profile && !prev.profile,
+        }))
       } else {
-        setState({ user: null, profile: null, session: null, loading: false })
+        setState({ user: null, profile: null, session: null, loading: false, profileError: false })
       }
     }
 
@@ -76,7 +93,7 @@ export function useAuth() {
       } catch {
         // fall through to signed-out
       }
-      setState({ user: null, profile: null, session: null, loading: false })
+      setState({ user: null, profile: null, session: null, loading: false, profileError: false })
     }, 5000)
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -88,7 +105,7 @@ export function useAuth() {
       if (settled) return
       settled = true
       clearTimeout(timeout)
-      setState({ user: null, profile: null, session: null, loading: false })
+      setState({ user: null, profile: null, session: null, loading: false, profileError: false })
     })
 
     // Listen for auth changes. NEVER run supabase calls synchronously in this
@@ -157,14 +174,14 @@ export function useAuth() {
     }
 
     // Refresh profile — retry a few times in case of propagation delay
-    let profile = await fetchProfile(state.user.id)
+    let { profile } = await fetchProfile(state.user.id)
     if (profile && !profile.profile_completed && updates.profile_completed) {
       // Update didn't propagate yet — wait and retry
       await new Promise(r => setTimeout(r, 500))
-      profile = await fetchProfile(state.user.id)
+      profile = (await fetchProfile(state.user.id)).profile
     }
 
-    setState((prev) => ({ ...prev, profile }))
+    setState((prev) => ({ ...prev, profile: profile ?? prev.profile }))
   }, [state.user, fetchProfile])
 
   return {
@@ -172,6 +189,7 @@ export function useAuth() {
     profile: state.profile,
     session: state.session,
     loading: state.loading,
+    profileError: state.profileError,
     signInWithGoogle,
     signOut,
     updateProfile,

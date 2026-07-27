@@ -27,7 +27,7 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  const { user, profile, loading, signInWithGoogle, signOut, updateProfile } = useAuth()
+  const { user, profile, loading, profileError, signInWithGoogle, signOut, updateProfile } = useAuth()
   const [signingIn, setSigningIn] = useState(false)
   const [savingProfile, setSavingProfile] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -89,6 +89,28 @@ export function AuthGuard({ children }: AuthGuardProps) {
     if (path === '/privacy') return <PrivacyPage />
     if (path === '/refunds') return <RefundPage />
     return <LandingPage onSignIn={handleSignIn} signingIn={signingIn} />
+  }
+
+  // Signed in but the profile fetch failed (e.g. waking from device sleep) —
+  // NEVER show the setup form here; that re-asks set-up users "Who's studying?".
+  if (!profile && profileError) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center"
+        style={{ background: 'linear-gradient(135deg, #FBEFE7, #F1ECFA)' }}
+      >
+        <div className="text-center">
+          <div className="text-5xl mb-4">📡</div>
+          <p className="text-gray-500 font-body mb-4">Couldn't reach HistoryLab — check your connection.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-5 py-2.5 rounded-xl font-bold text-white"
+            style={{ background: '#DC835F' }}
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    )
   }
 
   // Signed in but profile not completed
