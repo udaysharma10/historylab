@@ -1,6 +1,8 @@
 # HistoryLab — Session Handover (read this first)
 
-**Last updated:** 2026-07-27 (Milestone C started: legal no-refund + landing honesty + SEO shipped `a2d824d`/`8eb4b7b`/`0122ea6`) · **Branch:** `dev`
+**Last updated:** 2026-07-27 · **Branch:** `dev`
+
+> **🚀 LAUNCH MERGE DEPLOYED 2026-07-27: dev→main (`408588f`) pushed on Uday's direction; Cloudflare built and historylab.in NOW SERVES THE FULL LAUNCH BUILD** (paywall #26 live for pilot students — heads-up email still pending!; V2 workspace; test engine; examiner review; final legal pages; SEO; pilot-quotes band HIDDEN via `SHOW_PILOT_QUOTES=false` until real quotes). Verified on prod: new title, Refund Policy page, footer entity, robots/sitemap 200. **⚠️ Razorpay secrets are still TEST keys — real purchases FAIL until swapped (deliberate: Neha's examiner E2E runs on prod with test card first, then live keys + live webhook, then one real ₹199 smoke).** Supabase Site URL revert to https://historylab.in = Uday dashboard action, required BEFORE Neha signs in.
 
 > **🔒 DECISION #40 (2026-07-27, Uday): NO REFUNDS AT ALL — chapters included** (supersedes the 7-day chapter refund from Sprint 3 era). Refund Policy page = all purchases final + failed/duplicate-payment carve-out (payment errors reversed via Razorpay; not a "refund"). Landing: refund chip → "Try free before you pay"; FAQ answer = the free section IS the trial. Also same session: **sample-quotes note removed** (⚠️ the Ananya/Rohan quotes are still INVENTED and now carry no disclaimer — swap in real pilot quotes before launch or hide the band), **footer parent-subscribe column REMOVED** (3-col grid; further footer feedback coming from Uday separately), **examiner card remark rewritten (Option B) + "returned within 72 hours"**, and the full **honest-marking landing sweep** (no "marked in seconds"/"engine" anywhere; differentiator repositioned to "a real CBSE examiner marks you"; 48–72h → "within 72 hours" everywhere).
 >
