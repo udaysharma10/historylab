@@ -39,7 +39,8 @@ jobs:
           DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           STAMP=$(date -u +%Y-%m-%d_%H%M)
-          pg_dump "$DB_URL" \
+          # use the versioned binary directly — the pg_wrapper on the runner picks v16
+          /usr/lib/postgresql/17/bin/pg_dump "$DB_URL" \
             --format=custom --compress=9 \
             --no-owner --no-privileges \
             --schema=public --schema=auth \
