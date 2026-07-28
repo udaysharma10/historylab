@@ -189,8 +189,9 @@ export function HomePage() {
 
   const rail = (
     <div>
-      {/* Chapter progress — THE progress fact (one-fact-once) */}
-      <div className="mb-7">
+      {/* Chapter progress — THE progress fact (one-fact-once). Mobile hides
+          this card (Uday 2026-07-28): the hero carries a compact ring there. */}
+      <div className="hidden lg:block mb-7">
         <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-3.5">
           Chapter Progress
         </h3>
@@ -229,8 +230,11 @@ export function HomePage() {
 
       {/* Prime CTA — Mock Tests never buried (law) / unlock for preview */}
       {entitled ? (
+        /* Mobile: the Practice tab IS the always-visible mock-test entry, so
+           this rail CTA is desktop-only (law satisfied structurally). The
+           preview unlock band below stays on BOTH — it's the paywall CTA. */
         <button
-          className="w-full flex items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
+          className="hidden lg:flex w-full items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
           style={{ background: 'linear-gradient(140deg, #453A5E, #67589B)' }}
           onClick={() =>
             recommended
@@ -280,8 +284,10 @@ export function HomePage() {
           card duplicated the sidebar item one inch to its left. Section pages
           keep their rail cards — those are section-scoped, the sidebar isn't. */}
 
-      {/* Stats — 2×2, honest facts only (no streak until we track one) */}
-      <div>
+      {/* Stats — 2×2, honest facts only (no streak until we track one).
+          Desktop-only: mobile shows stars in the app bar, best MCQ lives in
+          the Practice tab (Uday 2026-07-28). */}
+      <div className="hidden lg:block">
         <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-2">Your stats</h3>
         <div className="grid grid-cols-2">
           <StatCell icon={<IconStar className="w-[17px] h-[17px] text-v2-accent" />} value={`${totalStars}`} label="stars" divider="r" />
@@ -345,6 +351,28 @@ export function HomePage() {
           <h1 className="font-display text-[24px] md:text-[31px] font-semibold text-v2-ink leading-[1.12] mb-4 max-w-full md:max-w-[60%]">
             {chapter.title}
           </h1>
+          {/* Mobile-only progress strip — replaces the rail's Chapter Progress
+              card, which is desktop-only (Uday 2026-07-28). One fact, once. */}
+          <div className="flex lg:hidden items-center gap-3 mb-4">
+            <div className="relative grid place-items-center shrink-0">
+              <svg width="52" height="52" className="-rotate-90">
+                <circle cx="26" cy="26" r="21" stroke="#F0E7EA" strokeWidth="6" fill="none" />
+                <circle
+                  cx="26" cy="26" r="21" stroke="#E8551F" strokeWidth="6" fill="none"
+                  strokeLinecap="round"
+                  strokeDasharray={2 * Math.PI * 21}
+                  strokeDashoffset={2 * Math.PI * 21 * (1 - overallProgress / 100)}
+                />
+              </svg>
+              <b className="absolute font-display text-[12px] text-v2-ink">{overallProgress}%</b>
+            </div>
+            <div className="text-[12px] font-bold text-v2-body leading-snug">
+              <b className="block font-display text-[13.5px] text-v2-ink">
+                {sectionsDone} of {chapter.sections.length} sections done
+              </b>
+              {estLeft && <span className="text-v2-muted">about {estLeft} left</span>}
+            </div>
+          </div>
           <div className="flex gap-2.5 flex-wrap">
             <HeroChip icon={<IconBook className="w-[15px] h-[15px] text-v2-accent" />} label={`${chapter.sections.length} Sections`} />
             {entitled && papers.length > 0 && (
