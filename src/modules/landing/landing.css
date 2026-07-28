@@ -61,6 +61,10 @@
 .landing .cred b { display: block; font-size: 12.5px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
 .landing .cred span { font-size: 11.5px; font-weight: 500; color: var(--muted); line-height: 1.4; }
 .landing .heroipad { width: 100%; display: block; border-radius: 26px; box-shadow: var(--shadow-lg); }
+/* Mobile-only elements (Package 1, 2026-07-28) — desktop never shows these. */
+.landing .herophone { display: none; }
+.landing .pricejump { display: none; }
+.landing .stickycta { display: none; }
 
 /* problem cards */
 .landing .probs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 44px; }
@@ -229,6 +233,32 @@
   .landing .hero-copy h1 { font-size: 37px; }
   .landing .hero-copy .sub { font-size: 15px; }
   .landing .cta-row .btn-big { width: 100%; }
+
+  /* — Package 1 (2026-07-28): slim header — the hero CTA + sticky bar own
+     "Start free" on phones, so the header keeps only brand + Sign in. */
+  .landing .topbar .in { padding-top: 8px; padding-bottom: 8px; gap: 10px; }
+  .landing .brand { font-size: 20px; }
+  .landing .topact .btn-sm { padding: 8px 13px; font-size: 12.5px; }
+  .landing .topact .btn-primary { display: none; }
+
+  /* — Package 1: phones show the real mobile app in a phone frame instead
+     of the iPad render. */
+  .landing .heroipad { display: none; }
+  .landing .herophone { display: block; width: 250px; margin: 0 auto; border: 8px solid #2A2333; border-radius: 38px; box-shadow: var(--shadow-lg); }
+
+  /* — Package 1: jump link to pricing under the hero CTA. */
+  .landing .pricejump { display: block; width: 100%; text-align: center; font-size: 13px; font-weight: 700; color: var(--accent-strong); text-decoration: none; margin-top: 2px; }
+  .landing .cta-row { justify-content: center; }
+
+  /* — Package 1: the ₹499 launch card leads the stacked pricing list. */
+  .landing .price.hot { order: -1; }
+  .landing .price-grid { padding-top: 6px; } /* room for the hot card's overhanging tag */
+
+  /* — Package 1: sticky bottom CTA bar (shown between hero and final CTA). */
+  .landing .stickycta { display: flex; flex-direction: column; gap: 6px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: rgba(255, 255, 255, .96); backdrop-filter: blur(8px); border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); transform: translateY(110%); transition: transform .25s ease; }
+  .landing .stickycta.on { transform: none; }
+  .landing .stickycta .btn { width: 100%; padding: 13px 20px; font-size: 14.5px; }
+  .landing .stickycta span { font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; }
   .landing .creds { flex-direction: column; gap: 12px; }
   .landing .probs { grid-template-columns: 1fr; }
   .landing .founder p { font-size: 18px; }

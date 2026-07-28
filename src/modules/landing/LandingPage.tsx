@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
 import './landing.css'
 
@@ -139,6 +139,31 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       })
   }, [])
 
+  // Mobile-only sticky bottom CTA: visible once the hero has scrolled away,
+  // hidden again when the final CTA band or footer is on screen (they carry
+  // their own CTA). Desktop never renders the bar (display:none in CSS).
+  const heroRef = useRef<HTMLElement>(null)
+  const endRef = useRef<HTMLElement>(null)
+  const footRef = useRef<HTMLElement>(null)
+  const [stickyOn, setStickyOn] = useState(false)
+  useEffect(() => {
+    const els = [heroRef.current, endRef.current, footRef.current].filter(
+      (el): el is HTMLElement => el !== null
+    )
+    if (els.length === 0) return
+    const vis = new Map<Element, boolean>()
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) vis.set(e.target, e.isIntersecting)
+      const heroGone = heroRef.current ? vis.get(heroRef.current) === false : false
+      const endOnScreen =
+        (footRef.current && vis.get(footRef.current)) ||
+        (endRef.current && vis.get(endRef.current))
+      setStickyOn(heroGone && !endOnScreen)
+    })
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+
   // CTAs open a branded sign-in sheet first — never a surprise redirect to
   // Google (Uday's feedback, 2026-07-12).
   const openSignIn = () => setShowSignIn(true)
@@ -174,7 +199,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       </div>
 
       {/* HERO */}
-      <section className="band band-hero">
+      <section className="band band-hero" ref={heroRef}>
         <div className="in">
           <div className="hero-grid">
             <div className="hero-copy">
@@ -192,6 +217,9 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               <div className="cta-row">
                 {start}
                 <span className="micro">No card needed · The first section is really free</span>
+                <a className="pricejump" href="#pricing">
+                  See pricing ↓
+                </a>
               </div>
               <div className="creds">
                 <div className="cred">
@@ -212,6 +240,12 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               className="heroipad"
               src="/landing/hero-ipad.png"
               alt="HistoryLab on an iPad — a chapter as an illustrated, interactive story"
+            />
+            {/* Phones swap the iPad render for the real mobile app (CSS toggles the pair). */}
+            <img
+              className="herophone"
+              src="/landing/hero-phone.png"
+              alt="HistoryLab on a phone — the chapter home with progress, mock tests and study tools"
             />
           </div>
         </div>
@@ -739,7 +773,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       </section>
 
       {/* CTA */}
-      <section className="band band-cta">
+      <section className="band band-cta" ref={endRef}>
         <div className="in">
           <h2>The first section is free. Start tonight.</h2>
           <p>
@@ -750,7 +784,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
         </div>
       </section>
 
-      <footer>
+      <footer ref={footRef}>
         <div className="in">
           <div className="fgrid">
             <div>
@@ -782,6 +816,18 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
           </div>
         </div>
       </footer>
+
+      {/* Mobile-only sticky CTA bar (desktop: display none) */}
+      <div className={`stickycta${stickyOn ? ' on' : ''}`} aria-hidden={!stickyOn}>
+        <button
+          className="btn btn-primary"
+          onClick={openSignIn}
+          tabIndex={stickyOn ? 0 : -1}
+        >
+          Start learning free →
+        </button>
+        <span>No card needed · The first section is really free</span>
+      </div>
 
       <SignInModal
         open={showSignIn}
