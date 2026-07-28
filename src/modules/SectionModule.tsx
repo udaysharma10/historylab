@@ -360,6 +360,38 @@ export function SectionModule() {
         </div>
       </motion.div>
 
+      {/* Mobile-only: "What You'll Learn" as its own slim band between hero
+          and sheet (Uday 2026-07-28, from his sample) — a page-level object,
+          not a lodger inside the Topics tab. Desktop keeps it in the sheet. */}
+      {section.keyPoints.length > 0 && (
+        <details className="lg:hidden group bg-white rounded-2xl shadow-v2-sm px-4 py-3.5 mb-4">
+          <summary className="flex items-center gap-3 cursor-pointer list-none">
+            <span className="w-10 h-10 rounded-xl bg-v2-accent-soft grid place-items-center shrink-0">
+              <IconTarget className="w-5 h-5 text-v2-accent" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <b className="block font-display text-[15.5px] font-semibold text-v2-ink">
+                What You'll Learn
+              </b>
+              <span className="text-[11.5px] font-bold text-v2-muted">
+                {section.keyPoints.length} takeaways · tap to see
+              </span>
+            </span>
+            <IconChevronRight className="w-[18px] h-[18px] text-v2-muted shrink-0 group-open:rotate-90 transition-transform" />
+          </summary>
+          <div className="grid grid-cols-1 gap-y-3 mt-4 pt-3.5 border-t border-v2-line">
+            {section.keyPoints.map((point, i) => (
+              <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
+                <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
+                  <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
+                </span>
+                {point}
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
       {/* THE SHEET — one continuous surface */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -394,31 +426,6 @@ export function SectionModule() {
         <div className={`${sheetTab === 'topics' ? 'block' : 'hidden'} lg:block`}>
         {section.keyPoints.length > 0 && (
           <>
-            {/* Mobile: collapsed disclosure — the checklist must not toll-gate
-                the topic list a screen and a half down (2026-07-28). Desktop
-                keeps it open; space is free there. */}
-            <details className="lg:hidden group">
-              <summary className="flex items-center gap-2.5 font-display text-[17px] font-semibold text-v2-ink cursor-pointer list-none">
-                <IconTarget className="w-5 h-5 text-v2-accent" />
-                What You'll Learn
-                <span className="ml-auto text-[11.5px] font-body font-bold text-v2-muted">
-                  {section.keyPoints.length} takeaways
-                  <IconChevronRight className="inline w-3.5 h-3.5 ml-1 group-open:rotate-90 transition-transform" />
-                </span>
-              </summary>
-              <div className="grid grid-cols-1 gap-y-3.5 mt-4">
-                {section.keyPoints.map((point, i) => (
-                  <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
-                    <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
-                      <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
-                    </span>
-                    {point}
-                  </div>
-                ))}
-              </div>
-            </details>
-            <hr className="lg:hidden border-0 h-px bg-v2-line my-6 -mx-2" />
-
             <div className="hidden lg:block">
               <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-[18px]">
                 <IconTarget className="w-5 h-5 text-v2-accent" />
@@ -439,8 +446,9 @@ export function SectionModule() {
           </>
         )}
 
-        {/* Topics */}
-        <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-2">
+        {/* Topics — heading desktop-only: on mobile the "Topics" tab IS the
+            heading (same treatment as Practice & Explore). */}
+        <h2 className="hidden lg:flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-2">
           <IconBook className="w-5 h-5 text-v2-accent" />
           Topics
         </h2>
