@@ -525,6 +525,14 @@ export function HomePage() {
                     )}
                   </div>
                 </div>
+                {/* Mobile: the status column below is hidden, but locked rows
+                    still need their one signal — tapping opens the purchase
+                    sheet, not the section. */}
+                {locked && (
+                  <span className="sm:hidden text-[13px] shrink-0" aria-label="Unlocks with the chapter">
+                    🔒
+                  </span>
+                )}
                 <div className="hidden sm:flex items-center gap-3.5 shrink-0">
                   {inProgress && (
                     <>
