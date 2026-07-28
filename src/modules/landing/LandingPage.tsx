@@ -139,29 +139,44 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       })
   }, [])
 
-  // Mobile-only sticky bottom CTA: visible once the hero has scrolled away,
-  // hidden again when the final CTA band or footer is on screen (they carry
-  // their own CTA). Desktop never renders the bar (display:none in CSS).
-  const heroRef = useRef<HTMLElement>(null)
+  // Mobile-only sticky bottom CTA: appears the moment the hero's own
+  // "Start learning free" button disappears (including behind the sticky
+  // header — hence the negative top rootMargin), hidden again while the
+  // final CTA band or footer is on screen (they carry their own CTA).
+  // Desktop never renders the bar (display:none in CSS).
+  const heroBtnRef = useRef<HTMLButtonElement>(null)
   const endRef = useRef<HTMLElement>(null)
   const footRef = useRef<HTMLElement>(null)
   const [stickyOn, setStickyOn] = useState(false)
   useEffect(() => {
-    const els = [heroRef.current, endRef.current, footRef.current].filter(
-      (el): el is HTMLElement => el !== null
+    let btnGone = false
+    let endOnScreen = false
+    const update = () => setStickyOn(btnGone && !endOnScreen)
+
+    const ioBtn = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) btnGone = !e.isIntersecting
+        update()
+      },
+      // ~mobile header height: the button counts as gone once it slides under it.
+      { rootMargin: '-56px 0px 0px 0px' }
     )
-    if (els.length === 0) return
+    if (heroBtnRef.current) ioBtn.observe(heroBtnRef.current)
+
     const vis = new Map<Element, boolean>()
-    const io = new IntersectionObserver((entries) => {
+    const ioEnd = new IntersectionObserver((entries) => {
       for (const e of entries) vis.set(e.target, e.isIntersecting)
-      const heroGone = heroRef.current ? vis.get(heroRef.current) === false : false
-      const endOnScreen =
-        (footRef.current && vis.get(footRef.current)) ||
-        (endRef.current && vis.get(endRef.current))
-      setStickyOn(heroGone && !endOnScreen)
+      endOnScreen = [...vis.values()].some(Boolean)
+      update()
     })
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
+    ;[endRef.current, footRef.current]
+      .filter((el): el is HTMLElement => el !== null)
+      .forEach((el) => ioEnd.observe(el))
+
+    return () => {
+      ioBtn.disconnect()
+      ioEnd.disconnect()
+    }
   }, [])
 
   // CTAs open a branded sign-in sheet first — never a surprise redirect to
@@ -199,7 +214,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       </div>
 
       {/* HERO */}
-      <section className="band band-hero" ref={heroRef}>
+      <section className="band band-hero">
         <div className="in">
           <div className="hero-grid">
             <div className="hero-copy">
@@ -215,7 +230,13 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
                 Get your paper <b>marked by a real CBSE examiner</b>.
               </p>
               <div className="cta-row">
-                {start}
+                <button
+                  className="btn btn-primary btn-big"
+                  onClick={openSignIn}
+                  ref={heroBtnRef}
+                >
+                  Start learning free →
+                </button>
                 <span className="micro">No card needed · The first section is really free</span>
                 <a className="pricejump" href="#pricing">
                   See pricing ↓
@@ -240,12 +261,6 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
               className="heroipad"
               src="/landing/hero-ipad.png"
               alt="HistoryLab on an iPad — a chapter as an illustrated, interactive story"
-            />
-            {/* Phones swap the iPad render for the real mobile app (CSS toggles the pair). */}
-            <img
-              className="herophone"
-              src="/landing/hero-phone.png"
-              alt="HistoryLab on a phone — the chapter home with progress, mock tests and study tools"
             />
           </div>
         </div>
