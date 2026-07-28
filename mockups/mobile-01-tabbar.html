@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>HistoryLab — Mobile Tab-Bar Mockup (Ch1, real content)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ============ V2 tokens (mirror of app) ============ */
+:root{
+  --paper:#FBF6F1; --card:#FFFFFF; --ink:#3E3830; --dark:#2E2A25; --muted:#8A8178;
+  --line:#EDE5DB; --accent:#C05F35; --accent-soft:#F7E8DE; --gold:#C2893E; --gold-soft:#F6EBDB;
+  --indigo:#7E72C2; --indigo-soft:#EFEBF8; --green:#5C9368; --blue:#5571B5;
+  --ff-d:'Fraunces',Georgia,serif; --ff-b:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--ff-b);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.serif{font-family:var(--ff-d)}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}
+
+/* mockup banner */
+.mockbar{background:#2E2A25;color:#F6EBDB;font-size:12px;font-weight:600;padding:8px 14px;text-align:center}
+.mockbar b{color:#fff}
+
+/* ============ DESKTOP — AS-IS TODAY (≥900px) ============ */
+.desktop{display:grid;grid-template-columns:250px minmax(0,1fr) 300px;gap:22px;max-width:1240px;margin:0 auto;padding:20px 22px 60px}
+.side{position:sticky;top:20px;height:calc(100vh - 40px);display:flex;flex-direction:column}
+.brand{font-family:var(--ff-d);font-size:21px;font-weight:700;color:var(--dark);margin-bottom:14px}
+.brand em{font-style:normal;color:var(--accent)}
+.allch{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin:2px 0 8px;display:block}
+.chpill{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:16px;box-shadow:0 1px 4px rgba(60,45,30,.05)}
+.chpill .n{width:30px;height:30px;border-radius:9px;background:var(--accent);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center}
+.chpill b{font-size:12.5px;color:var(--dark);line-height:1.25}
+.side nav{flex:1;min-height:0;overflow:auto}
+.grp{font-size:10px;font-weight:800;letter-spacing:1.4px;color:var(--muted);margin:14px 0 6px}
+.nitem{display:flex;gap:10px;align-items:center;font-size:13.5px;font-weight:600;color:var(--ink);padding:9px 12px;border-radius:11px}
+.nitem.on{background:var(--card);color:var(--accent);font-weight:700;box-shadow:0 1px 4px rgba(60,45,30,.06)}
+.prof{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+.prof b{display:block;font-size:12.5px;color:var(--dark)}
+.prof span{font-size:11px;color:var(--muted);font-weight:600}
+.crumb{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px}
+.crumb b{color:var(--dark)}
+.hero-d{background:linear-gradient(120deg,#FDF3E7,#F4ECF7);border:1px solid var(--line);border-radius:20px;padding:26px;margin-bottom:18px}
+.hero-d .row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.hero-d .chn{width:40px;height:40px;border-radius:12px;background:var(--accent);color:#fff;font-family:var(--ff-d);font-weight:700;font-size:18px;display:grid;place-items:center}
+.hero-d h1{font-family:var(--ff-d);font-size:27px;color:var(--dark);margin:4px 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:11px;padding:7px 12px;font-size:12px;font-weight:700;color:var(--ink)}
+.jour{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px}
+.jour h2{font-family:var(--ff-d);font-size:19px;color:var(--dark);margin-bottom:14px}
+.jrow{display:flex;gap:14px;padding:12px 4px;border-bottom:1px solid var(--line);align-items:flex-start}
+.jrow:last-child{border-bottom:0}
+.jn{width:30px;height:30px;border-radius:50%;background:#F1EADD;color:var(--muted);font-weight:800;font-size:13px;display:grid;place-items:center;flex-shrink:0}
+.jn.done{background:var(--green);color:#fff}.jn.cur{background:var(--accent);color:#fff}
+.jrow b{font-family:var(--ff-d);font-size:15px;color:var(--dark);display:block}
+.jrow span{font-size:11.5px;font-weight:600;color:var(--muted)}
+.rail>div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+.rail .q{font-family:var(--ff-d);font-style:italic;font-size:14px;color:var(--indigo);background:var(--indigo-soft);border:0;text-align:center}
+.mockcta{background:linear-gradient(135deg,#7E72C2,#5E53A0)!important;color:#fff;border:0!important}
+.mockcta b{font-family:var(--ff-d);font-size:15px}
+.mockcta span{font-size:11.5px;opacity:.85;font-weight:600;display:block;margin-top:2px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat b{font-family:var(--ff-d);font-size:18px;color:var(--dark);display:block}
+.stat span{font-size:10px;font-weight:800;letter-spacing:.8px;color:var(--muted);text-transform:uppercase}
+.mobile{display:none}
+
+/* ============ MOBILE — PROPOSED (<900px) ============ */
+@media (max-width:899px){
+  .desktop{display:none}
+  .mobile{display:block;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  /* app bar */
+  .abar{position:sticky;top:0;z-index:20;background:rgba(251,246,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:12px 16px}
+  .abar .burger{font-size:20px;color:var(--dark);background:none;border:0;line-height:1}
+  .abar .brand{margin:0;font-size:19px;flex:1}
+  .stars{display:flex;gap:5px;align-items:center;background:var(--gold-soft);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12.5px;font-weight:800;color:var(--dark)}
+  .abar .av{width:32px;height:32px;font-size:13px}
+  .view{padding:16px;display:none}
+  .view.on{display:block}
+  /* LEARN hero */
+  .hero-m{background:linear-gradient(120deg,#FDF3E7,#F4ECF7);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+  .hero-m .top{display:flex;gap:14px;align-items:center}
+  .hero-m .meta{flex:1;min-width:0}
+  .hero-m .kicker{color:var(--accent);margin-bottom:4px;display:block}
+  .hero-m h1{font-family:var(--ff-d);font-size:21px;line-height:1.2;color:var(--dark)}
+  .ring{width:74px;height:74px;flex-shrink:0;position:relative}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .txt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+  .ring .txt b{font-size:15px;font-family:var(--ff-d);color:var(--dark);display:block;line-height:1}
+  .ring .txt span{font-size:8.5px;font-weight:800;color:var(--muted);text-transform:uppercase}
+  .timeleft{font-size:12px;font-weight:600;color:var(--muted);margin:10px 0 12px}
+  .cta{display:block;width:100%;background:var(--accent);color:#fff;font-family:var(--ff-d);font-weight:700;font-size:16px;text-align:center;border:0;border-radius:14px;padding:14px;box-shadow:0 4px 12px rgba(192,95,53,.3)}
+  .chips-m{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .chip-m{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12px;font-weight:700;color:var(--ink);display:flex;justify-content:space-between;align-items:center}
+  .chip-m i{font-style:normal;color:var(--muted);font-weight:800}
+  /* resume */
+  .resume{background:var(--accent-soft);border:1px solid #EDD5C6;border-radius:16px;padding:14px;margin-bottom:16px}
+  .resume .kicker{color:var(--accent)}
+  .resume b{font-family:var(--ff-d);font-size:15.5px;color:var(--dark);display:block;margin:3px 0 2px}
+  .resume p{font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:10px}
+  .resume .go{background:var(--accent);color:#fff;font-weight:700;font-size:13px;border:0;border-radius:10px;padding:9px 16px;float:right;margin-top:-6px}
+  /* journey (mobile) */
+  .jour-m{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px}
+  .jour-m h2{font-family:var(--ff-d);font-size:17px;color:var(--dark);margin-bottom:8px}
+  .jrow-m{display:flex;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);align-items:flex-start}
+  .jrow-m:last-child{border-bottom:0}
+  .jrow-m .body{flex:1;min-width:0}
+  .jrow-m b{font-family:var(--ff-d);font-size:14.5px;color:var(--dark);display:block;line-height:1.3}
+  .jrow-m span{font-size:11px;font-weight:600;color:var(--muted)}
+  .bar{height:5px;border-radius:99px;background:#F1EADD;margin-top:7px;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+  .chev{color:var(--muted);font-size:16px;align-self:center}
+  .quote-m{font-family:var(--ff-d);font-style:italic;font-size:13.5px;color:var(--indigo);background:var(--indigo-soft);border-radius:14px;padding:14px;text-align:center;margin-bottom:16px}
+  .stats-m{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+  .stat-m{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+  .stat-m b{font-family:var(--ff-d);font-size:17px;color:var(--dark);display:block}
+  .stat-m span{font-size:9.5px;font-weight:800;letter-spacing:.8px;color:var(--muted);text-transform:uppercase}
+  /* REVISE hub */
+  .hub h1{font-family:var(--ff-d);font-size:21px;color:var(--dark);margin-bottom:2px}
+  .hub .sub{font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:14px}
+  .tool{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:10px;box-shadow:0 1px 4px rgba(60,45,30,.04)}
+  .tool .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
+  .tool .body{flex:1;min-width:0}
+  .tool b{font-family:var(--ff-d);font-size:16px;color:var(--dark);display:block}
+  .tool span{font-size:12px;font-weight:600;color:var(--muted)}
+  .tool .arrow{color:var(--muted);font-size:18px}
+  .tip{display:flex;gap:12px;background:var(--gold-soft);border:1px solid #EBDBC2;border-radius:16px;padding:14px;margin-top:14px}
+  .tip .b{font-size:12.5px;font-weight:700;color:var(--dark)}
+  .tip p{font-size:12px;font-weight:500;color:var(--ink);margin-top:2px;line-height:1.45}
+  /* PRACTICE */
+  .ppr{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+  .ppr .tag{float:right;background:var(--indigo-soft);color:var(--indigo);font-size:10px;font-weight:800;border-radius:999px;padding:4px 10px;letter-spacing:.5px}
+  .ppr b{font-family:var(--ff-d);font-size:16px;color:var(--dark);display:block;margin-bottom:4px}
+  .ppr p{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px}
+  .ppr .meta{font-size:11.5px;font-weight:700;color:var(--ink);display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .ppr .start{background:var(--blue);color:#fff;font-weight:700;font-size:13.5px;border:0;border-radius:11px;padding:11px 18px;width:100%}
+  .exnote{background:linear-gradient(135deg,#7E72C2,#5E53A0);color:#fff;border-radius:16px;padding:15px;margin-top:4px}
+  .exnote b{font-family:var(--ff-d);font-size:14.5px;display:block;margin-bottom:3px}
+  .exnote span{font-size:11.5px;opacity:.9;font-weight:600}
+  /* tab bar */
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .tab{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;font-size:10.5px;font-weight:700;color:var(--muted);font-family:var(--ff-b)}
+  .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tab.on{color:var(--accent)}
+}
+@media (min-width:900px){ .mockbar-m{display:none} }
+</style>
+</head>
+<body>
+
+<div class="mockbar">MOCKUP · real Ch1 content · <b>≥900px = desktop AS-IS today (unchanged)</b> · <b>&lt;900px = proposed mobile</b> — resize the window or open on a phone</div>
+
+<!-- ================= DESKTOP: AS-IS (reference, unchanged) ================= -->
+<div class="desktop">
+  <aside class="side">
+    <div class="brand">History<em>Lab</em></div>
+    <span class="allch">‹ All Chapters</span>
+    <div class="chpill"><span class="n">1</span><b>The Rise of Nationalism in Europe</b></div>
+    <nav>
+      <div class="grp">LEARN</div>
+      <div class="nitem on">⌂ Overview</div>
+      <div class="grp">REVISE</div>
+      <div class="nitem">▤ Flashcards</div>
+      <div class="nitem">▦ Timeline</div>
+      <div class="nitem">▨ Maps</div>
+      <div class="nitem">▧ Figures</div>
+      <div class="grp">PRACTICE</div>
+      <div class="nitem">◎ Mock Tests</div>
+      <div class="grp">EXAM PREP</div>
+      <div class="nitem">✎ Exam Prep</div>
+    </nav>
+    <div class="prof"><span class="av">N</span><span><b>Neha sharma</b><span>Student · ⭐ 27 Stars</span></span></div>
+  </aside>
+
+  <main>
+    <div class="crumb">All Chapters › The Rise of Nationalism in Europe › <b>Overview</b></div>
+    <div class="hero-d">
+      <div class="row"><span class="chn">1</span><span class="kicker" style="color:var(--gold)">CBSE Class 10 · History</span></div>
+      <h1>The Rise of Nationalism in Europe</h1>
+      <div class="chips">
+        <span class="chip">🔖 6 Sections</span><span class="chip">◎ 2 Mock Tests</span>
+        <span class="chip">▤ 100 Flashcards</span><span class="chip">▧ 21 Figures</span>
+      </div>
+    </div>
+    <div class="jour">
+      <h2>Your chapter journey</h2>
+      <div class="jrow"><span class="jn done">✓</span><div><b>The French Revolution and the Idea of the Nation</b><span>4 topics · 1 quiz · 25 min · Completed</span></div></div>
+      <div class="jrow"><span class="jn cur">2</span><div><b>The Making of Nationalism in Europe</b><span>5 topics · 1 quiz · 30 min · In progress</span></div></div>
+      <div class="jrow"><span class="jn">3</span><div><b>The Age of Revolutions: 1830–1848</b><span>5 topics · 1 quiz · 32 min</span></div></div>
+      <div class="jrow"><span class="jn">4</span><div><b>The Making of Germany and Italy</b><span>4 topics · 1 quiz · 28 min</span></div></div>
+      <div class="jrow"><span class="jn">5</span><div><b>Visualising the Nation</b><span>3 topics · 1 quiz · 17 min</span></div></div>
+      <div class="jrow"><span class="jn">6</span><div><b>Nationalism and Imperialism</b><span>3 topics · 1 quiz · 17 min</span></div></div>
+    </div>
+  </main>
+
+  <aside class="rail">
+    <div class="q">“When France sneezes, the rest of Europe catches a cold.” — Metternich</div>
+    <div><span class="kicker">Chapter progress</span><div style="margin-top:8px"><b class="serif" style="font-size:22px;color:var(--dark)">1 of 6</b> <span style="font-size:12px;font-weight:600;color:var(--muted)">sections · about 2h 4m left</span></div></div>
+    <div class="mockcta"><b>◎ Take a mock test</b><span>The Rise of Nationalism in Europe — Practice Paper 1</span></div>
+    <div><span class="kicker">Your stats</span>
+      <div class="stats" style="margin-top:10px">
+        <div class="stat"><b>27</b><span>Stars</span></div><div class="stat"><b>9</b><span>Topics done</span></div>
+        <div class="stat"><b>9/10</b><span>Best MCQ</span></div><div class="stat"><b>1</b><span>Sections done</span></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ================= MOBILE: PROPOSED (<900px) ================= -->
+<div class="mobile">
+  <div class="abar">
+    <button class="burger">☰</button>
+    <div class="brand">History<em>Lab</em></div>
+    <span class="stars">⭐ 27</span>
+    <span class="av">N</span>
+  </div>
+
+  <!-- LEARN -->
+  <section class="view on" id="v-learn">
+    <div class="hero-m">
+      <div class="top">
+        <div class="meta">
+          <span class="kicker">Chapter 1 · CBSE Class 10 · History</span>
+          <h1>The Rise of Nationalism in Europe</h1>
+        </div>
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#EEE9F2" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#C05F35" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="194.8" stroke-dashoffset="162.3"/></svg>
+          <div class="txt"><div><b>17%</b><span>done</span></div></div>
+        </div>
+      </div>
+      <div class="timeleft">⏱ about 2h 4m of study left</div>
+      <button class="cta">Continue learning →</button>
+      <div class="chips-m">
+        <button class="chip-m">🔖 6 Sections <i>›</i></button>
+        <button class="chip-m" onclick="go('practice')">◎ 2 Mock Tests <i>›</i></button>
+        <button class="chip-m" onclick="go('revise')">▤ 100 Flashcards <i>›</i></button>
+        <button class="chip-m" onclick="go('revise')">▧ 21 Figures <i>›</i></button>
+      </div>
+    </div>
+
+    <div class="resume">
+      <span class="kicker">Continue learning</span>
+      <b>The Making of Nationalism in Europe</b>
+      <p>Resume from Topic 3: What did Liberal Nationalism Stand for? · about 7 min</p>
+      <button class="go">Continue →</button>
+      <div style="clear:both"></div>
+    </div>
+
+    <div class="jour-m">
+      <h2>Your chapter journey</h2>
+      <div class="jrow-m"><span class="jn done">✓</span><div class="body"><b>The French Revolution and the Idea of the Nation</b><span>4 topics · 1 quiz · 25 min</span></div><span class="chev">›</span></div>
+      <div class="jrow-m"><span class="jn cur">2</span><div class="body"><b>The Making of Nationalism in Europe</b><span>5 topics · 1 quiz · 30 min</span><div class="bar"><i style="width:40%"></i></div></div><span class="chev">›</span></div>
+      <div class="jrow-m"><span class="jn">3</span><div class="body"><b>The Age of Revolutions: 1830–1848</b><span>5 topics · 1 quiz · 32 min</span></div><span class="chev">›</span></div>
+      <div class="jrow-m"><span class="jn">4</span><div class="body"><b>The Making of Germany and Italy</b><span>4 topics · 1 quiz · 28 min</span></div><span class="chev">›</span></div>
+      <div class="jrow-m"><span class="jn">5</span><div class="body"><b>Visualising the Nation</b><span>3 topics · 1 quiz · 17 min</span></div><span class="chev">›</span></div>
+      <div class="jrow-m"><span class="jn">6</span><div class="body"><b>Nationalism and Imperialism</b><span>3 topics · 1 quiz · 17 min</span></div><span class="chev">›</span></div>
+    </div>
+
+    <div class="quote-m">“When France sneezes, the rest of Europe catches a cold.” — Metternich</div>
+
+    <div class="stats-m">
+      <div class="stat-m"><b>⭐ 27</b><span>Stars earned</span></div>
+      <div class="stat-m"><b>9</b><span>Topics done</span></div>
+      <div class="stat-m"><b>9/10</b><span>Best MCQ</span></div>
+      <div class="stat-m"><b>1</b><span>Sections done</span></div>
+    </div>
+  </section>
+
+  <!-- REVISE hub (mobile-only surface) -->
+  <section class="view hub" id="v-revise">
+    <h1>Revise &amp; strengthen</h1>
+    <div class="sub">Quick ways to revise everything in this chapter</div>
+
+    <div class="tool"><span class="ic" style="background:var(--indigo-soft)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7E72C2" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="M7 6V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"/></svg></span>
+      <div class="body"><b>Flashcards</b><span>100 smart cards · spaced repetition</span></div><span class="arrow">›</span>
+    </div>
+
+    <div class="tool"><span class="ic" style="background:var(--accent-soft)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C05F35" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h18"/><circle cx="7" cy="12" r="2"/><circle cx="14" cy="12" r="2"/><path d="M7 10V6m7 8v4"/></svg></span>
+      <div class="body"><b>Timeline</b><span>32 key events, 1688 – 1905 · BOARD Q pills</span></div><span class="arrow">›</span>
+    </div>
+
+    <div class="tool"><span class="ic" style="background:#E4EDF7">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5571B5" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg></span>
+      <div class="body"><b>Maps</b><span>Explore + label — the way boards ask</span></div><span class="arrow">›</span>
+    </div>
+
+    <div class="tool"><span class="ic" style="background:var(--gold-soft)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C2893E" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m5 17 5-4 3 2 4-3 2 2"/></svg></span>
+      <div class="body"><b>Figures</b><span>21 NCERT figures, explorable hotspots</span></div><span class="arrow">›</span>
+    </div>
+
+    <div class="tip"><span style="font-size:20px">💡</span>
+      <div><div class="b">How to revise effectively?</div>
+      <p>Do your due flashcards daily, then test yourself with a section quiz. Reading feels like revision — recall is revision.</p></div>
+    </div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="view" id="v-practice">
+    <h1 class="serif" style="font-size:21px;color:var(--dark)">Mock Tests</h1>
+    <div class="sub" style="font-size:12.5px;font-weight:600;color:var(--muted);margin:2px 0 14px">Real board-pattern papers, marked the way CBSE marks.</div>
+
+    <div class="ppr">
+      <span class="tag">BOARD PATTERN</span>
+      <b>The Rise of Nationalism in Europe — Practice Paper 1</b>
+      <p>Full CBSE pattern: MCQs, short &amp; long answers, source-based study.</p>
+      <div class="meta"><span>📝 17 questions</span><span>🎯 29 marks</span><span>⏱ 60 min</span></div>
+      <div class="meta" style="color:var(--muted)">Best: 9/10 MCQ · 1 attempt</div>
+      <button class="start">Start attempt 2 →</button>
+    </div>
+
+    <div class="exnote">
+      <b>🖋️ Get any attempt marked by a Senior CBSE Examiner</b>
+      <span>Real marks and remarks on every written answer — returned within 72 hours.</span>
+    </div>
+  </section>
+
+  <!-- EXAM PREP -->
+  <section class="view" id="v-exam">
+    <h1 class="serif" style="font-size:21px;color:var(--dark)">Exam Prep</h1>
+    <div class="sub" style="font-size:12.5px;font-weight:600;color:var(--muted);margin:2px 0 14px">Board questions and sources, the way CBSE asks them</div>
+
+    <div class="tool"><span class="ic" style="background:var(--gold-soft)">📜</span>
+      <div class="body"><b>Primary sources</b><span>6 sources with guided analysis</span></div><span class="arrow">›</span>
+    </div>
+    <div class="tool"><span class="ic" style="background:var(--accent-soft)">✍️</span>
+      <div class="body"><b>NCERT board questions</b><span>Textbook questions with model pointers</span></div><span class="arrow">›</span>
+    </div>
+  </section>
+
+  <!-- bottom tab bar -->
+  <nav class="tabs">
+    <button class="tab on" data-v="learn" onclick="go('learn')">
+      <svg viewBox="0 0 24 24"><path d="M4 19V6a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h13"/></svg>Learn</button>
+    <button class="tab" data-v="revise" onclick="go('revise')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="11" rx="2"/><path d="M7 7V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"/></svg>Revise</button>
+    <button class="tab" data-v="practice" onclick="go('practice')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>Practice</button>
+    <button class="tab" data-v="exam" onclick="go('exam')">
+      <svg viewBox="0 0 24 24"><path d="m14 4 6 6-9 9H5v-6l9-9Z"/><path d="m12 6 6 6"/></svg>Exam Prep</button>
+  </nav>
+</div>
+
+<script>
+function go(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'))
+  document.getElementById('v-'+v).classList.add('on')
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.v===v))
+  window.scrollTo(0,0)
+}
+</script>
+</body>
+</html>
