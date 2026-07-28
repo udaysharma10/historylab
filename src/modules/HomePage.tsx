@@ -351,27 +351,20 @@ export function HomePage() {
           <h1 className="font-display text-[24px] md:text-[31px] font-semibold text-v2-ink leading-[1.12] mb-4 max-w-full md:max-w-[60%]">
             {chapter.title}
           </h1>
-          {/* Mobile-only progress strip — replaces the rail's Chapter Progress
-              card, which is desktop-only (Uday 2026-07-28). One fact, once. */}
-          <div className="flex lg:hidden items-center gap-3 mb-4">
-            <div className="relative grid place-items-center shrink-0">
-              <svg width="52" height="52" className="-rotate-90">
-                <circle cx="26" cy="26" r="21" stroke="#F0E7EA" strokeWidth="6" fill="none" />
-                <circle
-                  cx="26" cy="26" r="21" stroke="#E8551F" strokeWidth="6" fill="none"
-                  strokeLinecap="round"
-                  strokeDasharray={2 * Math.PI * 21}
-                  strokeDashoffset={2 * Math.PI * 21 * (1 - overallProgress / 100)}
-                />
-              </svg>
-              <b className="absolute font-display text-[12px] text-v2-ink">{overallProgress}%</b>
+          {/* Mobile-only progress line — replaces the rail's Chapter Progress
+              card (desktop-only). Slim bar, not a ring: the hero must stay
+              short on phones (Uday 2026-07-28). */}
+          <div className="lg:hidden flex items-center gap-2.5 mb-3.5">
+            <div className="h-[6px] w-[88px] rounded-full overflow-hidden shrink-0" style={{ backgroundColor: '#F0E7EA' }}>
+              <div
+                className="h-full rounded-full"
+                style={{ width: `${overallProgress}%`, backgroundColor: '#E8551F' }}
+              />
             </div>
-            <div className="text-[12px] font-bold text-v2-body leading-snug">
-              <b className="block font-display text-[13.5px] text-v2-ink">
-                {sectionsDone} of {chapter.sections.length} sections done
-              </b>
-              {estLeft && <span className="text-v2-muted">about {estLeft} left</span>}
-            </div>
+            <span className="text-[11.5px] font-bold text-v2-body">
+              {sectionsDone} of {chapter.sections.length} sections
+              {estLeft && <span className="text-v2-muted font-semibold"> · about {estLeft} left</span>}
+            </span>
           </div>
           <div className="flex gap-2.5 flex-wrap">
             <HeroChip icon={<IconBook className="w-[15px] h-[15px] text-v2-accent" />} label={`${chapter.sections.length} Sections`} />
