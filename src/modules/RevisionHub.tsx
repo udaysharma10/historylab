@@ -31,7 +31,7 @@ export function RevisionHub() {
     {
       to: `${base}/flashcards`,
       img: '/images/revise-flashcards.png',
-      tint: 'bg-v2-lav-soft/60',
+      tint: 'bg-white',
       title: 'Flashcards',
       count: `${cards} smart cards`,
       bullet: 'spaced repetition',
@@ -39,7 +39,7 @@ export function RevisionHub() {
     {
       to: `${base}/timeline`,
       img: '/images/revise-timeline.png',
-      tint: 'bg-v2-accent-soft/60',
+      tint: 'bg-white',
       title: 'Timeline',
       count: dates.length ? `${dates.length} key events` : 'Every key date',
       bullet: years ? `${years} · tap any year` : 'in order',
@@ -47,7 +47,7 @@ export function RevisionHub() {
     {
       to: `${base}/maps`,
       img: '/images/revise-maps.png',
-      tint: 'bg-v2-ok-bg/70',
+      tint: 'bg-white',
       title: 'Maps',
       count: maps > 0 ? 'Board map work' : 'Map work',
       bullet: 'explore, identify & label',
@@ -55,7 +55,7 @@ export function RevisionHub() {
     {
       to: `${base}/figures`,
       img: '/images/revise-figures.png',
-      tint: 'bg-v2-page2',
+      tint: 'bg-white',
       title: 'Figures',
       count: `${figures} NCERT figures`,
       bullet: 'explore & remember',
@@ -75,7 +75,7 @@ export function RevisionHub() {
         {tools.map(({ to, img, tint, title, count, bullet }) => (
           <button
             key={to}
-            className={`w-full flex items-center gap-4 ${tint} border border-v2-line rounded-[20px] px-4 py-4 text-left btn-press`}
+            className={`w-full flex items-center gap-4 ${tint} border border-v2-line rounded-[20px] px-4 py-4 text-left shadow-v2-sm btn-press`}
             onClick={() => navigate(to)}
           >
             <img src={img} alt="" className="w-[96px] h-[76px] object-contain shrink-0 drop-shadow-sm" />
