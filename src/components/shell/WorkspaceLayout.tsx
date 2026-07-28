@@ -10,6 +10,7 @@ const TOOL_LABELS: Record<string, string> = {
   figures: 'Figures',
   exam: 'Exam Prep',
   tests: 'Mock Tests',
+  revise: 'Revise',
 }
 
 function chapterNumberOf(chapterId: string): number {

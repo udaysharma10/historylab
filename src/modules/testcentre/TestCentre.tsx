@@ -93,8 +93,8 @@ export function TestCentre() {
             Mock Tests
           </h1>
           <p className="font-body text-[13.5px] font-medium text-hist-muted max-w-[48ch]">
-            Real board-pattern papers, marked the way CBSE marks — with the official marking
-            scheme on every answer you write.
+            Real board-pattern papers — MCQs marked instantly, and any attempt can be marked
+            by a Senior CBSE Examiner.
           </p>
         </div>
         <div className="flex gap-3 shrink-0">
