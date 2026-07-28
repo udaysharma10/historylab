@@ -5,7 +5,7 @@ import {
   getFigures,
   getMapDefinitions,
 } from '../data/getChapter'
-import { IconLayers, IconCalendar, IconMap, IconImage, IconChevronRight } from '../components/shell/icons'
+import { IconChevronRight } from '../components/shell/icons'
 
 // Mobile Revise hub (2026-07-28 mobile track) — the landing for the Revise
 // bottom tab. Desktop never links here (the sidebar lists the four tools
@@ -25,34 +25,40 @@ export function RevisionHub() {
     ? `${Math.min(...dates.map(yearOf))} – ${Math.max(...dates.map(yearOf))}`
     : ''
 
+  // Illustrated tiles (Uday's infographics, 2026-07-28) — big visual left,
+  // real counts right, tinted card, circular arrow. Reference: intern round 2.
   const tools = [
     {
       to: `${base}/flashcards`,
-      Icon: IconLayers,
-      tint: 'bg-v2-lav-soft text-v2-lav',
+      img: '/images/revise-flashcards.png',
+      tint: 'bg-v2-lav-soft/60',
       title: 'Flashcards',
-      sub: `${cards} smart cards · spaced repetition`,
+      count: `${cards} smart cards`,
+      bullet: 'spaced repetition',
     },
     {
       to: `${base}/timeline`,
-      Icon: IconCalendar,
-      tint: 'bg-v2-accent-soft text-v2-accent-deep',
+      img: '/images/revise-timeline.png',
+      tint: 'bg-v2-accent-soft/60',
       title: 'Timeline',
-      sub: dates.length ? `${dates.length} key events, ${years}` : 'Every key date, in order',
+      count: dates.length ? `${dates.length} key events` : 'Every key date',
+      bullet: years ? `${years} · tap any year` : 'in order',
     },
     {
       to: `${base}/maps`,
-      Icon: IconMap,
-      tint: 'bg-v2-ok-bg text-v2-ok',
+      img: '/images/revise-maps.png',
+      tint: 'bg-v2-ok-bg/70',
       title: 'Maps',
-      sub: maps > 0 ? 'Explore & label — the way boards ask' : 'Board map work',
+      count: maps > 0 ? 'Board map work' : 'Map work',
+      bullet: 'explore, identify & label',
     },
     {
       to: `${base}/figures`,
-      Icon: IconImage,
-      tint: 'bg-v2-page2 text-v2-accent-deep',
+      img: '/images/revise-figures.png',
+      tint: 'bg-v2-page2',
       title: 'Figures',
-      sub: `${figures} NCERT figures, explorable`,
+      count: `${figures} NCERT figures`,
+      bullet: 'explore & remember',
     },
   ]
 
@@ -65,21 +71,22 @@ export function RevisionHub() {
         Quick ways to revise everything in this chapter
       </p>
 
-      <div className="space-y-2.5">
-        {tools.map(({ to, Icon, tint, title, sub }) => (
+      <div className="space-y-3">
+        {tools.map(({ to, img, tint, title, count, bullet }) => (
           <button
             key={to}
-            className="w-full flex items-center gap-3.5 bg-white border border-v2-line rounded-2xl px-4 py-3.5 text-left shadow-v2 btn-press"
+            className={`w-full flex items-center gap-4 ${tint} border border-v2-line rounded-[20px] px-4 py-4 text-left btn-press`}
             onClick={() => navigate(to)}
           >
-            <span className={`w-11 h-11 rounded-xl grid place-items-center shrink-0 ${tint}`}>
-              <Icon className="w-[22px] h-[22px]" />
-            </span>
+            <img src={img} alt="" className="w-[96px] h-[76px] object-contain shrink-0 drop-shadow-sm" />
             <span className="flex-1 min-w-0">
-              <b className="block font-display text-[16px] font-semibold text-v2-ink">{title}</b>
-              <span className="text-[12px] font-semibold text-v2-muted">{sub}</span>
+              <b className="block font-display text-[18px] font-semibold text-v2-ink">{title}</b>
+              <span className="block text-[13px] font-bold text-v2-ink/85 mt-0.5">{count}</span>
+              <span className="block text-[12px] font-semibold text-v2-muted">• {bullet}</span>
             </span>
-            <IconChevronRight className="w-4 h-4 text-v2-muted shrink-0" />
+            <span className="w-10 h-10 rounded-full bg-white shadow-v2-sm grid place-items-center shrink-0">
+              <IconChevronRight className="w-4 h-4 text-v2-ink" />
+            </span>
           </button>
         ))}
       </div>
