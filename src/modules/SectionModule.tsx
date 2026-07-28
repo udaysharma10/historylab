@@ -100,9 +100,27 @@ export function SectionModule() {
 
   const topicPath = (i: number) => `${basePath}/section/${sectionId}/topic/${i + 1}`
 
+  // Mobile hero CTA — the one next action (mobile track 2026-07-28): next
+  // incomplete topic, else the quiz, else nothing (Completed chip suffices).
+  const nextTopic = firstIncomplete >= 0 ? section.subsections[firstIncomplete] : null
+  const heroCta = nextTopic
+    ? {
+        label: doneUnits > 0 ? 'Continue' : 'Start Learning',
+        to: topicPath(firstIncomplete),
+        caption: `Next: Topic ${firstIncomplete + 1} · ${nextTopic.title} · about ${Math.max(1, Math.round(nextTopic.narrativeCards.length * MIN_PER_CARD))} min`,
+      }
+    : !quizDone
+      ? {
+          label: 'Take the Section Quiz',
+          to: `${basePath}/section/${section.id}/quiz`,
+          caption: 'Last step — completes this section',
+        }
+      : null
+
   const rail = (
     <div>
-      <div className="mb-7">
+      {/* Desktop-only: the mobile hero carries the progress fact (2026-07-28) */}
+      <div className="hidden lg:block mb-7">
         <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-3.5">
           Section Progress
         </h3>
@@ -146,8 +164,9 @@ export function SectionModule() {
         )}
       </div>
 
+      {/* Desktop-only: mobile's Practice tab is the mock-test entry */}
       <button
-        className="w-full flex items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
+        className="hidden lg:flex w-full items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
         style={{ background: 'linear-gradient(140deg, #453A5E, #67589B)' }}
         onClick={() => navigate(`${basePath}/tests`)}
       >
@@ -186,8 +205,10 @@ export function SectionModule() {
             <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
           </button>
         )}
+        {/* Desktop-only: on mobile this stacked right under the sheet's own
+            Section Quiz card — the same door twice (2026-07-28). */}
         <button
-          className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
+          className="hidden lg:flex w-full items-center gap-3 py-3 text-left border-b border-v2-line"
           onClick={() => navigate(`${basePath}/section/${section.id}/quiz`)}
         >
           <span className="w-9 h-9 rounded-[10px] bg-v2-accent-soft text-v2-accent grid place-items-center shrink-0">
@@ -235,7 +256,7 @@ export function SectionModule() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-[20px] overflow-hidden mb-7 min-h-[236px] flex items-center shadow-[0_18px_44px_rgba(42,34,51,.28)]"
+        className="relative rounded-[20px] overflow-hidden mb-7 min-h-[204px] md:min-h-[236px] flex items-center shadow-[0_18px_44px_rgba(42,34,51,.28)]"
         style={{ backgroundColor: '#2A2233' }}
       >
         {art && (
@@ -270,7 +291,42 @@ export function SectionModule() {
           <h1 className="font-display text-[23px] md:text-[30px] font-semibold text-white leading-[1.12] mb-2">
             {section.title}
           </h1>
-          <div className="flex items-center gap-4 text-[12.5px] font-bold text-[#C9BFD4] flex-wrap mt-1">
+          {/* Mobile-only progress row + CTA (chapter-hero grammar, 2026-07-28) */}
+          <div className="md:hidden mt-2.5">
+            <div className="flex items-center gap-3 mb-3">
+              <b className="font-display text-[15px] text-[#FFB68F] shrink-0">{pct}%</b>
+              <div className="h-[5px] flex-1 rounded-full overflow-hidden bg-white/20">
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${Math.max(pct, 2)}%`, backgroundColor: '#E8551F' }}
+                />
+              </div>
+              <span className="text-[11px] font-bold text-[#C9BFD4] shrink-0">
+                {topicsDone} of {section.subsections.length} topics
+                {quizDone ? ' · quiz ✓' : ''}
+              </span>
+            </div>
+            {heroCta ? (
+              <>
+                <button
+                  className="flex items-center justify-center gap-2 w-full bg-v2-accent text-white font-extrabold text-[14.5px] py-3 rounded-2xl shadow-[0_6px_18px_rgba(232,85,31,.4)] btn-press"
+                  onClick={() => navigate(heroCta.to)}
+                >
+                  {heroCta.label}
+                  <IconChevronRight className="w-[15px] h-[15px]" />
+                </button>
+                <span className="block text-[11px] font-semibold text-[#C9BFD4] mt-2">
+                  {heroCta.caption}
+                </span>
+              </>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-[#9FE0B4] bg-[rgba(62,142,90,.28)] rounded-full px-3 py-1 text-[12px] font-extrabold">
+                <IconCheck className="w-3.5 h-3.5" />
+                Section completed — quiz and all 🎉
+              </span>
+            )}
+          </div>
+          <div className="hidden md:flex items-center gap-4 text-[12.5px] font-bold text-[#C9BFD4] flex-wrap mt-1">
             <span className="flex items-center gap-1.5">
               <IconBook className="w-[15px] h-[15px] text-[#A99DB8]" />
               {section.subsections.length} topics
@@ -302,21 +358,48 @@ export function SectionModule() {
       >
         {section.keyPoints.length > 0 && (
           <>
-            <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-[18px]">
-              <IconTarget className="w-5 h-5 text-v2-accent" />
-              What You'll Learn
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-7 gap-y-3.5">
-              {section.keyPoints.map((point, i) => (
-                <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
-                  <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
-                    <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
-                  </span>
-                  {point}
-                </div>
-              ))}
+            {/* Mobile: collapsed disclosure — the checklist must not toll-gate
+                the topic list a screen and a half down (2026-07-28). Desktop
+                keeps it open; space is free there. */}
+            <details className="lg:hidden group">
+              <summary className="flex items-center gap-2.5 font-display text-[17px] font-semibold text-v2-ink cursor-pointer list-none">
+                <IconTarget className="w-5 h-5 text-v2-accent" />
+                What You'll Learn
+                <span className="ml-auto text-[11.5px] font-body font-bold text-v2-muted">
+                  {section.keyPoints.length} takeaways
+                  <IconChevronRight className="inline w-3.5 h-3.5 ml-1 group-open:rotate-90 transition-transform" />
+                </span>
+              </summary>
+              <div className="grid grid-cols-1 gap-y-3.5 mt-4">
+                {section.keyPoints.map((point, i) => (
+                  <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
+                    <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
+                      <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
+                    </span>
+                    {point}
+                  </div>
+                ))}
+              </div>
+            </details>
+            <hr className="lg:hidden border-0 h-px bg-v2-line my-6 -mx-2" />
+
+            <div className="hidden lg:block">
+              <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-[18px]">
+                <IconTarget className="w-5 h-5 text-v2-accent" />
+                What You'll Learn
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-7 gap-y-3.5">
+                {section.keyPoints.map((point, i) => (
+                  <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
+                    <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
+                      <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
+                    </span>
+                    {point}
+                  </div>
+                ))}
+              </div>
+              <hr className="border-0 h-px bg-v2-line my-7 -mx-2" />
             </div>
-            <hr className="border-0 h-px bg-v2-line my-7 -mx-2" />
           </>
         )}
 
