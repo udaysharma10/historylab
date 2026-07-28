@@ -320,7 +320,7 @@ export function HomePage() {
       >
         {heroArt && (
           <div
-            className="absolute inset-0 opacity-25 md:opacity-100"
+            className="absolute inset-0 opacity-45 md:opacity-100"
             style={{
               background: `url(${heroArt}) right 30% / 62% auto no-repeat`,
               filter: 'sepia(.25) saturate(.85) brightness(1.03)',
@@ -351,43 +351,75 @@ export function HomePage() {
           <h1 className="font-display text-[24px] md:text-[31px] font-semibold text-v2-ink leading-[1.12] mb-4 max-w-full md:max-w-[60%]">
             {chapter.title}
           </h1>
-          {/* Mobile-only progress line — replaces the rail's Chapter Progress
-              card (desktop-only). Slim bar, not a ring: the hero must stay
-              short on phones (Uday 2026-07-28). */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-3.5">
-            <div className="h-[6px] w-[88px] rounded-full overflow-hidden shrink-0" style={{ backgroundColor: '#F0E7EA' }}>
+          {/* Mobile-only progress row — % stat · full-width bar · caption
+              (intern round-3 steal, Uday 2026-07-28). */}
+          <div className="lg:hidden flex items-center gap-3 mb-3.5">
+            <b className="font-display text-[16px] text-v2-accent shrink-0">{overallProgress}%</b>
+            <div className="h-[6px] flex-1 rounded-full overflow-hidden" style={{ backgroundColor: '#F0E7EA' }}>
               <div
                 className="h-full rounded-full"
-                style={{ width: `${overallProgress}%`, backgroundColor: '#E8551F' }}
+                style={{ width: `${Math.max(overallProgress, 2)}%`, backgroundColor: '#E8551F' }}
               />
             </div>
-            <span className="text-[11.5px] font-bold text-v2-body">
+            <span className="text-[11.5px] font-bold text-v2-muted shrink-0">
               {sectionsDone} of {chapter.sections.length} sections
-              {estLeft && <span className="text-v2-muted font-semibold"> · about {estLeft} left</span>}
             </span>
           </div>
-          <div className="flex gap-2.5 flex-wrap">
+          <div className="flex gap-2.5 lg:gap-2.5 gap-x-4 gap-y-2 flex-wrap">
             <HeroChip icon={<IconBook className="w-[15px] h-[15px] text-v2-accent" />} label={`${chapter.sections.length} Sections`} />
             {entitled && papers.length > 0 && (
-              <HeroChip icon={<IconTarget className="w-[15px] h-[15px] text-v2-accent" />} label={`${papers.length} Mock Test${papers.length === 1 ? '' : 's'}`} />
+              <HeroChip
+                icon={<IconTarget className="w-[15px] h-[15px] text-v2-accent" />}
+                label={`${papers.length} Mock Test${papers.length === 1 ? '' : 's'}`}
+                onClick={() => navigate(`${basePath}/tests`)}
+              />
             )}
             {flashcardCount > 0 && (
-              <HeroChip icon={<IconLayers className="w-[15px] h-[15px] text-v2-accent" />} label={`${flashcardCount} Flashcards`} />
+              <HeroChip
+                icon={<IconLayers className="w-[15px] h-[15px] text-v2-accent" />}
+                label={`${flashcardCount} Flashcards`}
+                onClick={() => navigate(`${basePath}/flashcards`)}
+              />
             )}
             {figureCount > 0 && (
-              <HeroChip icon={<IconImage className="w-[15px] h-[15px] text-v2-accent" />} label={`${figureCount} Figures`} />
+              <HeroChip
+                icon={<IconImage className="w-[15px] h-[15px] text-v2-accent" />}
+                label={`${figureCount} Figures`}
+                onClick={() => navigate(`${basePath}/figures`)}
+              />
             )}
           </div>
+          {/* Mobile-only hero CTA — the ONE start/continue action (the resume
+              band below is desktop-only; its context lives in the caption). */}
+          {resumeInfo && (
+            <div className="lg:hidden mt-4">
+              <button
+                className="flex items-center justify-center gap-2 w-full max-w-[340px] bg-v2-accent text-white font-extrabold text-[15px] py-3.5 rounded-2xl shadow-[0_6px_18px_rgba(232,85,31,.35)] btn-press"
+                onClick={() =>
+                  navigate(`${basePath}/section/${resumeInfo.sectionId}/topic/${resumeInfo.topicIndex + 1}`)
+                }
+              >
+                {overall.done > 0 ? 'Continue Learning' : 'Start Learning'}
+                <IconArrowRight className="w-[16px] h-[16px]" />
+              </button>
+              <span className="block text-[11.5px] font-semibold text-v2-body mt-2">
+                Next: Topic {resumeInfo.topicIndex + 1} · {resumeInfo.topicTitle} · about{' '}
+                {resumeInfo.minutes} min
+              </span>
+            </div>
+          )}
         </div>
       </motion.div>
 
-      {/* RESUME BAND — one click into the reader */}
+      {/* RESUME BAND — one click into the reader. DESKTOP ONLY (Uday
+          2026-07-28): the mobile hero carries the CTA + next-topic caption;
+          band + hero CTA on one phone screen said the same thing twice. */}
       {resumeInfo && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="flex items-center gap-4 rounded-2xl px-5 py-4 mb-6 border flex-wrap"
+          className="hidden lg:flex items-center gap-4 rounded-2xl px-5 py-4 mb-6 border flex-wrap"
           style={{
             background: 'linear-gradient(140deg,#FFF3E9,#FDE7D7)',
             borderColor: '#F6D4C2',
@@ -612,9 +644,30 @@ export function HomePage() {
   )
 }
 
-function HeroChip({ icon, label }: { icon: React.ReactNode; label: string }) {
+// Mobile: borderless (icon + text, no pill) and tappable where a destination
+// exists; desktop keeps the white pill look (intern round-3 steal, 2026-07-28).
+function HeroChip({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: React.ReactNode
+  label: string
+  onClick?: () => void
+}) {
+  const cls =
+    'flex items-center gap-[7px] text-xs font-extrabold text-v2-ink ' +
+    'lg:bg-white/85 lg:rounded-[11px] lg:px-[13px] lg:py-2 lg:shadow-[0_3px_10px_rgba(70,60,100,.06)]'
+  if (onClick) {
+    return (
+      <button className={`${cls} btn-press`} onClick={onClick}>
+        {icon}
+        {label}
+      </button>
+    )
+  }
   return (
-    <span className="flex items-center gap-[7px] bg-white/85 rounded-[11px] px-[13px] py-2 text-xs font-extrabold text-v2-ink shadow-[0_3px_10px_rgba(70,60,100,.06)]">
+    <span className={cls}>
       {icon}
       {label}
     </span>
