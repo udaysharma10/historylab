@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
 import './landing.css'
 
@@ -139,6 +139,46 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       })
   }, [])
 
+  // Mobile-only sticky bottom CTA: appears the moment the hero's own
+  // "Start learning free" button disappears (including behind the sticky
+  // header — hence the negative top rootMargin), hidden again while the
+  // final CTA band or footer is on screen (they carry their own CTA).
+  // Desktop never renders the bar (display:none in CSS).
+  const heroBtnRef = useRef<HTMLButtonElement>(null)
+  const endRef = useRef<HTMLElement>(null)
+  const footRef = useRef<HTMLElement>(null)
+  const [stickyOn, setStickyOn] = useState(false)
+  useEffect(() => {
+    let btnGone = false
+    let endOnScreen = false
+    const update = () => setStickyOn(btnGone && !endOnScreen)
+
+    const ioBtn = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) btnGone = !e.isIntersecting
+        update()
+      },
+      // ~mobile header height: the button counts as gone once it slides under it.
+      { rootMargin: '-56px 0px 0px 0px' }
+    )
+    if (heroBtnRef.current) ioBtn.observe(heroBtnRef.current)
+
+    const vis = new Map<Element, boolean>()
+    const ioEnd = new IntersectionObserver((entries) => {
+      for (const e of entries) vis.set(e.target, e.isIntersecting)
+      endOnScreen = [...vis.values()].some(Boolean)
+      update()
+    })
+    ;[endRef.current, footRef.current]
+      .filter((el): el is HTMLElement => el !== null)
+      .forEach((el) => ioEnd.observe(el))
+
+    return () => {
+      ioBtn.disconnect()
+      ioEnd.disconnect()
+    }
+  }, [])
+
   // CTAs open a branded sign-in sheet first — never a surprise redirect to
   // Google (Uday's feedback, 2026-07-12).
   const openSignIn = () => setShowSignIn(true)
@@ -178,34 +218,82 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
         <div className="in">
           <div className="hero-grid">
             <div className="hero-copy">
-              <span className="kicker">The home of school History · Live now: CBSE Class 10</span>
+              <span className="kicker">
+                <span>The home of school History</span>
+                <span className="kdot" aria-hidden>
+                  ·
+                </span>
+                <span>Live now: CBSE Class 10</span>
+              </span>
               <h1>
-                History, <em>finally understood.</em>
+                History,
+                <br />
+                <em>finally understood.</em>
               </h1>
-              <p className="sub">
-                Learn every chapter as an interactive story.
-                <br />
-                Practice like the boards.
-                <br />
-                Get your paper <b>marked by a real CBSE examiner</b>.
-              </p>
-              <div className="cta-row">
-                {start}
-                <span className="micro">No card needed · The first section is really free</span>
-              </div>
+              {/* The three statements + their proof lines, merged into icon
+                  rows (2026-07-28 hero polish) — copy unchanged, emoji gone. */}
               <div className="creds">
                 <div className="cred">
-                  <b>👩‍🏫 Built with a CBSE History teacher</b>
-                  <span>Every chapter, NCERT-faithful</span>
+                  <span className="cic" aria-hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z" />
+                      <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <b>Learn every chapter as an interactive story.</b>
+                    <span>Built with a CBSE History teacher · every chapter NCERT-faithful</span>
+                  </div>
                 </div>
                 <div className="cred">
-                  <b>🖊️ Senior CBSE Examiner on board</b>
-                  <span>20 years of board marking behind every scheme</span>
+                  <span className="cic" aria-hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="8" y="2" width="8" height="4" rx="1" />
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                      <path d="m9 14 2 2 4-4" />
+                    </svg>
+                  </span>
+                  <div>
+                    <b>Practice like the boards.</b>
+                    <span>Papers, sources &amp; maps the way CBSE asks</span>
+                  </div>
                 </div>
                 <div className="cred">
-                  <b>🎯 Board-pattern everything</b>
-                  <span>Papers, sources &amp; maps the way CBSE asks</span>
+                  <span className="cic" aria-hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="8" r="6" />
+                      <path d="M15.5 13 17 22l-5-3-5 3 1.5-9" />
+                    </svg>
+                  </span>
+                  <div>
+                    <b>
+                      Get your paper <em>marked by a real CBSE examiner</em>.
+                    </b>
+                    <span>20 years of board marking behind every scheme</span>
+                  </div>
                 </div>
+              </div>
+              <div className="cta-row">
+                <button
+                  className="btn btn-primary btn-big"
+                  onClick={openSignIn}
+                  ref={heroBtnRef}
+                >
+                  Start learning free →
+                </button>
+              </div>
+              <div className="herochips">
+                <span className="hchip">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V6l8-3 8 3z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                  First section free · no card needed
+                </span>
+                <span className="hdiv" aria-hidden />
+                <a className="hchip hlink" href="#pricing">
+                  See pricing →
+                </a>
               </div>
             </div>
             <img
@@ -739,7 +827,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
       </section>
 
       {/* CTA */}
-      <section className="band band-cta">
+      <section className="band band-cta" ref={endRef}>
         <div className="in">
           <h2>The first section is free. Start tonight.</h2>
           <p>
@@ -750,7 +838,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
         </div>
       </section>
 
-      <footer>
+      <footer ref={footRef}>
         <div className="in">
           <div className="fgrid">
             <div>
@@ -782,6 +870,18 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
           </div>
         </div>
       </footer>
+
+      {/* Mobile-only sticky CTA bar (desktop: display none) */}
+      <div className={`stickycta${stickyOn ? ' on' : ''}`} aria-hidden={!stickyOn}>
+        <button
+          className="btn btn-primary"
+          onClick={openSignIn}
+          tabIndex={stickyOn ? 0 : -1}
+        >
+          Start learning free →
+        </button>
+        <span>No card needed · The first section is really free</span>
+      </div>
 
       <SignInModal
         open={showSignIn}

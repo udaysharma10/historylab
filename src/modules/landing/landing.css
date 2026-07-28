@@ -48,19 +48,29 @@
 .landing .bhead p { font-size: 14.5px; font-weight: 500; color: var(--muted); }
 .landing .kicker { display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.6px; color: var(--accent-strong); margin-bottom: 12px; }
 
-/* hero */
+/* hero (polish pass 2026-07-28: pill kicker, icon proof rows, chip row, tilt) */
 .landing .hero-grid { display: grid; grid-template-columns: 1fr .96fr; gap: 56px; align-items: center; }
-.landing .hero-copy h1 { font-family: var(--font-display); font-size: 60px; font-weight: 600; line-height: 1.05; color: var(--ink); margin-bottom: 20px; }
+.landing .hero-copy .kicker { display: inline-flex; align-items: center; gap: 8px; background: rgba(220, 131, 95, .12); padding: 7px 14px; border-radius: 999px; margin-bottom: 16px; }
+.landing .hero-copy .kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.landing .hero-copy h1 { font-family: var(--font-display); font-size: 54px; font-weight: 600; line-height: 1.08; color: var(--ink); margin-bottom: 24px; }
 .landing .hero-copy h1 em { font-style: normal; color: var(--accent-strong); }
-.landing .hero-copy .sub { font-size: 17px; font-weight: 500; line-height: 1.7; margin-bottom: 26px; color: var(--body); }
-.landing .hero-copy .sub b { color: var(--ink); }
-.landing .cta-row { display: flex; gap: 14px; align-items: center; margin-bottom: 26px; flex-wrap: wrap; }
-.landing .micro { font-size: 12px; font-weight: 600; color: var(--muted); }
-.landing .creds { display: flex; gap: 0; border-top: 1px solid var(--line); padding-top: 18px; }
-.landing .cred { flex: 1; padding-right: 18px; }
-.landing .cred b { display: block; font-size: 12.5px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
-.landing .cred span { font-size: 11.5px; font-weight: 500; color: var(--muted); line-height: 1.4; }
-.landing .heroipad { width: 100%; display: block; border-radius: 26px; box-shadow: var(--shadow-lg); }
+.landing .cta-row { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+.landing .creds { display: flex; flex-direction: column; gap: 13px; margin-bottom: 26px; }
+.landing .cred { display: flex; gap: 13px; align-items: flex-start; }
+.landing .cic { width: 42px; height: 42px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-strong); display: grid; place-items: center; flex-shrink: 0; }
+.landing .cic svg { width: 21px; height: 21px; }
+.landing .cred b { display: block; font-size: 15px; font-weight: 700; color: var(--ink); margin: 2px 0 2px; line-height: 1.35; }
+.landing .cred b em { font-style: normal; color: var(--accent-strong); }
+.landing .cred span { font-size: 12px; font-weight: 500; color: var(--muted); line-height: 1.45; }
+.landing .herochips { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.landing .hchip { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--body); }
+.landing .hchip svg { width: 16px; height: 16px; color: var(--accent-strong); flex-shrink: 0; }
+.landing .hchip.hlink { color: var(--accent-strong); text-decoration: none; }
+.landing .hchip.hlink:hover { color: var(--pen); }
+.landing .hdiv { width: 1px; height: 16px; background: var(--line); }
+.landing .heroipad { width: 100%; display: block; border-radius: 26px; box-shadow: var(--shadow-lg); transform: rotate(-5deg) scale(.97); }
+/* Mobile-only elements (Package 1, 2026-07-28) — desktop never shows these. */
+.landing .stickycta { display: none; }
 
 /* problem cards */
 .landing .probs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 44px; }
@@ -225,10 +235,35 @@
   .landing .band-hero { padding: 34px 0 54px; }
   .landing .bhead { margin-bottom: 32px; }
   .landing .bhead h2 { font-size: 24px; }
-  .landing .hero-grid { grid-template-columns: 1fr; gap: 34px; }
+  .landing .hero-grid { grid-template-columns: 1fr; gap: 30px; }
   .landing .hero-copy h1 { font-size: 37px; }
-  .landing .hero-copy .sub { font-size: 15px; }
+  /* pill can't fit one line at 390px — break it deliberately between the
+     two phrases instead of mid-phrase */
+  .landing .hero-copy .kicker { flex-direction: column; align-items: flex-start; gap: 3px; width: fit-content; font-size: 10px; letter-spacing: 1px; padding: 9px 14px; border-radius: 18px; }
+  .landing .hero-copy .kicker::before { display: none; }
+  .landing .kdot { display: none; }
+  .landing .cred b { font-size: 14px; }
+  .landing .heroipad { transform: rotate(-4deg) scale(.96); margin-top: 6px; }
   .landing .cta-row .btn-big { width: 100%; }
+  .landing .herochips { justify-content: center; }
+  .landing .hdiv { display: none; }
+
+  /* — Package 1 (2026-07-28): slim header — the hero CTA + sticky bar own
+     "Start free" on phones, so the header keeps only brand + Sign in. */
+  .landing .topbar .in { padding-top: 8px; padding-bottom: 8px; gap: 10px; }
+  .landing .brand { font-size: 20px; }
+  .landing .topact .btn-sm { padding: 8px 13px; font-size: 12.5px; }
+  .landing .topact .btn-primary { display: none; }
+
+  /* — Package 1: the ₹499 launch card leads the stacked pricing list. */
+  .landing .price.hot { order: -1; }
+  .landing .price-grid { padding-top: 6px; } /* room for the hot card's overhanging tag */
+
+  /* — Package 1: sticky bottom CTA bar (shown between hero and final CTA). */
+  .landing .stickycta { display: flex; flex-direction: column; gap: 6px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: rgba(255, 255, 255, .96); backdrop-filter: blur(8px); border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); transform: translateY(110%); transition: transform .25s ease; }
+  .landing .stickycta.on { transform: none; }
+  .landing .stickycta .btn { width: 100%; padding: 13px 20px; font-size: 14.5px; }
+  .landing .stickycta span { font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; }
   .landing .creds { flex-direction: column; gap: 12px; }
   .landing .probs { grid-template-columns: 1fr; }
   .landing .founder p { font-size: 18px; }
