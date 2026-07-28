@@ -315,7 +315,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
           <div className="probs">
             <div className="prob">
               <div className="illo">
-                <img src="/landing/illo-memorise.png" alt="A student overwhelmed by dates and books" />
+                <img src="/landing/illo-memorise.webp" alt="A student overwhelmed by dates and books" />
               </div>
               <div className="tt">
                 <b>Too much to memorise</b>
@@ -324,7 +324,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             </div>
             <div className="prob">
               <div className="illo">
-                <img src="/landing/illo-connect.png" alt="A student unable to connect historical events" />
+                <img src="/landing/illo-connect.webp" alt="A student unable to connect historical events" />
               </div>
               <div className="tt">
                 <b>Hard to connect</b>
@@ -333,7 +333,7 @@ export function LandingPage({ onSignIn, signingIn }: LandingPageProps) {
             </div>
             <div className="prob">
               <div className="illo">
-                <img src="/landing/illo-panic.png" alt="A student panicking before exams" />
+                <img src="/landing/illo-panic.webp" alt="A student panicking before exams" />
               </div>
               <div className="tt">
                 <b>Panic before exams</b>
