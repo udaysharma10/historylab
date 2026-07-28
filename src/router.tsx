@@ -10,6 +10,7 @@ import { SectionModule } from './modules/SectionModule'
 import { TopicReader } from './modules/TopicReader'
 import { QuizMode } from './modules/QuizMode'
 import { TimelineMode } from './modules/TimelineMode'
+import { RevisionHub } from './modules/RevisionHub'
 import { MapMode } from './modules/MapMode'
 import { FigureMode } from './modules/FigureMode'
 import { FlashcardMode } from './modules/FlashcardMode'
@@ -114,6 +115,7 @@ export const router = createBrowserRouter([
       {
         element: <WorkspaceLayout />,
         children: [
+          { path: '/chapter/:chapterId/revise', element: <RevisionHub /> },
           { path: '/chapter/:chapterId/timeline', element: <TimelineMode /> },
           { path: '/chapter/:chapterId/maps', element: <MapMode /> },
           { path: '/chapter/:chapterId/flashcards', element: <FlashcardMode /> },

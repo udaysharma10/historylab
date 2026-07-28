@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { getChapter, getChapterPreview, getTimelineActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
@@ -100,9 +101,35 @@ export function SectionModule() {
 
   const topicPath = (i: number) => `${basePath}/section/${sectionId}/topic/${i + 1}`
 
+  // Mobile sheet tabs (Uday 2026-07-28): Topics | Quiz & Explore — section-
+  // local content modes ("Practice" is reserved for the bottom bar's Mock
+  // Tests). Opens on Quiz & Explore when only the quiz remains. Desktop shows
+  // the whole sheet, tabs hidden.
+  const [sheetTab, setSheetTab] = useState<'topics' | 'practice'>(
+    firstIncomplete === -1 && !quizDone ? 'practice' : 'topics',
+  )
+
+  // Mobile hero CTA — the one next action (mobile track 2026-07-28): next
+  // incomplete topic, else the quiz, else nothing (Completed chip suffices).
+  const nextTopic = firstIncomplete >= 0 ? section.subsections[firstIncomplete] : null
+  const heroCta = nextTopic
+    ? {
+        label: doneUnits > 0 ? 'Continue' : 'Start Learning',
+        to: topicPath(firstIncomplete),
+        caption: `Next: Topic ${firstIncomplete + 1} · ${nextTopic.title} · about ${Math.max(1, Math.round(nextTopic.narrativeCards.length * MIN_PER_CARD))} min`,
+      }
+    : !quizDone
+      ? {
+          label: 'Take the Section Quiz',
+          to: `${basePath}/section/${section.id}/quiz`,
+          caption: 'Last step — completes this section',
+        }
+      : null
+
   const rail = (
     <div>
-      <div className="mb-7">
+      {/* Desktop-only: the mobile hero carries the progress fact (2026-07-28) */}
+      <div className="hidden lg:block mb-7">
         <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-3.5">
           Section Progress
         </h3>
@@ -146,8 +173,9 @@ export function SectionModule() {
         )}
       </div>
 
+      {/* Desktop-only: mobile's Practice tab is the mock-test entry */}
       <button
-        className="w-full flex items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
+        className="hidden lg:flex w-full items-center gap-3 rounded-2xl p-4 mb-7 text-left shadow-[0_10px_26px_rgba(69,58,94,.3)]"
         style={{ background: 'linear-gradient(140deg, #453A5E, #67589B)' }}
         onClick={() => navigate(`${basePath}/tests`)}
       >
@@ -163,7 +191,9 @@ export function SectionModule() {
         <IconChevronRight className="w-[18px] h-[18px] ml-auto text-[#C9BEEC] shrink-0" />
       </button>
 
-      <div>
+      {/* Desktop-only: on mobile these shortcuts live in the sheet's
+          Quiz & Explore tab (2026-07-28). */}
+      <div className="hidden lg:block">
         <h3 className="font-display text-[15px] font-semibold text-v2-ink mb-2">
           Keep practising
         </h3>
@@ -186,8 +216,10 @@ export function SectionModule() {
             <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
           </button>
         )}
+        {/* Desktop-only: on mobile this stacked right under the sheet's own
+            Section Quiz card — the same door twice (2026-07-28). */}
         <button
-          className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
+          className="hidden lg:flex w-full items-center gap-3 py-3 text-left border-b border-v2-line"
           onClick={() => navigate(`${basePath}/section/${section.id}/quiz`)}
         >
           <span className="w-9 h-9 rounded-[10px] bg-v2-accent-soft text-v2-accent grid place-items-center shrink-0">
@@ -235,7 +267,7 @@ export function SectionModule() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-[20px] overflow-hidden mb-7 min-h-[236px] flex items-center shadow-[0_18px_44px_rgba(42,34,51,.28)]"
+        className="relative rounded-[20px] overflow-hidden mb-7 min-h-[204px] md:min-h-[236px] flex items-center shadow-[0_18px_44px_rgba(42,34,51,.28)]"
         style={{ backgroundColor: '#2A2233' }}
       >
         {art && (
@@ -270,7 +302,42 @@ export function SectionModule() {
           <h1 className="font-display text-[23px] md:text-[30px] font-semibold text-white leading-[1.12] mb-2">
             {section.title}
           </h1>
-          <div className="flex items-center gap-4 text-[12.5px] font-bold text-[#C9BFD4] flex-wrap mt-1">
+          {/* Mobile-only progress row + CTA (chapter-hero grammar, 2026-07-28) */}
+          <div className="md:hidden mt-2.5">
+            <div className="flex items-center gap-3 mb-3">
+              <b className="font-display text-[15px] text-[#FFB68F] shrink-0">{pct}%</b>
+              <div className="h-[5px] flex-1 rounded-full overflow-hidden bg-white/20">
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${Math.max(pct, 2)}%`, backgroundColor: '#E8551F' }}
+                />
+              </div>
+              <span className="text-[11px] font-bold text-[#C9BFD4] shrink-0">
+                {topicsDone} of {section.subsections.length} topics
+                {quizDone ? ' · quiz ✓' : ''}
+              </span>
+            </div>
+            {heroCta ? (
+              <>
+                <button
+                  className="flex items-center justify-center gap-2 w-full bg-v2-accent text-white font-extrabold text-[14.5px] py-3 rounded-2xl shadow-[0_6px_18px_rgba(232,85,31,.4)] btn-press"
+                  onClick={() => navigate(heroCta.to)}
+                >
+                  {heroCta.label}
+                  <IconChevronRight className="w-[15px] h-[15px]" />
+                </button>
+                <span className="block text-[11px] font-semibold text-[#C9BFD4] mt-2">
+                  {heroCta.caption}
+                </span>
+              </>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-[#9FE0B4] bg-[rgba(62,142,90,.28)] rounded-full px-3 py-1 text-[12px] font-extrabold">
+                <IconCheck className="w-3.5 h-3.5" />
+                Section completed — quiz and all 🎉
+              </span>
+            )}
+          </div>
+          <div className="hidden md:flex items-center gap-4 text-[12.5px] font-bold text-[#C9BFD4] flex-wrap mt-1">
             <span className="flex items-center gap-1.5">
               <IconBook className="w-[15px] h-[15px] text-[#A99DB8]" />
               {section.subsections.length} topics
@@ -293,6 +360,38 @@ export function SectionModule() {
         </div>
       </motion.div>
 
+      {/* Mobile-only: "What You'll Learn" as its own slim band between hero
+          and sheet (Uday 2026-07-28, from his sample) — a page-level object,
+          not a lodger inside the Topics tab. Desktop keeps it in the sheet. */}
+      {section.keyPoints.length > 0 && (
+        <details className="lg:hidden group bg-white rounded-2xl shadow-v2-sm px-4 py-3.5 mb-4">
+          <summary className="flex items-center gap-3 cursor-pointer list-none">
+            <span className="w-10 h-10 rounded-xl bg-v2-accent-soft grid place-items-center shrink-0">
+              <IconTarget className="w-5 h-5 text-v2-accent" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <b className="block font-display text-[15.5px] font-semibold text-v2-ink">
+                What You'll Learn
+              </b>
+              <span className="text-[11.5px] font-bold text-v2-muted">
+                {section.keyPoints.length} takeaways · tap to see
+              </span>
+            </span>
+            <IconChevronRight className="w-[18px] h-[18px] text-v2-muted shrink-0 group-open:rotate-90 transition-transform" />
+          </summary>
+          <div className="grid grid-cols-1 gap-y-3 mt-4 pt-3.5 border-t border-v2-line">
+            {section.keyPoints.map((point, i) => (
+              <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
+                <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
+                  <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
+                </span>
+                {point}
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
       {/* THE SHEET — one continuous surface */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -300,28 +399,56 @@ export function SectionModule() {
         transition={{ delay: 0.08 }}
         className="bg-white rounded-[20px] shadow-v2 px-5 md:px-9 py-8"
       >
+        {/* Mobile sheet tabs — Topics | Quiz & Explore */}
+        <div className="lg:hidden flex border-b border-v2-line mb-5 -mx-1">
+          <button
+            className={`flex-1 pb-2.5 font-display text-[15px] font-semibold border-b-2 -mb-px transition-colors ${
+              sheetTab === 'topics'
+                ? 'text-v2-accent border-v2-accent'
+                : 'text-v2-muted border-transparent'
+            }`}
+            onClick={() => setSheetTab('topics')}
+          >
+            Topics
+          </button>
+          <button
+            className={`flex-1 pb-2.5 font-display text-[15px] font-semibold border-b-2 -mb-px transition-colors ${
+              sheetTab === 'practice'
+                ? 'text-v2-accent border-v2-accent'
+                : 'text-v2-muted border-transparent'
+            }`}
+            onClick={() => setSheetTab('practice')}
+          >
+            Quiz &amp; Explore
+          </button>
+        </div>
+
+        <div className={`${sheetTab === 'topics' ? 'block' : 'hidden'} lg:block`}>
         {section.keyPoints.length > 0 && (
           <>
-            <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-[18px]">
-              <IconTarget className="w-5 h-5 text-v2-accent" />
-              What You'll Learn
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-7 gap-y-3.5">
-              {section.keyPoints.map((point, i) => (
-                <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
-                  <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
-                    <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
-                  </span>
-                  {point}
-                </div>
-              ))}
+            <div className="hidden lg:block">
+              <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-[18px]">
+                <IconTarget className="w-5 h-5 text-v2-accent" />
+                What You'll Learn
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-7 gap-y-3.5">
+                {section.keyPoints.map((point, i) => (
+                  <div key={i} className="flex gap-2.5 text-[13.5px] font-medium text-v2-body leading-relaxed">
+                    <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-v2-accent grid place-items-center mt-[3px]">
+                      <IconCheck className="w-2.5 h-2.5 text-white [stroke-width:3]" />
+                    </span>
+                    {point}
+                  </div>
+                ))}
+              </div>
+              <hr className="border-0 h-px bg-v2-line my-7 -mx-2" />
             </div>
-            <hr className="border-0 h-px bg-v2-line my-7 -mx-2" />
           </>
         )}
 
-        {/* Topics */}
-        <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-2">
+        {/* Topics — heading desktop-only: on mobile the "Topics" tab IS the
+            heading (same treatment as Practice & Explore). */}
+        <h2 className="hidden lg:flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-2">
           <IconBook className="w-5 h-5 text-v2-accent" />
           Topics
         </h2>
@@ -378,11 +505,15 @@ export function SectionModule() {
             )
           })}
         </div>
+        </div>
 
-        <hr className="border-0 h-px bg-v2-line my-7 -mx-2" />
+        <div className={`${sheetTab === 'practice' ? 'block' : 'hidden'} lg:block`}>
+        <hr className="hidden lg:block border-0 h-px bg-v2-line my-7 -mx-2" />
 
-        {/* Practice & Explore — Neha's kept elements, embedded in the sheet */}
-        <h2 className="flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-4">
+        {/* Practice & Explore — Neha's kept elements, embedded in the sheet.
+            Heading is desktop-only: on mobile the "Quiz & Explore" tab IS the
+            heading. */}
+        <h2 className="hidden lg:flex items-center gap-2.5 font-display text-[19px] font-semibold text-v2-ink mb-4">
           <IconPencil className="w-5 h-5 text-v2-accent" />
           Practice &amp; Explore
         </h2>
@@ -407,6 +538,44 @@ export function SectionModule() {
           <SectionTimeline sectionId={section.id} sectionColor={color} chapterId={cid} />
         </div>
         <SectionMaps sectionId={section.id} sectionColor={color} chapterId={cid} />
+
+        {/* Mobile-only: the rail's section-scoped shortcuts live in this tab
+            (the rail is desktop-only on phones). */}
+        <div className="lg:hidden mt-6 pt-1">
+          {hasTimelinePractice && (
+            <button
+              className="w-full flex items-center gap-3 py-3 text-left border-b border-v2-line"
+              onClick={() => navigate(`${basePath}/timeline?practice=${section.id}`)}
+            >
+              <span className="w-9 h-9 rounded-[10px] bg-v2-lav-soft text-hist-indigo grid place-items-center shrink-0">
+                <IconCalendar className="w-4 h-4" />
+              </span>
+              <span className="min-w-0">
+                <b className="block text-[13px] font-extrabold text-v2-ink">Order the events</b>
+                <span className="block text-[11px] font-semibold text-v2-muted">
+                  timeline practice for this section
+                </span>
+              </span>
+              <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
+            </button>
+          )}
+          <button
+            className="w-full flex items-center gap-3 py-3 text-left"
+            onClick={() => navigate(`${basePath}/flashcards?section=${section.id}`)}
+          >
+            <span className="w-9 h-9 rounded-[10px] bg-[#F3E9F3] text-hist-purple grid place-items-center shrink-0">
+              <IconLayers className="w-4 h-4" />
+            </span>
+            <span className="min-w-0">
+              <b className="block text-[13px] font-extrabold text-v2-ink">Flashcards</b>
+              <span className="block text-[11px] font-semibold text-v2-muted">
+                this section's cards
+              </span>
+            </span>
+            <IconChevronRight className="w-4 h-4 ml-auto text-v2-muted shrink-0" />
+          </button>
+        </div>
+        </div>
       </motion.div>
     </WorkspaceShell>
   )
