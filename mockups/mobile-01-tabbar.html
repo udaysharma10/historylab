@@ -43,7 +43,22 @@ a{color:inherit;text-decoration:none}
 .prof span{font-size:11px;color:var(--muted);font-weight:600}
 .crumb{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px}
 .crumb b{color:var(--dark)}
-.hero-d{background:linear-gradient(120deg,#FDF3E7,#F4ECF7);border:1px solid var(--line);border-radius:20px;padding:26px;margin-bottom:18px}
+.hero-d{background:linear-gradient(120deg,#FDF3E7,#F4ECF7);border:1px solid var(--line);border-radius:20px;padding:26px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero-d>*{position:relative}
+.hero-d img.hart{position:absolute;right:0;top:0;height:100%;width:52%;object-fit:cover;opacity:.45;pointer-events:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 55%);mask-image:linear-gradient(90deg,transparent 0,#000 55%)}
+.starthere{display:flex;gap:14px;align-items:center;background:var(--accent-soft);border:1px solid #EDD5C6;border-radius:16px;padding:16px 18px;margin-bottom:18px}
+.starthere .ic{width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:19px;flex-shrink:0}
+.starthere .k{font-family:var(--ff-d);font-size:13px;font-weight:700;color:var(--accent);font-style:italic}
+.starthere b{font-family:var(--ff-d);font-size:16px;color:var(--dark);display:block}
+.starthere span{font-size:12px;font-weight:600;color:var(--muted)}
+.starthere .go{margin-left:auto;background:var(--accent);color:#fff;font-weight:700;font-size:14px;border:0;border-radius:12px;padding:12px 26px;flex-shrink:0}
+.jst{margin-left:auto;font-size:10px;font-weight:800;border-radius:999px;padding:4px 11px;letter-spacing:.3px;white-space:nowrap;align-self:center}
+.jst.done{background:#E3F0E6;color:#4A7D55}.jst.prog{background:var(--accent-soft);color:var(--accent)}.jst.idle{background:#F0EDE9;color:var(--muted)}
+.dring{display:flex;gap:14px;align-items:center}
+.dring svg{transform:rotate(-90deg);flex-shrink:0}
+.dring .t b{font-family:var(--ff-d);font-size:19px;color:var(--dark);display:block}
+.dring .t span{font-size:11.5px;font-weight:600;color:var(--muted)}
 .hero-d .row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
 .hero-d .chn{width:40px;height:40px;border-radius:12px;background:var(--accent);color:#fff;font-family:var(--ff-d);font-weight:700;font-size:18px;display:grid;place-items:center}
 .hero-d h1{font-family:var(--ff-d);font-size:27px;color:var(--dark);margin:4px 0 14px}
@@ -163,7 +178,7 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 
-<div class="mockbar">MOCKUP · real Ch1 content · <b>≥900px = desktop AS-IS today (unchanged)</b> · <b>&lt;900px = proposed mobile</b> — resize the window or open on a phone</div>
+<div class="mockbar">MOCKUP · real Ch1 content · <b>≥900px = desktop AS-IS today (reference replica, PAID mid-chapter state — desktop does NOT change)</b> · <b>&lt;900px = proposed mobile</b> — resize or open on a phone</div>
 
 <!-- ================= DESKTOP: AS-IS (reference, unchanged) ================= -->
 <div class="desktop">
@@ -190,6 +205,7 @@ a{color:inherit;text-decoration:none}
   <main>
     <div class="crumb">All Chapters › The Rise of Nationalism in Europe › <b>Overview</b></div>
     <div class="hero-d">
+      <img class="hart" src="../public/images/fig-10-frankfurt-parliament.png" alt="" />
       <div class="row"><span class="chn">1</span><span class="kicker" style="color:var(--gold)">CBSE Class 10 · History</span></div>
       <h1>The Rise of Nationalism in Europe</h1>
       <div class="chips">
@@ -197,20 +213,33 @@ a{color:inherit;text-decoration:none}
         <span class="chip">▤ 100 Flashcards</span><span class="chip">▧ 21 Figures</span>
       </div>
     </div>
+    <div class="starthere">
+      <span class="ic">📖</span>
+      <div><span class="k">Continue learning</span>
+        <b>The Making of Nationalism in Europe</b>
+        <span>Resume from Topic 3: What did Liberal Nationalism Stand for? · about 7 min</span>
+      </div>
+      <button class="go">Continue →</button>
+    </div>
     <div class="jour">
       <h2>Your chapter journey</h2>
-      <div class="jrow"><span class="jn done">✓</span><div><b>The French Revolution and the Idea of the Nation</b><span>4 topics · 1 quiz · 25 min · Completed</span></div></div>
-      <div class="jrow"><span class="jn cur">2</span><div><b>The Making of Nationalism in Europe</b><span>5 topics · 1 quiz · 30 min · In progress</span></div></div>
-      <div class="jrow"><span class="jn">3</span><div><b>The Age of Revolutions: 1830–1848</b><span>5 topics · 1 quiz · 32 min</span></div></div>
-      <div class="jrow"><span class="jn">4</span><div><b>The Making of Germany and Italy</b><span>4 topics · 1 quiz · 28 min</span></div></div>
-      <div class="jrow"><span class="jn">5</span><div><b>Visualising the Nation</b><span>3 topics · 1 quiz · 17 min</span></div></div>
-      <div class="jrow"><span class="jn">6</span><div><b>Nationalism and Imperialism</b><span>3 topics · 1 quiz · 17 min</span></div></div>
+      <div class="jrow"><span class="jn done">✓</span><div><b>The French Revolution and the Idea of the Nation</b><span>4 topics · 1 quiz · 25 min</span></div><span class="jst done">Completed</span></div>
+      <div class="jrow"><span class="jn cur">2</span><div><b>The Making of Nationalism in Europe</b><span>5 topics · 1 quiz · 30 min</span></div><span class="jst prog">In progress</span></div>
+      <div class="jrow"><span class="jn">3</span><div><b>The Age of Revolutions: 1830–1848</b><span>5 topics · 1 quiz · 32 min</span></div><span class="jst idle">Not started</span></div>
+      <div class="jrow"><span class="jn">4</span><div><b>The Making of Germany and Italy</b><span>4 topics · 1 quiz · 28 min</span></div><span class="jst idle">Not started</span></div>
+      <div class="jrow"><span class="jn">5</span><div><b>Visualising the Nation</b><span>3 topics · 1 quiz · 17 min</span></div><span class="jst idle">Not started</span></div>
+      <div class="jrow"><span class="jn">6</span><div><b>Nationalism and Imperialism</b><span>3 topics · 1 quiz · 17 min</span></div><span class="jst idle">Not started</span></div>
     </div>
   </main>
 
   <aside class="rail">
     <div class="q">“When France sneezes, the rest of Europe catches a cold.” — Metternich</div>
-    <div><span class="kicker">Chapter progress</span><div style="margin-top:8px"><b class="serif" style="font-size:22px;color:var(--dark)">1 of 6</b> <span style="font-size:12px;font-weight:600;color:var(--muted)">sections · about 2h 4m left</span></div></div>
+    <div><span class="kicker">Chapter progress</span>
+      <div class="dring" style="margin-top:10px">
+        <svg width="64" height="64"><circle cx="32" cy="32" r="27" stroke="#EEE9F2" stroke-width="7" fill="none"/><circle cx="32" cy="32" r="27" stroke="#C05F35" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="141"/></svg>
+        <div class="t"><b>1 of 6</b><span>sections completed<br/>about 2h 4m left</span></div>
+      </div>
+    </div>
     <div class="mockcta"><b>◎ Take a mock test</b><span>The Rise of Nationalism in Europe — Practice Paper 1</span></div>
     <div><span class="kicker">Your stats</span>
       <div class="stats" style="margin-top:10px">
