@@ -5,9 +5,13 @@ import { SourceReader, SourceQuizCard } from '../components/source'
 import { QuizProgress } from '../components/quiz'
 import { QuizResults } from '../components/quiz/QuizResults'
 import { getSources, getNcertQuestions, getSourceAnalysisActivities, CHAPTER_SECTION_COLORS } from '../data/getChapter'
+import { getChapter as getBookChapter } from '../data/books'
 import { calculateStars, calculateXP } from '../engine/scoringEngine'
 import { useProgressStore } from '../store/useProgressStore'
 import { logActivity } from '../lib/activityLog'
+import { useAccess } from '../components/auth/AccessProvider'
+import { PurchaseSheet } from '../components/purchase/PurchaseSheet'
+import { chapterKey } from '../lib/contentIds'
 import type { NCERTQuestion } from '../types/chapter'
 
 type ExamPhase = 'home' | 'source-read' | 'source-practice' | 'ncert' | 'results'
@@ -28,6 +32,14 @@ export function ExamPractice() {
 
   const sources = useMemo(() => getSources(cid), [cid])
   const ncertQuestions = useMemo(() => getNcertQuestions(cid), [cid])
+  // Preview users get a server-trimmed bundle with no NCERT questions —
+  // show the unlock card instead of a blank list (Uday, 2026-07-29).
+  const { canAccessChapter, products } = useAccess()
+  const entitled = canAccessChapter(cid)
+  const product = products.find(p => p.id === chapterKey(cid))
+  const book = getBookChapter('history-10', cid)
+  const ncertLocked = !entitled && ncertQuestions.length === 0
+  const [purchaseOpen, setPurchaseOpen] = useState(false)
   const SECTION_COLORS = CHAPTER_SECTION_COLORS[cid] || CHAPTER_SECTION_COLORS.ch1
   const sourceAnalysisActivities = useMemo(() => getSourceAnalysisActivities(cid), [cid])
   const hasSourcePractice = sourceAnalysisActivities.length > 0
@@ -180,37 +192,71 @@ export function ExamPractice() {
           </p>
         </motion.div>
 
-        {/* Filter chips */}
-        <div className="flex gap-2 mb-5">
-          {[
-            { key: 'all' as const, label: 'All', count: ncertQuestions.length },
-            { key: 'write-in-brief' as const, label: 'Write in Brief', count: ncertQuestions.filter(q => q.type === 'write-in-brief').length },
-            { key: 'discuss' as const, label: 'Discuss', count: ncertQuestions.filter(q => q.type === 'discuss').length },
-          ].map(f => (
-            <button
-              key={f.key}
-              className={`text-xs font-bold px-3 py-1.5 rounded-full transition-colors ${
-                ncertFilter === f.key ? 'bg-hist-red text-white' : 'bg-gray-100 text-gray-500'
-              }`}
-              onClick={() => setNcertFilter(f.key)}
-            >
-              {f.label} ({f.count})
-            </button>
-          ))}
-        </div>
+        {ncertLocked ? (
+          /* Preview: the trimmed bundle has no NCERT questions — unlock card
+             instead of a blank list (mirrors the TestCentre gate). */
+          <div className="bg-hist-gold/10 border border-hist-gold/30 rounded-2xl p-5">
+            <div className="font-display font-bold text-hist-dark mb-1">
+              🔒 NCERT exercise questions come with the chapter
+            </div>
+            <p className="font-body text-sm text-gray-600 mb-3">
+              Every end-of-chapter question from the textbook, with examiner-style key
+              points and a full model answer to compare your writing against.
+            </p>
+            {product && !product.is_free && (
+              <button
+                className="font-display font-bold text-white rounded-xl px-5 py-2.5 shadow-button btn-press"
+                style={{ backgroundColor: '#C05F35' }}
+                onClick={() => setPurchaseOpen(true)}
+              >
+                Unlock chapter · ₹{(product.price_paise / 100).toFixed(0)}
+              </button>
+            )}
+          </div>
+        ) : (
+          <>
+            {/* Filter chips */}
+            <div className="flex gap-2 mb-5">
+              {[
+                { key: 'all' as const, label: 'All', count: ncertQuestions.length },
+                { key: 'write-in-brief' as const, label: 'Write in Brief', count: ncertQuestions.filter(q => q.type === 'write-in-brief').length },
+                { key: 'discuss' as const, label: 'Discuss', count: ncertQuestions.filter(q => q.type === 'discuss').length },
+              ].map(f => (
+                <button
+                  key={f.key}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-colors ${
+                    ncertFilter === f.key ? 'bg-hist-red text-white' : 'bg-gray-100 text-gray-500'
+                  }`}
+                  onClick={() => setNcertFilter(f.key)}
+                >
+                  {f.label} ({f.count})
+                </button>
+              ))}
+            </div>
 
-        {/* Questions */}
-        <div className="space-y-4">
-          {filteredNcert.map((q, i) => (
-            <NCERTQuestionCard
-              key={q.id}
-              question={q}
-              index={i}
-              expanded={expandedQ === q.id}
-              onToggle={() => setExpandedQ(expandedQ === q.id ? null : q.id)}
-            />
-          ))}
-        </div>
+            {/* Questions */}
+            <div className="space-y-4">
+              {filteredNcert.map((q, i) => (
+                <NCERTQuestionCard
+                  key={q.id}
+                  question={q}
+                  index={i}
+                  expanded={expandedQ === q.id}
+                  onToggle={() => setExpandedQ(expandedQ === q.id ? null : q.id)}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {product && book && (
+          <PurchaseSheet
+            product={product}
+            chapterTitle={book.title}
+            open={purchaseOpen}
+            onClose={() => setPurchaseOpen(false)}
+          />
+        )}
       </div>
     )
   }
@@ -345,18 +391,34 @@ export function ExamPractice() {
             </div>
             <div>
               <h2 className="font-display text-lg font-bold text-hist-dark mb-1">NCERT Exercise Questions</h2>
-              <p className="font-body text-sm text-gray-500 leading-relaxed">
-                <strong>{ncertQuestions.length} questions</strong> from the textbook with key points and model answers.
-                Practice writing full answers.
-              </p>
-              <div className="flex gap-2 mt-2">
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">
-                  {ncertQuestions.filter(q => q.type === 'write-in-brief').length} Write in Brief
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-500">
-                  {ncertQuestions.filter(q => q.type === 'discuss').length} Discuss
-                </span>
-              </div>
+              {ncertLocked ? (
+                <>
+                  <p className="font-body text-sm text-gray-500 leading-relaxed">
+                    Every textbook question with key points and model answers — comes
+                    with the full chapter.
+                  </p>
+                  <div className="flex gap-2 mt-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-hist-gold/10 text-[#B5652F]">
+                      🔒 Unlocks with the chapter
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="font-body text-sm text-gray-500 leading-relaxed">
+                    <strong>{ncertQuestions.length} questions</strong> from the textbook with key points and model answers.
+                    Practice writing full answers.
+                  </p>
+                  <div className="flex gap-2 mt-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-500">
+                      {ncertQuestions.filter(q => q.type === 'write-in-brief').length} Write in Brief
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-500">
+                      {ncertQuestions.filter(q => q.type === 'discuss').length} Discuss
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </motion.button>
