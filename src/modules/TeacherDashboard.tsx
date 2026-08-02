@@ -8,6 +8,7 @@ import { useAccess } from '../components/auth/AccessProvider'
 interface SectionActivity {
   sectionId: string
   activities: number
+  opened: number
   stars: number
   modes: string[]
 }
@@ -130,33 +131,44 @@ export function TeacherDashboard() {
       // Fetch activity logs for all users (include chapter_id + section_id)
       const { data: activityLogs } = await supabase
         .from('activity_logs')
-        .select('user_id, mode, chapter_id, section_id, stars_earned, completed_at')
+        .select('user_id, mode, chapter_id, section_id, activity_type, stars_earned, completed_at')
         .in('user_id', allUserIds.length > 0 ? allUserIds : ['none'])
 
       // Build user rows (ALL users, not just students)
       const rows: UserRow[] = profiles.map(p => {
         const logins = (loginSessions || []).filter(l => l.user_id === p.id)
-        const activities = (activityLogs || []).filter(a => a.user_id === p.id)
+        const allActivities = (activityLogs || []).filter(a => a.user_id === p.id)
+        // 'topic-opened' rows are a browse signal, not completions — keep
+        // them out of activity/star counts (2026-08-02).
+        const opens = allActivities.filter(a => a.activity_type === 'topic-opened')
+        const activities = allActivities.filter(a => a.activity_type !== 'topic-opened')
         const lastLogin = logins.length > 0
           ? logins.sort((a, b) => b.logged_in_at.localeCompare(a.logged_in_at))[0].logged_in_at
           : null
+        // Pre-throttle sessions logged one row per page load — distinct days
+        // is the honest historical "visits" number.
+        const visitDays = new Set(logins.map(l => l.logged_in_at.slice(0, 10))).size
 
         // Build per-chapter-section breakdown
-        const sectionMap: Record<string, { activities: number; stars: number; modes: Set<string> }> = {}
+        const sectionMap: Record<string, { activities: number; opened: number; stars: number; modes: Set<string> }> = {}
+        const bump = (a: { chapter_id?: string | null; section_id?: string | null }, kind: 'activities' | 'opened') => {
+          const key = `${a.chapter_id || 'ch1'}:${a.section_id || 'unknown'}`
+          if (!sectionMap[key]) sectionMap[key] = { activities: 0, opened: 0, stars: 0, modes: new Set() }
+          sectionMap[key][kind]++
+          return sectionMap[key]
+        }
         activities.forEach((a: { chapter_id?: string | null; section_id?: string | null; stars_earned?: number | null; mode?: string }) => {
-          const chId = a.chapter_id || 'ch1'
-          const sid = a.section_id || 'unknown'
-          const key = `${chId}:${sid}`
-          if (!sectionMap[key]) sectionMap[key] = { activities: 0, stars: 0, modes: new Set() }
-          sectionMap[key].activities++
-          sectionMap[key].stars += a.stars_earned || 0
-          if (a.mode) sectionMap[key].modes.add(a.mode)
+          const entry = bump(a, 'activities')
+          entry.stars += a.stars_earned || 0
+          if (a.mode) entry.modes.add(a.mode)
         })
+        opens.forEach(a => bump(a, 'opened'))
         const sections: SectionActivity[] = Object.entries(sectionMap)
           .filter(([key]) => !key.endsWith(':unknown'))
           .map(([key, data]) => ({
             sectionId: key, // format: "ch1:s1" or "ch2:s3"
             activities: data.activities,
+            opened: data.opened,
             stars: data.stars,
             modes: Array.from(data.modes),
           }))
@@ -171,7 +183,7 @@ export function TeacherDashboard() {
           role: p.role || 'student',
           created_at: p.created_at,
           profile_completed: p.profile_completed ?? false,
-          total_logins: logins.length,
+          total_logins: visitDays,
           last_login: lastLogin,
           total_stars: activities.reduce((sum: number, a: { stars_earned: number | null }) => sum + (a.stars_earned || 0), 0),
           activities_completed: activities.length,
@@ -197,9 +209,9 @@ export function TeacherDashboard() {
         .sort((a, b) => b.date.localeCompare(a.date))
       setLoginDates(dateEntries)
 
-      // Activity breakdown by mode
+      // Activity breakdown by mode (completions only — opens excluded)
       const modeCount: Record<string, number> = {}
-      ;(activityLogs || []).forEach(a => {
+      ;(activityLogs || []).filter(a => a.activity_type !== 'topic-opened').forEach(a => {
         modeCount[a.mode] = (modeCount[a.mode] || 0) + 1
       })
       setActivityBreakdown(
@@ -366,7 +378,7 @@ export function TeacherDashboard() {
                     <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">User</th>
                     <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Role</th>
                     <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">School</th>
-                    <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Logins</th>
+                    <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Visits</th>
                     <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Activities</th>
                     <th className="text-center px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Stars</th>
                     <th className="text-left px-3 py-3 font-display font-bold text-hist-dark text-xs uppercase tracking-wide">Joined</th>
@@ -454,14 +466,21 @@ export function TeacherDashboard() {
                                             {SECTION_NAMES[sid] || sid}
                                           </span>
                                           {section ? (
-                                            <span className="text-green-500 text-xs font-bold">Active</span>
+                                            section.activities > 0 ? (
+                                              <span className="text-green-500 text-xs font-bold">Active</span>
+                                            ) : (
+                                              <span className="text-amber-500 text-xs font-bold">Browsed</span>
+                                            )
                                           ) : (
                                             <span className="text-gray-300 text-xs">Not started</span>
                                           )}
                                         </div>
                                         {section && (
-                                          <div className="flex items-center gap-3 text-xs font-body text-gray-600 mt-1">
+                                          <div className="flex items-center gap-3 text-xs font-body text-gray-600 mt-1 flex-wrap">
                                             <span>{section.activities} activities</span>
+                                            {section.opened > 0 && (
+                                              <span className="text-gray-400">{section.opened} opened</span>
+                                            )}
                                             <span className="inline-flex items-center gap-0.5">
                                               <span className="text-yellow-500">★</span> {section.stars}
                                             </span>
@@ -549,7 +568,7 @@ export function TeacherDashboard() {
                 <thead>
                   <tr className="border-b border-gray-100">
                     <th className="text-left px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">User</th>
-                    <th className="text-center px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">Total Logins</th>
+                    <th className="text-center px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">Visits (days)</th>
                     <th className="text-left px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">Last Login</th>
                     <th className="text-left px-3 py-2 font-display font-bold text-hist-dark text-xs uppercase">First Joined</th>
                   </tr>

@@ -47,6 +47,18 @@ export function NarrativeMode({
   const hasQuiz = !!currentCard?.inlineQuiz
   const quizBlocking = hasQuiz && !quizAnswered[currentCard.id]
 
+  // Browse-depth signal for the dashboard: an open is not a completion —
+  // 'topic-opened' rows are excluded from activity/star counts there.
+  useEffect(() => {
+    logActivity({
+      mode: 'narrative',
+      chapter_id: cid,
+      section_id: subsection.id.split('-')[0],
+      activity_type: 'topic-opened',
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subsection.id])
+
   const totalQuizzes = cards.filter((c) => c.inlineQuiz).length
 
   const goNext = useCallback(() => {
