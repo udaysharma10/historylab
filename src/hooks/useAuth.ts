@@ -118,16 +118,32 @@ export function useAuth() {
           applySession(session)
 
           if (event === 'SIGNED_IN' && session?.user) {
-            const device = /Mobile|Android|iPhone/i.test(navigator.userAgent)
-              ? 'mobile'
-              : /Tablet|iPad/i.test(navigator.userAgent)
-                ? 'tablet'
-                : 'desktop'
-            supabase.from('login_sessions').insert({
-              user_id: session.user.id,
-              device,
-              user_agent: navigator.userAgent,
-            }).then(() => {})
+            // SIGNED_IN fires on every page load / token restore, not just
+            // real sign-ins — a session row per event inflated "logins" ~10x
+            // (2026-08-02). Only record a visit if the last one is >6h old.
+            const uid = session.user.id
+            supabase
+              .from('login_sessions')
+              .select('logged_in_at')
+              .eq('user_id', uid)
+              .order('logged_in_at', { ascending: false })
+              .limit(1)
+              .then(({ data }) => {
+                const lastAt = data?.[0]?.logged_in_at
+                if (lastAt && Date.now() - new Date(lastAt).getTime() < 6 * 60 * 60 * 1000) {
+                  return
+                }
+                const device = /Mobile|Android|iPhone/i.test(navigator.userAgent)
+                  ? 'mobile'
+                  : /Tablet|iPad/i.test(navigator.userAgent)
+                    ? 'tablet'
+                    : 'desktop'
+                supabase.from('login_sessions').insert({
+                  user_id: uid,
+                  device,
+                  user_agent: navigator.userAgent,
+                }).then(() => {})
+              })
           }
         }, 0)
       }
