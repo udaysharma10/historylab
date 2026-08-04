@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { useAuthContext } from '../components/auth'
 import { useAccess } from '../components/auth/AccessProvider'
+import { chapterSlug } from '../lib/contentIds'
 
 interface SectionActivity {
   sectionId: string
@@ -152,7 +153,12 @@ export function TeacherDashboard() {
         // Build per-chapter-section breakdown
         const sectionMap: Record<string, { activities: number; opened: number; stars: number; modes: Set<string> }> = {}
         const bump = (a: { chapter_id?: string | null; section_id?: string | null }, kind: 'activities' | 'opened') => {
-          const key = `${a.chapter_id || 'ch1'}:${a.section_id || 'unknown'}`
+          // DB rows carry namespaced ids (c10-hist-ch1) since Sprint 0, but
+          // SECTION_NAMES/SECTION_COLORS are keyed ch1:s1 — normalize, or the
+          // section panel matches nothing and shows all "Not started" (the
+          // 2026-08-04 "dashboard shows empty" bug; pre-Sprint-0 rows are
+          // short-form already, chapterSlug passes them through).
+          const key = `${chapterSlug(a.chapter_id || 'ch1')}:${a.section_id || 'unknown'}`
           if (!sectionMap[key]) sectionMap[key] = { activities: 0, opened: 0, stars: 0, modes: new Set() }
           sectionMap[key][kind]++
           return sectionMap[key]
