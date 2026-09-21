@@ -29,10 +29,11 @@ function LegalShell({ title, updated, children }: {
 }
 
 const UPDATED = '27 July 2026'
+const TERMS_UPDATED = '21 September 2026'
 
 export function TermsPage() {
   return (
-    <LegalShell title="Terms of Service" updated={UPDATED}>
+    <LegalShell title="Terms of Service" updated={TERMS_UPDATED}>
       <p>
         HistoryLab (historylab.in) is an online learning service for school History, operated by
         <b> Pi By Two Tech Solutions Pvt. Ltd.</b> ("we", "us"). By creating an account or using
@@ -63,9 +64,12 @@ export function TermsPage() {
       </p>
       <h2>Acceptable use</h2>
       <p>
-        Don't attempt to copy, scrape, resell or redistribute chapter content; don't probe,
-        overload or attempt to bypass access controls; don't submit abusive or unlawful content in
-        answers. We may suspend accounts that violate these terms.
+        Your purchase is a personal licence for one student. Don't share, sell or post
+        screenshots, recordings or copies of paid content — in class groups, on social media or
+        anywhere else — and don't share your login. Don't scrape content, probe, overload or
+        attempt to bypass access controls, or submit abusive or unlawful content in answers. If an
+        account is found sharing or reselling content, we may end its access to the purchased
+        chapters without refund and notify the account's registered email.
       </p>
       <h2>Content and intellectual property</h2>
       <p>

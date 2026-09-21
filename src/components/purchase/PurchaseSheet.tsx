@@ -142,6 +142,25 @@ export function PurchaseSheet({ product, chapterTitle, open, onClose }: Purchase
               </div>
             )}
 
+            {payState !== 'success' && payState !== 'pending' && !alreadyOwned && (
+              <div className="flex items-start gap-2.5 bg-[#FFFCFA] border border-dashed border-[#DDCFC6] rounded-xl px-3 py-2.5 mb-4">
+                <span className="text-[15px] leading-tight">👤</span>
+                <p className="font-body text-[12px] leading-snug text-hist-ink">
+                  <b className="text-hist-dark">For your account only.</b> Sharing or selling
+                  screenshots or copies ends access — no refund.{' '}
+                  <a
+                    className="font-semibold underline"
+                    style={{ color: '#C05F35' }}
+                    href="/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms
+                  </a>
+                </p>
+              </div>
+            )}
+
             {payState === 'pending' && !alreadyOwned ? (
               <div className="space-y-3">
                 <div className="flex items-start gap-3 bg-hist-orange/10 border border-hist-orange/25 rounded-[14px] px-4 py-3.5">
